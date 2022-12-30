@@ -1,0 +1,97 @@
+#' @title Format Shakepay file
+#'
+#' @description Format a .csv transaction history file from Shakepay for later ACB processing.
+#' @param data The dataframe
+#' @keywords money crypto
+#' @export
+#' @examples
+#' \dontrun{
+#' format_shakepay(data)
+#' }
+#' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
+#' @importFrom rlang .data
+
+format_shakepay <- function(data) {
+  # Rename columns
+  data <- data %>%
+    rename(
+      description = "Transaction.Type",
+      comment = "Direction",
+      spot.rate = "Spot.Rate",
+      date = "Date"
+    )
+
+  # Add single dates to dataframe
+  data <- data %>%
+    mutate(date = lubridate::as_datetime(.data$date))
+  # UTC confirmed
+
+  # Create a "buy" object
+  BUY <- data %>%
+    filter(.data$description == "purchase/sale") %>%
+    rename(
+      quantity = .data$Amount.Credited,
+      currency = .data$Credit.Currency,
+      total.price = .data$Amount.Debited
+    ) %>%
+    mutate(
+      transaction = "buy",
+      spot.rate = .data$total.price / .data$quantity
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price", "spot.rate",
+      "transaction", "description", "comment"
+    )
+
+  # Create a "SHAKES" object
+  SHAKES <- data %>%
+    filter(.data$description == "shakingsats") %>%
+    rename(
+      quantity = "Amount.Credited",
+      currency = "Credit.Currency"
+    ) %>%
+    mutate(
+      total.price = .data$quantity * .data$spot.rate,
+      transaction = "revenue",
+      revenue.type = replace(
+        .data$description,
+        .data$description %in% c("shakingsats"),
+        "airdrop"
+      )
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price",
+      "spot.rate", "transaction", "revenue.type",
+      "description", "comment"
+    )
+
+  # Create a "sell" object
+  SELL <- data %>%
+    filter(.data$description == "purchase/sale") %>%
+    rename(
+      quantity = "Amount.Debited",
+      currency = "Debit.Currency",
+      total.price = .data$Amount.Credited
+    ) %>%
+    mutate(
+      transaction = "sell",
+      spot.rate = .data$total.price / .data$quantity
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price",
+      "spot.rate", "transaction", "description", "comment"
+    ) %>%
+    filter(.data$currency != "CAD")
+
+  # Merge the "buy" and "sell" objects
+  data <- bind_rows(BUY, SHAKES, SELL) %>%
+    mutate(
+      fees = 0,
+      exchange = "shakepay",
+      rate.source = "exchange"
+    ) %>%
+    arrange(date)
+
+  # Return result
+  data
+}

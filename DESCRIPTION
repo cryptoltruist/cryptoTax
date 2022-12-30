@@ -1,0 +1,50 @@
+Package: cryptoTax
+Title: Crypto taxes in R (Canada only)
+Version: 0.0.1
+URL: http://github.com/cryptoltruist/cryptoTax/
+BugReports: https://github.com/cryptoltruist/cryptoTax/issues
+Authors@R: 
+    person(given = "Mr.",
+           family = "Cryptoltruist",
+           role = c("aut", "cre"),
+           email = "93457844+cryptoltruist@users.noreply.github.com")
+Description: Helps calculate crypto taxes in R. First by allowing 
+  you to format .CSV files from various exchanges to one
+  large dataframe of transactions. Second, by allowing you to 
+  calculate your Adjusted Cost Base (ACB), ACB per share, and 
+  realized and unrealized capital gains/losses. Third by calculating
+  revenues gained from staking, interest, airdrops, etc. Fourth, by 
+  calculating superficial losses as well. Only supports basic or simple 
+  tax scenarios (for now). *Disclaimer: This is not financial advice. 
+  Use at your own risks. There are no guarantees whatsoever in relation 
+  to the use of this package. Please consult a tax professional as necessary*.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Config/testthat/edition: 3
+Imports: 
+    dplyr,
+    lubridate,
+    priceR,
+    curl,
+    tidyquant,
+    ggplot2,
+    ggrepel,
+    RColorBrewer,
+    tidyr,
+    crypto2,
+    stringr,
+    rstudioapi,
+    rlang,
+    tidyselect,
+    progress,
+    pbapply
+Suggests: 
+    usethis,
+    flextable,
+    rmarkdown,
+    testthat (>= 3.0.0),
+Depends: 
+    R (>= 2.10)
