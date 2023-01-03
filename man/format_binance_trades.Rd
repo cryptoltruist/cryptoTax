@@ -10,9 +10,20 @@ format_binance_trades(data)
 \item{data}{The dataframe}
 }
 \description{
-Format a .xlsx trades history file from Binance for later ACB processing.
+Format a .xlsx trades history file from Binance for later
+ACB processing.
+}
+\details{
+To get this file, connect to your Binance account on
+desktop, click "Orders" (top right), "Spot Order", then in the
+"Spot Order" submenu, choose "Trade History". Next, click on "Export Trade
+History" and choose your time frame (you will probably need to choose
+"Beyond 6 months - Custom"). You are in this case allowed one year of
+transactions. If you have more, you might have to download more than one
+file and merge them before using this function.
 
-Warning: This does NOT process WITHDRAWALS and associated fees. See the format_binance_withdrawals() function for this purpose.
+Warning: This does NOT process WITHDRAWALS and associated fees. See the
+\code{format_binance_withdrawals()} function for this purpose.
 }
 \examples{
 \dontrun{

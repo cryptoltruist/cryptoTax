@@ -10,7 +10,16 @@ format_CDC(data)
 \item{data}{The dataframe}
 }
 \description{
-Format a .csv transaction history file from Crypto.com for later ACB processing.
+Format a .csv transaction history file from Crypto.com for later
+ACB processing.
+}
+\details{
+Be aware that CDC unfortunately does not include the withdrawal
+fees in their exported transaction files (please lobby to include this feature).
+This function attempts to guess some known withdrawal fees at some point in time
+but depending on when the withdrawals were made, the withdrawal fees are most
+certainly inaccurate. You will have to make a manual correction for the
+withdrawal fees after using \code{format_CDC}, on the resulting dataframe.
 }
 \examples{
 \dontrun{

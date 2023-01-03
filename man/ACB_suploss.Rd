@@ -12,6 +12,7 @@ ACB_suploss(
   quantity = "quantity",
   fees = "fees",
   total.price = "total.price",
+  spot.rate = "spot.rate",
   as.revenue = c("staking", "interest", "mining")
 )
 
@@ -22,6 +23,7 @@ ACB(
   quantity = "quantity",
   fees = "fees",
   total.price = "total.price",
+  spot.rate = "spot.rate",
   as.revenue = c("staking", "interest", "mining")
 )
 }
@@ -37,6 +39,8 @@ ACB(
 \item{fees}{Name of fees column}
 
 \item{total.price}{Name of total.price column}
+
+\item{spot.rate}{Name of spot.rate column}
 
 \item{as.revenue}{Name of as.revenue column}
 }

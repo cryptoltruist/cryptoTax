@@ -1,7 +1,13 @@
 #' @title Format Newton file
 #'
-#' @description Format a .csv transaction history file from Newton for later ACB processing.
+#' @description Format a .csv transaction history file from Newton for later ACB
+#' processing. When downloading from Newton, please choose the yearly reports
+#' format (the "CoinTracker Version" and "Koinly Version" are not supported
+#' at this time). If you have multiple years, that means you might have to
+#' merge the two datasets.
 #' @param data The dataframe
+#' @param filetype Which Newton file format to use, one of c("yearly",
+#' "cointracker", or "koinly"). Only "yearly" (default) supported at this time.
 #' @keywords money crypto
 #' @export
 #' @examples
@@ -11,7 +17,7 @@
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 
-format_newton <- function(data) {
+format_newton <- function(data, filetype = "yearly") {
   # Rename columns
   data <- data %>%
     rename(
@@ -31,9 +37,9 @@ format_newton <- function(data) {
   BUY <- data %>%
     filter(.data$description == "TRADE") %>%
     rename(
-      quantity = .data$Received.Quantity,
-      currency = .data$Received.Currency,
-      total.price = .data$Sent.Quantity
+      quantity = "Received.Quantity",
+      currency = "Received.Currency",
+      total.price = "Sent.Quantity"
     ) %>%
     mutate(
       transaction = "buy",
@@ -49,9 +55,9 @@ format_newton <- function(data) {
   SELL <- data %>%
     filter(.data$description == "TRADE") %>%
     rename(
-      quantity = .data$Sent.Quantity,
-      currency = .data$Sent.Currency,
-      total.price = .data$Received.Quantity
+      quantity = "Sent.Quantity",
+      currency = "Sent.Currency",
+      total.price = "Received.Quantity"
     ) %>%
     mutate(
       transaction = "sell",
@@ -65,12 +71,12 @@ format_newton <- function(data) {
 
   # Create a "earn" object
   EARN <- data %>%
-    filter(.data$Tag %in% c("Referral Program")) %>%
+    filter(.data$Fee.Amount %in% c("Referral Program")) %>%
     mutate(
       quantity = .data$Received.Quantity,
       currency = .data$Received.Currency,
       total.price = .data$Received.Quantity,
-      description = .data$Tag,
+      description = .data$Fee.Amount,
       transaction = "revenue",
       revenue.type = replace(
         .data$description,
@@ -83,6 +89,8 @@ format_newton <- function(data) {
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "revenue.type", "description"
     )
+
+  EARN$description <- as.character(EARN$description)
 
   # Merge the "buy" and "sell" objects
   data <- bind_rows(BUY, SELL, EARN) %>%

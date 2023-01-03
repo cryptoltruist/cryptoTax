@@ -1,8 +1,17 @@
 #' @title Format Binance trades file
 #'
-#' @description Format a .xlsx trades history file from Binance for later ACB processing.
+#' @description Format a .xlsx trades history file from Binance for later
+#' ACB processing.
+#' @details To get this file, connect to your Binance account on
+#' desktop, click "Orders" (top right), "Spot Order", then in the
+#' "Spot Order" submenu, choose "Trade History". Next, click on "Export Trade
+#' History" and choose your time frame (you will probably need to choose
+#' "Beyond 6 months - Custom"). You are in this case allowed one year of
+#' transactions. If you have more, you might have to download more than one
+#' file and merge them before using this function.
 #'
-#' Warning: This does NOT process WITHDRAWALS and associated fees. See the format_binance_withdrawals() function for this purpose.
+#' Warning: This does NOT process WITHDRAWALS and associated fees. See the
+#' `format_binance_withdrawals()` function for this purpose.
 #' @param data The dataframe
 #' @keywords money crypto
 #' @export
@@ -17,10 +26,9 @@ format_binance_trades <- function(data) {
   # Rename columns
   data <- data %>%
     rename(
-      quantity = "Amount",
-      description = "Type",
-      comment = "Market",
-      date = "Date(UTC)"
+      description = "Side",
+      comment = "Pair",
+      date = "Date.UTC.",
     )
 
   # Add single dates to dataframe
@@ -28,21 +36,28 @@ format_binance_trades <- function(data) {
     mutate(date = lubridate::as_datetime(.data$date))
   # UTC confirmed
 
-  # Make relevant columns numeric
+  # Split trading fees to a separate column
   data <- data %>%
-    mutate(across(.data$Price:.data$Fee, as.numeric))
-
-  # Separate trade transactions
-  data <- data %>%
-    rowwise() %>%
     mutate(
-      pair.currency1 = paste(strsplit(.data$comment, "")[[1]][1:3], collapse = ""),
-      pair.currency2 = paste(strsplit(.data$comment, "")[[1]][4:6], collapse = "")
+      Executed = gsub(",", "", .data$Executed),
+      Amount = gsub(",", "", .data$Amount)
+    ) %>%
+    tidyr::extract(
+      col = "Executed", into = c("quantity.pair1", "currency.pair1"),
+      regex = "^([0-9.]+)(\\D+)", convert = TRUE
+    ) %>%
+    tidyr::extract(
+      col = "Amount", into = c("quantity.pair2", "currency.pair2"),
+      regex = "^([0-9.]+)(\\D+)", convert = TRUE
+    ) %>%
+    tidyr::extract(
+      col = "Fee", into = c("Fee", "fee.currency"),
+      regex = "^([0-9.]+)(\\D+)", convert = TRUE
     )
 
   # Determine spot rate and value of fees
   data.fees <- data %>%
-    mutate(currency = .data$`Fee Coin`)
+    mutate(currency = .data$fee.currency)
 
   data.fees <- cryptoTax::match_prices(data.fees)
 
@@ -55,7 +70,8 @@ format_binance_trades <- function(data) {
     filter(.data$description == "BUY") %>%
     mutate(
       transaction = "buy",
-      currency = .data$pair.currency1
+      quantity = .data$quantity.pair1,
+      currency = .data$currency.pair1
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
@@ -67,8 +83,8 @@ format_binance_trades <- function(data) {
     filter(.data$description == "BUY") %>%
     mutate(
       transaction = "sell",
-      currency = .data$pair.currency2,
-      quantity = .data$Total,
+      currency = .data$currency.pair2,
+      quantity = .data$quantity.pair2,
       description = "SELL"
     ) %>%
     select(
@@ -81,7 +97,8 @@ format_binance_trades <- function(data) {
     filter(.data$description == "SELL") %>%
     mutate(
       transaction = "sell",
-      currency = .data$pair.currency1
+      quantity = .data$quantity.pair1,
+      currency = .data$currency.pair1
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
@@ -93,8 +110,8 @@ format_binance_trades <- function(data) {
     filter(.data$description == "SELL") %>%
     mutate(
       transaction = "buy",
-      currency = .data$pair.currency2,
-      quantity = .data$Total,
+      quantity = .data$quantity.pair2,
+      currency = .data$currency.pair2,
       description = "BUY"
     ) %>%
     select(
@@ -106,10 +123,6 @@ format_binance_trades <- function(data) {
   data <- bind_rows(BUY, BUY2, SELL, SELL2) %>%
     mutate(exchange = "binance") %>%
     arrange(date)
-
-  # Replace NAs with zeros (for the fees column)
-  data <- data %>%
-    mutate_at("fees", ~ replace(., is.na(.), 0))
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data)

@@ -14,14 +14,16 @@ format_ACB(
 \arguments{
 \item{data}{The dataframe}
 
-\item{as.revenue}{Which should be treated as revenue, in list of \code{c("staking", "interest", "mining")}.}
+\item{as.revenue}{Which should be treated as revenue, in list of
+\code{c("staking", "interest", "mining")}.}
 
 \item{sup.loss}{Logical, whether to take superficial losses into account.}
 
 \item{cl}{Number of cores to use for parallel processing.}
 }
 \description{
-Formats transaction data with Adjusted Cost Base (ACB), along with ACB per share and realized capital gains or losses.
+Formats transaction data with Adjusted Cost Base (ACB),
+along with ACB per share and realized capital gains or losses.
 }
 \examples{
 \dontrun{

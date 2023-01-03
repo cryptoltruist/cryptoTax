@@ -1,0 +1,31 @@
+url: https://cryptoltruist.github.io/cryptoTax/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#964D00"
+  
+toc:
+  depth: 4
+  
+navbar:
+  type: default
+  toc: TRUE
+  right:
+  - icon: fa-github
+    href: http://github.com/cryptoltruist/cryptoTax/
+    aria-label: GitHub
+  left:
+  - icon: fa-home
+    href: index.html
+  - text: Articles
+    href: articles/index.html
+    menu:
+      - text: Adjusted Cost Base
+        href: articles/ACB.html
+      - text: Tax treatments and decisions
+        href: articles/references.html
+  - text: Functions
+    href: reference/index.html
+  - text: News
+    href: news/index.html

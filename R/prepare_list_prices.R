@@ -1,9 +1,14 @@
 #' @title Prepare the list of coins for prices
 #'
 #' @description Prepare the list of coins for prices.
+#' @details The [crypto2::crypto_history] API is at times a bit capricious. You might
+#' need to try a few times before it process correctly and without
+#' errors.
 #' @param coins Which coins to include in the list.
 #' @param start.date What date to start reporting prices for.
 #' @param end.date What date to end reporting prices for.
+#' @param force Whether to force recreating list.prices even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @keywords money crypto
 #' @export
 #' @examples
@@ -14,7 +19,10 @@
 #' @importFrom utils timestamp
 #' @importFrom rlang .data
 
-prepare_list_prices <- function(coins, start.date, end.date = Sys.Date()) {
+prepare_list_prices <- function(coins,
+                                start.date,
+                                end.date = lubridate::now("UTC"),
+                                force = FALSE) {
   # List all active coins
   if (!exists("coins.list")) {
     coins.list <- crypto2::crypto_list(only_active = TRUE)
@@ -25,8 +33,18 @@ prepare_list_prices <- function(coins, start.date, end.date = Sys.Date()) {
     coins.list <<- coins.list
   }
 
-  if (!exists("list.prices")) {
+  if (isTRUE(force) || !exists("list.prices")) {
     # Define coins from our merged data set
+
+    if (is.null(coins)) {
+      coins <- c(
+        "CRO", "LTC", "BTC", "ETH", "ELON", "PRE", "USDC",
+        "CEL", "XMR", "BAT", "XRP", "BCH", "ADA", "XLM",
+        "BOSON", "EFI", "XNO", "GUSD", "USDT", "BUSD",
+        "ETHW"
+      )
+    }
+
     my.coins <- coins
     names(my.coins) <- my.coins
 
@@ -45,8 +63,15 @@ prepare_list_prices <- function(coins, start.date, end.date = Sys.Date()) {
       filter(.data$symbol %in% my.coins)
 
     # Dates cannot have hyphens in crypto2::crypto_history!
-    start.date <- paste(stringr::str_split(start.date, "-", simplify = TRUE), collapse = "")
-    end.date <- paste(stringr::str_split(end.date, "-", simplify = TRUE), collapse = "")
+    start.date <- start.date %>%
+      as.Date() %>%
+      stringr::str_split("-", simplify = TRUE) %>%
+      paste(collapse = "")
+
+    end.date <- end.date %>%
+      as.Date() %>%
+      stringr::str_split("-", simplify = TRUE) %>%
+      paste(collapse = "")
 
     coin_hist <- crypto2::crypto_history(
       coin_list = coins.temp,
@@ -63,7 +88,8 @@ prepare_list_prices <- function(coins, start.date, end.date = Sys.Date()) {
       rowwise() %>%
       mutate(
         spot.rate2 = mean(c(.data$open, .data$close)),
-        currency = .data$symbol
+        currency = .data$symbol,
+        date2 = lubridate::as_date(.data$timestamp)
       )
   }
 

@@ -1,6 +1,13 @@
 #' @title Format Crypto.com App file
 #'
-#' @description Format a .csv transaction history file from Crypto.com for later ACB processing.
+#' @description Format a .csv transaction history file from Crypto.com for later
+#' ACB processing.
+#' @details Be aware that CDC unfortunately does not include the withdrawal
+#' fees in their exported transaction files (please lobby to include this feature).
+#' This function attempts to guess some known withdrawal fees at some point in time
+#' but depending on when the withdrawals were made, the withdrawal fees are most
+#' certainly inaccurate. You will have to make a manual correction for the
+#' withdrawal fees after using `format_CDC`, on the resulting dataframe.
 #' @param data The dataframe
 #' @keywords money crypto
 #' @export
@@ -139,7 +146,7 @@ format_CDC <- function(data) {
         .data$revenue.type %in% c("referral_gift"),
         "referrals"
       ),
-      spot.rate = .data$total.price / .data$quantity
+      spot.rate = abs(.data$total.price / .data$quantity)
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
@@ -229,9 +236,12 @@ format_CDC <- function(data) {
         .data$comment == "Withdraw ETH" ~ 0.005,
         .data$comment == "Withdraw BTC" ~ 0.0004,
         .data$comment == "Withdraw ADA" ~ 0.8,
-        .data$comment == "Withdraw ADA (Cardano)" ~ 0.8
+        .data$comment == "Withdraw ADA (Cardano)" ~ 0.8,
+        .data$comment == "Withdraw CRO (Crypto.org)" ~ 0.001,
+        .data$comment == "Withdraw CRO (Cronos)" ~ 0.2,
+        .data$comment == "Withdraw USDC (BSC)" ~ 1,
       ),
-      spot.rate = .data$Native.Amount / .data$quantity,
+      spot.rate = abs(.data$Native.Amount / .data$quantity),
       quantity = .data$withdraw.fees,
       total.price = .data$quantity * .data$spot.rate,
       transaction = "sell"

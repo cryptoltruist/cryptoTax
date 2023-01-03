@@ -4,7 +4,12 @@
 \alias{prepare_list_prices}
 \title{Prepare the list of coins for prices}
 \usage{
-prepare_list_prices(coins, start.date, end.date = Sys.Date())
+prepare_list_prices(
+  coins,
+  start.date,
+  end.date = lubridate::now("UTC"),
+  force = FALSE
+)
 }
 \arguments{
 \item{coins}{Which coins to include in the list.}
@@ -12,9 +17,17 @@ prepare_list_prices(coins, start.date, end.date = Sys.Date())
 \item{start.date}{What date to start reporting prices for.}
 
 \item{end.date}{What date to end reporting prices for.}
+
+\item{force}{Whether to force recreating list.prices even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Prepare the list of coins for prices.
+}
+\details{
+The \link[crypto2:crypto_history]{crypto2::crypto_history} API is at times a bit capricious. You might
+need to try a few times before it process correctly and without
+errors.
 }
 \examples{
 \dontrun{

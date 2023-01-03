@@ -4,10 +4,12 @@
 \alias{match_prices}
 \title{Get Fair Market Value (FMV) of transactions}
 \usage{
-match_prices(data)
+match_prices(data, my.coins = NULL)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{my.coins}{Your coins to match}
 }
 \description{
 Matches prices obtained through the \code{fetch_prices()} function with the transaction data frame.

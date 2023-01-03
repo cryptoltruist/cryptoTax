@@ -10,9 +10,15 @@ format_CDC_wallet(data)
 \item{data}{The dataframe}
 }
 \description{
-Format a .csv transaction history file from the Crypto.com DeFi wallet for later ACB processing.
+Format a .csv transaction history file from the Crypto.com DeFi
+wallet for later ACB processing.
 
-One way to download the CRO staking rewards data from the blockchain is to visit http://crypto.barkisoft.de/ and input your CRO address. Keep the default export option ("Koinly"). It will output a CSV file with your transactions. Note: the site does not use a secure connection: use at your own risks.
+One way to download the CRO staking rewards data from the blockchain is to
+visit http://crypto.barkisoft.de/ and input your CRO address. Keep the default
+export option ("Koinly"). It will output a CSV file with your transactions.
+Note: the site does not use a secure connection: use at your own risks.
+The file is semi-column separated; when using \code{read.csv}, add the \code{sep = ";"}
+argument.
 }
 \examples{
 \dontrun{

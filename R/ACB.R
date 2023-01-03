@@ -7,6 +7,7 @@
 #' @param quantity Name of quantity column
 #' @param fees Name of fees column
 #' @param total.price Name of total.price column
+#' @param spot.rate Name of spot.rate column
 #' @param as.revenue Name of as.revenue column
 #' @keywords money crypto
 #' @export
@@ -23,13 +24,20 @@ ACB_suploss <- function(data,
                         quantity = "quantity",
                         fees = "fees",
                         total.price = "total.price",
+                        spot.rate = "spot.rate",
                         as.revenue = c("staking", "interest", "mining")) {
   # Excludes staking, interest, mining
 
   # Setup progress bar
+  if ("currency2" %in% names(data)) {
+    currency <- data$currency2[1]
+  } else {
+    currency <- data$currency[1]
+  }
+
   pb <- progress::progress_bar$new(
     format = paste(
-      data$currency2[1],
+      currency,
       "[:bar] :current/:total (:percent) [Elapsed: :elapsedfull || Remaining: :eta]"
     ),
     total = nrow(data),
@@ -54,15 +62,22 @@ ACB_suploss <- function(data,
 
   # Change total.price of non-revenue sources to 0$
   # Also keep the original total.price information in a "value" row for revenue calculations...
-  data <- data %>%
-    mutate(
-      value = .data$total.price,
-      total.price = ifelse(.data$revenue.type %in% not.revenue,
-        0,
-        .data$total.price
-      )
-    ) %>%
-    relocate("value", .after = "revenue.type")
+  if (!missing(total.price) && "revenue.type" %in% names(data)) {
+    data <- data %>%
+      mutate(
+        value = .data$total.price,
+        total.price = ifelse(.data$revenue.type %in% not.revenue,
+          0,
+          .data$total.price
+        )
+      ) %>%
+      relocate("value", .after = "revenue.type")
+  }
+
+  if (!"fees" %in% names(data)) {
+    data <- data %>%
+      mutate(fees = 0, .before = currency)
+  }
 
   # Define empty rows for later reuse
   data["gains"] <- 0
@@ -71,13 +86,16 @@ ACB_suploss <- function(data,
   data["gains.uncorrected"] <- NA
   data$gains.uncorrected <- NA
 
+
   for (i in 1:nrow(data)) {
     # Update progress bar
     pb$tick()
 
+    # Loop ####
+
     # Set total price if it is missing
     if (missing(total.price)) {
-      data[i, total.price] <- data[i, "spot.rate"] * data[i, quantity]
+      data[i, total.price] <- data[i, spot.rate] * data[i, quantity]
     }
 
     # First row: add first quantity
@@ -86,34 +104,34 @@ ACB_suploss <- function(data,
     }
 
     # First row: calculate ACB for added quantities
-    if (i == 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i == 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "ACB"] <- data[i, total.price] + data[i, fees]
     }
 
     # After first row: add new quantities
-    if (i > 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i > 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] + data[i, quantity]
     }
 
     # After first row: calculate ACB for added quantities
-    if (i > 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i > 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "ACB"] <- data[i - 1, "ACB"] +
         data[i, total.price] + data[i, fees]
     }
 
     # After first row: remove new quantities
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] - data[i, quantity]
     }
 
     # After first row: calculate ACB for removed quantities
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "ACB"] <- data[i - 1, "ACB"] *
         ((data[i - 1, "total.quantity"] - data[i, quantity]) /
           data[i - 1, "total.quantity"])
@@ -126,7 +144,7 @@ ACB_suploss <- function(data,
     )
 
     # After first row: calculate capital gains and losses
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "gains"] <- data[i, total.price] - data[i, fees] -
         data[i - 1, "ACB.share"] * data[i, quantity]
     }
@@ -144,7 +162,7 @@ ACB_suploss <- function(data,
     #                               0)
 
     # Change sup.loss to FALSE if the gain is positive!
-    if (i > 1 & data[i, "sup.loss"] == TRUE) {
+    if (i > 1 && data[i, "sup.loss"] == TRUE) {
       data[i, "sup.loss"] <- ifelse(data[i, "gains"] >= 0,
         FALSE,
         data[i, "sup.loss"]
@@ -152,7 +170,7 @@ ACB_suploss <- function(data,
     }
 
     # After first row: calculate superficial capital gains and losses
-    if (i > 1 & data[i, transaction] == "sell" & data[i, "sup.loss"] == TRUE) {
+    if (i > 1 && data[i, transaction] == "sell" && data[i, "sup.loss"] == TRUE) {
       data[i, "gains.sup"] <- data[i, "gains"] * (min(
         data[i, "quantity.60days"],
         data[i, "sup.loss.quantity"],
@@ -171,7 +189,7 @@ ACB_suploss <- function(data,
     )
 
     # After first row: calculate superficial capital gains and losses for any excess
-    if (i > 1 & data[i, "sup.loss"] == TRUE & data[i, "sup.loss.quantity"] > data[i, "quantity.60days"]) {
+    if (i > 1 && data[i, "sup.loss"] == TRUE && data[i, "sup.loss.quantity"] > data[i, "quantity.60days"]) {
       # data[i, "gains"] <- data[i, total.price] - data[i, fees] -
       # data[i-1, "ACB.share"] * (data[i, "sup.loss.quantity"] - data[i, "quantity.60days"])
       data[i, "gains.excess"] <- data[i, "gains"] - data[i, "gains.sup"]
@@ -183,15 +201,15 @@ ACB_suploss <- function(data,
     }
 
     # After first row: recalculate ACB for added quantities MINUS sup loss
-    if (i > 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i > 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "ACB"] <- data[i - 1, "ACB"] +
         data[i, total.price] + data[i, fees] - data[i - 1, "gains.sup"]
     }
 
     # After first row: calculate ACB for removed quantities MINUS sup loss
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "ACB"] <- data[i - 1, "ACB"] *
         ((data[i - 1, "total.quantity"] - data[i, quantity]) /
           data[i - 1, "total.quantity"]) - data[i, "gains.sup"]
@@ -234,29 +252,42 @@ ACB_suploss <- function(data,
       )
     ) %>%
     relocate(c(
-      .data$sup.loss, .data$gains.uncorrected, .data$gains.sup,
-      .data$gains.excess, .data$gains
-    ), .before = .data$ACB)
+      "sup.loss", "gains.uncorrected", "gains.sup",
+      "gains.excess", "gains"
+    ), .before = "ACB")
   # relocate(gains.excess, .after = gains.sup) %>%
   # relocate(gains.uncorrected, .before = gains.sup) %>%
   # relocate(gains, .after = gains.excess)
+
+  data <- as.data.frame(data)
 
   data
 }
 
 #' @rdname ACB_suploss
+#' @export
 ACB <- function(data,
                 transaction = "transaction",
                 price = "price",
                 quantity = "quantity",
                 fees = "fees",
                 total.price = "total.price",
+                spot.rate = "spot.rate",
                 as.revenue = c("staking", "interest", "mining")) {
   # Excludes staking, interest, mining
 
   # Setup progress bar
+  if ("currency2" %in% names(data)) {
+    currency <- data$currency2[1]
+  } else {
+    currency <- data$currency[1]
+  }
+
   pb <- progress::progress_bar$new(
-    format = "Formatting ACB [:bar] :current/:total (:percent) [Elapsed: :elapsedfull || Remaining: :eta]",
+    format = paste(
+      currency,
+      "[:bar] :current/:total (:percent) [Elapsed: :elapsedfull || Remaining: :eta]"
+    ),
     total = nrow(data),
     complete = "=", # Completion bar character
     incomplete = "-", # Incomplete bar character
@@ -277,25 +308,32 @@ ACB <- function(data,
   # List all non-revenue
   not.revenue <- all.revenue.type[!(all.revenue.type %in% as.revenue)]
 
-  # Change total.price of non-revenue sources to 0$
+  # Change total.price of non-taxable revenue sources to 0$
   # Also keep the original total.price information in a "value" row for revenue calculations...
-  data <- data %>%
-    mutate(
-      value = .data$total.price,
-      total.price = ifelse(.data$revenue.type %in% not.revenue,
-        0,
-        .data$total.price
-      )
-    ) %>%
-    relocate(.data$value, .after = .data$revenue.type)
+  if (!missing(total.price) && "revenue.type" %in% names(data)) {
+    data <- data %>%
+      mutate(
+        value = .data[[total.price]],
+        total.price = ifelse(.data$revenue.type %in% not.revenue,
+          0,
+          .data[[total.price]]
+        )
+      ) %>%
+      relocate("value", .after = "revenue.type")
+  }
 
-  for (i in 1:nrow(data)) {
+  if (!"fees" %in% names(data)) {
+    data <- data %>%
+      mutate(fees = 0, .before = currency)
+  }
+
+  for (i in seq_len(nrow(data))) {
     # Update progress bar
     pb$tick()
 
     # Set total price if it is missing
     if (missing(total.price)) {
-      data[i, total.price] <- data[i, "spot.rate"] * data[i, quantity]
+      data[i, total.price] <- data[i, spot.rate] * data[i, quantity]
     }
 
     # First row: add first quantity
@@ -304,34 +342,34 @@ ACB <- function(data,
     }
 
     # After first row: add new quantities
-    if (i > 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i > 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] + data[i, quantity]
     }
 
     # After first row: remove new quantities
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] - data[i, quantity]
     }
 
     # First row: calculate ACB for added quantities
-    if (i == 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i == 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "ACB"] <- data[i, total.price] + data[i, fees]
     }
 
     # After first row: calculate ACB for removed quantities
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "ACB"] <- data[i - 1, "ACB"] *
         ((data[i - 1, "total.quantity"] - data[i, quantity]) /
           data[i - 1, "total.quantity"])
     }
 
     # After first row: calculate ACB for added quantities
-    if (i > 1 & (data[i, transaction] == "buy" |
-      data[i, transaction] == "revenue" |
+    if (i > 1 && (data[i, transaction] == "buy" ||
+      data[i, transaction] == "revenue" ||
       data[i, transaction] == "rebate")) {
       data[i, "ACB"] <- data[i - 1, "ACB"] +
         data[i, total.price] + data[i, fees]
@@ -344,10 +382,13 @@ ACB <- function(data,
     )
 
     # After first row: calculate capital gains and losses
-    if (i > 1 & data[i, transaction] == "sell") {
+    if (i > 1 && data[i, transaction] == "sell") {
       data[i, "gains"] <- data[i, total.price] - data[i, fees] -
         data[i - 1, "ACB.share"] * data[i, quantity]
     }
   }
+
+  data <- as.data.frame(data)
+
   data
 }

@@ -1,8 +1,10 @@
 #' @title Formats transactions with ACB
 #'
-#' @description Formats transaction data with Adjusted Cost Base (ACB), along with ACB per share and realized capital gains or losses.
+#' @description Formats transaction data with Adjusted Cost Base (ACB),
+#' along with ACB per share and realized capital gains or losses.
 #' @param data The dataframe
-#' @param as.revenue Which should be treated as revenue, in list of `c("staking", "interest", "mining")`.
+#' @param as.revenue Which should be treated as revenue, in list of
+#' `c("staking", "interest", "mining")`.
 #' @param sup.loss Logical, whether to take superficial losses into account.
 #' @param cl Number of cores to use for parallel processing.
 #' @keywords money crypto
@@ -18,6 +20,16 @@ format_ACB <- function(data,
                        as.revenue = c("staking", "interest", "mining"),
                        sup.loss = TRUE,
                        cl = NULL) {
+  if (any(is.na(data$total.price))) {
+    stop("Column 'total.price' cannot have any missing values. Please double check your file.")
+  } else if (any(is.na(data$transaction))) {
+    stop("Column 'total.price' cannot have any missing values. Please double check your file.")
+  } else if (any(data$total.price < 0)) {
+    stop("Column 'total.price' cannot have any negative values. Please double check your file.")
+  } else if (any(data$spot.rate < 0)) {
+    stop("Column 'spot.rate' cannot have any negative values. Please double check your file.")
+  }
+
   # Benchmarks
   start_time <- Sys.time()
   cat(paste(
@@ -25,12 +37,17 @@ format_ACB <- function(data,
     ". Please be patient as the transactions process.\n"
   ))
 
+  data <- data %>%
+    mutate(fees = ifelse(is.na(.data$fees), 0, .data$fees))
+
   all.data <- data
 
   if (isTRUE(sup.loss)) {
     all.data <- all.data %>%
       format_suploss()
   }
+
+  cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
 
   capital.gains <- all.data %>%
     arrange(date) %>%
@@ -42,16 +59,13 @@ format_ACB <- function(data,
       ACB(.x, total.price = "total.price", as.revenue = as.revenue)
     }) %>%
     arrange(date) %>%
-    relocate(.data$date, .before = .data$currency) %>%
-    relocate(.data$fees, .before = .data$description)
+    relocate("date", .before = "currency") %>%
+    relocate("fees", .before = "description")
 
   neg.val <- "WARNING: Some balances have negative values. Double-check for missing transactions."
 
   if (any(capital.gains$total.quantity < 0)) {
     cat(neg.val)
-  }
-
-  if (any(capital.gains$total.quantity < 0)) {
     warning(neg.val)
   }
 

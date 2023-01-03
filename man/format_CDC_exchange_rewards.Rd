@@ -10,15 +10,24 @@ format_CDC_exchange_rewards(data)
 \item{data}{The dataframe}
 }
 \description{
-Format a .csv transaction history file from the Crypto.com exchange for later ACB processing. Only processes rewards, not trades (see \code{format_CDC_exchange_trades} for this).
+Format a .csv transaction history file from the
+Crypto.com exchange for later ACB processing. Only processes
+rewards and withdrawal fees, not trades (see
+\code{format_CDC_exchange_trades} for this).
 
-To download the rewards data from the Crypto.com exchange as a CSV file, copy and paste the code below and save it as a bookmark in your browser.
+To download the rewards/withdrawal fees data from the Crypto.com
+exchange as a CSV file, copy and paste the code below and save it
+as a bookmark in your browser.
 
 \verb{javascript:(function()\{function callback()\{window.cdc()\}var s=document.createElement("script");s.src="https://cdn.jsdelivr.net/gh/ConorIA/cdc-csv@master/cdc.js";if(s.addEventListener)\{s.addEventListener("load",callback,false)\}else if(s.readyState)\{s.onreadystatechange=callback\}document.body.appendChild(s);\})()}
 
-Then log into the crypto.com exchange and click the bookmark you saved. It will automatically download a CSV that contains Supercharger rewards, withdrawal fees, CRO staking interest (if you have an exchange stake), among others.
+Then log into the crypto.com exchange and click the bookmark you
+saved. It will automatically download a CSV that contains Supercharger
+rewards, withdrawal fees, CRO staking interest (if you have an
+exchange stake), among others.
 
-Note that this code does not include the initial referral reward in CRO for signup or on the Crypto.com exchange. It must be added manually.
+Note that this code does not include the initial referral reward in CRO
+for signup or on the Crypto.com exchange. It must be added manually.
 
 WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS!
 }

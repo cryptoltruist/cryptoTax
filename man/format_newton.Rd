@@ -4,13 +4,20 @@
 \alias{format_newton}
 \title{Format Newton file}
 \usage{
-format_newton(data)
+format_newton(data, filetype = "yearly")
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{filetype}{Which Newton file format to use, one of c("yearly",
+"cointracker", or "koinly"). Only "yearly" (default) supported at this time.}
 }
 \description{
-Format a .csv transaction history file from Newton for later ACB processing.
+Format a .csv transaction history file from Newton for later ACB
+processing. When downloading from Newton, please choose the yearly reports
+format (the "CoinTracker Version" and "Koinly Version" are not supported
+at this time). If you have multiple years, that means you might have to
+merge the two datasets.
 }
 \examples{
 \dontrun{

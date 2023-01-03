@@ -1,7 +1,7 @@
 Package: cryptoTax
 Title: Crypto taxes in R (Canada only)
 Version: 0.0.1
-URL: http://github.com/cryptoltruist/cryptoTax/
+URL: https://cryptoltruist.github.io/cryptoTax/
 BugReports: https://github.com/cryptoltruist/cryptoTax/issues
 Authors@R: 
     person(given = "Mr.",
@@ -10,7 +10,7 @@ Authors@R:
            email = "93457844+cryptoltruist@users.noreply.github.com")
 Description: Helps calculate crypto taxes in R. First by allowing 
   you to format .CSV files from various exchanges to one
-  large dataframe of transactions. Second, by allowing you to 
+  large dataframe of organized transactions. Second, by allowing you to 
   calculate your Adjusted Cost Base (ACB), ACB per share, and 
   realized and unrealized capital gains/losses. Third by calculating
   revenues gained from staking, interest, airdrops, etc. Fourth, by 
@@ -46,5 +46,7 @@ Suggests:
     flextable,
     rmarkdown,
     testthat (>= 3.0.0),
+    knitr
 Depends: 
     R (>= 2.10)
+VignetteBuilder: knitr

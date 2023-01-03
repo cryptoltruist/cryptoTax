@@ -23,7 +23,8 @@ format_exodus <- function(data) {
 
   # Add single dates to dataframe
   data <- data %>%
-    mutate(date = lubridate::mdy_hms(.data$date))
+    mutate(date = lubridate::ymd_hms(.data$date))
+  # mutate(date = lubridate::mdy_hms(.data$date))
   # UTC confirmed
 
   # Add currency to missing places
@@ -35,7 +36,10 @@ format_exodus <- function(data) {
 
   # Create a "earn" object
   EARN <- data %>%
-    filter(.data$currency %in% c("NANO")) %>%
+    filter(
+      .data$currency %in% c("XNO"),
+      .data$description == "deposit"
+    ) %>%
     mutate(
       transaction = "revenue",
       revenue.type = "airdrop"

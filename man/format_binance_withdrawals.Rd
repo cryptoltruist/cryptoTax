@@ -10,9 +10,19 @@ format_binance_withdrawals(data)
 \item{data}{The dataframe}
 }
 \description{
-Format a .xlsx withdrawal history file from Binance for later ACB processing.
+Format a .xlsx withdrawal history file from Binance for later
+ACB processing.
+}
+\details{
+To get this file, connect to your Binance account on
+desktop, click "Wallet" (top right), "Transaction History", then in the
+"Type" column, choose "Withdraw". Next, click on "Export Withdrawal History"
+on the right and choose your time frame (you will probably need to choose
+"Customized"). You are only allowed to choose up to 3 months, so you might
+have to download more than one file and merge them before using this function.
 
-Warning: This does NOT process TRADES See the format_binance_trades() function for this purpose.
+Warning: This does NOT process TRADES See the \code{format_binance_trades()}
+function for this purpose.
 }
 \examples{
 \dontrun{

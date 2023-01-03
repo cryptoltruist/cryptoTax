@@ -2,6 +2,7 @@
 #'
 #' @description Matches prices obtained through the `fetch_prices()` function with the transaction data frame.
 #' @param data The dataframe
+#' @param my.coins Your coins to match
 #' @keywords money crypto
 #' @export
 #' @examples
@@ -12,7 +13,7 @@
 #' @importFrom utils timestamp
 #' @importFrom rlang .data
 
-match_prices <- function(data) {
+match_prices <- function(data, my.coins = NULL) {
   all.data <- data
 
   # Create an empty spot.rate if missing else the function won't work
@@ -34,48 +35,16 @@ match_prices <- function(data) {
   all.data <- all.data %>%
     mutate(spot.rate = ifelse(.data$currency == "TCAD", 1, .data$spot.rate))
 
-  # List all active coins
-  if (!exists("coins.list")) {
-    coins.list <- crypto2::crypto_list(only_active = TRUE)
-    coins.list <<- coins.list
-  }
-
-  # Remove some bad coins from list (which share the same name with NANO or EFI for example)
-  coins.list <- coins.list %>%
-    filter(!(.data$slug %in% c("xeno-token", "earnablefi")))
-
-  # Define coins from our merged data set
-  my.coins <- unique(all.data$currency)
-  names(my.coins) <- my.coins
-
-  # Remove the NFTs, TCAD, CAD, GB
-  my.coins <- my.coins[!grepl("NFT", my.coins)]
-  my.coins <- my.coins[!grepl("TCAD", my.coins)]
-  my.coins <- my.coins[!grepl("CAD", my.coins)]
-  my.coins <- my.coins[!grepl("GB", my.coins)]
-  # Remove TCAD/CAD (Market data is untracked: This project is featured as an 'Untracked Listing')
-
   # Apply the fetch_prices function to all the coins
   if (!exists("list.prices")) {
-    list.prices <- lapply(my.coins,
-      fetch_prices,
-      data = all.data,
-      coins.list = coins.list
-    )
+    list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
     list.prices <<- list.prices
   }
-
-  # Combine the lists together in one dataframe, and change the date format
-  df.prices <- bind_rows(list.prices) %>%
-    mutate(
-      date2 = lubridate::as_date(.data$timestamp),
-      currency = ifelse(.data$currency == "XNO", "NANO", .data$currency)
-    )
 
   # Get date in proper format for matching and merge data
   new.data <- all.data %>%
     mutate(date2 = lubridate::as_date(.data$date)) %>%
-    left_join(df.prices[c("currency", "spot.rate2", "date2")], by = c("date2", "currency"))
+    left_join(list.prices[c("currency", "spot.rate2", "date2")], by = c("date2", "currency"))
 
   # Add source of spot.rate and total.price
   new.data <- new.data %>%

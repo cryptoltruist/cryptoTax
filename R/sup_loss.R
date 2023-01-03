@@ -1,7 +1,8 @@
 #' @title Calculate superficial capital losses
 #'
 #' @description Calculate superficial capital losses to be substracted from total capital losses.
-#' @param date The date
+#' @param data The data
+#' @param cl The number of cores to use.
 #' @keywords money crypto
 #' @export
 #' @examples
@@ -12,15 +13,15 @@
 #' @importFrom lubridate %within%
 #' @importFrom rlang .data
 
-suploss_range <- function(date) {
-  after.30 <- date + lubridate::days(30)
-  before.30 <- date - lubridate::days(30)
-  range <- lubridate::interval(before.30, after.30)
-  range
-}
-
 format_suploss <- function(data, cl = NULL) {
-  cat("[Calculating superficial losses...]\n")
+  if (interactive()) {
+    cat("[Calculating superficial losses...]\n")  
+  }
+  
+  if (is.null(data$currency)) {
+    data$currency <- "XXX"
+  }
+
   out <- pbapply::pblapply(unique(data$currency), function(x) {
     data %>%
       filter(.data$currency == x) %>%
@@ -29,8 +30,17 @@ format_suploss <- function(data, cl = NULL) {
   }, cl = cl) %>%
     bind_rows() %>%
     arrange(date)
-  cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
+  if (interactive()) {
+    cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
+  }
   out
+}
+
+suploss_range <- function(date) {
+  after.30 <- date + lubridate::days(30)
+  before.30 <- date - lubridate::days(30)
+  range <- lubridate::interval(before.30, after.30)
+  range
 }
 
 check_suploss <- function(data) {
@@ -101,7 +111,7 @@ sup_loss_single_df <- function(data) {
     mutate(suploss.range = suploss_range(.data$date))
   list.ranges <- data.range %>%
     filter(.data$transaction == "buy") %>%
-    select(.data$currency, .data$suploss.range)
+    select("currency", "suploss.range")
   # Calculate the sum of buy quantities for each range of 60 days...
   list.ranges.df <- check_suploss(data.range)
   quantity.60days <- lapply(list.ranges.df, function(x) {
@@ -128,8 +138,8 @@ sup_loss_single_df <- function(data) {
     x %>%
       utils::tail(1) %>%
       ungroup() %>%
-      select(.data$total.quantity) %>%
-      rename(share.left60 = .data$total.quantity)
+      select("total.quantity") %>%
+      rename(share.left60 = "total.quantity")
   }) %>% bind_rows()
   # if(nrow(share.left60) == 2 &
   #   share.left60$share.left60[1] == 0 &

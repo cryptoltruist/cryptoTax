@@ -1,7 +1,11 @@
-^cryptoTaxR\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^data-raw$
 ^README\.Rmd$
 ^cryptoTax.Rproj$
 ^TODOS.md$
+^.*\.Rproj$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
