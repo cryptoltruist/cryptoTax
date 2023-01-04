@@ -8,11 +8,11 @@ Authors@R:
            family = "Cryptoltruist",
            role = c("aut", "cre"),
            email = "93457844+cryptoltruist@users.noreply.github.com")
-Description: Helps calculate crypto taxes in R. First by allowing 
+Description: Helps calculate crypto taxes in R. First, by allowing 
   you to format .CSV files from various exchanges to one
   large dataframe of organized transactions. Second, by allowing you to 
   calculate your Adjusted Cost Base (ACB), ACB per share, and 
-  realized and unrealized capital gains/losses. Third by calculating
+  realized and unrealized capital gains/losses. Third, by calculating
   revenues gained from staking, interest, airdrops, etc. Fourth, by 
   calculating superficial losses as well. Only supports basic or simple 
   tax scenarios (for now). *Disclaimer: This is not financial advice. 

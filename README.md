@@ -9,11 +9,11 @@ Please consult a tax professional as necessary*.
 
 Helps calculate crypto taxes in R.
 
-1.  First by allowing you to format .CSV files from various exchanges to
-    one large dataframe of organized transactions.
+1.  First, by allowing you to format .CSV files from various exchanges
+    to one large dataframe of organized transactions.
 2.  Second, by allowing you to calculate your Adjusted Cost Base (ACB),
     ACB per share, and realized and unrealized capital gains/losses.
-3.  Third by calculating revenues gained from staking, interest,
+3.  Third, by calculating revenues gained from staking, interest,
     airdrops, etc.
 4.  Fourth, by calculating superficial losses as well, if desired.
 
