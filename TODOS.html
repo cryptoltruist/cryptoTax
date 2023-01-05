@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-primary navbar-expand-lg bg-dark"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">cryptoTax</a>
 
@@ -59,18 +59,21 @@
 
 <div id="development-roadmap-to-do-list" class="section level1">
 
-<ul><li>Superficial loss needs to look at least 30 days in the new year (assuming a transaction occured on the last day of the year). Therefore, when filtering for year, it should first calculate superficial losses until say January 30 of the next year, and at the end filter again for the selected year.</li>
-<li>Integrate <code>format_suploss</code> in <code>ACB</code> with <code>suploss = TRUE</code>
-</li>
-<li>Combine <code>ACB_suploss</code> and <code>ACB</code> and add <code>suploss</code> argument.</li>
+<ul><li>Shakepay: include CAD referrals in rewards</li>
+<li>Shakepay: add support for sales…</li>
+<li>Write new function to get latest transaction dates by exchanges.</li>
+<li>Write new function to check where negative balances appear.</li>
+<li>Write vignette on the general workflow using <code>prepare_list_prices</code>, etc.</li>
+<li>Superficial loss needs to look at least 30 days in the new year (assuming a transaction occured on the last day of the year). Therefore, when filtering for year, it should first calculate superficial losses until say January 30 of the next year, and at the end filter again for the selected year.</li>
 <li>Fix duplicated columns in sup loss calculations</li>
 <li>Better error message when not providing first buy transactions (so no ACB…)</li>
 <li>Check for all trading exchanges that prices of sells and buys match</li>
 <li>For NA fees, check and replace with 0 in ACB instead of each exchange…</li>
 <li>Detect new transaction types not accounted for</li>
+<li>Replace for-loops with dplyr (e.g., in ACB) to increase efficiency</li>
 <li>Think about using data.table or dtplyr to increase efficiency</li>
 <li>Clarify the time zones for year to year transition days!</li>
-<li>Still have to follow-up with each exchange where time isn’t specified to know whether it is EST or EDT time! Including: Wealthsimple, Binance.</li>
+<li>Still have to follow-up with each exchange where time isn’t specified to know whether it is EST or EDT time! Including: Wealthsimple.</li>
 <li>When price is fetched through <code>priceR</code>, indicate the source of the price accordingly</li>
 <li>Add option to change whether different transaction types (cashback, airdrops) are considered as part of taxable revenue stream (or explain how to do it in the Tax report)</li>
 <li>For <code><a href="reference/report_revenues.html">report_revenues()</a></code>, better and more clearly accommodate tax year</li>

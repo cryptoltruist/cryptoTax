@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-primary navbar-expand-lg bg-dark"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
@@ -61,16 +61,25 @@
 <h2 class="pkg-version" data-toc-text="0.0.2" id="cryptotax-002">cryptoTax 0.0.2<a class="anchor" aria-label="anchor" href="#cryptotax-002"></a></h2>
 <p>New Features:</p>
 <ul><li>New <code>pkgdown</code> website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.</li>
-<li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow.</li>
+<li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow with thousands of transactions.</li>
 <li>Added ACB example data sets</li>
+<li>Added shakepay example data set</li>
 <li>New function: <code>format_binance_earn</code>, to process Binance rewards.</li>
 <li>New function: <code>format_binance</code>, a general version that works with the general transaction report.</li>
 </ul><p>Improvements:</p>
-<ul><li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
+<ul><li>
+<code>ACB_suploss</code> integrates the primary <code>ACB</code> function, which accordingly gains a new logical argument, <code>suploss</code>.</li>
+<li>
+<code>format_suploss</code> integrates <code>ACB</code> when <code>suploss = TRUE</code>, and gains a greatly improved code base.</li>
+<li>
+<code>add_quantities</code> switches from a for-loop to <code>dplyr</code> code.</li>
+<li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
 <li>Added tests for ACB and superficial losses</li>
 <li>Updated <code>format_newton</code> to the new format</li>
 </ul><p>Bug Fixes:</p>
-<ul><li>Fixed a bug for NANO/XNO</li>
+<ul><li>
+<code>format_ACB</code>: Fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>
+<li>Fixed a bug for NANO/XNO</li>
 <li>Fixed various R CMD check errors, warnings, and notes.</li>
 </ul></div>
     <div class="section level2">

@@ -31,7 +31,7 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/news/index.html</loc>
   </url>
   <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/ACB_suploss.html</loc>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/ACB.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.html</loc>
@@ -149,6 +149,9 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/report_summary.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/shakepay.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/tax_box.html</loc>
