@@ -1,6 +1,8 @@
 ---
 output: 
-  github_document
+  github_document:
+    toc: TRUE
+    df_print: kable
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -43,26 +45,56 @@ data
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
+For more on calculating the ACB, as well as superficial losses, see the [corresponding vignette](cryptoTaxarticles/ACB.html).
+
+# Supported exchanges
+
+Currently, the following exchanges are supported with the `format_*` functions:
+
+1. Adalite
+1. Binance
+1. BlockFi
+1. Crypto.com (app, exchange, wallet)
+1. Celsius
+1. CoinSmart
+1. Exodus wallet
+1. Gemini
+1. Newton
+1. Pooltool (ADA)
+1. Presearch
+1. Shakepay
+
+To support another exchange not listed here, please open an issue. You can also prepare your own file according to the style of one of those exchanges and use the corresponding function.
+
 # Workflow demo
 
-```{r workflow}
-
+```{r workflow, warning=FALSE, message=FALSE}
 # Prepare list of coins
-my.coins <- c("BTC", "CRO", "ETH")
-
+my.coins <- c("BTC", "CRO", "ETH", "ETHW")
 list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
+# Note that for some exchanges this step may be unnecessary
 
-# Load data
+# Load data and format shakepay file
 data(shakepay)
-# Format file
-(formatted.shakepay <- format_shakepay(shakepay))
+formatted.shakepay <- format_shakepay(shakepay)
 
-all.data <- merge_exchanges(formatted.shakepay)
+# Load data and format CDC file
+data(CDC)
+formatted.CDC <- format_CDC(CDC)
 
+# Merge data from the different exchanges
+all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
+
+# Format data with ACB
 formatted.ACB <- format_ACB(all.data)
 
-as.data.frame(formatted.ACB)
+# Let's get a preview of the output
+as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
+```
 
+### Summary info
+
+```{r summary, warning=FALSE}
 # Get latest ACB.share for each coin (ACB)
 report_overview(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
@@ -74,7 +106,11 @@ report_summary(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
   local.timezone = "America/Toronto"
 )
+```
 
+### Revenue estimation
+
+```{r revenues, warning=FALSE}
 table.revenues <- report_revenues(formatted.ACB, tax.year = "2021")
 table.revenues
 

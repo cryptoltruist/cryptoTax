@@ -18,6 +18,7 @@
 - When price is fetched through `priceR`, indicate the source of the price accordingly
 - Add option to change whether different transaction types (cashback, airdrops) are considered as part of taxable revenue stream (or explain how to do it in the Tax report)
 - For `report_revenues()`, better and more clearly accommodate tax year
+- Correct "Total time elapsed:" from minutes to seconds when in seconds
 - Add custom import with no non-sense defaults, but also the possibility for custom columns. Also add option for time zone.
 - Make sample datasets (2 exchanges, then combine them), e.g. CDC, ShakePay, Newton.
 - Clean up all the scripts; optimize code with renaming names at the top, etc.

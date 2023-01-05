@@ -4,8 +4,7 @@ New Features:
 
 - New `pkgdown` website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.
 - Informative progress bars with `format_ACB` and `format_suploss` since these functions are extremely slow with thousands of transactions.
-- Added ACB example data sets
-- Added shakepay example data set
+- Added example data sets (ACB, shakepay, CDC)
 - New function: `format_binance_earn`, to process Binance rewards.
 - New function: `format_binance`, a general version that works with the general transaction report.
 
