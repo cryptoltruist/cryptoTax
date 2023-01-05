@@ -1,17 +1,4 @@
 
-- <a href="#cryptotax-crypto-taxes-in-r-canada-only-"
-  id="toc-cryptotax-crypto-taxes-in-r-canada-only-">cryptoTax: Crypto
-  taxes in R (Canada only)
-  <img src='man/figures/logo.png' align="right" height="140" style="float:right; height:200px;" /></a>
-- <a href="#installation" id="toc-installation">Installation</a>
-- <a href="#acb-demo" id="toc-acb-demo">ACB demo</a>
-- <a href="#supported-exchanges" id="toc-supported-exchanges">Supported
-  exchanges</a>
-- <a href="#workflow-demo" id="toc-workflow-demo">Workflow demo</a>
-  - <a href="#summary-info" id="toc-summary-info">Summary info</a>
-  - <a href="#revenue-estimation" id="toc-revenue-estimation">Revenue
-    estimation</a>
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # cryptoTax: Crypto taxes in R (Canada only) <img src='man/figures/logo.png' align="right" height="140" style="float:right; height:200px;" />
@@ -122,9 +109,9 @@ all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)
-#> Process started at 2023-01-05 17:56:42. Please be patient as the transactions process.
+#> Process started at 2023-01-05 18:12:15. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2023-01-05 17:56:43. Total time elapsed: 1.04 minutes
+#> Process ended at 2023-01-05 18:12:16. Total time elapsed: 0.97 minutes
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
