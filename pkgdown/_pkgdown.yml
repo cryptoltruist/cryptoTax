@@ -10,7 +10,6 @@ toc:
   
 navbar:
   type: primary
-  bg: dark
   toc: TRUE
   right:
   - icon: fa-github
