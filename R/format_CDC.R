@@ -9,7 +9,6 @@
 #' certainly inaccurate. You will have to make a manual correction for the
 #' withdrawal fees after using `format_CDC`, on the resulting dataframe.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

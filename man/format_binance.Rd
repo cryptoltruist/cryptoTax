@@ -29,5 +29,3 @@ Warning: This does NOT process WITHDRAWALS (see the
 format_binance_earn(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

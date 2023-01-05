@@ -24,5 +24,3 @@ ACB(data)
 }
 
 }
-\keyword{crypto}
-\keyword{money}

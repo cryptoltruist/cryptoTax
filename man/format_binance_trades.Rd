@@ -30,5 +30,3 @@ Warning: This does NOT process WITHDRAWALS and associated fees. See the
 format_binance_trades(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

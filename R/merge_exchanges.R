@@ -2,7 +2,6 @@
 #'
 #' @description Provides a list of transactions, separated by coin..
 #' @param ... To pass the other exchanges to be merged.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

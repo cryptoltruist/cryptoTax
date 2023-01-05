@@ -11,7 +11,6 @@
 #' argument.
 #'
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

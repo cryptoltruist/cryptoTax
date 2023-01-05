@@ -32,7 +32,49 @@ remotes::install_github("cryptoltruist/cryptoTax")
 library(cryptoTax)
 data <- adjustedcostbase.ca_1
 data
-ACB(data, spot.rate = "price")
+ACB(data, spot.rate = "price", sup.loss = FALSE)
+```
+
+# Workflow demo
+
+```{r workflow}
+
+# Prepare list of coins
+my.coins <- c("BTC", "CRO", "ETH")
+
+list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
+
+# Load data
+data(shakepay)
+# Format file
+(formatted.shakepay <- format_shakepay(shakepay))
+
+all.data <- merge_exchanges(formatted.shakepay)
+
+formatted.ACB <- format_ACB(all.data)
+
+as.data.frame(formatted.ACB)
+
+# Get latest ACB.share for each coin (ACB)
+report_overview(formatted.ACB,
+  today.data = TRUE, tax.year = "2021",
+  local.timezone = "America/Toronto"
+)
+
+# Get summary of realized capital gains and losses
+report_summary(formatted.ACB,
+  today.data = TRUE, tax.year = "2021",
+  local.timezone = "America/Toronto"
+)
+
+table.revenues <- report_revenues(formatted.ACB, tax.year = "2021")
+table.revenues
+
+# Plot revenues by exchange
+crypto_pie(table.revenues)
+
+# Plot revenues by reward type
+crypto_pie(table.revenues, by = "revenue.type")
 ```
 
 *Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary*.

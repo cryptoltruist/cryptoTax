@@ -17,5 +17,3 @@ Format a .csv transaction history file from Celsius for later ACB processing.
 format_celsius(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

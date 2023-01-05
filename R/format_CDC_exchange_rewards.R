@@ -22,7 +22,6 @@
 #' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS!
 #'
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

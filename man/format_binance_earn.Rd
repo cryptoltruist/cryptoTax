@@ -41,5 +41,3 @@ functions for this purpose).
 format_binance_earn(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

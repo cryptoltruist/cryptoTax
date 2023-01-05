@@ -17,5 +17,3 @@ Provides a list of transactions, separated by coin..
 listby_coin(formatted.ACB)
 }
 }
-\keyword{crypto}
-\keyword{money}

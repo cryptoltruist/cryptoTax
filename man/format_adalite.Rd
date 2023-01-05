@@ -17,5 +17,3 @@ Format a .csv transaction history file from the Adalite wallet for later ACB pro
 format_adalite(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

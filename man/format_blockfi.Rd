@@ -17,5 +17,3 @@ Format a .csv transaction history file from BlockFi for later ACB processing.
 format_blockfi(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

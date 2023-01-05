@@ -4,7 +4,6 @@
 #' @param coin The coin
 #' @param data The dataframe
 #' @param coins.list The coins list
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

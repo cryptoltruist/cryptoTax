@@ -17,5 +17,3 @@ Format a .csv transaction history file from Gemini for later ACB processing.
 format_gemini(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

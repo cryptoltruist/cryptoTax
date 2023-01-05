@@ -2,7 +2,6 @@
 #'
 #' @description Format a .csv transaction history file from Wealthsimple for later ACB processing.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

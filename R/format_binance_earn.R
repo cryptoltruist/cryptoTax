@@ -23,7 +23,6 @@
 #' @param data The dataframe
 #' @param filetype Which file type to use, one of ("all", for all
 #' transactions, or "earn", for just earn).
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

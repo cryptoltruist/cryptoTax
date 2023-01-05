@@ -4,7 +4,6 @@
 #' @param data The dataframe formatted.ACB,
 #' @param tax.year which year
 #' @param local.timezone which time zone
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

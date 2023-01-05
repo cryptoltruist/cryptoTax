@@ -40,7 +40,6 @@ Imports:
     rlang,
     tidyselect,
     progress,
-    pbapply
 Suggests: 
     usethis,
     flextable,

@@ -8,7 +8,6 @@
 #' @param data The dataframe
 #' @param filetype Which Newton file format to use, one of c("yearly",
 #' "cointracker", or "koinly"). Only "yearly" (default) supported at this time.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

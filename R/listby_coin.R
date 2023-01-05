@@ -2,7 +2,6 @@
 #'
 #' @description Provides a list of transactions, separated by coin..
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

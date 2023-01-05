@@ -29,5 +29,3 @@ function for this purpose.
 format_binance_withdrawals(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

@@ -17,5 +17,3 @@ Format a .csv transaction history file from CoinSmart for later ACB processing.
 format_coinsmart(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

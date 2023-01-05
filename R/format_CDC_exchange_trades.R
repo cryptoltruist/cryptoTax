@@ -24,7 +24,6 @@
 #' `read.csv()`, add the argument `skip = 3`. You will then be able to
 #' read the file normally.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

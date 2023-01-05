@@ -26,5 +26,3 @@ print_report()
 }
 
 }
-\keyword{crypto}
-\keyword{money}

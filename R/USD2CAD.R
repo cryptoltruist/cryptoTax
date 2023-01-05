@@ -4,7 +4,6 @@
 #' @param data The data
 #' @param conversion What to convert to
 #' @param currency What to convert from
-#' @keywords money
 #' @export
 #' @examples
 #' # Not work anymore

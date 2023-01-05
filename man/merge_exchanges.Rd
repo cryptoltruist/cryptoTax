@@ -17,5 +17,3 @@ Provides a list of transactions, separated by coin..
 merge_exchanges(formatted.data)
 }
 }
-\keyword{crypto}
-\keyword{money}

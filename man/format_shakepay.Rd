@@ -17,5 +17,3 @@ Format a .csv transaction history file from Shakepay for later ACB processing.
 format_shakepay(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

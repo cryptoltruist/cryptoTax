@@ -17,5 +17,3 @@ Format a .csv transaction history file from Uphold for later ACB processing.
 format_uphold(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

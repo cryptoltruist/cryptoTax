@@ -16,5 +16,3 @@ tax_table(table, repeat.header = FALSE, type = 1)
 \description{
 Format tax tables for the final rmd/html report.
 }
-\keyword{crypto}
-\keyword{money}

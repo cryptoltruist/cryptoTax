@@ -2,7 +2,6 @@
 #'
 #' @description Format a custom .csv transaction history file from the Binance Smart Chain wallet for later ACB processing.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

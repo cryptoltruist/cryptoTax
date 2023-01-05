@@ -17,5 +17,3 @@ Format a .csv transaction history file from the Cardano PoolTool for later ACB p
 format_pooltool(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

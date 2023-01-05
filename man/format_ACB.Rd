@@ -30,5 +30,3 @@ along with ACB per share and realized capital gains or losses.
 format_ACB(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

@@ -3,13 +3,14 @@ url: https://cryptoltruist.github.io/cryptoTax/
 template:
   bootstrap: 5
   bslib:
-    primary: "#964D00"
+    primary: "#F6921A"
   
 toc:
   depth: 4
   
 navbar:
-  type: default
+  type: primary
+  bg: dark
   toc: TRUE
   right:
   - icon: fa-github

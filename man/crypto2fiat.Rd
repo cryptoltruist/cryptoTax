@@ -22,5 +22,3 @@ crypto2fiat(data)
 }
 
 }
-\keyword{crypto}
-\keyword{money}

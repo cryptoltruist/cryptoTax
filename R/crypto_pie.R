@@ -3,7 +3,6 @@
 #' @description Format a .csv file from Newton for later ACB processing.
 #' @param table.revenues The revenue table to plot
 #' @param by To plot by which element, one of `c("exchange", "revenue.type")`.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

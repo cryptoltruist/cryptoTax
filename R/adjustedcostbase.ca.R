@@ -1,4 +1,4 @@
-#' Sample data set provided by adjustedcostbase.ca
+#' Sample data sets provided by adjustedcostbase.ca
 #'
 #' A dataset from adjustedcostbase.ca to demonstrate adjusted cost base as well as
 #' capital gains/losses. Used as demo for our own gains() function.

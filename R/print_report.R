@@ -6,7 +6,6 @@
 #' @param table.revenues The table of revenues.
 #' @param report.summary The report summary.
 #' @param sup.losses The calculated superficial losses.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

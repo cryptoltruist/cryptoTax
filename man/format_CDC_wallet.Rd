@@ -25,5 +25,3 @@ argument.
 format_CDC_wallet(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

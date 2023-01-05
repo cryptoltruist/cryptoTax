@@ -41,5 +41,3 @@ read the file normally.
 format_CDC_exchange_trades(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

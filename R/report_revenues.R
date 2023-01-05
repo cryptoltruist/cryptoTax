@@ -4,7 +4,6 @@
 #' @param formatted.ACB The formatted ACB data.
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

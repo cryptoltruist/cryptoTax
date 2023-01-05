@@ -7,7 +7,6 @@
 #' `c("staking", "interest", "mining")`.
 #' @param sup.loss Logical, whether to take superficial losses into account.
 #' @param cl Number of cores to use for parallel processing.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{
@@ -32,8 +31,8 @@ format_ACB <- function(data,
 
   # Benchmarks
   start_time <- Sys.time()
-  cat(paste(
-    "Process started at", start_time,
+  cat(paste0(
+    "Process started at ", start_time,
     ". Please be patient as the transactions process.\n"
   ))
 
@@ -42,27 +41,21 @@ format_ACB <- function(data,
 
   all.data <- data
 
-  if (isTRUE(sup.loss)) {
-    all.data <- all.data %>%
-      format_suploss()
-  }
-
   cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
 
   capital.gains <- all.data %>%
     arrange(date) %>%
     mutate(currency2 = .data$currency) %>%
-    group_by(.data$currency) %>%
-    group_modify(~ if (isTRUE(sup.loss)) {
-      ACB_suploss(.x, total.price = "total.price", as.revenue = as.revenue)
-    } else {
-      ACB(.x, total.price = "total.price", as.revenue = as.revenue)
-    }) %>%
+    group_by(.data$currency, .drop = FALSE) %>%
+    group_modify(~ ACB(.x,
+      total.price = "total.price", as.revenue = as.revenue,
+      sup.loss = sup.loss
+    )) %>%
     arrange(date) %>%
     relocate("date", .before = "currency") %>%
     relocate("fees", .before = "description")
 
-  neg.val <- "WARNING: Some balances have negative values. Double-check for missing transactions."
+  neg.val <- "WARNING: Some balances have negative values. Double-check for missing transactions.\n"
 
   if (any(capital.gains$total.quantity < 0)) {
     cat(neg.val)
@@ -75,9 +68,11 @@ format_ACB <- function(data,
 
   # Benchmarks
   end_time <- Sys.time()
-  cat(paste("Process ended at", end_time))
   total_time <- end_time - start_time
-  cat(paste("Total time elapsed:", total_time))
+  cat(paste0(
+    "Process ended at ", end_time, ". Total time elapsed: ",
+    round(total_time, 2), " minutes\n"
+  ))
 
   capital.gains
 }

@@ -34,5 +34,3 @@ errors.
 match_prices(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

@@ -5,7 +5,6 @@
 #' @param sup.losses sup.losses
 #' @param table.revenues table.revenues
 #' @param proceeds proceeds
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

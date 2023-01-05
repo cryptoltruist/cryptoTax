@@ -4,7 +4,6 @@
 #' @param coin The coin
 #' @param date The date
 #' @param currency The currency
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

@@ -24,5 +24,3 @@ merge the two datasets.
 format_newton(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

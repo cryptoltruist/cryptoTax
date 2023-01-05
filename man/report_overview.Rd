@@ -28,5 +28,3 @@ Provides a summary of Adjusted Cost Base (ACB) per share, as well as realized an
 report_overview(formatted.ACB)
 }
 }
-\keyword{crypto}
-\keyword{money}

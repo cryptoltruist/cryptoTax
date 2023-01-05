@@ -17,5 +17,3 @@ Format a custom .csv transaction history file from the Binance Smart Chain walle
 format_BSC(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

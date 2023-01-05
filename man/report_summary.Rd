@@ -28,5 +28,3 @@ Provides a summary of realized capital gains and losses (and total).
 report_summary(formatted.ACB)
 }
 }
-\keyword{crypto}
-\keyword{money}

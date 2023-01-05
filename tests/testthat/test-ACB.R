@@ -4,7 +4,7 @@ data
 # https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/
 test_that("adjustedcostbase.ca basic", {
   expect_equal(
-    ACB(data, spot.rate = "price"),
+    ACB(data, spot.rate = "price", sup.loss = FALSE),
     structure(
       list(
         date = as.Date(c("2014-03-03", "2014-05-01", "2014-07-18", "2014-09-25")),

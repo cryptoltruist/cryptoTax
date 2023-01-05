@@ -12,7 +12,6 @@
 #' Warning: This does NOT process TRADES See the `format_binance_trades()`
 #' function for this purpose.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

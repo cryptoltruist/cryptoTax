@@ -26,5 +26,3 @@ withdrawal fees after using \code{format_CDC}, on the resulting dataframe.
 format_CDC(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

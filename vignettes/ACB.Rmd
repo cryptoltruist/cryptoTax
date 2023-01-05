@@ -35,7 +35,7 @@ Next, we generate the calculations to achieve the following result:
 ![](images/ACB1.png)
 
 ```{r}
-ACB(data, spot.rate = "price")
+ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
 # Superficial losses
@@ -50,8 +50,7 @@ We first demonstrate the "Violation of the Superficial Loss Rule" by using regul
 
 ```{r}
 data <- adjustedcostbase.ca_2
-x <- format_suploss(data)
-x <- ACB(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
 Per default, there are a lot of columns to provide as much information as possible. To make it look as short as the adjustedcostbase.ca example, we can subselect relevant columns:
@@ -66,7 +65,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB3.png)
 
 ```{r}
-x <- ACB_suploss(x, spot.rate = "price")
+x <- ACB(x, spot.rate = "price")
 select(x, date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -78,8 +77,7 @@ We continue with the second superficial loss example. We first demonstrate the "
 
 ```{r}
 data <- adjustedcostbase.ca_3
-x <- format_suploss(data)
-x <- ACB(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price", sup.loss = FALSE)
 select(x, date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -88,7 +86,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB5.png)
 
 ```{r}
-x <- ACB_suploss(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price")
 select(x, date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -102,8 +100,7 @@ We continue with the third superficial loss example (first example in https://ww
 
 ```{r}
 data <- adjustedcostbase.ca_4
-x <- format_suploss(data)
-x <- ACB(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price", sup.loss = FALSE)
 select(x, date, transaction, quantity, price, total.price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -112,7 +109,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB7.png)
 
 ```{r}
-x <- ACB_suploss(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price")
 select(x, date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -126,8 +123,7 @@ We continue with the fourth superficial loss example (second example in https://
 
 ```{r}
 data <- adjustedcostbase.ca_5
-x <- format_suploss(data)
-x <- ACB(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price", sup.loss = FALSE)
 select(x, date, transaction, quantity, price, total.price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -136,7 +132,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB9.png)
 
 ```{r}
-x <- ACB_suploss(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price")
 select(x, date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -152,15 +148,14 @@ Fortunately, `cryptoTax` allows claiming partial losses automatically. We first 
 
 ```{r}
 data <- adjustedcostbase.ca_6
-x <- format_suploss(data)
-x <- ACB(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price", sup.loss = FALSE)
 select(x, date, transaction, quantity, price, total.price, total.quantity, ACB, ACB.share, gains)
 ```
 
 Next, we do it the correct way, *accounting* for superficial losses, and include a few more columns for the demonstration:
 
 ```{r}
-x <- ACB_suploss(x, spot.rate = "price")
+x <- ACB(data, spot.rate = "price")
 select(
   x, date, transaction, quantity, price, total.quantity,
   suploss.range, sup.loss, sup.loss.quantity, ACB, ACB.share,

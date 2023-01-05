@@ -5,7 +5,6 @@
 #' @param today.data whether to fetch today's data.
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{
@@ -39,7 +38,7 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
 
     warning(
       "gains, losses, and net have been filtered for tax year ",
-      tax.year, "(time zone = ", local.timezone, ")"
+      tax.year, " (time zone = ", local.timezone, ")"
     )
   }
 

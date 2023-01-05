@@ -9,7 +9,6 @@
 #' @param end.date What date to end reporting prices for.
 #' @param force Whether to force recreating list.prices even though
 #' it already exists (e.g., if you added new coins or new dates).
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

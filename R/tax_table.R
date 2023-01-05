@@ -4,7 +4,6 @@
 #' @param table The table to format
 #' @param repeat.header Logical, whether to repeat headers at the bottom.
 #' @param type Type of table, one of 1 (default), 2, or 3.
-#' @keywords money crypto
 #' @export
 #' @importFrom dplyr %>% filter arrange mutate select summarize desc
 #' @importFrom rlang .data

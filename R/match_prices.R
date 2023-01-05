@@ -3,7 +3,6 @@
 #' @description Matches prices obtained through the `fetch_prices()` function with the transaction data frame.
 #' @param data The dataframe
 #' @param my.coins Your coins to match
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

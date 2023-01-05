@@ -19,5 +19,3 @@ Format a .csv file from Newton for later ACB processing.
 crypto_pie(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

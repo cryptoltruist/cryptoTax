@@ -25,5 +25,3 @@ Provides a summary of revenues from all sources.
 report_revenues(formatted.ACB)
 }
 }
-\keyword{crypto}
-\keyword{money}

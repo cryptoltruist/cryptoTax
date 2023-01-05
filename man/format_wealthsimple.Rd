@@ -17,5 +17,3 @@ Format a .csv transaction history file from Wealthsimple for later ACB processin
 format_wealthsimple(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

@@ -2,7 +2,6 @@
 #'
 #' @description Format a .csv transaction history file from Shakepay for later ACB processing.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{
@@ -41,7 +40,8 @@ format_shakepay <- function(data) {
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment"
-    )
+    ) %>%
+    filter(.data$currency != "CAD")
 
   # Create a "SHAKES" object
   SHAKES <- data %>%

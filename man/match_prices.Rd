@@ -19,5 +19,3 @@ Matches prices obtained through the \code{fetch_prices()} function with the tran
 match_prices(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

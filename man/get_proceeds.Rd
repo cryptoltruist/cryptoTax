@@ -21,5 +21,3 @@ Get proceeds of sold coins, ACB of sold coins, and resulting difference between 
 ACB(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

@@ -21,5 +21,3 @@ Fetches daily prices of coins through the crypto2 package.
 fetch_prices(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

@@ -36,5 +36,3 @@ WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS!
 format_CDC_exchange_rewards(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

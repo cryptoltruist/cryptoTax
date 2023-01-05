@@ -20,4 +20,3 @@ This function allows you to convert USD to CAD.
 # Not work anymore
 # USD2CAD(date = "2021-10-08", conversion = "USD", currency = "CAD")
 }
-\keyword{money}

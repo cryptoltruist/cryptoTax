@@ -2,7 +2,6 @@
 #'
 #' @description Format a .csv transaction history file from the Cardano PoolTool for later ACB processing. Instructions: Use https://pooltool.io/ click on "rewards data for taxes", search your ADA address, scroll to the bottom of the page, and use the export tool to export all transactions. Make sure to use the "Generic(CSV)" format.
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

@@ -17,5 +17,3 @@ Format a .csv transaction history file from the Exodus wallet for later ACB proc
 format_exodus(data)
 }
 }
-\keyword{crypto}
-\keyword{money}

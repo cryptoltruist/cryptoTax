@@ -12,7 +12,6 @@
 #' Warning: This does NOT process WITHDRAWALS (see the
 #' `format_binance_withdrawals()` function for this purpose).
 #' @param data The dataframe
-#' @keywords money crypto
 #' @export
 #' @examples
 #' \dontrun{

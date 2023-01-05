@@ -17,5 +17,3 @@ Format a .csv transaction history file from Presearch for later ACB processing.
 format_presearch(data)
 }
 }
-\keyword{crypto}
-\keyword{money}
