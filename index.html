@@ -98,7 +98,20 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
+  <main id="main" class="col-md-9"><ul>
+<li><a href="#cryptotax-crypto-taxes-in-r-canada-only-" id="toc-cryptotax-crypto-taxes-in-r-canada-only-">cryptoTax: Crypto taxes in R (Canada only) <img src="reference/figures/logo.png" align="right" height="140" style="float:right; height:200px;"></a></li>
+<li><a href="#installation" id="toc-installation">Installation</a></li>
+<li><a href="#acb-demo" id="toc-acb-demo">ACB demo</a></li>
+<li><a href="#supported-exchanges" id="toc-supported-exchanges">Supported exchanges</a></li>
+<li>
+<a href="#workflow-demo" id="toc-workflow-demo">Workflow demo</a>
+<ul>
+<li><a href="#summary-info" id="toc-summary-info">Summary info</a></li>
+<li><a href="#revenue-estimation" id="toc-revenue-estimation">Revenue estimation</a></li>
+</ul>
+</li>
+</ul>
+<!-- README.md is generated from README.Rmd. Please edit that file --><div class="section level1">
 <div class="page-header">
 <img src="logo.png" class="logo" alt=""><h1 id="cryptotax-crypto-taxes-in-r-canada-only-">cryptoTax: Crypto taxes in R (Canada only) <a class="anchor" aria-label="anchor" href="#cryptotax-crypto-taxes-in-r-canada-only-"></a>
 </h1>
@@ -126,170 +139,613 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_1</span></span>
-<span><span class="va">data</span></span>
-<span><span class="co">#&gt;         date transaction quantity price fees</span></span>
-<span><span class="co">#&gt; 1 2014-03-03         buy      100    50   10</span></span>
-<span><span class="co">#&gt; 2 2014-05-01        sell       50   120   10</span></span>
-<span><span class="co">#&gt; 3 2014-07-18         buy       50   130   10</span></span>
-<span><span class="co">#&gt; 4 2014-09-25        sell       40    90   10</span></span>
-<span><span class="fu"><a href="reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date transaction quantity price fees total.price total.quantity  ACB</span></span>
-<span><span class="co">#&gt; 1 2014-03-03         buy      100    50   10        5000            100 5010</span></span>
-<span><span class="co">#&gt; 2 2014-05-01        sell       50   120   10        6000             50 2505</span></span>
-<span><span class="co">#&gt; 3 2014-07-18         buy       50   130   10        6500            100 9015</span></span>
-<span><span class="co">#&gt; 4 2014-09-25        sell       40    90   10        3600             60 5409</span></span>
-<span><span class="co">#&gt;   ACB.share gains</span></span>
-<span><span class="co">#&gt; 1     50.10    NA</span></span>
-<span><span class="co">#&gt; 2     50.10  3485</span></span>
-<span><span class="co">#&gt; 3     90.15    NA</span></span>
-<span><span class="co">#&gt; 4     90.15   -16</span></span></code></pre></div>
+<span><span class="va">data</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">date</th>
+<th align="left">transaction</th>
+<th align="right">quantity</th>
+<th align="right">price</th>
+<th align="right">fees</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2014-03-03</td>
+<td align="left">buy</td>
+<td align="right">100</td>
+<td align="right">50</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">2014-05-01</td>
+<td align="left">sell</td>
+<td align="right">50</td>
+<td align="right">120</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">2014-07-18</td>
+<td align="left">buy</td>
+<td align="right">50</td>
+<td align="right">130</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">2014-09-25</td>
+<td align="left">sell</td>
+<td align="right">40</td>
+<td align="right">90</td>
+<td align="right">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="12%">
+<col width="9%">
+<col width="6%">
+<col width="5%">
+<col width="12%">
+<col width="15%">
+<col width="5%">
+<col width="10%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">date</th>
+<th align="left">transaction</th>
+<th align="right">quantity</th>
+<th align="right">price</th>
+<th align="right">fees</th>
+<th align="right">total.price</th>
+<th align="right">total.quantity</th>
+<th align="right">ACB</th>
+<th align="right">ACB.share</th>
+<th align="right">gains</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2014-03-03</td>
+<td align="left">buy</td>
+<td align="right">100</td>
+<td align="right">50</td>
+<td align="right">10</td>
+<td align="right">5000</td>
+<td align="right">100</td>
+<td align="right">5010</td>
+<td align="right">50.10</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2014-05-01</td>
+<td align="left">sell</td>
+<td align="right">50</td>
+<td align="right">120</td>
+<td align="right">10</td>
+<td align="right">6000</td>
+<td align="right">50</td>
+<td align="right">2505</td>
+<td align="right">50.10</td>
+<td align="right">3485</td>
+</tr>
+<tr class="odd">
+<td align="left">2014-07-18</td>
+<td align="left">buy</td>
+<td align="right">50</td>
+<td align="right">130</td>
+<td align="right">10</td>
+<td align="right">6500</td>
+<td align="right">100</td>
+<td align="right">9015</td>
+<td align="right">90.15</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2014-09-25</td>
+<td align="left">sell</td>
+<td align="right">40</td>
+<td align="right">90</td>
+<td align="right">10</td>
+<td align="right">3600</td>
+<td align="right">60</td>
+<td align="right">5409</td>
+<td align="right">90.15</td>
+<td align="right">-16</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For more on calculating the ACB, as well as superficial losses, see the <a href="cryptoTaxarticles/ACB.html">corresponding vignette</a>.</p>
+</div>
+<div class="section level1">
+<h1 id="supported-exchanges">Supported exchanges<a class="anchor" aria-label="anchor" href="#supported-exchanges"></a>
+</h1>
+<p>Currently, the following exchanges are supported with the <code>format_*</code> functions:</p>
+<ol style="list-style-type: decimal">
+<li>Adalite</li>
+<li>Binance</li>
+<li>BlockFi</li>
+<li>Crypto.com (app, exchange, wallet)</li>
+<li>Celsius</li>
+<li>CoinSmart</li>
+<li>Exodus wallet</li>
+<li>Gemini</li>
+<li>Newton</li>
+<li>Pooltool (ADA)</li>
+<li>Presearch</li>
+<li>Shakepay</li>
+</ol>
+<p>To support another exchange not listed here, please open an issue. You can also prepare your own file according to the style of one of those exchanges and use the corresponding function.</p>
 </div>
 <div class="section level1">
 <h1 id="workflow-demo">Workflow demo<a class="anchor" aria-label="anchor" href="#workflow-demo"></a>
 </h1>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="co"># Prepare list of coins</span></span>
-<span><span class="va">my.coins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BTC"</span>, <span class="st">"CRO"</span>, <span class="st">"ETH"</span><span class="op">)</span></span>
-<span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Prepare list of coins</span></span>
+<span><span class="va">my.coins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BTC"</span>, <span class="st">"CRO"</span>, <span class="st">"ETH"</span>, <span class="st">"ETHW"</span><span class="op">)</span></span>
 <span><span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/prepare_list_prices.html">prepare_list_prices</a></span><span class="op">(</span>coins <span class="op">=</span> <span class="va">my.coins</span>, start.date <span class="op">=</span> <span class="st">"2021-01-01"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ❯ Scraping historical crypto data</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ❯ Processing historical crypto data</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co"># Note that for some exchanges this step may be unnecessary</span></span>
 <span></span>
-<span><span class="co"># Load data</span></span>
+<span><span class="co"># Load data and format shakepay file</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">shakepay</span><span class="op">)</span></span>
-<span><span class="co"># Format file</span></span>
-<span><span class="op">(</span><span class="va">formatted.shakepay</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">shakepay</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                  date   quantity currency total.price spot.rate transaction</span></span>
-<span><span class="co">#&gt; 1 2021-04-07 14:50:41 0.00103982      BTC  53.0333500  51002.43         buy</span></span>
-<span><span class="co">#&gt; 2 2021-04-08 12:12:57 0.00000480      BTC   0.2523938  52582.03     revenue</span></span>
-<span><span class="co">#&gt; 3 2021-04-08 12:22:07 0.00000300      BTC   0.1508610  50287.01     revenue</span></span>
-<span><span class="co">#&gt; 4 2021-04-10 12:47:14 0.00000330      BTC   0.1865411  56527.62     revenue</span></span>
-<span><span class="co">#&gt; 5 2021-04-11 12:03:31 0.00000350      BTC   0.2099232  59978.05     revenue</span></span>
-<span><span class="co">#&gt; 6 2021-04-11 12:21:49 0.00000380      BTC   0.2207769  58099.18     revenue</span></span>
-<span><span class="co">#&gt; 7 2021-04-25 00:52:19 0.00052991      BTC  31.2684800  59007.15        sell</span></span>
-<span><span class="co">#&gt;     description  comment revenue.type fees exchange rate.source</span></span>
-<span><span class="co">#&gt; 1 purchase/sale purchase         &lt;NA&gt;    0 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 2   shakingsats   credit      airdrop    0 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 3   shakingsats   credit      airdrop    0 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 4   shakingsats   credit      airdrop    0 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 5   shakingsats   credit      airdrop    0 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 6   shakingsats   credit      airdrop    0 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 7 purchase/sale     sale         &lt;NA&gt;    0 shakepay    exchange</span></span>
+<span><span class="va">formatted.shakepay</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">shakepay</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/merge_exchanges.html">merge_exchanges</a></span><span class="op">(</span><span class="va">formatted.shakepay</span><span class="op">)</span></span>
+<span><span class="co"># Load data and format CDC file</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">CDC</span><span class="op">)</span></span>
+<span><span class="va">formatted.CDC</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_CDC.html">format_CDC</a></span><span class="op">(</span><span class="va">CDC</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Merge data from the different exchanges</span></span>
+<span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/merge_exchanges.html">merge_exchanges</a></span><span class="op">(</span><span class="va">formatted.shakepay</span>, <span class="va">formatted.CDC</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Format data with ACB</span></span>
 <span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Process started at 2023-01-05 12:44:52. Please be patient as the transactions process.</span></span>
+<span><span class="co">#&gt; Process started at 2023-01-05 17:56:42. Please be patient as the transactions process.</span></span>
 <span><span class="co">#&gt; [Formatting ACB (progress bar repeats for each coin)...]</span></span>
-<span><span class="co">#&gt; Warning in format_ACB(all.data): WARNING: Adjusted cost base (ACB) and capital</span></span>
-<span><span class="co">#&gt; gains have been adjusted for the superficial loss rule. To avoid adjusting for</span></span>
-<span><span class="co">#&gt; the superficial loss rule, this, use argument `sup.loss = FALSE`.</span></span>
-<span><span class="co">#&gt; Process ended at 2023-01-05 12:44:53. Total time elapsed: 0.42 minutes</span></span>
+<span><span class="co">#&gt; Process ended at 2023-01-05 17:56:43. Total time elapsed: 1.04 minutes</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                  date currency   quantity total.price spot.rate transaction</span></span>
-<span><span class="co">#&gt; 1 2021-04-07 14:50:41      BTC 0.00103982    53.03335  51002.43         buy</span></span>
-<span><span class="co">#&gt; 2 2021-04-08 12:12:57      BTC 0.00000480     0.00000  52582.03     revenue</span></span>
-<span><span class="co">#&gt; 3 2021-04-08 12:22:07      BTC 0.00000300     0.00000  50287.01     revenue</span></span>
-<span><span class="co">#&gt; 4 2021-04-10 12:47:14      BTC 0.00000330     0.00000  56527.62     revenue</span></span>
-<span><span class="co">#&gt; 5 2021-04-11 12:03:31      BTC 0.00000350     0.00000  59978.05     revenue</span></span>
-<span><span class="co">#&gt; 6 2021-04-11 12:21:49      BTC 0.00000380     0.00000  58099.18     revenue</span></span>
-<span><span class="co">#&gt; 7 2021-04-25 00:52:19      BTC 0.00052991    31.26848  59007.15        sell</span></span>
-<span><span class="co">#&gt;   fees   description  comment revenue.type      value exchange rate.source</span></span>
-<span><span class="co">#&gt; 1    0 purchase/sale purchase         &lt;NA&gt; 53.0333500 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 2    0   shakingsats   credit      airdrop  0.2523938 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 3    0   shakingsats   credit      airdrop  0.1508610 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 4    0   shakingsats   credit      airdrop  0.1865411 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 5    0   shakingsats   credit      airdrop  0.2099232 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 6    0   shakingsats   credit      airdrop  0.2207769 shakepay    exchange</span></span>
-<span><span class="co">#&gt; 7    0 purchase/sale     sale         &lt;NA&gt; 31.2684800 shakepay    exchange</span></span>
-<span><span class="co">#&gt;   currency2 total.quantity                                    suploss.range</span></span>
-<span><span class="co">#&gt; 1       BTC     0.00103982 2021-03-08 14:50:41 UTC--2021-05-07 14:50:41 UTC</span></span>
-<span><span class="co">#&gt; 2       BTC     0.00104462 2021-03-09 12:12:57 UTC--2021-05-08 12:12:57 UTC</span></span>
-<span><span class="co">#&gt; 3       BTC     0.00104762 2021-03-09 12:22:07 UTC--2021-05-08 12:22:07 UTC</span></span>
-<span><span class="co">#&gt; 4       BTC     0.00105092 2021-03-11 12:47:14 UTC--2021-05-10 12:47:14 UTC</span></span>
-<span><span class="co">#&gt; 5       BTC     0.00105442 2021-03-12 12:03:31 UTC--2021-05-11 12:03:31 UTC</span></span>
-<span><span class="co">#&gt; 6       BTC     0.00105822 2021-03-12 12:21:49 UTC--2021-05-11 12:21:49 UTC</span></span>
-<span><span class="co">#&gt; 7       BTC     0.00052831 2021-03-26 00:52:19 UTC--2021-05-25 00:52:19 UTC</span></span>
-<span><span class="co">#&gt;   quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected</span></span>
-<span><span class="co">#&gt; 1      0.00103982   0.00052831        0.00000000    FALSE          0.000000</span></span>
-<span><span class="co">#&gt; 2      0.00103982   0.00052831        0.00000000    FALSE          0.000000</span></span>
-<span><span class="co">#&gt; 3      0.00103982   0.00052831        0.00000000    FALSE          0.000000</span></span>
-<span><span class="co">#&gt; 4      0.00103982   0.00052831        0.00000000    FALSE          0.000000</span></span>
-<span><span class="co">#&gt; 5      0.00103982   0.00052831        0.00000000    FALSE          0.000000</span></span>
-<span><span class="co">#&gt; 6      0.00103982   0.00052831        0.00000000    FALSE          0.000000</span></span>
-<span><span class="co">#&gt; 7      0.00103982   0.00052831        0.00052991    FALSE          4.711713</span></span>
-<span><span class="co">#&gt;   gains.sup gains.excess    gains      ACB ACB.share</span></span>
-<span><span class="co">#&gt; 1        NA           NA       NA 53.03335  51002.43</span></span>
-<span><span class="co">#&gt; 2        NA           NA       NA 53.03335  50768.08</span></span>
-<span><span class="co">#&gt; 3        NA           NA       NA 53.03335  50622.70</span></span>
-<span><span class="co">#&gt; 4        NA           NA       NA 53.03335  50463.74</span></span>
-<span><span class="co">#&gt; 5        NA           NA       NA 53.03335  50296.23</span></span>
-<span><span class="co">#&gt; 6        NA           NA       NA 53.03335  50115.62</span></span>
-<span><span class="co">#&gt; 7        NA           NA 4.711713 26.47658  50115.62</span></span>
-<span></span>
-<span><span class="co"># Get latest ACB.share for each coin (ACB)</span></span>
+<span><span class="co"># Let's get a preview of the output</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">19</span>, <span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">14</span>, <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="8%">
+<col width="4%">
+<col width="5%">
+<col width="5%">
+<col width="6%">
+<col width="5%">
+<col width="2%">
+<col width="14%">
+<col width="10%">
+<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">date</th>
+<th align="left">currency</th>
+<th align="right">quantity</th>
+<th align="right">total.price</th>
+<th align="right">spot.rate</th>
+<th align="left">transaction</th>
+<th align="right">fees</th>
+<th align="left">description</th>
+<th align="left">comment</th>
+<th align="left">revenue.type</th>
+<th align="right">value</th>
+<th align="left">exchange</th>
+<th align="left">rate.source</th>
+<th align="left">currency2</th>
+<th align="right">gains</th>
+<th align="right">ACB</th>
+<th align="right">ACB.share</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2021-05-03 22:05:50</td>
+<td align="left">BTC</td>
+<td align="right">0.0007334</td>
+<td align="right">51.25000</td>
+<td align="right">69882.7777778</td>
+<td align="left">buy</td>
+<td align="right">0</td>
+<td align="left">crypto_purchase</td>
+<td align="left">Buy BTC</td>
+<td align="left">NA</td>
+<td align="right">51.250000</td>
+<td align="left">CDC</td>
+<td align="left">exchange</td>
+<td align="left">BTC</td>
+<td align="right">NA</td>
+<td align="right">51.25000</td>
+<td align="right">69882.7777778</td>
+</tr>
+<tr class="even">
+<td align="left">2021-05-08 12:12:57</td>
+<td align="left">BTC</td>
+<td align="right">0.0001800</td>
+<td align="right">0.00000</td>
+<td align="right">52582.0324000</td>
+<td align="left">revenue</td>
+<td align="right">0</td>
+<td align="left">shakingsats</td>
+<td align="left">credit</td>
+<td align="left">airdrop</td>
+<td align="right">9.464766</td>
+<td align="left">shakepay</td>
+<td align="left">exchange</td>
+<td align="left">BTC</td>
+<td align="right">NA</td>
+<td align="right">104.28335</td>
+<td align="right">53391.2720277</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-05-23 22:09:39</td>
+<td align="left">CRO</td>
+<td align="right">117.9468230</td>
+<td align="right">0.00000</td>
+<td align="right">0.2559658</td>
+<td align="left">revenue</td>
+<td align="right">0</td>
+<td align="left">referral_gift</td>
+<td align="left">Sign-up Bonus Unlocked</td>
+<td align="left">referrals</td>
+<td align="right">30.190350</td>
+<td align="left">CDC</td>
+<td align="left">exchange</td>
+<td align="left">CRO</td>
+<td align="right">NA</td>
+<td align="right">53.42000</td>
+<td align="right">0.1778397</td>
+</tr>
+<tr class="even">
+<td align="left">2021-06-02 19:11:52</td>
+<td align="left">CRO</td>
+<td align="right">53.6136688</td>
+<td align="right">0.00000</td>
+<td align="right">0.2049850</td>
+<td align="left">revenue</td>
+<td align="right">0</td>
+<td align="left">reimbursement</td>
+<td align="left">Card Rebate: Spotify</td>
+<td align="left">rebate</td>
+<td align="right">10.990000</td>
+<td align="left">CDC</td>
+<td align="left">exchange</td>
+<td align="left">CRO</td>
+<td align="right">NA</td>
+<td align="right">53.42000</td>
+<td align="right">0.1482240</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-07-10 00:52:19</td>
+<td align="left">BTC</td>
+<td align="right">0.0005299</td>
+<td align="right">31.26848</td>
+<td align="right">59007.1521579</td>
+<td align="left">sell</td>
+<td align="right">0</td>
+<td align="left">purchase/sale</td>
+<td align="left">sale</td>
+<td align="left">NA</td>
+<td align="right">31.268480</td>
+<td align="left">shakepay</td>
+<td align="left">exchange</td>
+<td align="left">BTC</td>
+<td align="right">9.280183</td>
+<td align="right">82.29505</td>
+<td align="right">41494.3995728</td>
+</tr>
+<tr class="even">
+<td align="left">2021-07-14 18:20:27</td>
+<td align="left">CRO</td>
+<td align="right">0.2476190</td>
+<td align="right">0.00000</td>
+<td align="right">0.4846154</td>
+<td align="left">revenue</td>
+<td align="right">0</td>
+<td align="left">rewards_platform_deposit_credited</td>
+<td align="left">Mission Rewards Deposit</td>
+<td align="left">rewards</td>
+<td align="right">0.120000</td>
+<td align="left">CDC</td>
+<td align="left">exchange</td>
+<td align="left">CRO</td>
+<td align="right">NA</td>
+<td align="right">53.68000</td>
+<td align="right">0.1083018</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="summary-info">Summary info<a class="anchor" aria-label="anchor" href="#summary-info"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get latest ACB.share for each coin (ACB)</span></span>
 <span><span class="fu"><a href="reference/report_overview.html">report_overview</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in report_overview(formatted.ACB, today.data = TRUE, tax.year =</span></span>
-<span><span class="co">#&gt; "2021", : gains, losses, and net have been filtered for tax year 2021</span></span>
-<span><span class="co">#&gt;             date.last currency total.quantity cost.share total.cost gains</span></span>
-<span><span class="co">#&gt; 1 2021-04-25 00:52:19      BTC     0.00052831   50115.62      26.48  4.71</span></span>
-<span><span class="co">#&gt; 2 2021-04-25 00:52:19    Total             NA         NA      26.48  4.71</span></span>
-<span><span class="co">#&gt;   losses  net rate.today value.today unrealized.gains unrealized.losses</span></span>
-<span><span class="co">#&gt; 1      0 4.71   22774.35       12.03               NA            -14.45</span></span>
-<span><span class="co">#&gt; 2      0 4.71         NA       12.03                0            -14.45</span></span>
-<span><span class="co">#&gt;   unrealized.net currency2</span></span>
-<span><span class="co">#&gt; 1         -14.45       BTC</span></span>
-<span><span class="co">#&gt; 2         -14.45     Total</span></span>
-<span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="5%">
+<col width="8%">
+<col width="6%">
+<col width="6%">
+<col width="3%">
+<col width="4%">
+<col width="3%">
+<col width="6%">
+<col width="7%">
+<col width="9%">
+<col width="10%">
+<col width="8%">
+<col width="6%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">date.last</th>
+<th align="left">currency</th>
+<th align="right">total.quantity</th>
+<th align="right">cost.share</th>
+<th align="right">total.cost</th>
+<th align="right">gains</th>
+<th align="right">losses</th>
+<th align="right">net</th>
+<th align="right">rate.today</th>
+<th align="right">value.today</th>
+<th align="right">unrealized.gains</th>
+<th align="right">unrealized.losses</th>
+<th align="right">unrealized.net</th>
+<th align="left">currency2</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2021-07-10 00:52:19</td>
+<td align="left">BTC</td>
+<td align="right">0.0019833</td>
+<td align="right">41494.40</td>
+<td align="right">82.30</td>
+<td align="right">9.28</td>
+<td align="right">0</td>
+<td align="right">9.28</td>
+<td align="right">22774.35</td>
+<td align="right">45.17</td>
+<td align="right">NA</td>
+<td align="right">-37.13</td>
+<td align="right">-37.13</td>
+<td align="left">BTC</td>
+</tr>
+<tr class="even">
+<td align="left">2021-07-23 17:21:19</td>
+<td align="left">CRO</td>
+<td align="right">532.8120642</td>
+<td align="right">0.11</td>
+<td align="right">60.66</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.08</td>
+<td align="right">42.10</td>
+<td align="right">NA</td>
+<td align="right">-18.56</td>
+<td align="right">-18.56</td>
+<td align="left">CRO</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-06-27 21:17:50</td>
+<td align="left">ETH</td>
+<td align="right">0.0213553</td>
+<td align="right">2684.58</td>
+<td align="right">57.33</td>
+<td align="right">0.00</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1677.72</td>
+<td align="right">35.83</td>
+<td align="right">NA</td>
+<td align="right">-21.50</td>
+<td align="right">-21.50</td>
+<td align="left">ETH</td>
+</tr>
+<tr class="even">
+<td align="left">2021-07-23 17:21:19</td>
+<td align="left">Total</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">200.29</td>
+<td align="right">9.28</td>
+<td align="right">0</td>
+<td align="right">9.28</td>
+<td align="right">NA</td>
+<td align="right">123.10</td>
+<td align="right">0</td>
+<td align="right">-77.19</td>
+<td align="right">-77.19</td>
+<td align="left">Total</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Get summary of realized capital gains and losses</span></span>
 <span><span class="fu"><a href="reference/report_summary.html">report_summary</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in report_summary(formatted.ACB, today.data = TRUE, tax.year = "2021", :</span></span>
-<span><span class="co">#&gt; gains, losses, and net have been filtered for tax year 2021 (time zone =</span></span>
-<span><span class="co">#&gt; America/Toronto)</span></span>
-<span><span class="co">#&gt;                 Type  Amount currency</span></span>
-<span><span class="co">#&gt; 1           tax.year    2021      CAD</span></span>
-<span><span class="co">#&gt; 2              gains    4.71      CAD</span></span>
-<span><span class="co">#&gt; 3             losses    0.00      CAD</span></span>
-<span><span class="co">#&gt; 4                net    4.71      CAD</span></span>
-<span><span class="co">#&gt; 5         total.cost   26.48      CAD</span></span>
-<span><span class="co">#&gt; 6        value.today   12.03      CAD</span></span>
-<span><span class="co">#&gt; 7   unrealized.gains    0.00      CAD</span></span>
-<span><span class="co">#&gt; 8  unrealized.losses  -14.45      CAD</span></span>
-<span><span class="co">#&gt; 9     unrealized.net  -14.45      CAD</span></span>
-<span><span class="co">#&gt; 10     percentage.up -54.56%      CAD</span></span>
-<span><span class="co">#&gt; 11       all.time.up -36.77%      CAD</span></span>
-<span></span>
-<span><span class="va">table.revenues</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/report_revenues.html">report_revenues</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in report_revenues(formatted.ACB, tax.year = "2021"): revenues have been</span></span>
-<span><span class="co">#&gt; filtered for tax year 2021</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="kable-table">
+<table class="table">
+<thead><tr class="header">
+<th align="left">Type</th>
+<th align="left">Amount</th>
+<th align="left">currency</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">tax.year</td>
+<td align="left">2021</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="even">
+<td align="left">gains</td>
+<td align="left">9.28</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="odd">
+<td align="left">losses</td>
+<td align="left">0.00</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="even">
+<td align="left">net</td>
+<td align="left">9.28</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="odd">
+<td align="left">total.cost</td>
+<td align="left">200.29</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="even">
+<td align="left">value.today</td>
+<td align="left">123.10</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="odd">
+<td align="left">unrealized.gains</td>
+<td align="left">0.00</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="even">
+<td align="left">unrealized.losses</td>
+<td align="left">-77.19</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="odd">
+<td align="left">unrealized.net</td>
+<td align="left">-77.19</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="even">
+<td align="left">percentage.up</td>
+<td align="left">-38.54%</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="odd">
+<td align="left">all.time.up</td>
+<td align="left">-33.90%</td>
+<td align="left">CAD</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level3">
+<h3 id="revenue-estimation">Revenue estimation<a class="anchor" aria-label="anchor" href="#revenue-estimation"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">table.revenues</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/report_revenues.html">report_revenues</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Adding missing grouping variables: `exchange`</span></span>
-<span><span class="va">table.revenues</span></span>
-<span><span class="co">#&gt;   exchange           date.last total.revenues  airdrop referrals staking promo</span></span>
-<span><span class="co">#&gt; 1 shakepay 2021-04-11 12:21:49           1.02 1.020496         0       0     0</span></span>
-<span><span class="co">#&gt; 2    total 2021-04-11 12:21:49           1.02 1.020496         0       0     0</span></span>
-<span><span class="co">#&gt;   interests rebate rewards currency</span></span>
-<span><span class="co">#&gt; 1         0      0       0      CAD</span></span>
-<span><span class="co">#&gt; 2         0      0       0      CAD</span></span>
-<span></span>
+<span><span class="va">table.revenues</span></span></code></pre></div>
+<div class="kable-table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="8%">
+<col width="17%">
+<col width="13%">
+<col width="8%">
+<col width="9%">
+<col width="7%">
+<col width="5%">
+<col width="9%">
+<col width="6%">
+<col width="7%">
+<col width="8%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">exchange</th>
+<th align="left">date.last</th>
+<th align="right">total.revenues</th>
+<th align="right">airdrop</th>
+<th align="right">referrals</th>
+<th align="right">staking</th>
+<th align="right">promo</th>
+<th align="right">interests</th>
+<th align="right">rebate</th>
+<th align="right">rewards</th>
+<th align="left">currency</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">CDC</td>
+<td align="left">2021-07-23 17:21:19</td>
+<td align="right">91.82</td>
+<td align="right">0.00000</td>
+<td align="right">30.19035</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">10.36</td>
+<td align="right">51.15</td>
+<td align="right">0.12</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="even">
+<td align="left">shakepay</td>
+<td align="left">2021-06-23 12:21:49</td>
+<td align="right">41.30</td>
+<td align="right">41.29662</td>
+<td align="right">0.00000</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="left">CAD</td>
+</tr>
+<tr class="odd">
+<td align="left">total</td>
+<td align="left">2021-07-23 17:21:19</td>
+<td align="right">133.12</td>
+<td align="right">41.29662</td>
+<td align="right">30.19035</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">10.36</td>
+<td align="right">51.15</td>
+<td align="right">0.12</td>
+<td align="left">CAD</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Plot revenues by exchange</span></span>
 <span><span class="fu"><a href="reference/crypto_pie.html">crypto_pie</a></span><span class="op">(</span><span class="va">table.revenues</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-workflow-1.png"><!-- --></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p><img src="reference/figures/README-revenues-1.png"><!-- --></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Plot revenues by reward type</span></span>
 <span><span class="fu"><a href="reference/crypto_pie.html">crypto_pie</a></span><span class="op">(</span><span class="va">table.revenues</span>, by <span class="op">=</span> <span class="st">"revenue.type"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-workflow-2.png"><!-- --></p>
+<p><img src="reference/figures/README-revenues-2.png"><!-- --></p>
 <p><em>Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary</em>.</p>
+</div>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
