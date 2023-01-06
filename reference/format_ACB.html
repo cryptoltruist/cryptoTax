@@ -69,7 +69,7 @@ along with ACB per share and realized capital gains or losses.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_ACB</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
-<span>  as.revenue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"staking"</span>, <span class="st">"interest"</span>, <span class="st">"mining"</span><span class="op">)</span>,</span>
+<span>  as.revenue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"staking"</span>, <span class="st">"interests"</span>, <span class="st">"mining"</span><span class="op">)</span>,</span>
 <span>  sup.loss <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cl <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -83,7 +83,7 @@ along with ACB per share and realized capital gains or losses.</p>
 
 <dt>as.revenue</dt>
 <dd><p>Which should be treated as revenue, in list of
-<code>c("staking", "interest", "mining")</code>.</p></dd>
+<code>c("staking", "interests", "mining")</code>.</p></dd>
 
 
 <dt>sup.loss</dt>
@@ -97,9 +97,31 @@ along with ACB per share and realized capital gains or losses.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_ACB</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">format_ACB</span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-01-06 22:23:33. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid adjusting for the superficial loss rule, this, use argument `sup.loss = FALSE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-01-06 22:23:34. Total time elapsed: 0.33 minutes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 26</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   currency [2]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   date                currency  quantity total.p…¹ spot.…² trans…³  fees descr…⁴</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2021-05-07 <span style="color: #949494;">14:50:41</span> BTC       0.001<span style="text-decoration: underline;">04</span>       53.0  <span style="text-decoration: underline;">51</span>002. buy         0 purcha…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2021-05-07 <span style="color: #949494;">21:25:36</span> CAD      30              0        1  revenue     0 other  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2021-05-08 <span style="color: #949494;">12:12:57</span> BTC       0.000<span style="text-decoration: underline;">11</span>        0    <span style="text-decoration: underline;">52</span>582. revenue     0 shakin…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2021-05-09 <span style="color: #949494;">12:22:07</span> BTC       0.000<span style="text-decoration: underline;">12</span>        0    <span style="text-decoration: underline;">50</span>287. revenue     0 shakin…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2021-05-21 <span style="color: #949494;">12:47:14</span> BTC       0.000<span style="text-decoration: underline;">13</span>        0    <span style="text-decoration: underline;">56</span>528. revenue     0 shakin…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2021-06-11 <span style="color: #949494;">12:03:31</span> BTC       0.000<span style="text-decoration: underline;">14</span>        0    <span style="text-decoration: underline;">59</span>978. revenue     0 shakin…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 2021-06-23 <span style="color: #949494;">12:21:49</span> BTC       0.000<span style="text-decoration: underline;">15</span>        0    <span style="text-decoration: underline;">58</span>099. revenue     0 shakin…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> 2021-07-10 <span style="color: #949494;">00:52:19</span> BTC       0.000<span style="text-decoration: underline;">530</span>      31.3  <span style="text-decoration: underline;">59</span>007. sell        0 purcha…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 18 more variables: comment &lt;chr&gt;, revenue.type &lt;chr&gt;, value &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   exchange &lt;chr&gt;, rate.source &lt;chr&gt;, currency2 &lt;chr&gt;, total.quantity &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   suploss.range &lt;Interval&gt;, quantity.60days &lt;dbl&gt;, share.left60 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   sup.loss.quantity &lt;dbl&gt;, sup.loss &lt;lgl&gt;, gains.uncorrected &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   gains.sup &lt;lgl&gt;, gains.excess &lt;lgl&gt;, gains &lt;dbl&gt;, ACB &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ACB.share &lt;dbl&gt;, and abbreviated variable names ¹​total.price, ²​spot.rate,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ³​transaction, ⁴​description</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

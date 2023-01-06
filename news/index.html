@@ -62,22 +62,33 @@
 <p>New Features:</p>
 <ul><li>New <code>pkgdown</code> website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.</li>
 <li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow with thousands of transactions.</li>
-<li>Added example data sets (ACB, shakepay, CDC)</li>
+<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC)</li>
 <li>New function: <code>format_binance_earn</code>, to process Binance rewards.</li>
 <li>New function: <code>format_binance</code>, a general version that works with the general transaction report.</li>
 </ul><p>Improvements:</p>
 <ul><li>
-<code>ACB_suploss</code> integrates the primary <code>ACB</code> function, which accordingly gains a new logical argument, <code>suploss</code>.</li>
+<code>ACB_suploss</code>: integrates the primary <code>ACB</code> function, which accordingly gains a new logical argument, <code>suploss</code>.</li>
 <li>
-<code>format_suploss</code> integrates <code>ACB</code> when <code>suploss = TRUE</code>, and gains a greatly improved code base.</li>
+<code>format_suploss</code>: integrates <code>ACB</code> when <code>suploss = TRUE</code>, and gains a greatly improved code base.</li>
 <li>
-<code>add_quantities</code> switches from a for-loop to <code>dplyr</code> code.</li>
+<code>add_quantities</code>: switches from a for-loop to <code>dplyr</code> code.</li>
+<li>
+<code>format_newton</code>: updated to the new format</li>
+<li>
+<code>ACB</code>: Better error message when not providing first buy transactions (so no ACB…)</li>
+<li>
+<code>ACB</code>: Added tests for ACB and superficial losses</li>
+<li>Consistently use plural for reward types.</li>
 <li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
-<li>Added tests for ACB and superficial losses</li>
-<li>Updated <code>format_newton</code> to the new format</li>
 </ul><p>Bug Fixes:</p>
 <ul><li>
-<code>format_ACB</code>: Fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>
+<code>format_shakepay</code>: now correctly detect CAD referral rewards</li>
+<li>
+<code>format_binance</code>: now correctly detect interest rewards</li>
+<li>
+<code>format_ACB</code>: fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>
+<li>
+<code>ACB</code>: now correctly accept alternative column names</li>
 <li>Fixed a bug for NANO/XNO</li>
 <li>Fixed various R CMD check errors, warnings, and notes.</li>
 </ul></div>

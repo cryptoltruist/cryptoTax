@@ -76,9 +76,26 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_shakepay</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">formatted.shakepay</span> <span class="op">&lt;-</span> <span class="fu">format_shakepay</span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">formatted.shakepay</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date    quantity currency total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-05-07 14:50:41  0.00103982      BTC   53.033350  51002.43         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-07 21:25:36 30.00000000      CAD   30.000000      1.00     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-08 12:12:57  0.00011000      BTC    5.784024  52582.03     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-05-09 12:22:07  0.00012000      BTC    6.034441  50287.01     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-21 12:47:14  0.00013000      BTC    7.348590  56527.62     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-06-11 12:03:31  0.00014000      BTC    8.396927  59978.05     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-06-23 12:21:49  0.00015000      BTC    8.714877  58099.18     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 2021-07-10 00:52:19  0.00052991      BTC   31.268480  59007.15        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     description  comment revenue.type exchange rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 purchase/sale purchase         &lt;NA&gt; shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         other   credit    referrals shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   shakingsats   credit     airdrops shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   shakingsats   credit     airdrops shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   shakingsats   credit     airdrops shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   shakingsats   credit     airdrops shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   shakingsats   credit     airdrops shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 purchase/sale     sale         &lt;NA&gt; shakepay    exchange</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

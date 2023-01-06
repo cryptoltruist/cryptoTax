@@ -59,14 +59,11 @@
 
 <div id="development-roadmap-to-do-list" class="section level1">
 
-<ul><li>Shakepay: include CAD referrals in rewards</li>
-<li>Shakepay: add support for sales…</li>
+<ul><li>To massively improve performance, only calculate superficial losses for rows that are sales and with a loss instead of every row.</li>
 <li>Write new function to get latest transaction dates by exchanges.</li>
 <li>Write new function to check where negative balances appear.</li>
-<li>Write vignette on the general workflow using <code>prepare_list_prices</code>, etc.</li>
 <li>Superficial loss needs to look at least 30 days in the new year (assuming a transaction occured on the last day of the year). Therefore, when filtering for year, it should first calculate superficial losses until say January 30 of the next year, and at the end filter again for the selected year.</li>
 <li>Fix duplicated columns in sup loss calculations</li>
-<li>Better error message when not providing first buy transactions (so no ACB…)</li>
 <li>Check for all trading exchanges that prices of sells and buys match</li>
 <li>For NA fees, check and replace with 0 in ACB instead of each exchange…</li>
 <li>Detect new transaction types not accounted for</li>
@@ -79,7 +76,8 @@
 <li>For <code><a href="reference/report_revenues.html">report_revenues()</a></code>, better and more clearly accommodate tax year</li>
 <li>Correct “Total time elapsed:” from minutes to seconds when in seconds</li>
 <li>Add custom import with no non-sense defaults, but also the possibility for custom columns. Also add option for time zone.</li>
-<li>Make sample datasets (2 exchanges, then combine them), e.g. CDC, ShakePay, Newton.</li>
+<li>Make sample datasets for all exchanges</li>
+<li>Write a longer vignette on the general workflow using <code>prepare_list_prices</code> and several (all?) exchanges, etc.</li>
 <li>Clean up all the scripts; optimize code with renaming names at the top, etc.</li>
 <li>Check <a href="https://github.com/BittyTax/BittyTax" class="external-link uri">https://github.com/BittyTax/BittyTax</a> for general inspiration</li>
 <li>Finish the Shiny app: editable table, see <a href="https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/" class="external-link uri">https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/</a>

@@ -104,7 +104,7 @@ adjusted cost base by <code>cryptoTax</code> closely follows those of <a href="h
 <p>We first generate the data:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_1</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca1</span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">#&gt;         date transaction quantity price fees</span></span>
 <span><span class="co">#&gt; 1 2014-03-03         buy      100    50   10</span></span>
@@ -140,25 +140,29 @@ using regular ACB <em>without</em> accounting for superficial
 losses:</p>
 <p><img src="images/ACB2.png"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_2</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>Per default, there are a lot of columns to provide as much
-information as possible. To make it look as short as the
-adjustedcostbase.ca example, we can subselect relevant columns:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date transaction quantity price total.quantity  ACB ACB.share gains</span></span>
-<span><span class="co">#&gt; 1 2014-01-06         buy      100    50            100 5000        50    NA</span></span>
-<span><span class="co">#&gt; 2 2014-11-03        sell      100    30              0    0         0 -2000</span></span>
-<span><span class="co">#&gt; 3 2014-11-04         buy      100    30            100 3000        30    NA</span></span>
-<span><span class="co">#&gt; 4 2015-12-02        sell      100    80              0    0         0  5000</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca2</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction quantity price total.price fees total.quantity  ACB</span></span>
+<span><span class="co">#&gt; 1 2014-01-06         buy      100    50        5000    0            100 5000</span></span>
+<span><span class="co">#&gt; 2 2014-11-03        sell      100    30        3000    0              0    0</span></span>
+<span><span class="co">#&gt; 3 2014-11-04         buy      100    30        3000    0            100 3000</span></span>
+<span><span class="co">#&gt; 4 2015-12-02        sell      100    80        8000    0              0    0</span></span>
+<span><span class="co">#&gt;   ACB.share gains</span></span>
+<span><span class="co">#&gt; 1        50    NA</span></span>
+<span><span class="co">#&gt; 2         0 -2000</span></span>
+<span><span class="co">#&gt; 3        30    NA</span></span>
+<span><span class="co">#&gt; 4         0  5000</span></span></code></pre></div>
 <p>Next, we do it the correct way, <em>accounting</em> for superficial
 losses:</p>
 <p><img src="images/ACB3.png"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">x</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<p>Per default, setting <code>sup.loss = TRUE</code> (the default)
+generates a lot of columns to provide as much information as possible.
+To make it look as short as the adjustedcostbase.ca example, we can
+subselect relevant columns:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date transaction quantity price total.quantity  ACB ACB.share gains</span></span>
 <span><span class="co">#&gt; 1 2014-01-06         buy      100    50            100 5000        50    NA</span></span>
 <span><span class="co">#&gt; 2 2014-11-03        sell      100    30              0    0         0    NA</span></span>
@@ -172,21 +176,25 @@ losses:</p>
 demonstrate the “Violation of the Superficial Loss Rule” by using
 regular ACB <em>without</em> accounting for superficial losses:</p>
 <p><img src="images/ACB4.png"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_3</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date transaction quantity price total.quantity  ACB ACB.share gains</span></span>
-<span><span class="co">#&gt; 1 2014-01-06         buy      100    50            100 5000        50    NA</span></span>
-<span><span class="co">#&gt; 2 2014-11-03         buy      100    30            200 8000        40    NA</span></span>
-<span><span class="co">#&gt; 3 2014-11-04        sell      100    30            100 4000        40 -1000</span></span>
-<span><span class="co">#&gt; 4 2015-12-02        sell      100    80              0    0         0  4000</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca3</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction quantity price total.price fees total.quantity  ACB</span></span>
+<span><span class="co">#&gt; 1 2014-01-06         buy      100    50        5000    0            100 5000</span></span>
+<span><span class="co">#&gt; 2 2014-11-03         buy      100    30        3000    0            200 8000</span></span>
+<span><span class="co">#&gt; 3 2014-11-04        sell      100    30        3000    0            100 4000</span></span>
+<span><span class="co">#&gt; 4 2015-12-02        sell      100    80        8000    0              0    0</span></span>
+<span><span class="co">#&gt;   ACB.share gains</span></span>
+<span><span class="co">#&gt; 1        50    NA</span></span>
+<span><span class="co">#&gt; 2        40    NA</span></span>
+<span><span class="co">#&gt; 3        40 -1000</span></span>
+<span><span class="co">#&gt; 4         0  4000</span></span></code></pre></div>
 <p>Next, we do it the correct way, <em>accounting</em> for superficial
 losses:</p>
 <p><img src="images/ACB5.png"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date transaction quantity price total.quantity  ACB ACB.share gains</span></span>
 <span><span class="co">#&gt; 1 2014-01-06         buy      100    50            100 5000        50    NA</span></span>
 <span><span class="co">#&gt; 2 2014-11-03         buy      100    30            200 8000        40    NA</span></span>
@@ -206,14 +214,13 @@ losses:</p>
 the Superficial Loss Period<a class="anchor" aria-label="anchor" href="#when-shares-are-sold-at-a-loss-and-then-partially-reacquired-within-the-superficial-loss-period"></a>
 </h4>
 <p><img src="images/ACB6.png"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_4</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date transaction quantity price total.price total.quantity ACB</span></span>
-<span><span class="co">#&gt; 1 2015-01-02         buy      100   3.0         300            100 300</span></span>
-<span><span class="co">#&gt; 2 2015-04-09        sell      100   2.0         200              0   0</span></span>
-<span><span class="co">#&gt; 3 2015-04-10         buy       25   2.2          55             25  55</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca4</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction quantity price total.price fees total.quantity ACB</span></span>
+<span><span class="co">#&gt; 1 2015-01-02         buy      100   3.0         300    0            100 300</span></span>
+<span><span class="co">#&gt; 2 2015-04-09        sell      100   2.0         200    0              0   0</span></span>
+<span><span class="co">#&gt; 3 2015-04-10         buy       25   2.2          55    0             25  55</span></span>
 <span><span class="co">#&gt;   ACB.share gains</span></span>
 <span><span class="co">#&gt; 1       3.0    NA</span></span>
 <span><span class="co">#&gt; 2       0.0  -100</span></span>
@@ -221,9 +228,9 @@ the Superficial Loss Period<a class="anchor" aria-label="anchor" href="#when-sha
 <p>Next, we do it the correct way, <em>accounting</em> for superficial
 losses:</p>
 <p><img src="images/ACB7.png"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date transaction quantity price total.quantity ACB ACB.share gains</span></span>
 <span><span class="co">#&gt; 1 2015-01-02         buy      100   3.0            100 300       3.0    NA</span></span>
 <span><span class="co">#&gt; 2 2015-04-09        sell      100   2.0              0   0       0.0   -75</span></span>
@@ -243,22 +250,21 @@ losses:</p>
 Superficial Loss Period<a class="anchor" aria-label="anchor" href="#when-shares-are-purchased-and-then-partially-sold-within-the-superficial-loss-period"></a>
 </h4>
 <p><img src="images/ACB8.png"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_5</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date transaction quantity price total.price total.quantity ACB</span></span>
-<span><span class="co">#&gt; 1 2015-04-09         buy      100     3         300            100 300</span></span>
-<span><span class="co">#&gt; 2 2015-04-10        sell       80     2         160             20  60</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca5</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction quantity price total.price fees total.quantity ACB</span></span>
+<span><span class="co">#&gt; 1 2015-04-09         buy      100     3         300    0            100 300</span></span>
+<span><span class="co">#&gt; 2 2015-04-10        sell       80     2         160    0             20  60</span></span>
 <span><span class="co">#&gt;   ACB.share gains</span></span>
 <span><span class="co">#&gt; 1         3    NA</span></span>
 <span><span class="co">#&gt; 2         3   -80</span></span></code></pre></div>
 <p>Next, we do it the correct way, <em>accounting</em> for superficial
 losses:</p>
 <p><img src="images/ACB9.png"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date transaction quantity price total.quantity ACB ACB.share gains</span></span>
 <span><span class="co">#&gt; 1 2015-04-09         buy      100     3            100 300         3    NA</span></span>
 <span><span class="co">#&gt; 2 2015-04-10        sell       80     2             20  80         4    NA</span></span></code></pre></div>
@@ -287,16 +293,15 @@ methods described above.</p>
 automatically. We first demonstrate the “Violation of the Superficial
 Loss Rule” by using regular ACB <em>without</em> accounting for
 superficial losses:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca_6</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.price</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         date transaction quantity price total.price total.quantity ACB</span></span>
-<span><span class="co">#&gt; 1 2015-04-09         buy      150     3         450            150 450</span></span>
-<span><span class="co">#&gt; 2 2015-04-10        sell       20     2          40            130 390</span></span>
-<span><span class="co">#&gt; 3 2015-04-15         buy       50     3         150            180 540</span></span>
-<span><span class="co">#&gt; 4 2015-04-20        sell       10     2          20            170 510</span></span>
-<span><span class="co">#&gt; 5 2015-05-15        sell       80     2         160             90 270</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca6</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction quantity price total.price fees total.quantity ACB</span></span>
+<span><span class="co">#&gt; 1 2015-04-09         buy      150     3         450    0            150 450</span></span>
+<span><span class="co">#&gt; 2 2015-04-10        sell       20     2          40    0            130 390</span></span>
+<span><span class="co">#&gt; 3 2015-04-15         buy       50     3         150    0            180 540</span></span>
+<span><span class="co">#&gt; 4 2015-04-20        sell       10     2          20    0            170 510</span></span>
+<span><span class="co">#&gt; 5 2015-05-15        sell       80     2         160    0             90 270</span></span>
 <span><span class="co">#&gt;   ACB.share gains</span></span>
 <span><span class="co">#&gt; 1         3    NA</span></span>
 <span><span class="co">#&gt; 2         3   -20</span></span>
@@ -305,12 +310,11 @@ superficial losses:</p>
 <span><span class="co">#&gt; 5         3   -80</span></span></code></pre></div>
 <p>Next, we do it the correct way, <em>accounting</em> for superficial
 losses, and include a few more columns for the demonstration:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>, <span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>,</span>
-<span>  <span class="va">suploss.range</span>, <span class="va">sup.loss</span>, <span class="va">sup.loss.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>,</span>
-<span>  <span class="va">gains.uncorrected</span>, <span class="va">gains.sup</span>, <span class="va">gains.excess</span>, <span class="va">gains</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">price</span>, <span class="va">total.quantity</span>,</span>
+<span>         <span class="va">suploss.range</span>, <span class="va">sup.loss</span>, <span class="va">sup.loss.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>,</span>
+<span>         <span class="va">gains.uncorrected</span>, <span class="va">gains.sup</span>, <span class="va">gains.excess</span>, <span class="va">gains</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;         date transaction quantity price total.quantity</span></span>
 <span><span class="co">#&gt; 1 2015-04-09         buy      150     3            150</span></span>
@@ -331,6 +335,168 @@ losses, and include a few more columns for the demonstration:</p>
 <span><span class="co">#&gt; 4         -12.22222 -12.22222           NA        NA</span></span>
 <span><span class="co">#&gt; 5        -103.52941 -64.70588    -38.82353 -38.82353</span></span></code></pre></div>
 </div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="other-examples-from-the-internet">Other examples from the internet<a class="anchor" aria-label="anchor" href="#other-examples-from-the-internet"></a>
+</h2>
+<div class="section level3">
+<h3 id="cryptotaxcalculator">CryptoTaxCalculator<a class="anchor" aria-label="anchor" href="#cryptotaxcalculator"></a>
+</h3>
+<div class="section level4">
+<h4 id="example-1-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1-1"></a>
+</h4>
+<p>Here is an example from CryptoTaxCalculator, showcased at: <a href="https://cryptotaxcalculator.io/guides/crypto-tax-canada-cra/" class="external-link uri">https://cryptotaxcalculator.io/guides/crypto-tax-canada-cra/</a>.
+We first demonstrate the “Violation of the Superficial Loss Rule” by
+using regular ACB <em>without</em> accounting for superficial
+losses:</p>
+<p><img src="images/cryptotaxcalculator1.png"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">cryptotaxcalculator.io1</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"trade"</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date trade currency price quantity total.price fees total.quantity</span></span>
+<span><span class="co">#&gt; 1 2020-01-01   buy      BTC  5000        2       10000    0              2</span></span>
+<span><span class="co">#&gt; 2 2020-02-03  sell      BTC  3000        2        6000    0              0</span></span>
+<span><span class="co">#&gt; 3 2020-02-04   buy      BTC  3000        2        6000    0              2</span></span>
+<span><span class="co">#&gt; 4 2021-02-04  sell      BTC 10000        2       20000    0              0</span></span>
+<span><span class="co">#&gt;     ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1 10000      5000    NA</span></span>
+<span><span class="co">#&gt; 2     0         0 -4000</span></span>
+<span><span class="co">#&gt; 3  6000      3000    NA</span></span>
+<span><span class="co">#&gt; 4     0         0 14000</span></span></code></pre></div>
+<p>Next, we do it the correct way, <em>accounting</em> for superficial
+losses:</p>
+<p><img src="images/cryptotaxcalculator2.png"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"trade"</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">trade</span>, <span class="va">price</span>, <span class="va">quantity</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date trade price quantity total.quantity   ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1 2020-01-01   buy  5000        2              2 10000      5000    NA</span></span>
+<span><span class="co">#&gt; 2 2020-02-03  sell  3000        2              0     0         0    NA</span></span>
+<span><span class="co">#&gt; 3 2020-02-04   buy  3000        2              2 10000      5000    NA</span></span>
+<span><span class="co">#&gt; 4 2021-02-04  sell 10000        2              0     0         0 10000</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="example-2-1">Example 2<a class="anchor" aria-label="anchor" href="#example-2-1"></a>
+</h4>
+<p>We continue with the second superficial loss example. We first
+demonstrate the “Violation of the Superficial Loss Rule” by using
+regular ACB <em>without</em> accounting for superficial losses:</p>
+<p><img src="images/cryptotaxcalculator3.png"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">cryptotaxcalculator.io2</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"trade"</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date trade currency price quantity total.price fees total.quantity</span></span>
+<span><span class="co">#&gt; 1 2020-01-01   buy      BTC  5000        2       10000    0              2</span></span>
+<span><span class="co">#&gt; 2 2020-02-05   buy      BTC  1000        2        2000    0              4</span></span>
+<span><span class="co">#&gt; 3 2020-02-06  sell      BTC  1000        2        2000    0              2</span></span>
+<span><span class="co">#&gt; 4 2021-02-06  sell      BTC 10000        2       20000    0              0</span></span>
+<span><span class="co">#&gt;     ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1 10000      5000    NA</span></span>
+<span><span class="co">#&gt; 2 12000      3000    NA</span></span>
+<span><span class="co">#&gt; 3  6000      3000 -4000</span></span>
+<span><span class="co">#&gt; 4     0         0 14000</span></span></code></pre></div>
+<p>Next, we do it the correct way, <em>accounting</em> for superficial
+losses:</p>
+<p><img src="images/cryptotaxcalculator4.png"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"trade"</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">trade</span>, <span class="va">price</span>, <span class="va">quantity</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date trade price quantity total.quantity   ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1 2020-01-01   buy  5000        2              2 10000      5000    NA</span></span>
+<span><span class="co">#&gt; 2 2020-02-05   buy  1000        2              4 12000      3000    NA</span></span>
+<span><span class="co">#&gt; 3 2020-02-06  sell  1000        2              2 10000      5000    NA</span></span>
+<span><span class="co">#&gt; 4 2021-02-06  sell 10000        2              0     0         0 10000</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="coinpanda">Coinpanda<a class="anchor" aria-label="anchor" href="#coinpanda"></a>
+</h3>
+<div class="section level4">
+<h4 id="example-1-2">Example 1<a class="anchor" aria-label="anchor" href="#example-1-2"></a>
+</h4>
+<p>Here is an example from Coinpanda, showcased at: <a href="https://coinpanda.io/blog/crypto-taxes-canada-adjusted-cost-base/" class="external-link uri">https://coinpanda.io/blog/crypto-taxes-canada-adjusted-cost-base/</a>.
+The first example does not require the superficial loss rule so we can
+set it to <code>FALSE</code> without worry.</p>
+<p><img src="images/coinpanda1.png"><img src="images/coinpanda2.png"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">coinpanda.io1</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"type"</span>, quantity <span class="op">=</span> <span class="st">"amount"</span>, </span>
+<span>    total.price <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   type       date currency amount price fees total.quantity  ACB ACB.share</span></span>
+<span><span class="co">#&gt; 1  buy 2019-08-14      BTC    0.2  1800   20            0.2 1820  9100.000</span></span>
+<span><span class="co">#&gt; 2  buy 2019-10-29      BTC    0.6  4300   20            0.8 6140  7675.000</span></span>
+<span><span class="co">#&gt; 3 sell 2020-06-05      BTC    0.8  5700    0            0.0    0     0.000</span></span>
+<span><span class="co">#&gt; 4  buy 2020-09-23      BTC    1.2  8200    0            1.2 8200  6833.333</span></span>
+<span><span class="co">#&gt;   gains</span></span>
+<span><span class="co">#&gt; 1    NA</span></span>
+<span><span class="co">#&gt; 2    NA</span></span>
+<span><span class="co">#&gt; 3  -440</span></span>
+<span><span class="co">#&gt; 4    NA</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="example-2-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2-2"></a>
+</h4>
+<p>We continue with the second superficial loss example. We first
+demonstrate the “Violation of the Superficial Loss Rule” by using
+regular ACB <em>without</em> accounting for superficial losses:</p>
+<p><img src="images/coinpanda3.png"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">coinpanda.io2</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"type"</span>, quantity <span class="op">=</span> <span class="st">"amount"</span>, </span>
+<span>    total.price <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   type       date currency amount price fees total.quantity  ACB ACB.share</span></span>
+<span><span class="co">#&gt; 1  buy 2019-08-14      BTC    0.2  1800   20            0.2 1820  9100.000</span></span>
+<span><span class="co">#&gt; 2  buy 2019-10-29      BTC    0.6  4300   20            0.8 6140  7675.000</span></span>
+<span><span class="co">#&gt; 3 sell 2020-06-05      BTC    0.8  5700    0            0.0    0     0.000</span></span>
+<span><span class="co">#&gt; 4  buy 2020-06-07      BTC    1.2  7000    0            1.2 7000  5833.333</span></span>
+<span><span class="co">#&gt;   gains</span></span>
+<span><span class="co">#&gt; 1    NA</span></span>
+<span><span class="co">#&gt; 2    NA</span></span>
+<span><span class="co">#&gt; 3  -440</span></span>
+<span><span class="co">#&gt; 4    NA</span></span></code></pre></div>
+<p>Next, we do it the correct way, <em>accounting</em> for superficial
+losses:</p>
+<p><img src="images/coinpanda4.png"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, transaction <span class="op">=</span> <span class="st">"type"</span>, quantity <span class="op">=</span> <span class="st">"amount"</span>, total.price <span class="op">=</span> <span class="st">"price"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">type</span>, <span class="va">date</span>, <span class="va">amount</span>, <span class="va">price</span>, <span class="va">fees</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   type       date amount price fees  ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1  buy 2019-08-14    0.2  1800   20 1820      9100    NA</span></span>
+<span><span class="co">#&gt; 2  buy 2019-10-29    0.6  4300   20 6140      7675    NA</span></span>
+<span><span class="co">#&gt; 3 sell 2020-06-05    0.8  5700    0    0         0    NA</span></span>
+<span><span class="co">#&gt; 4  buy 2020-06-07    1.2  7000    0 7440      6200    NA</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="koinly">Koinly<a class="anchor" aria-label="anchor" href="#koinly"></a>
+</h3>
+<p>Here is an example from Koinly, showcased at: <a href="https://koinly.io/blog/calculating-crypto-taxes-canada/" class="external-link uri">https://koinly.io/blog/calculating-crypto-taxes-canada/</a>.
+We first demonstrate the “Violation of the Superficial Loss Rule” by
+using regular ACB <em>without</em> accounting for superficial
+losses:</p>
+<p><img src="images/koinly1.png"></p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">koinly.io</span></span>
+<span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction currency quantity spot.rate total.price fees</span></span>
+<span><span class="co">#&gt; 1 2019-01-06         buy      ETH      100        50        5000    0</span></span>
+<span><span class="co">#&gt; 2 2019-11-03        sell      ETH      100        30        3000    0</span></span>
+<span><span class="co">#&gt; 3 2019-11-04         buy      ETH      100        30        3000    0</span></span>
+<span><span class="co">#&gt;   total.quantity  ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1            100 5000        50    NA</span></span>
+<span><span class="co">#&gt; 2              0    0         0 -2000</span></span>
+<span><span class="co">#&gt; 3            100 3000        30    NA</span></span></code></pre></div>
+<p>Next, we do it the correct way, <em>accounting</em> for superficial
+losses:</p>
+<p><img src="images/koinly2.png"></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">transaction</span>, <span class="va">quantity</span>, <span class="va">spot.rate</span>, <span class="va">total.quantity</span>, <span class="va">ACB</span>, <span class="va">ACB.share</span>, <span class="va">gains</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         date transaction quantity spot.rate total.quantity  ACB ACB.share gains</span></span>
+<span><span class="co">#&gt; 1 2019-01-06         buy      100        50            100 5000        50    NA</span></span>
+<span><span class="co">#&gt; 2 2019-11-03        sell      100        30              0    0         0    NA</span></span>
+<span><span class="co">#&gt; 3 2019-11-04         buy      100        30            100 5000        50    NA</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

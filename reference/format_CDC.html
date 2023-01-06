@@ -88,9 +88,56 @@ withdrawal fees after using <code>format_CDC</code>, on the resulting dataframe.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_CDC</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">formatted.CDC</span> <span class="op">&lt;-</span> <span class="fu">format_CDC</span><span class="op">(</span><span class="va">data_CDC</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For full currency exchange rate API documentation visit:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  https://exchangerate.host/#/#docs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  (this message will only appear once per session)</span>
+<span class="r-in"><span><span class="va">formatted.CDC</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date     quantity currency total.price    spot.rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-05-03 22:05:50 7.333710e-04      BTC    51.25000 6.988278e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-05-07 23:06:50 2.059201e-02      ETH    54.21000 2.632575e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-05-15 18:07:10 1.824360e+02      CRO    53.42000 2.928150e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-05-23 22:09:39 1.179468e+02      CRO    30.19035 2.559658e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-29 23:10:59 6.403954e+00      CRO     1.13000 1.764535e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-06-02 19:11:52 5.361367e+01      CRO    10.99000 2.049850e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-06-10 23:12:24 8.635724e+01      CRO    16.94000 1.961619e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-06-11 19:13:58 1.736890e+01      CRO     9.19000 5.291066e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-06-16 20:14:29 2.250418e+01      CRO    11.65000 5.176817e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-06-19 21:16:30 8.452621e+00      CRO     1.25000 1.478831e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-06-27 21:17:50 7.632668e-04      ETH     3.12000 4.087692e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-07-06 22:18:40 3.207992e-01      CRO     0.26000 8.104758e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-07-14 18:20:27 2.476190e+00      CRO     1.20000 4.846154e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-07-23 17:21:19 3.716026e+01      CRO     6.98000 1.878351e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    transaction                       description                   comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          buy                   crypto_purchase                   Buy BTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          buy                   crypto_purchase                   Buy ETH</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          buy                   crypto_purchase                   Buy CRO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      revenue                     referral_gift    Sign-up Bonus Unlocked</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      revenue            referral_card_cashback             Card Cashback</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      revenue                     reimbursement      Card Rebate: Spotify</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      revenue                     reimbursement      Card Rebate: Netflix</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      revenue                     reimbursement Card Rebate: Amazon Prime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      revenue                     reimbursement      Card Rebate: Expedia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     revenue               pay_checkout_reward               Pay Rewards</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     revenue         crypto_earn_interest_paid               Crypto Earn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     revenue   crypto_earn_extra_interest_paid       Crypto Earn (Extra)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     revenue rewards_platform_deposit_credited   Mission Rewards Deposit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     revenue                  mco_stake_reward         CRO Stake Rewards</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type fees exchange rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt;    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt;    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt;    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     referrals    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       rebates    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       rebates    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       rebates    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       rebates    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       rebates    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      rebates    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    interests    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    interests    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13      rewards    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    interests    0      CDC    exchange</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
