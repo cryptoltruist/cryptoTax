@@ -12,7 +12,7 @@ ACB(
   fees = "fees",
   total.price = "total.price",
   spot.rate = "spot.rate",
-  as.revenue = c("staking", "interest", "mining"),
+  as.revenue = c("staking", "interests", "mining"),
   sup.loss = TRUE,
   cl = NULL
 )
@@ -42,7 +42,7 @@ ACB(
 Calculate realized and unrealized capital gains/losses
 }
 \examples{
-\dontrun{
-ACB(data)
-}
+data <- adjustedcostbase.ca1
+ACB(data, spot.rate = "price", sup.loss = FALSE)
+ACB(data, spot.rate = "price")
 }

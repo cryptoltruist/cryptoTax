@@ -29,7 +29,7 @@ format_BSC <- function(data) {
     filter(.data$currency %in% c("GB")) %>%
     mutate(
       transaction = "revenue",
-      revenue.type = "airdrop"
+      revenue.type = "airdrops"
     ) %>%
     select(
       "date", "quantity", "currency", "spot.rate", "total.price",

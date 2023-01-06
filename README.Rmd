@@ -25,7 +25,7 @@ Helps calculate crypto taxes in R.
 3. Third, by calculating revenues gained from staking, interest, airdrops, etc.
 4. Fourth, by calculating superficial losses as well, if desired.
 
-Only supports basic or simple tax scenarios (for now).
+This is a work in progress. If you notice bugs, please report them: https://github.com/cryptoltruist/cryptoTax/issues.
 
 # Installation
 
@@ -39,7 +39,7 @@ remotes::install_github("cryptoltruist/cryptoTax")
 
 ```{r}
 library(cryptoTax)
-data <- adjustedcostbase.ca_1
+data <- adjustedcostbase.ca1
 data
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
@@ -74,12 +74,12 @@ list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
 # Note that for some exchanges this step may be unnecessary
 
 # Load data and format shakepay file
-data(shakepay)
-formatted.shakepay <- format_shakepay(shakepay)
+data(data_shakepay)
+formatted.shakepay <- format_shakepay(data_shakepay)
 
 # Load data and format CDC file
-data(CDC)
-formatted.CDC <- format_CDC(CDC)
+data(data_CDC)
+formatted.CDC <- format_CDC(data_CDC)
 
 # Merge data from the different exchanges
 all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)

@@ -43,7 +43,7 @@ format_presearch <- function(data) {
   # Add revenu type
   data <- data %>%
     mutate(revenue.type = ifelse(.data$transaction == "revenue",
-      "airdrop",
+      "airdrops",
       NA
     ))
 

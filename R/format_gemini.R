@@ -130,7 +130,7 @@ format_gemini <- function(data) {
     filter(.data$comment == "Deposit" & .data$currency == "BAT") %>%
     mutate(
       transaction = "revenue",
-      revenue.type = "airdrop"
+      revenue.type = "airdrops"
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",

@@ -121,7 +121,7 @@ format_coinsmart <- function(data) {
       revenue.type = replace(
         .data$comment,
         .data$comment %in% c("Quiz"),
-        "airdrop"
+        "airdrops"
       ),
       revenue.type = replace(
         .data$revenue.type,

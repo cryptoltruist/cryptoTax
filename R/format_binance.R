@@ -104,8 +104,8 @@ format_binance <- function(data) {
       transaction = "revenue",
       revenue.type = case_when(
         grepl("Interest", .data$description) ~ "interests",
-        grepl("Referral", .data$description) ~ "rebate",
-        grepl("Distribution", .data$description) ~ "airdrop"
+        grepl("Referral", .data$description) ~ "rebates",
+        grepl("Distribution", .data$description) ~ "airdrops"
       )
     )
 

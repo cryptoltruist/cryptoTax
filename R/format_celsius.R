@@ -52,7 +52,7 @@ format_celsius <- function(data) {
       revenue.type = replace(
         .data$revenue.type,
         .data$revenue.type %in% c("Promo Code Reward"),
-        "promo"
+        "promos"
       ),
       spot.rate = .data$total.price / .data$quantity
     ) %>%

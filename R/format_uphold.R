@@ -48,7 +48,7 @@ format_uphold <- function(data) {
       revenue.type = replace(
         .data$description,
         .data$description %in% c("in"),
-        "airdrop"
+        "airdrops"
       )
     ) %>%
     select(

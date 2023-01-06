@@ -80,7 +80,7 @@ format_CDC_exchange_rewards <- function(data) {
       revenue.type = replace(
         .data$revenue.type,
         grepl("Rebate", .data$comment),
-        "rebate"
+        "rebates"
       )
     ) %>%
     select(

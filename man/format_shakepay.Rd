@@ -13,7 +13,6 @@ format_shakepay(data)
 Format a .csv transaction history file from Shakepay for later ACB processing.
 }
 \examples{
-\dontrun{
-format_shakepay(data)
-}
+formatted.shakepay <- format_shakepay(data_shakepay)
+formatted.shakepay
 }

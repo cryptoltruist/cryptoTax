@@ -1,13 +1,10 @@
 # Development roadmap (to-do list)
 
-- Shakepay: include CAD referrals in rewards
-- Shakepay: add support for sales...
+- To massively improve performance, only calculate superficial losses for rows that are sales and with a loss instead of every row.
 - Write new function to get latest transaction dates by exchanges.
 - Write new function to check where negative balances appear.
-- Write vignette on the general workflow using `prepare_list_prices`, etc.
 - Superficial loss needs to look at least 30 days in the new year (assuming a transaction occured on the last day of the year). Therefore, when filtering for year, it should first calculate superficial losses until say January 30 of the next year, and at the end filter again for the selected year.
 - Fix duplicated columns in sup loss calculations
-- Better error message when not providing first buy transactions (so no ACB...)
 - Check for all trading exchanges that prices of sells and buys match
 - For NA fees, check and replace with 0 in ACB instead of each exchange...
 - Detect new transaction types not accounted for
@@ -20,7 +17,8 @@
 - For `report_revenues()`, better and more clearly accommodate tax year
 - Correct "Total time elapsed:" from minutes to seconds when in seconds
 - Add custom import with no non-sense defaults, but also the possibility for custom columns. Also add option for time zone.
-- Make sample datasets (2 exchanges, then combine them), e.g. CDC, ShakePay, Newton.
+- Make sample datasets for all exchanges
+- Write a longer vignette on the general workflow using `prepare_list_prices` and several (all?) exchanges, etc.
 - Clean up all the scripts; optimize code with renaming names at the top, etc.
 - Check <https://github.com/BittyTax/BittyTax> for general inspiration
 - Finish the Shiny app: editable table, see <https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/>

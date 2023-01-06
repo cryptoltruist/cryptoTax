@@ -41,7 +41,7 @@ format_exodus <- function(data) {
     ) %>%
     mutate(
       transaction = "revenue",
-      revenue.type = "airdrop"
+      revenue.type = "airdrops"
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",

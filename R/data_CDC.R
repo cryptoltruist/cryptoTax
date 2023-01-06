@@ -1,6 +1,6 @@
 #' Sample data set of a fictive Crypto.com transaction history file
 #'
-#' A fictive Crypto.com dataset to demonstrate [format_CDC()].
+#' A fictive Crypto.com data set to demonstrate [format_CDC()].
 #'
 #' @docType data
 #' @format A data frame with 19 rows and 11 variables:
@@ -19,4 +19,4 @@
 #'   ...
 #' }
 #' @source \url{https://crypto.com/}
-"CDC"
+"data_CDC"

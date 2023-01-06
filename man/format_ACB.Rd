@@ -6,7 +6,7 @@
 \usage{
 format_ACB(
   data,
-  as.revenue = c("staking", "interest", "mining"),
+  as.revenue = c("staking", "interests", "mining"),
   sup.loss = TRUE,
   cl = NULL
 )
@@ -15,7 +15,7 @@ format_ACB(
 \item{data}{The dataframe}
 
 \item{as.revenue}{Which should be treated as revenue, in list of
-\code{c("staking", "interest", "mining")}.}
+\code{c("staking", "interests", "mining")}.}
 
 \item{sup.loss}{Logical, whether to take superficial losses into account.}
 
@@ -26,7 +26,6 @@ Formats transaction data with Adjusted Cost Base (ACB),
 along with ACB per share and realized capital gains or losses.
 }
 \examples{
-\dontrun{
-format_ACB(data)
-}
+all.data <- format_shakepay(data_shakepay)
+format_ACB(all.data)
 }

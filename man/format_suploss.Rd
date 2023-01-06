@@ -4,10 +4,19 @@
 \alias{format_suploss}
 \title{Calculate superficial capital losses}
 \usage{
-format_suploss(data, cl = NULL)
+format_suploss(
+  data,
+  transaction = "transaction",
+  quantity = "quantity",
+  cl = NULL
+)
 }
 \arguments{
 \item{data}{The data}
+
+\item{transaction}{Name of transaction column}
+
+\item{quantity}{Name of quantity column}
 
 \item{cl}{The number of cores to use.}
 }
@@ -15,7 +24,6 @@ format_suploss(data, cl = NULL)
 Calculate superficial capital losses to be substracted from total capital losses.
 }
 \examples{
-\dontrun{
+data <- adjustedcostbase.ca1
 format_suploss(data)
-}
 }

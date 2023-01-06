@@ -62,7 +62,7 @@ format_blockfi <- function(data) {
       revenue.type = replace(
         .data$revenue.type,
         .data$revenue.type %in% c("Bonus Payment"),
-        "promo"
+        "promos"
       )
     ) %>%
     select(

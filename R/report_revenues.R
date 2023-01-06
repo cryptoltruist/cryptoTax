@@ -42,10 +42,10 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
     select(.data$date)
 
   # Add revenue.type
-  airdrop <- revenues %>%
+  airdrops <- revenues %>%
     group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "airdrop") %>%
-    summarize(airdrop = sum(.data$value))
+    filter(.data$revenue.type == "airdrops") %>%
+    summarize(airdrops = sum(.data$value))
 
   referrals <- revenues %>%
     group_by(.data$exchange) %>%
@@ -57,20 +57,20 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
     filter(.data$revenue.type == "staking") %>%
     summarize(staking = sum(.data$value))
 
-  promo <- revenues %>%
+  promos <- revenues %>%
     group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "promo") %>%
-    summarize(promo = sum(.data$value))
+    filter(.data$revenue.type == "promos") %>%
+    summarize(promos = sum(.data$value))
 
   interests <- revenues %>%
     group_by(.data$exchange) %>%
     filter(.data$revenue.type == "interests") %>%
     summarize(interests = sum(.data$value))
 
-  rebate <- revenues %>%
+  rebates <- revenues %>%
     group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "rebate") %>%
-    summarize(rebate = sum(.data$value))
+    filter(.data$revenue.type == "rebates") %>%
+    summarize(rebates = sum(.data$value))
 
   rewards <- revenues %>%
     group_by(.data$exchange) %>%
@@ -79,8 +79,8 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
 
   # Combine everything together
   table <- list(
-    revenues.dates, revenues2, airdrop, referrals, staking,
-    promo, interests, rebate, rewards
+    revenues.dates, revenues2, airdrops, referrals, staking,
+    promos, interests, rebates, rewards
   ) %>%
     Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "exchange"), .)
 

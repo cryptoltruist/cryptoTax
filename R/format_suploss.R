@@ -2,31 +2,35 @@
 #'
 #' @description Calculate superficial capital losses to be substracted from total capital losses.
 #' @param data The data
+#' @param transaction Name of transaction column
+#' @param quantity Name of quantity column
 #' @param cl The number of cores to use.
 #' @export
 #' @examples
-#' \dontrun{
+#' data <- adjustedcostbase.ca1
 #' format_suploss(data)
-#' }
 #' @importFrom dplyr mutate %>% filter summarize bind_rows distinct transmute ungroup group_by select arrange rename add_row
 #' @importFrom lubridate %within%
 #' @importFrom rlang .data
 
-format_suploss <- function(data, cl = NULL) {
+format_suploss <- function(data, 
+                           transaction = "transaction", 
+                           quantity = "quantity",
+                           cl = NULL) {
   out <- data %>%
-    add_quantities() %>%
-    sup_loss_single_df() %>%
+    add_quantities(transaction = transaction, quantity = quantity) %>%
+    sup_loss_single_df(transaction = transaction, quantity = quantity) %>%
     bind_rows() %>%
     arrange(date)
   out
 }
 
-add_quantities <- function(data) {
+add_quantities <- function(data, transaction = "transaction", quantity = "quantity") {
   data %>%
     mutate(
-      quantity.negative = ifelse(.data$transaction == "sell",
-        .data$quantity * -1,
-        .data$quantity
+      quantity.negative = ifelse(.data[[transaction]] == "sell",
+        .data[[quantity]] * -1,
+        .data[[quantity]]
       ),
       total.quantity = cumsum(.data$quantity.negative)
     ) %>%
@@ -41,18 +45,18 @@ add_quantities <- function(data) {
 # negative values. Have to check though if rounding to 18 decimals
 # won't create other problems elsewhere.
 
-sup_loss_single_df <- function(data) {
+sup_loss_single_df <- function(data, transaction = "transaction", quantity = "quantity") {
   data.range <- data %>%
     mutate(suploss.range = suploss_range(.data$date))
   list.ranges <- data.range %>%
-    filter(.data$transaction == "buy") %>%
+    filter(.data[[transaction]] == "buy") %>%
     select("suploss.range")
   # Calculate the sum of buy quantities for each range of 60 days...
   list.ranges.df <- check_suploss(data.range)
   quantity.60days <- lapply(list.ranges.df, function(x) {
     x %>%
-      mutate(quantity.buy = ifelse(.data$transaction == "buy",
-        .data$quantity,
+      mutate(quantity.buy = ifelse(.data[[transaction]] == "buy",
+        .data[[quantity]],
         0
       )) %>%
       summarize(quantity.60days = sum(.data$quantity.buy))
@@ -82,12 +86,12 @@ sup_loss_single_df <- function(data) {
     rowwise() %>%
     mutate(
       sup.loss = any(.data$date %within% list.ranges),
-      sup.loss = ifelse(.data$transaction != "sell",
+      sup.loss = ifelse(.data[[transaction]] != "sell",
         FALSE,
         .data$sup.loss
       ),
       sup.loss.quantity = ifelse(.data$sup.loss == TRUE,
-        .data$quantity,
+        .data[[quantity]],
         0
       )
     ) %>%

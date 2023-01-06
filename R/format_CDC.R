@@ -11,9 +11,8 @@
 #' @param data The dataframe
 #' @export
 #' @examples
-#' \dontrun{
-#' format_CDC(data)
-#' }
+#' formatted.CDC <- format_CDC(data_CDC)
+#' formatted.CDC
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange bind_rows case_when
 #' @importFrom rlang .data
 
@@ -120,7 +119,7 @@ format_CDC <- function(data) {
           "pay_checkout_reward", # Pay cashback (internet purchase)
           "gift_card_reward"
         ), # Pay cashback (gift card)
-        "rebate"
+        "rebates"
       ),
       revenue.type = replace(
         .data$revenue.type,

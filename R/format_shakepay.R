@@ -4,13 +4,13 @@
 #' @param data The dataframe
 #' @export
 #' @examples
-#' \dontrun{
-#' format_shakepay(data)
-#' }
+#' formatted.shakepay <- format_shakepay(data_shakepay)
+#' formatted.shakepay
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 
 format_shakepay <- function(data) {
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -29,9 +29,9 @@ format_shakepay <- function(data) {
   BUY <- data %>%
     filter(.data$description == "purchase/sale") %>%
     rename(
-      quantity = .data$Amount.Credited,
-      currency = .data$Credit.Currency,
-      total.price = .data$Amount.Debited
+      quantity = "Amount.Credited",
+      currency = "Credit.Currency",
+      total.price = "Amount.Debited"
     ) %>%
     mutate(
       transaction = "buy",
@@ -56,7 +56,7 @@ format_shakepay <- function(data) {
       revenue.type = replace(
         .data$description,
         .data$description %in% c("shakingsats"),
-        "airdrop"
+        "airdrops"
       )
     ) %>%
     select(
@@ -65,13 +65,31 @@ format_shakepay <- function(data) {
       "description", "comment"
     )
 
+  # Create a "REFERRAL" object
+  REFERRAL <- data %>%
+    filter(.data$description == "other" & comment == "credit") %>%
+    rename(
+      quantity = "Amount.Credited",
+      currency = "Credit.Currency"
+    ) %>% 
+    mutate(
+      transaction = "revenue",
+      revenue.type = "referrals",
+      spot.rate = 1,
+      total.price = .data$quantity * .data$spot.rate,) %>%
+    select(
+      "date", "quantity", "currency", "total.price",
+      "spot.rate", "transaction", "revenue.type",
+      "description", "comment"
+    )
+  
   # Create a "sell" object
   SELL <- data %>%
     filter(.data$description == "purchase/sale") %>%
     rename(
       quantity = "Amount.Debited",
       currency = "Debit.Currency",
-      total.price = .data$Amount.Credited
+      total.price = "Amount.Credited"
     ) %>%
     mutate(
       transaction = "sell",
@@ -84,9 +102,8 @@ format_shakepay <- function(data) {
     filter(.data$currency != "CAD")
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, SHAKES, SELL) %>%
+  data <- bind_rows(BUY, SHAKES, REFERRAL, SELL) %>%
     mutate(
-      fees = 0,
       exchange = "shakepay",
       rate.source = "exchange"
     ) %>%

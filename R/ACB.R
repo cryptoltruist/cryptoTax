@@ -13,9 +13,9 @@
 #' @param cl Number of cores to use for parallel processing.
 #' @export
 #' @examples
-#' \dontrun{
-#' ACB(data)
-#' }
+#' data <- adjustedcostbase.ca1
+#' ACB(data, spot.rate = "price", sup.loss = FALSE)
+#' ACB(data, spot.rate = "price")
 #' @importFrom dplyr mutate relocate %>% all_of
 #' @importFrom rlang .data
 
@@ -26,15 +26,20 @@ ACB <- function(data,
                 fees = "fees",
                 total.price = "total.price",
                 spot.rate = "spot.rate",
-                as.revenue = c("staking", "interest", "mining"),
+                as.revenue = c("staking", "interests", "mining"),
                 sup.loss = TRUE,
                 cl = NULL) {
-  # Excludes staking, interest, mining
+  # Excludes staking, interests, mining
 
+  if (!data[1, transaction] %in% c("buy", "revenue")) {
+    stop("The first transaction for this currency cannot be a sale. ",
+         "Please make sure you are not missing any transactions.")
+  }
+  
   # List all possible revenue sources
   all.revenue.type <- c(
-    "airdrop", "referrals", "promo", "rewards",
-    "rebate", "staking", "interest", "mining"
+    "airdrops", "referrals", "promos", "rewards",
+    "rebates", "staking", "interests", "mining"
   )
 
   # List all non-revenue
@@ -52,16 +57,28 @@ ACB <- function(data,
         )
       ) %>%
       relocate("value", .after = "revenue.type")
+  } else if (!total.price %in% names(data) &&
+             spot.rate %in% names(data)) {
+    # Set total price if it is missing
+    data[total.price] <- data[spot.rate] * data[quantity]
+  } else if (!total.price %in% names(data) &&
+             !spot.rate %in% names(data)){
+    stop("Cannot calculate column 'total.price'. ",
+         "Please provide either 'spot.rate' or 'total.price' columns.")
   }
 
+  # Handle fees
   if (!"fees" %in% names(data)) {
     data <- data %>%
-      mutate(fees = 0, .after = all_of(spot.rate))
+      mutate(fees = 0, .after = all_of(total.price))
   }
 
+  data <- data %>%
+    mutate(fees = ifelse(is.na(.data$fees), 0, .data$fees))
+  
   if (isTRUE(sup.loss)) {
     data <- data %>%
-      format_suploss(cl = cl)
+      format_suploss(transaction = transaction, quantity = quantity, cl = cl)
 
     # Define empty rows for later reuse
     data$gains <- 0
@@ -101,11 +118,6 @@ ACB <- function(data,
 
     # Loop ####
 
-    # Set total price if it is missing
-    if (missing(total.price)) {
-      data[i, total.price] <- data[i, spot.rate] * data[i, quantity]
-    }
-
     # First row: add first quantity
     if (i == 1) {
       data[i, "total.quantity"] <- data[i, quantity]
@@ -114,14 +126,14 @@ ACB <- function(data,
     # First row: calculate ACB for added quantities
     if (i == 1 && (data[i, transaction] == "buy" ||
       data[i, transaction] == "revenue" ||
-      data[i, transaction] == "rebate")) {
+      data[i, transaction] == "rebates")) {
       data[i, "ACB"] <- data[i, total.price] + data[i, fees]
     }
 
     # After first row: add new quantities
     if (i > 1 && (data[i, transaction] == "buy" ||
       data[i, transaction] == "revenue" ||
-      data[i, transaction] == "rebate")) {
+      data[i, transaction] == "rebates")) {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] +
         data[i, quantity]
     }
@@ -129,7 +141,7 @@ ACB <- function(data,
     # After first row: calculate ACB for added quantities
     if (i > 1 && (data[i, transaction] == "buy" ||
       data[i, transaction] == "revenue" ||
-      data[i, transaction] == "rebate")) {
+      data[i, transaction] == "rebates")) {
       data[i, "ACB"] <- data[i - 1, "ACB"] +
         data[i, total.price] + data[i, fees]
     }
@@ -198,7 +210,7 @@ ACB <- function(data,
       # After first row: recalculate ACB for added quantities MINUS sup loss
       if (i > 1 && (data[i, transaction] == "buy" ||
         data[i, transaction] == "revenue" ||
-        data[i, transaction] == "rebate")) {
+        data[i, transaction] == "rebates")) {
         data[i, "ACB"] <- data[i - 1, "ACB"] +
           data[i, total.price] + data[i, fees] - data[i - 1, "gains.sup"]
       }

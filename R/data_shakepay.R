@@ -1,6 +1,6 @@
 #' Sample data set of a fictive Shakepay transaction history file
 #'
-#' A fictive Shakepay dataset to demonstrate [format_shakepay()].
+#' A fictive Shakepay data set to demonstrate [format_shakepay()].
 #'
 #' @docType data
 #' @format A data frame with 10 rows and 11 variables:
@@ -19,4 +19,4 @@
 #'   ...
 #' }
 #' @source \url{https://shakepay.com/}
-"shakepay"
+"data_shakepay"

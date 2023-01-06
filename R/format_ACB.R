@@ -4,19 +4,18 @@
 #' along with ACB per share and realized capital gains or losses.
 #' @param data The dataframe
 #' @param as.revenue Which should be treated as revenue, in list of
-#' `c("staking", "interest", "mining")`.
+#' `c("staking", "interests", "mining")`.
 #' @param sup.loss Logical, whether to take superficial losses into account.
 #' @param cl Number of cores to use for parallel processing.
 #' @export
 #' @examples
-#' \dontrun{
-#' format_ACB(data)
-#' }
+#' all.data <- format_shakepay(data_shakepay)
+#' format_ACB(all.data)
 #' @importFrom dplyr %>% arrange group_by group_modify relocate mutate
 #' @importFrom rlang .data
 
 format_ACB <- function(data,
-                       as.revenue = c("staking", "interest", "mining"),
+                       as.revenue = c("staking", "interests", "mining"),
                        sup.loss = TRUE,
                        cl = NULL) {
   if (any(is.na(data$total.price))) {
@@ -36,9 +35,6 @@ format_ACB <- function(data,
     ". Please be patient as the transactions process.\n"
   ))
 
-  data <- data %>%
-    mutate(fees = ifelse(is.na(.data$fees), 0, .data$fees))
-
   all.data <- data
 
   cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
@@ -47,10 +43,9 @@ format_ACB <- function(data,
     arrange(date) %>%
     mutate(currency2 = .data$currency) %>%
     group_by(.data$currency, .drop = FALSE) %>%
-    group_modify(~ ACB(.x,
-      total.price = "total.price", as.revenue = as.revenue,
-      sup.loss = sup.loss
-    )) %>%
+    group_modify(~ ACB(
+      .x, total.price = "total.price", as.revenue = as.revenue, 
+      sup.loss = sup.loss)) %>%
     arrange(date) %>%
     relocate("date", .before = "currency") %>%
     relocate("fees", .before = "description")
