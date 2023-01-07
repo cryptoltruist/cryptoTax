@@ -73,11 +73,20 @@
 <li>
 <code>add_quantities</code>: switches from a for-loop to <code>dplyr</code> code.</li>
 <li>
+<code>ACB</code>:
+<ul><li>Better error message when not providing first buy transactions (so no ACB…)</li>
+<li>Added tests for ACB and superficial losses</li>
+</ul></li>
+<li>
+<code>report_revenues</code>: Now support forks and mining.</li>
+<li>
 <code>format_newton</code>: updated to the new format</li>
 <li>
-<code>ACB</code>: Better error message when not providing first buy transactions (so no ACB…)</li>
-<li>
-<code>ACB</code>: Added tests for ACB and superficial losses</li>
+<code>format_CDC</code>:
+<ul><li>new warning message when withdrawal fees could not be detected automatically.</li>
+<li>new transaction types supported: forks (“admin_wallet_credited”) and sales (“crypto_viban_exchange”, “card_top_up”, “crypto_wallet_swap_debited”)</li>
+<li>To handle LUNA to LUNC balance conversions, all LUNA transactions are renamed “LUNC” since technically it is simply a change of name, so the ACB from LUNA should follow.</li>
+</ul></li>
 <li>Consistently use plural for reward types.</li>
 <li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
 </ul><p>Bug Fixes:</p>
@@ -86,7 +95,10 @@
 <li>
 <code>format_binance</code>: now correctly detect interest rewards</li>
 <li>
-<code>format_ACB</code>: fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>
+<code>format_ACB</code>:
+<ul><li>fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>
+<li>corrected “Total time elapsed:” time unit to always be minutes</li>
+</ul></li>
 <li>
 <code>ACB</code>: now correctly accept alternative column names</li>
 <li>Fixed a bug for NANO/XNO</li>
