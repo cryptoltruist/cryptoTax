@@ -50,20 +50,17 @@ format_ACB <- function(data,
     relocate("date", .before = "currency") %>%
     relocate("fees", .before = "description")
 
-  neg.val <- "WARNING: Some balances have negative values. Double-check for missing transactions.\n"
-
   if (any(capital.gains$total.quantity < 0)) {
-    cat(neg.val)
-    warning(neg.val)
+    warning("WARNING: Some balances have negative values. Double-check for missing transactions.\n")
   }
 
   if (sup.loss == TRUE) {
-    warning("WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid adjusting for the superficial loss rule, this, use argument `sup.loss = FALSE`.")
+    warning("WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.")
   }
 
   # Benchmarks
   end_time <- Sys.time()
-  total_time <- end_time - start_time
+  total_time <- difftime(end_time, start_time, units = "min")
   cat(paste0(
     "Process ended at ", end_time, ". Total time elapsed: ",
     round(total_time, 2), " minutes\n"

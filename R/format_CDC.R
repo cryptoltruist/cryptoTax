@@ -17,7 +17,36 @@
 #' @importFrom rlang .data
 
 format_CDC <- function(data) {
-  # Rename columns
+  
+  known.kind <- c(
+    "crypto_earn_program_withdrawn", "rewards_platform_deposit_credited",
+    "crypto_earn_extra_interest_paid", "crypto_earn_interest_paid",
+    "reimbursement", "crypto_withdrawal", "mco_stake_reward", "referral_card_cashback",
+    "crypto_transfer", "transfer_cashback", "card_cashback_reverted",
+    "crypto_earn_program_created", "crypto_viban_exchange", "admin_wallet_credited",
+    "card_top_up", "crypto_wallet_swap_credited", "crypto_wallet_swap_debited",
+    "viban_purchase", "supercharger_reward_to_app_credited", "supercharger_withdrawal",
+    "crypto_to_exchange_transfer", "supercharger_deposit", "crypto_exchange",
+    "exchange_to_crypto_transfer", "crypto_deposit", "lockup_upgrade",
+    "reimbursement_reverted", "mobile_airtime_reward", "crypto_payment",
+    "pay_checkout_reward", "gift_card_reward", "crypto_purchase",
+    "referral_gift", "lockup_lock")
+
+  new.kind <- !unique(data$Transaction.Kind) %in% known.kind
+  
+  if (any(new.kind)) {
+    new.kind.names <- unique(data$Transaction.Kind)[new.kind]
+    new.kind.names <- paste(new.kind.names, collapse = ", ")
+    new.des.names <- data %>% 
+      filter(!data$Transaction.Kind %in% known.kind) %>% 
+      pull(Transaction.Description) %>% 
+      unique
+    new.des.names <- paste(new.des.names, collapse = ", ")
+    warning("New transaction kinds detected! These may be unaccounted for: ", 
+            new.kind.names, ". Associated description: ", new.des.names)
+  }
+  
+  # Rename columns ####
   data <- data %>%
     rename(
       quantity = "Amount",
@@ -27,12 +56,16 @@ format_CDC <- function(data) {
       date = "Timestamp..UTC."
     )
 
-  # Add single dates to dataframe
+  # Add single dates to dataframe ####
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
   # UTC confirmed
+  
+  # Correct LUNA to LUNC balance conversions
+  data <- data %>% 
+    mutate(currency == ifelse(.data$currency == "LUNA", "LUNC", .data$currency))
 
-  # Convert USD value to CAD
+  # Convert USD value to CAD ####
   data <- data %>%
     cryptoTax::USD2CAD() %>%
     mutate(
@@ -43,7 +76,7 @@ format_CDC <- function(data) {
       total.price = .data$Native.Amount * .data$CAD.rate
     )
 
-  # Create a "buy" object
+  # Create a "buy" object ####
   BUY <- data %>%
     filter(.data$description == "crypto_purchase") %>%
     mutate(
@@ -56,7 +89,7 @@ format_CDC <- function(data) {
     ) %>%
     filter(.data$currency != "CAD")
 
-  # Create a second "buy" object
+  # Create a second "buy" object ####
   BUY2 <- data %>%
     filter(.data$description == "crypto_exchange") %>%
     mutate(
@@ -71,7 +104,7 @@ format_CDC <- function(data) {
     ) %>%
     filter(.data$currency != "CAD")
 
-  # Create a "credit card purchase" object
+  # Create a "credit card purchase" object ####
   CREDIT <- data %>%
     filter(.data$description == "viban_purchase") %>%
     mutate(
@@ -86,7 +119,7 @@ format_CDC <- function(data) {
       "transaction", "description", "comment"
     )
 
-  # Create a "EARN" object
+  # Create a "EARN" object ####
   EARN <- data %>%
     filter(
       .data$description %in% c(
@@ -102,7 +135,8 @@ format_CDC <- function(data) {
         "referral_gift",
         "rewards_platform_deposit_credited",
         "card_cashback_reverted",
-        "reimbursement_reverted"
+        "reimbursement_reverted",
+        "admin_wallet_credited"
       )
     ) %>%
     # Mission Rewards Deposit for last one
@@ -144,6 +178,12 @@ format_CDC <- function(data) {
         .data$revenue.type %in% c("referral_gift"),
         "referrals"
       ),
+      revenue.type = replace(
+        .data$revenue.type,
+        .data$revenue.type %in% c("admin_wallet_credited"),
+        "forks"
+      ),
+      total.price = abs(.data$total.price),
       spot.rate = abs(.data$total.price / .data$quantity)
     ) %>%
     select(
@@ -164,10 +204,11 @@ format_CDC <- function(data) {
       )
     )
 
-  # Create a "sell" object
+  # Create a "sell" object ####
   SELL <- data %>%
     filter(.data$description %in% c(
-      "crypto_sell_TEMP",
+      "crypto_viban_exchange",
+      "card_top_up",
       "crypto_payment"
     )) %>%
     mutate(
@@ -194,7 +235,7 @@ format_CDC <- function(data) {
       )
     )
 
-  # Create a second "sell" object for exchanges
+  # Create a second "sell" object for exchanges ####
   SELL2 <- data %>%
     filter(.data$description %in% c("crypto_exchange")) %>%
     mutate(
@@ -221,7 +262,7 @@ format_CDC <- function(data) {
       )
     )
 
-  # Create a "withdrawals" object
+  # Create a "withdrawals" object ####
   WITHDRAWALS <- data %>%
     filter(.data$description == "crypto_withdrawal") %>%
     mutate(
@@ -237,7 +278,7 @@ format_CDC <- function(data) {
         .data$comment == "Withdraw ADA (Cardano)" ~ 0.8,
         .data$comment == "Withdraw CRO (Crypto.org)" ~ 0.001,
         .data$comment == "Withdraw CRO (Cronos)" ~ 0.2,
-        .data$comment == "Withdraw USDC (BSC)" ~ 1,
+        .data$comment == "Withdraw USDC (BSC)" ~ 1
       ),
       spot.rate = abs(.data$Native.Amount / .data$quantity),
       quantity = .data$withdraw.fees,
@@ -249,11 +290,18 @@ format_CDC <- function(data) {
       "transaction", "description", "comment"
     )
 
+  if (any(is.na(WITHDRAWALS$quantity))) {
+    WITHDRAWALS.na <- unique(WITHDRAWALS[is.na(WITHDRAWALS$quantity), "currency"])
+    WITHDRAWALS.na <- paste(WITHDRAWALS.na, collapse = ", ")
+    warning("Some withdrawal fees could not be detected automatically. ",
+            "You will have to make manual corrections for: ", WITHDRAWALS.na)
+  }
+  
   # Actually withdrawal fees should be like "selling at zero", so correct total.price
   # WITHDRAWALS <- WITHDRAWALS %>%
   #  mutate(total.price = 0)
 
-  # Merge the "buy" and "sell" objects
+  # Merge the "buy" and "sell" objects ####
   data <- bind_rows(BUY, BUY2, CREDIT, EARN, SELL, SELL2, WITHDRAWALS) %>%
     mutate(
       fees = 0,

@@ -39,7 +39,7 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
   revenues.dates <- revenues %>%
     group_by(.data$exchange) %>%
     filter(date == max(.data$date)) %>%
-    select(.data$date)
+    select(.data$exchange, .data$date)
 
   # Add revenue.type
   airdrops <- revenues %>%
@@ -77,10 +77,20 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
     filter(.data$revenue.type == "rewards") %>%
     summarize(rewards = sum(.data$value))
 
+  forks <- revenues %>%
+    group_by(.data$exchange) %>%
+    filter(.data$revenue.type == "forks") %>%
+    summarize(forks = sum(.data$value))
+  
+  mining <- revenues %>%
+    group_by(.data$exchange) %>%
+    filter(.data$revenue.type == "mining") %>%
+    summarize(mining = sum(.data$value))
+  
   # Combine everything together
   table <- list(
     revenues.dates, revenues2, airdrops, referrals, staking,
-    promos, interests, rebates, rewards
+    promos, interests, rebates, rewards, forks, mining
   ) %>%
     Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "exchange"), .)
 
@@ -92,7 +102,7 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
     as.data.frame()
 
   # Add total
-  table <- table %>%
+  table <- table %>%  
     add_row(
       exchange = "total",
       date.last = max(table$date.last),

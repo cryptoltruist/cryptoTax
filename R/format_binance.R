@@ -114,8 +114,8 @@ format_binance <- function(data) {
     mutate(exchange = "binance") %>%
     arrange(date, desc(.data$total.price)) %>%
     select(
-      "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment", "revenue.type", "rate.source"
+      "date", "quantity", "currency", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "rate.source", "exchange"
     )
 
   # Return result
