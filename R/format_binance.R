@@ -105,7 +105,7 @@ format_binance <- function(data) {
       revenue.type = case_when(
         grepl("Interest", .data$description) ~ "interests",
         grepl("Referral", .data$description) ~ "rebates",
-        grepl("Distribution", .data$description) ~ "airdrops"
+        grepl("Distribution", .data$description) ~ "forks"
       )
     )
 
@@ -114,7 +114,7 @@ format_binance <- function(data) {
     mutate(exchange = "binance") %>%
     arrange(date, desc(.data$total.price)) %>%
     select(
-      "date", "quantity", "currency", "total.price", "spot.rate", "transaction", 
+      "date", "quantity", "currency", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "rate.source", "exchange"
     )
 

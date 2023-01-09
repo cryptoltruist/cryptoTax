@@ -101,12 +101,8 @@ format_CDC_exchange_rewards <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(EARN, WITHDRAWALS) %>%
-    mutate(
-      fees = 0,
-      exchange = "CDC.exchange"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(EARN, WITHDRAWALS) %>%
+    mutate(exchange = "CDC.exchange")
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data)

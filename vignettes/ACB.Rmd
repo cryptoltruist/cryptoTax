@@ -63,7 +63,7 @@ Per default, setting `sup.loss = TRUE` (the default) generates a lot of columns 
 
 ```{r, message=FALSE}
 library(dplyr)
-ACB(data, spot.rate = "price") %>% 
+ACB(data, spot.rate = "price") %>%
   select(date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -83,7 +83,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB5.png)
 
 ```{r}
-ACB(data, spot.rate = "price") %>% 
+ACB(data, spot.rate = "price") %>%
   select(date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -105,7 +105,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB7.png)
 
 ```{r}
-ACB(data, spot.rate = "price") %>% 
+ACB(data, spot.rate = "price") %>%
   select(date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -127,7 +127,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/ACB9.png)
 
 ```{r}
-ACB(data, spot.rate = "price") %>% 
+ACB(data, spot.rate = "price") %>%
   select(date, transaction, quantity, price, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -149,11 +149,12 @@ ACB(data, spot.rate = "price", sup.loss = FALSE)
 Next, we do it the correct way, *accounting* for superficial losses, and include a few more columns for the demonstration:
 
 ```{r}
-ACB(data, spot.rate = "price") %>% 
-  select(date, transaction, quantity, price, total.quantity,
-         suploss.range, sup.loss, sup.loss.quantity, ACB, ACB.share,
-         gains.uncorrected, gains.sup, gains.excess, gains
-)
+ACB(data, spot.rate = "price") %>%
+  select(
+    date, transaction, quantity, price, total.quantity,
+    suploss.range, sup.loss, sup.loss.quantity, ACB, ACB.share,
+    gains.uncorrected, gains.sup, gains.excess, gains
+  )
 ```
 
 # Other examples from the internet
@@ -176,7 +177,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/cryptotaxcalculator2.png)
 
 ```{r}
-ACB(data, transaction = "trade", spot.rate = "price") %>% 
+ACB(data, transaction = "trade", spot.rate = "price") %>%
   select(date, trade, price, quantity, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -196,7 +197,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/cryptotaxcalculator4.png)
 
 ```{r}
-ACB(data, transaction = "trade", spot.rate = "price") %>% 
+ACB(data, transaction = "trade", spot.rate = "price") %>%
   select(date, trade, price, quantity, total.quantity, ACB, ACB.share, gains)
 ```
 
@@ -211,8 +212,10 @@ Here is an example from Coinpanda, showcased at: https://coinpanda.io/blog/crypt
 
 ```{r}
 data <- coinpanda.io1
-ACB(data, transaction = "type", quantity = "amount", 
-    total.price = "price", sup.loss = FALSE)
+ACB(data,
+  transaction = "type", quantity = "amount",
+  total.price = "price", sup.loss = FALSE
+)
 ```
 
 ### Example 2
@@ -223,8 +226,10 @@ We continue with the second superficial loss example. We first demonstrate the "
 
 ```{r}
 data <- coinpanda.io2
-ACB(data, transaction = "type", quantity = "amount", 
-    total.price = "price", sup.loss = FALSE)
+ACB(data,
+  transaction = "type", quantity = "amount",
+  total.price = "price", sup.loss = FALSE
+)
 ```
 
 Next, we do it the correct way, *accounting* for superficial losses:
@@ -232,7 +237,7 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/coinpanda4.png)
 
 ```{r}
-ACB(data, transaction = "type", quantity = "amount", total.price = "price") %>% 
+ACB(data, transaction = "type", quantity = "amount", total.price = "price") %>%
   select(type, date, amount, price, fees, ACB, ACB.share, gains)
 ```
 
@@ -252,6 +257,6 @@ Next, we do it the correct way, *accounting* for superficial losses:
 ![](images/koinly2.png)
 
 ```{r}
-ACB(data) %>% 
+ACB(data) %>%
   select(date, transaction, quantity, spot.rate, total.quantity, ACB, ACB.share, gains)
 ```

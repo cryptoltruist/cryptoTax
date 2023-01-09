@@ -19,4 +19,3 @@
 
 #' @rdname coinpanda.io1
 "coinpanda.io2"
-

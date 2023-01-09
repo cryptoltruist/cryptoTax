@@ -34,7 +34,7 @@ crypto_pie <- function(table.revenues, by = "exchange") {
   if (by == "revenue.type") {
     table.revenues <- table.revenues %>%
       filter(.data$exchange != "total") %>%
-      select(.data$airdrops:.data$rewards) %>%
+      select(.data$airdrops:.data$mining) %>%
       summarize(across(tidyselect::where(is.numeric), sum, na.rm = TRUE)) %>%
       round(2) %>%
       t() %>%

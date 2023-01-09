@@ -44,8 +44,10 @@ format_ACB <- function(data,
     mutate(currency2 = .data$currency) %>%
     group_by(.data$currency, .drop = FALSE) %>%
     group_modify(~ ACB(
-      .x, total.price = "total.price", as.revenue = as.revenue, 
-      sup.loss = sup.loss)) %>%
+      .x,
+      total.price = "total.price", as.revenue = as.revenue,
+      sup.loss = sup.loss
+    )) %>%
     arrange(date) %>%
     relocate("date", .before = "currency") %>%
     relocate("fees", .before = "description")

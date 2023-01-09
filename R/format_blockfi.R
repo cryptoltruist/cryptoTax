@@ -89,12 +89,8 @@ format_blockfi <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, EARN, SELL) %>%
-    mutate(
-      fees = 0,
-      exchange = "blockfi"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(BUY, EARN, SELL) %>%
+    mutate(exchange = "blockfi")
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data)

@@ -91,12 +91,8 @@ format_uphold <- function(data) {
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, EARN, SELL, WITHDRAWALS) %>%
-    mutate(
-      fees = 0,
-      exchange = "uphold"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
+    mutate(exchange = "uphold")
 
   # Rename transfers as trades for clarity
   data <- data %>%

@@ -62,12 +62,8 @@ format_adalite <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(EARN, WITHDRAWALS) %>%
-    mutate(
-      fees = 0,
-      exchange = "adalite"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(EARN, WITHDRAWALS) %>%
+    mutate(exchange = "adalite")
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data)

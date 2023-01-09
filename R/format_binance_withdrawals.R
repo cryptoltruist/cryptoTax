@@ -64,12 +64,8 @@ format_binance_withdrawals <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(SELL) %>%
-    mutate(
-      fees = 0,
-      exchange = "binance"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(SELL) %>%
+    mutate(exchange = "binance")
 
   # Return result
   data

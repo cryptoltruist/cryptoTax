@@ -28,7 +28,7 @@ test_that("Example #0 - ACB", {
 test_that("Example #1 - ACB", {
   data <- adjustedcostbase.ca2
   data
-  
+
   expect_equal(
     ACB(data, spot.rate = "price", sup.loss = FALSE),
     structure(
@@ -47,7 +47,7 @@ test_that("Example #1 - ACB", {
       row.names = c(NA, -4L), class = c("data.frame")
     )
   )
-  
+
   expect_equal(
     ACB(data, spot.rate = "price"),
     structure(
@@ -63,7 +63,7 @@ test_that("Example #1 - ACB", {
           "Interval",
           .Data = c(5184000, 5184000, 5184000, 5184000),
           start = structure(c(1386374400, 1412380800, 1412467200, 1446422400),
-                            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
           ), tzone = "UTC"
         ),
         quantity.60days = c(100, 100, 100, 0),
@@ -81,14 +81,12 @@ test_that("Example #1 - ACB", {
       class = c("data.frame")
     )
   )
-  
 })
 
 test_that("Example #2 - ACB", {
-  
   data <- adjustedcostbase.ca3
   data <- data
-  
+
   expect_equal(
     ACB(data, spot.rate = "price", sup.loss = FALSE),
     structure(
@@ -107,7 +105,7 @@ test_that("Example #2 - ACB", {
       row.names = c(NA, -4L), class = "data.frame"
     )
   )
-  
+
   expect_equal(
     ACB(data, spot.rate = "price"),
     structure(
@@ -123,7 +121,7 @@ test_that("Example #2 - ACB", {
           "Interval",
           .Data = c(5184000, 5184000, 5184000, 5184000),
           start = structure(c(1386374400, 1412380800, 1412467200, 1446422400),
-                            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
           ), tzone = "UTC"
         ),
         quantity.60days = c(100, 100, 100, 0),
@@ -140,14 +138,12 @@ test_that("Example #2 - ACB", {
       row.names = c(NA, -4L), class = "data.frame"
     )
   )
-  
 })
 
 test_that("Example #3 - ACB", {
-  
   data <- adjustedcostbase.ca4
   data <- data
-  
+
   expect_equal(
     ACB(data, spot.rate = "price", sup.loss = FALSE),
     structure(
@@ -166,7 +162,7 @@ test_that("Example #3 - ACB", {
       row.names = c(NA, -3L), class = "data.frame"
     )
   )
-  
+
   expect_equal(
     ACB(data, spot.rate = "price"),
     structure(
@@ -182,7 +178,7 @@ test_that("Example #3 - ACB", {
           "Interval",
           .Data = c(5184000, 5184000, 5184000),
           start = structure(c(1417564800, 1425945600, 1426032000),
-                            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
           ),
           tzone = "UTC"
         ),
@@ -205,7 +201,7 @@ test_that("Example #3 - ACB", {
 test_that("Example #4 - ACB", {
   data <- adjustedcostbase.ca5
   data <- data
-  
+
   expect_equal(
     ACB(data, spot.rate = "price", sup.loss = FALSE),
     structure(
@@ -224,7 +220,7 @@ test_that("Example #4 - ACB", {
       row.names = c(NA, -2L), class = "data.frame"
     )
   )
-  
+
   expect_equal(
     ACB(data, spot.rate = "price"),
     structure(
@@ -240,7 +236,7 @@ test_that("Example #4 - ACB", {
           "Interval",
           .Data = c(5184000, 5184000),
           start = structure(c(1425945600, 1426032000),
-                            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
           ),
           tzone = "UTC"
         ),
@@ -263,7 +259,7 @@ test_that("Example #4 - ACB", {
 test_that("Example #5 - ACB", {
   data <- adjustedcostbase.ca6
   data <- data
-  
+
   expect_equal(
     ACB(data, spot.rate = "price", sup.loss = FALSE),
     structure(
@@ -282,7 +278,7 @@ test_that("Example #5 - ACB", {
       row.names = c(NA, -5L), class = "data.frame"
     )
   )
-  
+
   expect_equal(
     ACB(data, spot.rate = "price"),
     structure(
@@ -326,237 +322,280 @@ test_that("Example #5 - ACB", {
 test_that("Example #6 - CryptoTaxCalculator", {
   data <- cryptotaxcalculator.io1
   data <- data
-  
+
   expect_equal(
     ACB(data, transaction = "trade", spot.rate = "price", sup.loss = FALSE),
-    structure(list(
-      date = structure(c(18262, 18295, 18296, 18662), class = "Date"), 
-      trade = c("buy", "sell", "buy", "sell"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"),
-      price = c(5000, 3000, 3000, 10000), 
-      quantity = c(2, 2, 2, 2), 
-      total.price = c(10000, 6000, 6000, 20000), 
-      fees = c(0, 0, 0, 0), 
-      total.quantity = c(2, 0, 2, 0), 
-      ACB = c(10000, 0, 6000, 0), 
-      ACB.share = c(5000, 0, 3000, 0), 
-      gains = c(NA, -4000, NA, 14000)),
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    structure(
+      list(
+        date = structure(c(18262, 18295, 18296, 18662), class = "Date"),
+        trade = c("buy", "sell", "buy", "sell"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        price = c(5000, 3000, 3000, 10000),
+        quantity = c(2, 2, 2, 2),
+        total.price = c(10000, 6000, 6000, 20000),
+        fees = c(0, 0, 0, 0),
+        total.quantity = c(2, 0, 2, 0),
+        ACB = c(10000, 0, 6000, 0),
+        ACB.share = c(5000, 0, 3000, 0),
+        gains = c(NA, -4000, NA, 14000)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
-  
+
   expect_equal(
     ACB(data, transaction = "trade", spot.rate = "price"),
-    structure(list(
-      date = structure(c(18262, 18295, 18296, 18662), class = "Date"), 
-      trade = c("buy", "sell", "buy", "sell"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"), 
-      price = c(5000, 3000, 3000, 10000), 
-      quantity = c(2, 2, 2, 2), 
-      total.price = c(10000, 6000, 6000, 20000), 
-      fees = c(0, 0, 0, 0), 
-      total.quantity = c(2, 0, 2, 0), 
-      suploss.range = new(
-        "Interval", .Data = c(5184000, 5184000, 5184000, 5184000),
-        start = structure(c(
-          1575244800, 1578096000, 1578182400, 1609804800), 
-          class = c("POSIXct", "POSIXt"), tzone = "UTC"), tzone = "UTC"), 
-      quantity.60days = c(2, 2, 2, 0), 
-      share.left60 = c(2, 2, 2, 0), 
-      sup.loss.quantity = c(0, 2, 0, 0), 
-      sup.loss = c(FALSE, TRUE, FALSE, FALSE), 
-      gains.uncorrected = c(0, -4000, 0, 10000), 
-      gains.sup = c(NA, -4000, NA, NA), 
-      gains.excess = c(NA, NA, NA, NA), 
-      gains = c(NA, NA, NA, 10000), 
-      ACB = c(10000, 0, 10000, 0), 
-      ACB.share = c(5000, 0, 5000, 0)), 
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    structure(
+      list(
+        date = structure(c(18262, 18295, 18296, 18662), class = "Date"),
+        trade = c("buy", "sell", "buy", "sell"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        price = c(5000, 3000, 3000, 10000),
+        quantity = c(2, 2, 2, 2),
+        total.price = c(10000, 6000, 6000, 20000),
+        fees = c(0, 0, 0, 0),
+        total.quantity = c(2, 0, 2, 0),
+        suploss.range = new(
+          "Interval",
+          .Data = c(5184000, 5184000, 5184000, 5184000),
+          start = structure(
+            c(
+              1575244800, 1578096000, 1578182400, 1609804800
+            ),
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+          ), tzone = "UTC"
+        ),
+        quantity.60days = c(2, 2, 2, 0),
+        share.left60 = c(2, 2, 2, 0),
+        sup.loss.quantity = c(0, 2, 0, 0),
+        sup.loss = c(FALSE, TRUE, FALSE, FALSE),
+        gains.uncorrected = c(0, -4000, 0, 10000),
+        gains.sup = c(NA, -4000, NA, NA),
+        gains.excess = c(NA, NA, NA, NA),
+        gains = c(NA, NA, NA, 10000),
+        ACB = c(10000, 0, 10000, 0),
+        ACB.share = c(5000, 0, 5000, 0)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
-  
 })
 
 test_that("Example #7 - CryptoTaxCalculator", {
   data <- cryptotaxcalculator.io2
   data <- data
-  
+
   expect_equal(
     ACB(data, transaction = "trade", spot.rate = "price", sup.loss = FALSE),
-    structure(list(
-      date = structure(c(18262, 18297, 18298, 18664), class = "Date"), 
-      trade = c("buy", "buy", "sell", "sell"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"), 
-      price = c(5000, 1000, 1000, 10000), 
-      quantity = c(2, 2, 2, 2), 
-      total.price = c(10000, 2000, 2000, 20000), 
-      fees = c(0, 0, 0, 0), 
-      total.quantity = c(2, 4, 2, 0), 
-      ACB = c(10000, 12000, 6000, 0), 
-      ACB.share = c(5000, 3000, 3000, 0), 
-      gains = c(NA, NA, -4000, 14000)), 
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    structure(
+      list(
+        date = structure(c(18262, 18297, 18298, 18664), class = "Date"),
+        trade = c("buy", "buy", "sell", "sell"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        price = c(5000, 1000, 1000, 10000),
+        quantity = c(2, 2, 2, 2),
+        total.price = c(10000, 2000, 2000, 20000),
+        fees = c(0, 0, 0, 0),
+        total.quantity = c(2, 4, 2, 0),
+        ACB = c(10000, 12000, 6000, 0),
+        ACB.share = c(5000, 3000, 3000, 0),
+        gains = c(NA, NA, -4000, 14000)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
-  
+
   expect_equal(
     ACB(data, transaction = "trade", spot.rate = "price"),
-    structure(list(
-      date = structure(c(18262, 18297, 18298, 18664), class = "Date"), 
-      trade = c("buy", "buy", "sell", "sell"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"), 
-      price = c(5000, 1000, 1000, 10000), 
-      quantity = c(2, 2, 2, 2), 
-      total.price = c(10000, 2000, 2000, 20000), 
-      fees = c(0, 0, 0, 0), 
-      total.quantity = c(2, 4, 2, 0), 
-      suploss.range = new(
-        "Interval", .Data = c(5184000, 5184000, 5184000, 5184000), 
-        start = structure(c(
-          1575244800, 1578268800, 1578355200, 1609977600), 
-          class = c("POSIXct", "POSIXt"), tzone = "UTC"), tzone = "UTC"), 
-      quantity.60days = c(2, 2, 2, 0), 
-      share.left60 = c(2, 2, 2, 0), 
-      sup.loss.quantity = c(0, 0, 2, 0), 
-      sup.loss = c(FALSE, FALSE, TRUE, FALSE), 
-      gains.uncorrected = c(0, 0, -4000, 10000), 
-      gains.sup = c(NA, NA, -4000, NA), 
-      gains.excess = c(NA, NA, NA, NA), 
-      gains = c(NA, NA, NA, 10000), 
-      ACB = c(10000, 12000, 10000, 0), 
-      ACB.share = c(5000, 3000, 5000, 0)), 
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    structure(
+      list(
+        date = structure(c(18262, 18297, 18298, 18664), class = "Date"),
+        trade = c("buy", "buy", "sell", "sell"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        price = c(5000, 1000, 1000, 10000),
+        quantity = c(2, 2, 2, 2),
+        total.price = c(10000, 2000, 2000, 20000),
+        fees = c(0, 0, 0, 0),
+        total.quantity = c(2, 4, 2, 0),
+        suploss.range = new(
+          "Interval",
+          .Data = c(5184000, 5184000, 5184000, 5184000),
+          start = structure(
+            c(
+              1575244800, 1578268800, 1578355200, 1609977600
+            ),
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+          ), tzone = "UTC"
+        ),
+        quantity.60days = c(2, 2, 2, 0),
+        share.left60 = c(2, 2, 2, 0),
+        sup.loss.quantity = c(0, 0, 2, 0),
+        sup.loss = c(FALSE, FALSE, TRUE, FALSE),
+        gains.uncorrected = c(0, 0, -4000, 10000),
+        gains.sup = c(NA, NA, -4000, NA),
+        gains.excess = c(NA, NA, NA, NA),
+        gains = c(NA, NA, NA, 10000),
+        ACB = c(10000, 12000, 10000, 0),
+        ACB.share = c(5000, 3000, 5000, 0)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
-  
 })
 
 test_that("Example #8 - Coinpanda", {
   data <- coinpanda.io1
   data <- data
-  
+
   expect_equal(
-    ACB(data, transaction = "type", quantity = "amount", 
-        total.price = "price", sup.loss = FALSE),
-    structure(list(
-      type = c("buy", "buy", "sell", "buy"), 
-      date = structure(c(18122, 18198, 18418, 18528), class = "Date"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"), 
-      amount = c(0.2, 0.6, 0.8, 1.2), 
-      price = c(1800, 4300, 5700, 8200), 
-      fees = c(20, 20, 0, 0), 
-      total.quantity = c(0.2, 0.8, 0, 1.2), 
-      ACB = c(1820, 6140, 0, 8200), 
-      ACB.share = c(9100, 7675, 0, 6833.33333333333), 
-      gains = c(NA, NA, -440, NA)), 
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    ACB(data,
+      transaction = "type", quantity = "amount",
+      total.price = "price", sup.loss = FALSE
+    ),
+    structure(
+      list(
+        type = c("buy", "buy", "sell", "buy"),
+        date = structure(c(18122, 18198, 18418, 18528), class = "Date"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        amount = c(0.2, 0.6, 0.8, 1.2),
+        price = c(1800, 4300, 5700, 8200),
+        fees = c(20, 20, 0, 0),
+        total.quantity = c(0.2, 0.8, 0, 1.2),
+        ACB = c(1820, 6140, 0, 8200),
+        ACB.share = c(9100, 7675, 0, 6833.33333333333),
+        gains = c(NA, NA, -440, NA)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
 })
 
 test_that("Example #9 - Coinpanda", {
   data <- coinpanda.io2
   data <- data
-  
+
   expect_equal(
-    ACB(data, transaction = "type", quantity = "amount", 
-        total.price = "price", sup.loss = FALSE),
-    structure(list(
-      type = c("buy", "buy", "sell", "buy"), 
-      date = structure(c(18122, 18198, 18418, 18420), class = "Date"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"), 
-      amount = c(0.2, 0.6, 0.8, 1.2), 
-      price = c(1800, 4300, 5700, 7000), 
-      fees = c(20, 20, 0, 0), 
-      total.quantity = c(0.2, 0.8, 0, 1.2), 
-      ACB = c(1820, 6140, 0, 7000), 
-      ACB.share = c(9100, 7675, 0, 5833.33333333333), 
-      gains = c(NA, NA, -440, NA)), 
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    ACB(data,
+      transaction = "type", quantity = "amount",
+      total.price = "price", sup.loss = FALSE
+    ),
+    structure(
+      list(
+        type = c("buy", "buy", "sell", "buy"),
+        date = structure(c(18122, 18198, 18418, 18420), class = "Date"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        amount = c(0.2, 0.6, 0.8, 1.2),
+        price = c(1800, 4300, 5700, 7000),
+        fees = c(20, 20, 0, 0),
+        total.quantity = c(0.2, 0.8, 0, 1.2),
+        ACB = c(1820, 6140, 0, 7000),
+        ACB.share = c(9100, 7675, 0, 5833.33333333333),
+        gains = c(NA, NA, -440, NA)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
-  
+
   expect_equal(
     ACB(data, transaction = "type", quantity = "amount", total.price = "price"),
-    structure(list(
-      type = c("buy", "buy", "sell", "buy"), 
-      date = structure(c(18122, 18198, 18418, 18420), class = "Date"), 
-      currency = c("BTC", "BTC", "BTC", "BTC"), 
-      amount = c(0.2, 0.6, 0.8, 1.2), 
-      price = c(1800, 4300, 5700, 7000), 
-      fees = c(20, 20, 0, 0), 
-      total.quantity = c(0.2, 0.8, 0, 1.2), 
-      suploss.range = new(
-        "Interval", .Data = c(5184000, 5184000, 5184000, 5184000),
-        start = structure(c(1563148800, 1569715200, 1588723200, 1588896000), 
-                          class = c("POSIXct", "POSIXt"), tzone = "UTC"), 
-        tzone = "UTC"), 
-      quantity.60days = c(0.2, 0.6, 1.2, 1.2), 
-      share.left60 = c(0.2, 0.8, 1.2, 1.2), 
-      sup.loss.quantity = c(0, 0, 0.8, 0), 
-      sup.loss = c(FALSE, FALSE, TRUE, FALSE), 
-      gains.uncorrected = c(0, 0, -440, 0), 
-      gains.sup = c(NA, NA, -440, NA), 
-      gains.excess = c(NA, NA, NA, NA), 
-      gains = c(NA, NA, NA, NA), 
-      ACB = c(1820, 6140, 0, 7440), 
-      ACB.share = c(9100, 7675, 0, 6200)), 
-      row.names = c(NA, -4L), 
-      class = "data.frame")
+    structure(
+      list(
+        type = c("buy", "buy", "sell", "buy"),
+        date = structure(c(18122, 18198, 18418, 18420), class = "Date"),
+        currency = c("BTC", "BTC", "BTC", "BTC"),
+        amount = c(0.2, 0.6, 0.8, 1.2),
+        price = c(1800, 4300, 5700, 7000),
+        fees = c(20, 20, 0, 0),
+        total.quantity = c(0.2, 0.8, 0, 1.2),
+        suploss.range = new(
+          "Interval",
+          .Data = c(5184000, 5184000, 5184000, 5184000),
+          start = structure(c(1563148800, 1569715200, 1588723200, 1588896000),
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+          ),
+          tzone = "UTC"
+        ),
+        quantity.60days = c(0.2, 0.6, 1.2, 1.2),
+        share.left60 = c(0.2, 0.8, 1.2, 1.2),
+        sup.loss.quantity = c(0, 0, 0.8, 0),
+        sup.loss = c(FALSE, FALSE, TRUE, FALSE),
+        gains.uncorrected = c(0, 0, -440, 0),
+        gains.sup = c(NA, NA, -440, NA),
+        gains.excess = c(NA, NA, NA, NA),
+        gains = c(NA, NA, NA, NA),
+        ACB = c(1820, 6140, 0, 7440),
+        ACB.share = c(9100, 7675, 0, 6200)
+      ),
+      row.names = c(NA, -4L),
+      class = "data.frame"
+    )
   )
-  
 })
 
 test_that("Example #10 - Koinly", {
   data <- koinly.io
   data <- data
-  
+
   expect_equal(
     ACB(data, sup.loss = FALSE),
-    structure(list(
-      date = structure(c(17902, 18203, 18204), class = "Date"), 
-      transaction = c("buy", "sell", "buy"), 
-      currency = c("ETH", "ETH", "ETH"), 
-      quantity = c(100, 100, 100), 
-      spot.rate = c(50, 30, 30), 
-      total.price = c(5000, 3000, 3000), 
-      fees = c(0, 0, 0), 
-      total.quantity = c(100, 0, 100), 
-      ACB = c(5000, 0, 3000), 
-      ACB.share = c(50, 0, 30), 
-      gains = c(NA, -2000, NA)), 
-      row.names = c(NA, -3L), 
-      class = "data.frame")
+    structure(
+      list(
+        date = structure(c(17902, 18203, 18204), class = "Date"),
+        transaction = c("buy", "sell", "buy"),
+        currency = c("ETH", "ETH", "ETH"),
+        quantity = c(100, 100, 100),
+        spot.rate = c(50, 30, 30),
+        total.price = c(5000, 3000, 3000),
+        fees = c(0, 0, 0),
+        total.quantity = c(100, 0, 100),
+        ACB = c(5000, 0, 3000),
+        ACB.share = c(50, 0, 30),
+        gains = c(NA, -2000, NA)
+      ),
+      row.names = c(NA, -3L),
+      class = "data.frame"
+    )
   )
-  
+
   expect_equal(
     ACB(data),
-    structure(list(
-      date = structure(c(17902, 18203, 18204), class = "Date"), 
-      transaction = c("buy", "sell", "buy"), 
-      currency = c("ETH", "ETH", "ETH"), 
-      quantity = c(100, 100, 100), 
-      spot.rate = c(50, 30, 30), 
-      total.price = c(5000, 3000, 3000), 
-      fees = c(0, 0, 0), 
-      total.quantity = c(100, 0, 100), 
-      suploss.range = new(
-        "Interval", .Data = c(5184000, 5184000, 5184000), 
-        start = structure(c(1544140800, 1570147200, 1570233600), 
-                          class = c("POSIXct", "POSIXt"), tzone = "UTC"), 
-        tzone = "UTC"), 
-      quantity.60days = c(100, 100, 100), 
-      share.left60 = c(100, 100, 100), 
-      sup.loss.quantity = c(0, 100, 0), 
-      sup.loss = c(FALSE, TRUE, FALSE),
-      gains.uncorrected = c(0, -2000, 0), 
-      gains.sup = c(NA, -2000, NA), 
-      gains.excess = c(NA, NA, NA), 
-      gains = c(NA, NA, NA), 
-      ACB = c(5000, 0, 5000), 
-      ACB.share = c(50, 0, 50)), 
-      row.names = c(NA, -3L), 
-      class = "data.frame")
+    structure(
+      list(
+        date = structure(c(17902, 18203, 18204), class = "Date"),
+        transaction = c("buy", "sell", "buy"),
+        currency = c("ETH", "ETH", "ETH"),
+        quantity = c(100, 100, 100),
+        spot.rate = c(50, 30, 30),
+        total.price = c(5000, 3000, 3000),
+        fees = c(0, 0, 0),
+        total.quantity = c(100, 0, 100),
+        suploss.range = new(
+          "Interval",
+          .Data = c(5184000, 5184000, 5184000),
+          start = structure(c(1544140800, 1570147200, 1570233600),
+            class = c("POSIXct", "POSIXt"), tzone = "UTC"
+          ),
+          tzone = "UTC"
+        ),
+        quantity.60days = c(100, 100, 100),
+        share.left60 = c(100, 100, 100),
+        sup.loss.quantity = c(0, 100, 0),
+        sup.loss = c(FALSE, TRUE, FALSE),
+        gains.uncorrected = c(0, -2000, 0),
+        gains.sup = c(NA, -2000, NA),
+        gains.excess = c(NA, NA, NA),
+        gains = c(NA, NA, NA),
+        ACB = c(5000, 0, 5000),
+        ACB.share = c(50, 0, 50)
+      ),
+      row.names = c(NA, -3L),
+      class = "data.frame"
+    )
   )
-  
 })

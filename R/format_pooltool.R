@@ -47,12 +47,8 @@ format_pooltool <- function(data) {
     )
 
   # Put fees to zero and add exchange
-  data <- data %>%
-    mutate(
-      fees = 0,
-      exchange = "exodus"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(data) %>%
+    mutate(exchange = "exodus")
 
   # Return result
   data

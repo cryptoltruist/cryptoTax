@@ -10,7 +10,7 @@ A data frame with 19 rows and 11 variables:
 \item{Timestamp..UTC.}{the date}
 \item{Transaction.Description}{transaction description}
 \item{Currency}{the currency}
-\item{Amount}{quanity}
+\item{Amount}{quantity}
 \item{To.Currency}{currency of the other traded coin}
 \item{To.Amount}{quanity of the other traded coin}
 \item{Native.Currency}{usually CAD}

@@ -57,12 +57,8 @@ format_presearch <- function(data) {
     ))
 
   # Add fees, exchange
-  data <- data %>%
-    mutate(
-      fees = 0,
-      exchange = "presearch"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(data) %>%
+    mutate(exchange = "presearch")
 
   # Return result
   data

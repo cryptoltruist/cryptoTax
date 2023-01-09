@@ -32,10 +32,21 @@ ACB <- function(data,
   # Excludes staking, interests, mining
 
   if (!data[1, transaction] %in% c("buy", "revenue")) {
-    stop("The first transaction for this currency cannot be a sale. ",
-         "Please make sure you are not missing any transactions.")
+    stop(
+      "The first transaction for this currency cannot be a sale. ",
+      "Please make sure you are not missing any transactions."
+    )
   }
-  
+
+  if ("currency" %in% names(data)) {
+    if (length(unique(data$currency)) > 1) {
+      stop(
+        "ACB can only work on one currency at a time. ",
+        "For multiple coins, use 'format_ACB'."
+      )
+    }
+  }
+
   # List all possible revenue sources
   all.revenue.type <- c(
     "airdrops", "referrals", "promos", "rewards",
@@ -58,13 +69,15 @@ ACB <- function(data,
       ) %>%
       relocate("value", .after = "revenue.type")
   } else if (!total.price %in% names(data) &&
-             spot.rate %in% names(data)) {
+    spot.rate %in% names(data)) {
     # Set total price if it is missing
     data[total.price] <- data[spot.rate] * data[quantity]
   } else if (!total.price %in% names(data) &&
-             !spot.rate %in% names(data)){
-    stop("Cannot calculate column 'total.price'. ",
-         "Please provide either 'spot.rate' or 'total.price' columns.")
+    !spot.rate %in% names(data)) {
+    stop(
+      "Cannot calculate column 'total.price'. ",
+      "Please provide either 'spot.rate' or 'total.price' columns."
+    )
   }
 
   # Handle fees
@@ -75,7 +88,7 @@ ACB <- function(data,
 
   data <- data %>%
     mutate(fees = ifelse(is.na(.data$fees), 0, .data$fees))
-  
+
   if (isTRUE(sup.loss)) {
     data <- data %>%
       format_suploss(transaction = transaction, quantity = quantity, cl = cl)
@@ -150,6 +163,7 @@ ACB <- function(data,
     if (i > 1 && data[i, transaction] == "sell") {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] - data[i, quantity]
     }
+    # Remove fees from total quantity too??
 
     # After first row: calculate ACB for removed quantities
     if (i > 1 && data[i, transaction] == "sell") {
@@ -193,6 +207,9 @@ ACB <- function(data,
           data[i, "sup.loss.quantity"],
           data[i, "share.left60"]
         ) / data[i, "sup.loss.quantity"])
+        if (is.na(data[i, "gains.sup"]) && data[i, "sup.loss.quantity"] == 0) {
+          data[i, "gains.sup"] <- 0
+        }
       }
 
       # Correct gains.sup for actual gains

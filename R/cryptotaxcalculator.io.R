@@ -1,6 +1,6 @@
 #' Sample data sets provided by cryptotaxcalculator.io
 #'
-#' Data sets from cryptotaxcalculator.io to demonstrate adjusted cost base as 
+#' Data sets from cryptotaxcalculator.io to demonstrate adjusted cost base as
 #' well as capital gains/losses. Used as demo for our own [ACB()] function.
 #'
 #' @docType data

@@ -92,13 +92,8 @@ format_newton <- function(data, filetype = "yearly") {
   EARN$description <- as.character(EARN$description)
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, SELL, EARN) %>%
-    mutate(
-      fees = 0,
-      exchange = "newton",
-      rate.source = "exchange"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(BUY, SELL, EARN) %>%
+    mutate(exchange = "newton", rate.source = "exchange")
 
   # Return result
   data

@@ -36,12 +36,7 @@ prepare_list_prices <- function(coins,
     # Define coins from our merged data set
 
     if (is.null(coins)) {
-      coins <- c(
-        "CRO", "LTC", "BTC", "ETH", "ELON", "PRE", "USDC",
-        "CEL", "XMR", "BAT", "XRP", "BCH", "ADA", "XLM",
-        "BOSON", "EFI", "XNO", "GUSD", "USDT", "BUSD",
-        "ETHW"
-      )
+      coins <- c("BTC", "ETH")
     }
 
     my.coins <- coins
@@ -90,6 +85,11 @@ prepare_list_prices <- function(coins,
         currency = .data$symbol,
         date2 = lubridate::as_date(.data$timestamp)
       )
+  } else {
+    message(
+      "Object 'list.prices' already exists. Reusing 'list.prices'. ",
+      "To force a fresh download, use argument 'force = TRUE'."
+    )
   }
 
   list.prices

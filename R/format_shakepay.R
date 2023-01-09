@@ -10,7 +10,6 @@
 #' @importFrom rlang .data
 
 format_shakepay <- function(data) {
-  
   # Rename columns
   data <- data %>%
     rename(
@@ -71,18 +70,19 @@ format_shakepay <- function(data) {
     rename(
       quantity = "Amount.Credited",
       currency = "Credit.Currency"
-    ) %>% 
+    ) %>%
     mutate(
       transaction = "revenue",
       revenue.type = "referrals",
       spot.rate = 1,
-      total.price = .data$quantity * .data$spot.rate,) %>%
+      total.price = .data$quantity * .data$spot.rate,
+    ) %>%
     select(
       "date", "quantity", "currency", "total.price",
       "spot.rate", "transaction", "revenue.type",
       "description", "comment"
     )
-  
+
   # Create a "sell" object
   SELL <- data %>%
     filter(.data$description == "purchase/sale") %>%

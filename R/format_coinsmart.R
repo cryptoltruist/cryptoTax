@@ -125,7 +125,7 @@ format_coinsmart <- function(data) {
       ),
       revenue.type = replace(
         .data$revenue.type,
-        .data$revenue.type %in% c("Referral "),
+        .data$revenue.type %in% c("Referral"),
         "referrals"
       )
     ) %>%
@@ -195,13 +195,8 @@ format_coinsmart <- function(data) {
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, EARN, SELL, WITHDRAWALS) %>%
-    mutate(exchange = "coinsmart") %>%
-    arrange(date)
-
-  # Replace NAs with zeros (for the fees column)
-  data <- data %>%
-    mutate_at("fees", ~ replace(., is.na(.), 0))
+  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
+    mutate(exchange = "coinsmart")
 
   # Add trade info in comments
 

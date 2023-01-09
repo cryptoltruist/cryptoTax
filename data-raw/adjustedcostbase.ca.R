@@ -50,4 +50,3 @@ adjustedcostbase.ca6 <- data.frame(
   price = c(3, 2, 3, 2, 2)
 )
 usethis::use_data(adjustedcostbase.ca6, overwrite = TRUE)
-

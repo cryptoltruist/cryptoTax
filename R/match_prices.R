@@ -60,6 +60,6 @@ match_prices <- function(data, my.coins = NULL) {
       #                      quantity * spot.rate,
       #                      total.price)
     ) %>%
-    select(-c(.data$date2, .data$spot.rate2))
+    select(-c("date2", "spot.rate2"))
   new.data
 }

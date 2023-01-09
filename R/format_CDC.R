@@ -17,7 +17,6 @@
 #' @importFrom rlang .data
 
 format_CDC <- function(data) {
-  
   known.kind <- c(
     "crypto_earn_program_withdrawn", "rewards_platform_deposit_credited",
     "crypto_earn_extra_interest_paid", "crypto_earn_interest_paid",
@@ -30,22 +29,25 @@ format_CDC <- function(data) {
     "exchange_to_crypto_transfer", "crypto_deposit", "lockup_upgrade",
     "reimbursement_reverted", "mobile_airtime_reward", "crypto_payment",
     "pay_checkout_reward", "gift_card_reward", "crypto_purchase",
-    "referral_gift", "lockup_lock")
+    "referral_gift", "lockup_lock"
+  )
 
   new.kind <- !unique(data$Transaction.Kind) %in% known.kind
-  
+
   if (any(new.kind)) {
     new.kind.names <- unique(data$Transaction.Kind)[new.kind]
     new.kind.names <- paste(new.kind.names, collapse = ", ")
-    new.des.names <- data %>% 
-      filter(!data$Transaction.Kind %in% known.kind) %>% 
-      pull(Transaction.Description) %>% 
-      unique
+    new.des.names <- data %>%
+      filter(!data$Transaction.Kind %in% known.kind) %>%
+      pull(.data$Transaction.Description) %>%
+      unique()
     new.des.names <- paste(new.des.names, collapse = ", ")
-    warning("New transaction kinds detected! These may be unaccounted for: ", 
-            new.kind.names, ". Associated description: ", new.des.names)
+    warning(
+      "New transaction kinds detected! These may be unaccounted for: ",
+      new.kind.names, ". Associated description: ", new.des.names
+    )
   }
-  
+
   # Rename columns ####
   data <- data %>%
     rename(
@@ -60,10 +62,13 @@ format_CDC <- function(data) {
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
   # UTC confirmed
-  
+
   # Correct LUNA to LUNC balance conversions
-  data <- data %>% 
-    mutate(currency == ifelse(.data$currency == "LUNA", "LUNC", .data$currency))
+  data <- data %>%
+    mutate(
+      currency = ifelse(.data$currency == "LUNA", "LUNC", .data$currency),
+      currency = ifelse(.data$currency == "LUNA2", "LUNA", .data$currency)
+    )
 
   # Convert USD value to CAD ####
   data <- data %>%
@@ -136,7 +141,8 @@ format_CDC <- function(data) {
         "rewards_platform_deposit_credited",
         "card_cashback_reverted",
         "reimbursement_reverted",
-        "admin_wallet_credited"
+        "admin_wallet_credited",
+        "supercharger_reward_to_app_credited"
       )
     ) %>%
     # Mission Rewards Deposit for last one
@@ -293,22 +299,19 @@ format_CDC <- function(data) {
   if (any(is.na(WITHDRAWALS$quantity))) {
     WITHDRAWALS.na <- unique(WITHDRAWALS[is.na(WITHDRAWALS$quantity), "currency"])
     WITHDRAWALS.na <- paste(WITHDRAWALS.na, collapse = ", ")
-    warning("Some withdrawal fees could not be detected automatically. ",
-            "You will have to make manual corrections for: ", WITHDRAWALS.na)
+    warning(
+      "Some withdrawal fees could not be detected automatically. ",
+      "You will have to make manual corrections for: ", WITHDRAWALS.na
+    )
   }
-  
+
   # Actually withdrawal fees should be like "selling at zero", so correct total.price
   # WITHDRAWALS <- WITHDRAWALS %>%
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects ####
-  data <- bind_rows(BUY, BUY2, CREDIT, EARN, SELL, SELL2, WITHDRAWALS) %>%
-    mutate(
-      fees = 0,
-      exchange = "CDC",
-      rate.source = "exchange"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(BUY, BUY2, CREDIT, EARN, SELL, SELL2, WITHDRAWALS) %>%
+    mutate(exchange = "CDC", rate.source = "exchange")
 
   # Return result
   data

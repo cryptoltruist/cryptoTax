@@ -84,12 +84,8 @@ format_CDC_wallet <- function(data) {
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(EARN, WITHDRAWALS) %>%
-    mutate(
-      fees = 0,
-      exchange = "CDC.wallet"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(EARN, WITHDRAWALS) %>%
+    mutate(exchange = "CDC.wallet")
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data)

@@ -37,13 +37,8 @@ format_BSC <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- EARN %>%
-    mutate(
-      fees = 0,
-      exchange = "binance",
-      rate.source = "exchange"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(EARN) %>%
+    mutate(exchange = "binance", rate.source = "exchange")
 
   # Return result
   data

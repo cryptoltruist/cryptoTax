@@ -62,13 +62,8 @@ format_celsius <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- EARN %>%
-    mutate(
-      fees = 0,
-      exchange = "celsius",
-      rate.source = "exchange"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(EARN) %>%
+    mutate(exchange = "celsius", rate.source = "exchange")
 
   # Return result
   data

@@ -20,4 +20,3 @@ coinpanda.io2 <- data.frame(
   fees = c(20, 20, 0, 0)
 )
 usethis::use_data(coinpanda.io2, overwrite = TRUE)
-

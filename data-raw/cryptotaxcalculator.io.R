@@ -18,4 +18,3 @@ cryptotaxcalculator.io2 <- data.frame(
   quantity = 2
 )
 usethis::use_data(cryptotaxcalculator.io2, overwrite = TRUE)
-

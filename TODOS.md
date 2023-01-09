@@ -4,13 +4,13 @@
 
 - Only calculate superficial losses for rows that are sales and with a loss instead of every row.
 - Replace for-loops with dplyr (e.g., in ACB)
-- Think about using data.`table` or `dtplyr`
+- Think about using `data.table` or `dtplyr`
 
 ## Features
 
-- Make sample datasets for all exchanges
-- Add custom import with no non-sense defaults, but also the possibility for custom columns. Also add option for time zone.
-- Detect new transaction types not accounted for every exchange
+- New error message for appropriate functions: "You must first run 'prepare_list_prices' before using this function."
+- Make sample data sets for all exchanges (remaining: adalite, binance, blockfi, BSC, CDC_exchange_rewards, CDC_exchange_trades, CDC_wallet, celsius, coinsmart, exodus, gemini, newton, pooltool, presearch)
+- Detect new transaction types not accounted for every exchange (done: CDC)
 - Write new function to get latest transaction dates by exchanges.
 - Write new function to check where negative balances appear.
 - When price is fetched through `priceR`, indicate the source of the price accordingly
@@ -19,6 +19,8 @@
 
 ## Tax
 
+- Remove trading fees from total quantity??
+- Should trading fees be applied to the quantity from the superficial loss? I think so... Write a test to check that
 - Check for all trading exchanges that prices of sells and buys match
 - Clarify the time zones for year to year transition days!
 - Still have to follow-up with each exchange where time isn't specified to know whether it is EST or EDT time! Including: Wealthsimple.
@@ -26,6 +28,8 @@
 
 ## Code optimization
 
+- Use `format_generic` as much as possible in every other `format_*` function, whenever possible, to reduce code redundancy.
+- New function: format_dollars
 - Fix duplicated columns in sup loss calculations
 - For NA fees, check and replace with 0 in ACB instead of each exchange...
 - Check <https://github.com/BittyTax/BittyTax> for general inspiration

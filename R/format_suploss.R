@@ -13,8 +13,8 @@
 #' @importFrom lubridate %within%
 #' @importFrom rlang .data
 
-format_suploss <- function(data, 
-                           transaction = "transaction", 
+format_suploss <- function(data,
+                           transaction = "transaction",
                            quantity = "quantity",
                            cl = NULL) {
   out <- data %>%

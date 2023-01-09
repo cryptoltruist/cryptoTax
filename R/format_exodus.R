@@ -76,12 +76,8 @@ format_exodus <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(EARN, WITHDRAWALS, STAKING.FEES) %>%
-    mutate(
-      fees = 0,
-      exchange = "exodus"
-    ) %>%
-    arrange(date)
+  data <- merge_exchanges(EARN, WITHDRAWALS, STAKING.FEES) %>%
+    mutate(exchange = "exodus")
 
   # Actually correct network fees sold for zero!
   # data <- data %>%
