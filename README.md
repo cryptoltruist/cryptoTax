@@ -108,22 +108,22 @@ all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)
-#> Process started at 2023-01-08 19:54:28. Please be patient as the transactions process.
+#> Process started at 2023-01-08 20:30:32. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2023-01-08 19:54:29. Total time elapsed: 1.19 minutes
+#> Process ended at 2023-01-08 20:30:34. Total time elapsed: 0.03 minutes
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
 ```
 
-| date                | currency |  quantity | total.price |    spot.rate | transaction | fees | description                     | comment             | revenue.type |    value | exchange | rate.source | currency2 |    gains |       ACB |    ACB.share |
-|:--------------------|:---------|----------:|------------:|-------------:|:------------|-----:|:--------------------------------|:--------------------|:-------------|---------:|:---------|:------------|:----------|---------:|----------:|-------------:|
-| 2021-05-03 22:05:50 | BTC      | 0.0007334 |    51.25000 | 6.988278e+04 | buy         |    0 | crypto_purchase                 | Buy BTC             | NA           | 51.25000 | CDC      | exchange    | BTC       |       NA |  51.25000 | 6.988278e+04 |
-| 2021-05-07 23:06:50 | ETH      | 0.0205920 |    54.21000 | 2.632575e+03 | buy         |    0 | crypto_purchase                 | Buy ETH             | NA           | 54.21000 | CDC      | exchange    | ETH       |       NA |  54.21000 | 2.632575e+03 |
-| 2021-05-21 12:47:14 | BTC      | 0.0001300 |     0.00000 | 5.652762e+04 | revenue     |    0 | shakingsats                     | credit              | airdrops     |  7.34859 | shakepay | exchange    | BTC       |       NA | 104.28335 | 4.888608e+04 |
-| 2021-05-29 23:10:59 | CRO      | 6.4039545 |     0.00000 | 1.764535e-01 | revenue     |    0 | referral_card_cashback          | Card Cashback       | rebates      |  1.13000 | CDC      | exchange    | CRO       |       NA |  53.42000 | 1.741274e-01 |
-| 2021-07-06 22:18:40 | CRO      | 0.3207992 |     0.26000 | 8.104758e-01 | revenue     |    0 | crypto_earn_extra_interest_paid | Crypto Earn (Extra) | interests    |  0.26000 | CDC      | exchange    | CRO       |       NA |  53.68000 | 1.083560e-01 |
-| 2021-07-10 00:52:19 | BTC      | 0.0005299 |    31.26848 | 5.900715e+04 | sell        |    0 | purchase/sale                   | sale                | NA           | 31.26848 | shakepay | exchange    | BTC       | 8.463513 |  81.47838 | 4.303555e+04 |
+| date                | currency |  quantity | total.price |     spot.rate | transaction | fees | description                     | comment             | revenue.type |    value | exchange | rate.source | currency2 | gains |      ACB |     ACB.share |
+|:--------------------|:---------|----------:|------------:|--------------:|:------------|-----:|:--------------------------------|:--------------------|:-------------|---------:|:---------|:------------|:----------|------:|---------:|--------------:|
+| 2021-05-03 22:05:50 | BTC      | 0.0007334 |       51.25 | 69882.7777778 | buy         |    0 | crypto_purchase                 | Buy BTC             | NA           | 51.25000 | CDC      | exchange    | BTC       |    NA |  51.2500 | 69882.7777778 |
+| 2021-05-07 23:06:50 | ETH      | 0.0205920 |       54.21 |  2632.5750000 | buy         |    0 | crypto_purchase                 | Buy ETH             | NA           | 54.21000 | CDC      | exchange    | ETH       |    NA |  54.2100 |  2632.5750000 |
+| 2021-05-21 12:47:14 | BTC      | 0.0001300 |        0.00 | 56527.6188000 | revenue     |    0 | shakingsats                     | credit              | airdrops     |  7.34859 | shakepay | exchange    | BTC       |    NA | 104.2833 | 48886.0827905 |
+| 2021-05-29 23:10:59 | CRO      | 6.4039545 |        0.00 |     0.1764535 | revenue     |    0 | referral_card_cashback          | Card Cashback       | rebates      |  1.13000 | CDC      | exchange    | CRO       |    NA |  53.4200 |     0.1741274 |
+| 2021-06-27 21:17:50 | ETH      | 0.0007633 |        3.12 |  4087.6923838 | revenue     |    0 | crypto_earn_interest_paid       | Crypto Earn         | interests    |  3.12000 | CDC      | exchange    | ETH       |    NA |  57.3800 |  2685.1921836 |
+| 2021-07-06 22:18:40 | CRO      | 0.3207992 |        0.26 |     0.8104758 | revenue     |    0 | crypto_earn_extra_interest_paid | Crypto Earn (Extra) | interests    |  0.26000 | CDC      | exchange    | CRO       |    NA |  53.6800 |     0.1083560 |
 
 ### Summary info
 
@@ -135,12 +135,13 @@ report_overview(formatted.ACB,
 )
 ```
 
-| date.last           | currency | total.quantity | cost.share | total.cost | gains | losses |  net | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
-|:--------------------|:---------|---------------:|-----------:|-----------:|------:|-------:|-----:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
-| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 | 0.00 |       0.08 |       44.65 |               NA |            -16.01 |         -16.01 | CRO       |
-| 2021-07-10 00:52:19 | BTC      |      0.0018933 |   43035.55 |      81.48 |  8.46 |      0 | 8.46 |   22883.51 |       43.32 |               NA |            -38.16 |         -38.16 | BTC       |
-| 2021-06-27 21:17:50 | ETH      |      0.0213553 |    2684.58 |      57.33 |  0.00 |      0 | 0.00 |    1715.01 |       36.62 |               NA |            -20.71 |         -20.71 | ETH       |
-| 2021-07-23 17:21:19 | Total    |             NA |         NA |     199.47 |  8.46 |      0 | 8.46 |         NA |      124.59 |                0 |            -74.88 |         -74.88 | Total     |
+| date.last           | currency | total.quantity | cost.share | total.cost | gains | losses |   net | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
+|:--------------------|:---------|---------------:|-----------:|-----------:|------:|-------:|------:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
+| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 |  0.00 |       0.08 |       44.65 |               NA |            -16.01 |         -16.01 | CRO       |
+| 2021-07-25 18:22:02 | BTC      |      0.0013612 |   43035.55 |      58.58 | 20.57 |      0 | 20.57 |   22883.51 |       31.15 |               NA |            -27.43 |         -27.43 | BTC       |
+| 2021-07-28 23:23:04 | ETH      |      0.0114054 |    2685.19 |      30.63 |  8.25 |      0 |  8.25 |    1715.01 |       19.56 |               NA |            -11.07 |         -11.07 | ETH       |
+| 2021-07-11 20:19:55 | ETHW     |      0.3558067 |       8.99 |       3.20 |  0.00 |      0 |  0.00 |       4.39 |        1.56 |               NA |             -1.64 |          -1.64 | ETHW      |
+| 2021-07-28 23:23:04 | Total    |             NA |         NA |     153.07 | 28.82 |      0 | 28.82 |         NA |       96.92 |                0 |            -56.15 |         -56.15 | Total     |
 
 ``` r
 
@@ -154,30 +155,29 @@ report_summary(formatted.ACB,
 | Type              | Amount  | currency |
 |:------------------|:--------|:---------|
 | tax.year          | 2021    | CAD      |
-| gains             | 8.46    | CAD      |
+| gains             | 28.81   | CAD      |
 | losses            | 0.00    | CAD      |
-| net               | 8.46    | CAD      |
-| total.cost        | 199.47  | CAD      |
-| value.today       | 124.59  | CAD      |
+| net               | 28.81   | CAD      |
+| total.cost        | 153.07  | CAD      |
+| value.today       | 96.92   | CAD      |
 | unrealized.gains  | 0.00    | CAD      |
-| unrealized.losses | -74.88  | CAD      |
-| unrealized.net    | -74.88  | CAD      |
-| percentage.up     | -37.54% | CAD      |
-| all.time.up       | -33.30% | CAD      |
+| unrealized.losses | -56.15  | CAD      |
+| unrealized.net    | -56.15  | CAD      |
+| percentage.up     | -36.68% | CAD      |
+| all.time.up       | -17.86% | CAD      |
 
 ### Revenue estimation
 
 ``` r
 table.revenues <- report_revenues(formatted.ACB, tax.year = "2021")
-#> Adding missing grouping variables: `exchange`
 table.revenues
 ```
 
-| exchange | date.last           | total.revenues | airdrops | referrals | staking | promos | interests | rebates | rewards | currency |
-|:---------|:--------------------|---------------:|---------:|----------:|--------:|-------:|----------:|--------:|--------:|:---------|
-| CDC      | 2021-07-23 17:21:19 |          92.90 |  0.00000 |  30.19035 |       0 |      0 |     10.36 |   51.15 |     1.2 | CAD      |
-| shakepay | 2021-06-23 12:21:49 |          66.28 | 36.27886 |  30.00000 |       0 |      0 |      0.00 |    0.00 |     0.0 | CAD      |
-| total    | 2021-07-23 17:21:19 |         159.18 | 36.27886 |  60.19035 |       0 |      0 |     10.36 |   51.15 |     1.2 | CAD      |
+| exchange | date.last           | total.revenues | airdrops | referrals | staking | promos | interests | rebates | rewards | forks | mining | currency |
+|:---------|:--------------------|---------------:|---------:|----------:|--------:|-------:|----------:|--------:|--------:|------:|-------:|:---------|
+| CDC      | 2021-07-23 17:21:19 |          96.15 |     0.00 |     30.19 |       0 |      0 |     10.36 |   51.15 |     1.2 |   3.2 |      0 | CAD      |
+| shakepay | 2021-06-23 12:21:49 |          66.28 |    36.28 |     30.00 |       0 |      0 |      0.00 |    0.00 |     0.0 |   0.0 |      0 | CAD      |
+| total    | 2021-07-23 17:21:19 |         162.43 |    36.28 |     60.19 |       0 |      0 |     10.36 |   51.15 |     1.2 |   3.2 |      0 | CAD      |
 
 ``` r
 

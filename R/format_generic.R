@@ -94,7 +94,7 @@ format_generic <- function(data,
 
   # Add proper dates to dataframe
   data <- data %>%
-    mutate(date = lubridate::with_tz(.data$date, tz = timezone))
+    mutate(date = lubridate::as_datetime(.data$date, tz = timezone))
 
   # Add total price
   if (!"total.price" %in% names(data) && "spot.rate" %in% names(data)) {

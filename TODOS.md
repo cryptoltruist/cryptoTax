@@ -6,8 +6,13 @@
 - Replace for-loops with dplyr (e.g., in ACB)
 - Think about using `data.table` or `dtplyr`
 
+## Bugs
+
+- `lubridate::with_tz` seems to be creating problems in other timezones. Might be better to find a replacement like `lubridate::as_datetime`.
+
 ## Features
 
+- Round revenue table to 2 decimals
 - New error message for appropriate functions: "You must first run 'prepare_list_prices' before using this function."
 - Make sample data sets for all exchanges (remaining: adalite, binance, blockfi, BSC, CDC_exchange_rewards, CDC_exchange_trades, CDC_wallet, celsius, coinsmart, exodus, gemini, newton, pooltool, presearch)
 - Detect new transaction types not accounted for every exchange (done: CDC)

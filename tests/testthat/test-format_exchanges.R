@@ -131,7 +131,8 @@ test_that("generic1", {
   data
   expect_equal(
     format_generic(data),
-    structure(list(date = structure(c(1614699366, 1615398544, 1615831928), class = c("POSIXct", "POSIXt"), tzone = "UTC"), currency = c(
+    structure(list(date = structure(c(1614681366, 1615380544, 1615817528
+    ), class = c("POSIXct", "POSIXt"), tzone = "UTC"), currency = c(
       "BTC",
       "ETH", "ETH"
     ), quantity = c(0.00124, 0.063067, 0.065048), total.price = c(
@@ -167,7 +168,8 @@ test_that("generic2", {
       fees = "Fee",
       exchange = "Platform"
     ),
-    structure(list(date = structure(c(1614699366, 1615398544, 1615831928), class = c("POSIXct", "POSIXt"), tzone = "UTC"), currency = c(
+    structure(list(date = structure(c(1614681366, 1615380544, 1615817528
+    ), class = c("POSIXct", "POSIXt"), tzone = "UTC"), currency = c(
       "BTC",
       "ETH", "ETH"
     ), quantity = c(0.00124, 0.063067, 0.065048), total.price = c(
@@ -194,7 +196,8 @@ test_that("generic3", {
   data
   expect_equal(
     format_generic(data),
-    structure(list(date = structure(c(1614699366, 1615398544, 1615831928), class = c("POSIXct", "POSIXt"), tzone = "UTC"), currency = c(
+    structure(list(date = structure(c(1614681366, 1615380544, 1615817528
+    ), class = c("POSIXct", "POSIXt"), tzone = "UTC"), currency = c(
       "BTC",
       "ETH", "ETH"
     ), quantity = c(0.00124, 0.063067, 0.065048), total.price = c(
@@ -221,7 +224,8 @@ test_that("generic4", {
   data
   expect_equal(
     format_generic(data),
-    structure(list(date = structure(c(1614699366, 1615398544, 1615831928), tzone = "UTC", class = c("POSIXct", "POSIXt")), currency = c(
+    structure(list(date = structure(c(1614681366, 1615380544, 1615817528
+    ), tzone = "UTC", class = c("POSIXct", "POSIXt")), currency = c(
       "BTC",
       "ETH", "ETH"
     ), quantity = c(0.00124, 0.063067, 0.065048), total.price = c(

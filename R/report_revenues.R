@@ -108,6 +108,7 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
       date.last = max(table$date.last),
       summarize(., across(tidyselect::where(is.numeric), sum, na.rm = TRUE))
     ) %>%
-    mutate(currency = "CAD")
+    mutate(currency = "CAD",
+           across(tidyselect::where(is.numeric), round, 2))
   table
 }
