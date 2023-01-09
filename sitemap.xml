@@ -58,6 +58,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_generic1.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_shakepay.html</loc>
   </url>
   <url>
@@ -88,12 +91,6 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance.html</loc>
   </url>
   <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance_earn.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance_trades.html</loc>
-  </url>
-  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance_withdrawals.html</loc>
   </url>
   <url>
@@ -112,6 +109,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_gemini.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_generic.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_newton.html</loc>
   </url>
   <url>
@@ -128,9 +128,6 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_wealthsimple.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.html</loc>

@@ -59,14 +59,19 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="cryptotax-002">cryptoTax 0.0.2<a class="anchor" aria-label="anchor" href="#cryptotax-002"></a></h2>
-<p>New Features:</p>
+<p>Breaking changes:</p>
+<ul><li>We get rid of the <code>format_wealtsimple</code> and <code>format_binance_trades</code> functions, since their goal is better fulfilled by the <code>format_generic</code> and <code>format_binance</code> functions, respectively.</li>
+</ul><p>New Features:</p>
 <ul><li>New <code>pkgdown</code> website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.</li>
 <li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow with thousands of transactions.</li>
 <li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC)</li>
-<li>New function: <code>format_binance_earn</code>, to process Binance rewards.</li>
-<li>New function: <code>format_binance</code>, a general version that works with the general transaction report.</li>
+<li>New function: <code>format_generic</code>, to process most transaction history files not supported by existing functions.</li>
+<li>New function: <code>format_binance</code>, a general version that works with the general transaction report and includes rewards (but not withdrawal fees). We thus get rid of <code>format_binance_trades</code> since the former is superior (as it includes more transaction types).</li>
 </ul><p>Improvements:</p>
-<ul><li>
+<ul><li>Consistently use plural for reward types.</li>
+<li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
+<li>New tests for <code>format_shakepay</code>, <code>format_CDC</code>, <code>format_generic</code>, and <code>ACB</code>.</li>
+<li>
 <code>ACB_suploss</code>: integrates the primary <code>ACB</code> function, which accordingly gains a new logical argument, <code>suploss</code>.</li>
 <li>
 <code>format_suploss</code>: integrates <code>ACB</code> when <code>suploss = TRUE</code>, and gains a greatly improved code base.</li>
@@ -74,21 +79,25 @@
 <code>add_quantities</code>: switches from a for-loop to <code>dplyr</code> code.</li>
 <li>
 <code>ACB</code>:
-<ul><li>Better error message when not providing first buy transactions (so no ACB…)</li>
-<li>Added tests for ACB and superficial losses</li>
+<ul><li>new warning messages:
+<ul><li>when not providing first buy transactions (so no ACB…)</li>
+<li>when more than one currency are provided at a time</li>
+<li>when insufficient columns are provided to calculate ‘total.price’</li>
+</ul></li>
 </ul></li>
 <li>
-<code>report_revenues</code>: Now support forks and mining.</li>
+<code>report_revenues</code> and <code>crypto_pie</code>: Now support forks and mining.</li>
 <li>
 <code>format_newton</code>: updated to the new format</li>
 <li>
 <code>format_CDC</code>:
-<ul><li>new warning message when withdrawal fees could not be detected automatically.</li>
-<li>new transaction types supported: forks (“admin_wallet_credited”) and sales (“crypto_viban_exchange”, “card_top_up”, “crypto_wallet_swap_debited”)</li>
-<li>To handle LUNA to LUNC balance conversions, all LUNA transactions are renamed “LUNC” since technically it is simply a change of name, so the ACB from LUNA should follow.</li>
+<ul><li>new warning messages
+<ul><li>when new, unregistered transaction types are detected</li>
+<li>when withdrawal fees could not be detected automatically.</li>
 </ul></li>
-<li>Consistently use plural for reward types.</li>
-<li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
+<li>new transaction types supported: forks (“admin_wallet_credited”), sales (“crypto_viban_exchange”, “card_top_up”, “crypto_wallet_swap_debited”), and supercharger rewards (“supercharger_reward_to_app_credited”)</li>
+<li>On coinmarketcap, after 2022-05-28, LUNA gets renamed to LUNC, and the LUNA2 fork gets renamed to LUNA. This is confusing because on CDC, they use the terms LUNA and LUNC (which are the same), and LUNA2, which is the new LUNA fork. Therefore, we now rename “LUNA” transactions (on CDC) to “LUNC”, and “LUNA2” to “LUNA”.</li>
+</ul></li>
 </ul><p>Bug Fixes:</p>
 <ul><li>
 <code>format_shakepay</code>: now correctly detect CAD referral rewards</li>

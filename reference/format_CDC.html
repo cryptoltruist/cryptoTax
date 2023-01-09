@@ -103,50 +103,53 @@ withdrawal fees after using <code>format_CDC</code>, on the resulting dataframe.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-06-10 23:12:24 8.635724e+01      CRO    16.94000 1.961619e-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-06-11 19:13:58 1.736890e+01      CRO     9.19000 5.291066e-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-06-16 20:14:29 2.250418e+01      CRO    11.65000 5.176817e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-06-19 21:16:30 8.452621e+00      CRO     1.25000 1.478831e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-06-27 21:17:50 7.632668e-04      ETH     3.12000 4.087692e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-07-06 22:18:40 3.207992e-01      CRO     0.26000 8.104758e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-07-11 20:19:55 3.558067e-01     ETHW     3.20000 8.993647e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-07-14 18:20:27 2.476190e+00      CRO     1.20000 4.846154e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 2021-07-23 17:21:19 3.716026e+01      CRO     6.98000 1.878351e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 2021-07-25 18:22:02 5.320542e-04      BTC    35.00000 6.578278e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 2021-07-28 23:23:04 9.963655e-03      ETH    35.00000 3.512767e+03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    transaction                       description                   comment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          buy                   crypto_purchase                   Buy BTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          buy                   crypto_purchase                   Buy ETH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          buy                   crypto_purchase                   Buy CRO</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      revenue                     referral_gift    Sign-up Bonus Unlocked</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      revenue            referral_card_cashback             Card Cashback</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      revenue                     reimbursement      Card Rebate: Spotify</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      revenue                     reimbursement      Card Rebate: Netflix</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      revenue                     reimbursement Card Rebate: Amazon Prime</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      revenue                     reimbursement      Card Rebate: Expedia</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     revenue               pay_checkout_reward               Pay Rewards</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11     revenue         crypto_earn_interest_paid               Crypto Earn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12     revenue   crypto_earn_extra_interest_paid       Crypto Earn (Extra)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13     revenue             admin_wallet_credited       Adjustment (Credit)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14     revenue rewards_platform_deposit_credited   Mission Rewards Deposit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15     revenue                  mco_stake_reward         CRO Stake Rewards</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16        sell             crypto_viban_exchange                BTC -&gt; CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17        sell             crypto_viban_exchange                ETH -&gt; CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type fees exchange rate.source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt;    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt;    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt;    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     referrals    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       rebates    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       rebates    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7       rebates    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       rebates    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       rebates    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10      rebates    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11    interests    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    interests    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13        forks    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14      rewards    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15    interests    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16         &lt;NA&gt;    0      CDC    exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17         &lt;NA&gt;    0      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-06-18 21:15:51 1.377500e-05      ETH     0.05000 3.629764e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-06-19 21:16:30 8.452621e+00      CRO     1.25000 1.478831e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-06-27 21:17:50 7.632668e-04      ETH     3.12000 4.087692e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-07-06 22:18:40 3.207992e-01      CRO     0.26000 8.104758e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-07-11 20:19:55 3.558067e-01     ETHW     3.20000 8.993647e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 2021-07-14 18:20:27 2.476190e+00      CRO     1.20000 4.846154e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 2021-07-23 17:21:19 3.716026e+01      CRO     6.98000 1.878351e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 2021-07-25 18:22:02 5.320542e-04      BTC    35.00000 6.578278e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 2021-07-28 23:23:04 9.963655e-03      ETH    35.00000 3.512767e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    transaction                         description                   comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          buy                     crypto_purchase                   Buy BTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          buy                     crypto_purchase                   Buy ETH</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          buy                     crypto_purchase                   Buy CRO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      revenue                       referral_gift    Sign-up Bonus Unlocked</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      revenue              referral_card_cashback             Card Cashback</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      revenue                       reimbursement      Card Rebate: Spotify</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      revenue                       reimbursement      Card Rebate: Netflix</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      revenue                       reimbursement Card Rebate: Amazon Prime</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      revenue                       reimbursement      Card Rebate: Expedia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     revenue supercharger_reward_to_app_credited       Supercharger Reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     revenue                 pay_checkout_reward               Pay Rewards</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     revenue           crypto_earn_interest_paid               Crypto Earn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     revenue     crypto_earn_extra_interest_paid       Crypto Earn (Extra)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     revenue               admin_wallet_credited       Adjustment (Credit)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     revenue   rewards_platform_deposit_credited   Mission Rewards Deposit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     revenue                    mco_stake_reward         CRO Stake Rewards</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        sell               crypto_viban_exchange                BTC -&gt; CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18        sell               crypto_viban_exchange                ETH -&gt; CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           revenue.type exchange rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                 &lt;NA&gt;      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                 &lt;NA&gt;      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                 &lt;NA&gt;      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                            referrals      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                              rebates      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                              rebates      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                              rebates      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                              rebates      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                              rebates      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 supercharger_reward_to_app_credited      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                             rebates      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                           interests      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                           interests      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                               forks      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                             rewards      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                           interests      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                &lt;NA&gt;      CDC    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                &lt;NA&gt;      CDC    exchange</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
