@@ -98,7 +98,8 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
+  <main id="main" class="col-md-9">
+<div class="section level1">
 <div class="page-header">
 <img src="logo.png" class="logo" alt=""><h1 id="cryptotax-crypto-taxes-in-r-canada-only-">cryptoTax: Crypto taxes in R (Canada only) <a class="anchor" aria-label="anchor" href="#cryptotax-crypto-taxes-in-r-canada-only-"></a>
 </h1>
@@ -290,9 +291,9 @@
 <span></span>
 <span><span class="co"># Format data with ACB</span></span>
 <span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Process started at 2023-01-06 17:04:34. Please be patient as the transactions process.</span></span>
+<span><span class="co">#&gt; Process started at 2023-01-08 19:54:28. Please be patient as the transactions process.</span></span>
 <span><span class="co">#&gt; [Formatting ACB (progress bar repeats for each coin)...]</span></span>
-<span><span class="co">#&gt; Process ended at 2023-01-06 17:04:36. Total time elapsed: 1.55 minutes</span></span>
+<span><span class="co">#&gt; Process ended at 2023-01-08 19:54:29. Total time elapsed: 1.19 minutes</span></span>
 <span></span>
 <span><span class="co"># Let's get a preview of the output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">19</span>, <span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">14</span>, <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -496,22 +497,6 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">2021-07-10 00:52:19</td>
-<td align="left">BTC</td>
-<td align="right">0.0018933</td>
-<td align="right">43035.55</td>
-<td align="right">81.48</td>
-<td align="right">8.46</td>
-<td align="right">0</td>
-<td align="right">8.46</td>
-<td align="right">22789.00</td>
-<td align="right">43.15</td>
-<td align="right">NA</td>
-<td align="right">-38.33</td>
-<td align="right">-38.33</td>
-<td align="left">BTC</td>
-</tr>
-<tr class="even">
 <td align="left">2021-07-23 17:21:19</td>
 <td align="left">CRO</td>
 <td align="right">535.0406356</td>
@@ -521,11 +506,27 @@
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">0.08</td>
-<td align="right">42.72</td>
+<td align="right">44.65</td>
 <td align="right">NA</td>
-<td align="right">-17.94</td>
-<td align="right">-17.94</td>
+<td align="right">-16.01</td>
+<td align="right">-16.01</td>
 <td align="left">CRO</td>
+</tr>
+<tr class="even">
+<td align="left">2021-07-10 00:52:19</td>
+<td align="left">BTC</td>
+<td align="right">0.0018933</td>
+<td align="right">43035.55</td>
+<td align="right">81.48</td>
+<td align="right">8.46</td>
+<td align="right">0</td>
+<td align="right">8.46</td>
+<td align="right">22883.51</td>
+<td align="right">43.32</td>
+<td align="right">NA</td>
+<td align="right">-38.16</td>
+<td align="right">-38.16</td>
+<td align="left">BTC</td>
 </tr>
 <tr class="odd">
 <td align="left">2021-06-27 21:17:50</td>
@@ -536,11 +537,11 @@
 <td align="right">0.00</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">1695.24</td>
-<td align="right">36.20</td>
+<td align="right">1715.01</td>
+<td align="right">36.62</td>
 <td align="right">NA</td>
-<td align="right">-21.13</td>
-<td align="right">-21.13</td>
+<td align="right">-20.71</td>
+<td align="right">-20.71</td>
 <td align="left">ETH</td>
 </tr>
 <tr class="even">
@@ -553,10 +554,10 @@
 <td align="right">0</td>
 <td align="right">8.46</td>
 <td align="right">NA</td>
-<td align="right">122.07</td>
+<td align="right">124.59</td>
 <td align="right">0</td>
-<td align="right">-77.40</td>
-<td align="right">-77.40</td>
+<td align="right">-74.88</td>
+<td align="right">-74.88</td>
 <td align="left">Total</td>
 </tr>
 </tbody>
@@ -602,7 +603,7 @@
 </tr>
 <tr class="even">
 <td align="left">value.today</td>
-<td align="left">122.07</td>
+<td align="left">124.59</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
@@ -612,22 +613,22 @@
 </tr>
 <tr class="even">
 <td align="left">unrealized.losses</td>
-<td align="left">-77.40</td>
+<td align="left">-74.88</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
 <td align="left">unrealized.net</td>
-<td align="left">-77.40</td>
+<td align="left">-74.88</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="even">
 <td align="left">percentage.up</td>
-<td align="left">-38.80%</td>
+<td align="left">-37.54%</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
 <td align="left">all.time.up</td>
-<td align="left">-34.56%</td>
+<td align="left">-33.30%</td>
 <td align="left">CAD</td>
 </tr>
 </tbody>
@@ -754,7 +755,13 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/cryptoltruist/cryptoTax/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/cryptoltruist/cryptoTax/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/cryptoltruist/cryptoTax?branch=main" class="external-link"><img src="https://codecov.io/gh/cryptoltruist/cryptoTax/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
