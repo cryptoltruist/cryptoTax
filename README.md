@@ -1,5 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/cryptoltruist/cryptoTax/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cryptoltruist/cryptoTax/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/cryptoltruist/cryptoTax/branch/main/graph/badge.svg)](https://app.codecov.io/gh/cryptoltruist/cryptoTax?branch=main)
+<!-- badges: end -->
 
 # cryptoTax: Crypto taxes in R (Canada only) <img src='man/figures/logo.png' align="right" height="140" style="float:right; height:200px;" />
 
@@ -102,9 +108,9 @@ all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)
-#> Process started at 2023-01-06 17:04:34. Please be patient as the transactions process.
+#> Process started at 2023-01-08 19:54:28. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2023-01-06 17:04:36. Total time elapsed: 1.55 minutes
+#> Process ended at 2023-01-08 19:54:29. Total time elapsed: 1.19 minutes
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
@@ -131,10 +137,10 @@ report_overview(formatted.ACB,
 
 | date.last           | currency | total.quantity | cost.share | total.cost | gains | losses |  net | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
 |:--------------------|:---------|---------------:|-----------:|-----------:|------:|-------:|-----:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
-| 2021-07-10 00:52:19 | BTC      |      0.0018933 |   43035.55 |      81.48 |  8.46 |      0 | 8.46 |   22789.00 |       43.15 |               NA |            -38.33 |         -38.33 | BTC       |
-| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 | 0.00 |       0.08 |       42.72 |               NA |            -17.94 |         -17.94 | CRO       |
-| 2021-06-27 21:17:50 | ETH      |      0.0213553 |    2684.58 |      57.33 |  0.00 |      0 | 0.00 |    1695.24 |       36.20 |               NA |            -21.13 |         -21.13 | ETH       |
-| 2021-07-23 17:21:19 | Total    |             NA |         NA |     199.47 |  8.46 |      0 | 8.46 |         NA |      122.07 |                0 |            -77.40 |         -77.40 | Total     |
+| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 | 0.00 |       0.08 |       44.65 |               NA |            -16.01 |         -16.01 | CRO       |
+| 2021-07-10 00:52:19 | BTC      |      0.0018933 |   43035.55 |      81.48 |  8.46 |      0 | 8.46 |   22883.51 |       43.32 |               NA |            -38.16 |         -38.16 | BTC       |
+| 2021-06-27 21:17:50 | ETH      |      0.0213553 |    2684.58 |      57.33 |  0.00 |      0 | 0.00 |    1715.01 |       36.62 |               NA |            -20.71 |         -20.71 | ETH       |
+| 2021-07-23 17:21:19 | Total    |             NA |         NA |     199.47 |  8.46 |      0 | 8.46 |         NA |      124.59 |                0 |            -74.88 |         -74.88 | Total     |
 
 ``` r
 
@@ -152,12 +158,12 @@ report_summary(formatted.ACB,
 | losses            | 0.00    | CAD      |
 | net               | 8.46    | CAD      |
 | total.cost        | 199.47  | CAD      |
-| value.today       | 122.07  | CAD      |
+| value.today       | 124.59  | CAD      |
 | unrealized.gains  | 0.00    | CAD      |
-| unrealized.losses | -77.40  | CAD      |
-| unrealized.net    | -77.40  | CAD      |
-| percentage.up     | -38.80% | CAD      |
-| all.time.up       | -34.56% | CAD      |
+| unrealized.losses | -74.88  | CAD      |
+| unrealized.net    | -74.88  | CAD      |
+| percentage.up     | -37.54% | CAD      |
+| all.time.up       | -33.30% | CAD      |
 
 ### Revenue estimation
 

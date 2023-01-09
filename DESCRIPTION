@@ -45,7 +45,8 @@ Suggests:
     flextable,
     rmarkdown,
     testthat (>= 3.0.0),
-    knitr
+    knitr,
+    covr
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr

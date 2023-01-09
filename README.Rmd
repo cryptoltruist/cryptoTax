@@ -14,6 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/cryptoltruist/cryptoTax/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cryptoltruist/cryptoTax/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/cryptoltruist/cryptoTax/branch/main/graph/badge.svg)](https://app.codecov.io/gh/cryptoltruist/cryptoTax?branch=main)
+<!-- badges: end -->
+
 # cryptoTax: Crypto taxes in R (Canada only) <img src='man/figures/logo.png' align="right" height="140" style="float:right; height:200px;" />
 
 *Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary*.
