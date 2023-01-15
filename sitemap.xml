@@ -37,10 +37,10 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.html</loc>
   </url>
   <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/adjustedcostbase.ca1.html</loc>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/check_missing_transactions.html</loc>
   </url>
   <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/coinpanda.io1.html</loc>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/crypto2fiat.html</loc>
@@ -52,13 +52,22 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/crypto_pie.html</loc>
   </url>
   <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/cryptotaxcalculator.io1.html</loc>
-  </url>
-  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_adjustedcostbase1.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinpanda1.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_cryptotaxcalculator1.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_generic1.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_koinly.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_shakepay.html</loc>
@@ -68,9 +77,6 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_BSC.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.html</loc>
@@ -103,6 +109,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_dollars.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.html</loc>
   </url>
   <url>
@@ -130,13 +139,13 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_latest_transactions.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/koinly.io.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/listby_coin.html</loc>

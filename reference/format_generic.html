@@ -152,17 +152,7 @@ be one of <code>c("airdrops", "referrals", "staking", "promos", "interests", "re
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Detects correct names even with capitals</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_generic1</span></span></span>
-<span class="r-in"><span><span class="va">data</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      Date Currency Quantity Total.Price Transaction Fees</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06 EST      BTC 0.001240       50.99         buy 0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04 EST      ETH 0.063067       50.99         buy 0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-03-15 14:12:08 EST      ETH 0.065048      150.99        sell 1.75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 generic_exchange</span>
-<span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data_generic1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price  spot.rate transaction fees</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06      BTC 0.001240       50.99 41120.9677         buy 0.72</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04      ETH 0.063067       50.99   808.5052         buy 0.72</span>
@@ -173,14 +163,8 @@ be one of <code>c("airdrops", "referrals", "staking", "promos", "interests", "re
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 generic_exchange    exchange</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># In other cases, names can be specified explicitly:</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_generic2</span></span></span>
-<span class="r-in"><span><span class="va">data</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Date.Transaction Coin   Amount  Price Type  Fee         Platform</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06 EST  BTC 0.001240  50.99  buy 0.72 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04 EST  ETH 0.063067  50.99  buy 0.72 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-03-15 14:12:08 EST  ETH 0.065048 150.99 sell 1.75 generic_exchange</span>
 <span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">data</span>,</span></span>
+<span class="r-in"><span>  <span class="va">data_generic2</span>,</span></span>
 <span class="r-in"><span>  date <span class="op">=</span> <span class="st">"Date.Transaction"</span>,</span></span>
 <span class="r-in"><span>  currency <span class="op">=</span> <span class="st">"Coin"</span>,</span></span>
 <span class="r-in"><span>  quantity <span class="op">=</span> <span class="st">"Amount"</span>,</span></span>
@@ -200,17 +184,7 @@ be one of <code>c("airdrops", "referrals", "staking", "promos", "interests", "re
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># If total.price is missing, it will calculate it based</span></span></span>
 <span class="r-in"><span><span class="co"># on the spot.rate, if available</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_generic3</span></span></span>
-<span class="r-in"><span><span class="va">data</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      Date Currency Quantity  Spot.Rate Transaction Fees</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06 EST      BTC 0.001240 41120.9677         buy 0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04 EST      ETH 0.063067   808.5052         buy 0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-03-15 14:12:08 EST      ETH 0.065048  2321.2090        sell 1.75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 generic_exchange</span>
-<span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data_generic3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price  spot.rate transaction fees</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06      BTC 0.001240       50.99 41120.9677         buy 0.72</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04      ETH 0.063067       50.99   808.5052         buy 0.72</span>
@@ -222,13 +196,7 @@ be one of <code>c("airdrops", "referrals", "staking", "promos", "interests", "re
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># If both total.price and spot.rate are missing, it will</span></span></span>
 <span class="r-in"><span><span class="co"># scrap the spot.rate from coinmarketcap based on the coin:</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_generic4</span></span></span>
-<span class="r-in"><span><span class="va">data</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      Date Currency Quantity Transaction Fees         Exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06 EST      BTC 0.001240         buy 0.72 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04 EST      ETH 0.063067         buy 0.72 generic_exchange</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-03-15 14:12:08 EST      ETH 0.065048        sell 1.75 generic_exchange</span>
-<span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data_generic4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Scraping historical crypto data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Processing historical crypto data</span>

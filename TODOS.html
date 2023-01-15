@@ -69,17 +69,12 @@
 <div class="section level2">
 <h2 id="bugs">Bugs<a class="anchor" aria-label="anchor" href="#bugs"></a></h2>
 <ul><li>
-<code><a href="https://lubridate.tidyverse.org/reference/with_tz.html" class="external-link">lubridate::with_tz</a></code> seems to be creating problems in other timezones. Might be better to find a replacement like <code><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">lubridate::as_datetime</a></code>.</li>
+<code><a href="https://lubridate.tidyverse.org/reference/with_tz.html" class="external-link">lubridate::with_tz</a></code> seems to be creating problems in other timezones (based on GHA). Might be better to find a replacement like <code><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">lubridate::as_datetime</a></code> everywhere.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a></h2>
-<ul><li>Round revenue table to 2 decimals</li>
-<li>New error message for appropriate functions: “You must first run ‘prepare_list_prices’ before using this function.”</li>
-<li>Make sample data sets for all exchanges (remaining: adalite, binance, blockfi, BSC, CDC_exchange_rewards, CDC_exchange_trades, CDC_wallet, celsius, coinsmart, exodus, gemini, newton, pooltool, presearch)</li>
-<li>Detect new transaction types not accounted for every exchange (done: CDC)</li>
-<li>Write new function to get latest transaction dates by exchanges.</li>
-<li>Write new function to check where negative balances appear.</li>
-<li>When price is fetched through <code>priceR</code>, indicate the source of the price accordingly</li>
+<ul><li>Make sample data sets for all exchanges (remaining: adalite, binance, blockfi, BSC, CDC_exchange_rewards, CDC_exchange_trades, CDC_wallet, celsius, coinsmart, exodus, gemini, newton, pooltool, presearch).</li>
+<li>New error message for functions where it is required: “You must first create an object ‘list.prices’ using <code><a href="reference/prepare_list_prices.html">prepare_list_prices()</a></code> before using this function.” [or just add it as a required argument?? Would do the same thing… think about this].</li>
 <li>For <code><a href="reference/report_revenues.html">report_revenues()</a></code>, better and more clearly accommodate tax year</li>
 <li>Finish the Shiny app: editable table, see <a href="https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/" class="external-link uri">https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/</a>
 </li>
@@ -88,17 +83,13 @@
 <h2 id="tax">Tax<a class="anchor" aria-label="anchor" href="#tax"></a></h2>
 <ul><li>Remove trading fees from total quantity??</li>
 <li>Should trading fees be applied to the quantity from the superficial loss? I think so… Write a test to check that</li>
-<li>Check for all trading exchanges that prices of sells and buys match</li>
 <li>Clarify the time zones for year to year transition days!</li>
-<li>Still have to follow-up with each exchange where time isn’t specified to know whether it is EST or EDT time! Including: Wealthsimple.</li>
 <li>Superficial loss needs to look at least 30 days in the new year (assuming a transaction occured on the last day of the year). Therefore, when filtering for year, it should first calculate superficial losses until say January 30 of the next year, and at the end filter again for the selected year.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="code-optimization">Code optimization<a class="anchor" aria-label="anchor" href="#code-optimization"></a></h2>
 <ul><li>Use <code>format_generic</code> as much as possible in every other <code>format_*</code> function, whenever possible, to reduce code redundancy.</li>
-<li>New function: format_dollars</li>
 <li>Fix duplicated columns in sup loss calculations</li>
-<li>For NA fees, check and replace with 0 in ACB instead of each exchange…</li>
 <li>Check <a href="https://github.com/BittyTax/BittyTax" class="external-link uri">https://github.com/BittyTax/BittyTax</a> for general inspiration</li>
 </ul></div>
 <div class="section level2">
