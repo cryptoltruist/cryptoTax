@@ -14,19 +14,19 @@
 #'   ...
 #' }
 #' @source \url{https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/, https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/}
-"adjustedcostbase.ca1"
+"data_adjustedcostbase1"
 
-#' @rdname adjustedcostbase.ca1
-"adjustedcostbase.ca2"
+#' @rdname data_adjustedcostbase1
+"data_adjustedcostbase2"
 
-#' @rdname adjustedcostbase.ca1
-"adjustedcostbase.ca3"
+#' @rdname data_adjustedcostbase1
+"data_adjustedcostbase3"
 
-#' @rdname adjustedcostbase.ca1
-"adjustedcostbase.ca4"
+#' @rdname data_adjustedcostbase1
+"data_adjustedcostbase4"
 
-#' @rdname adjustedcostbase.ca1
-"adjustedcostbase.ca5"
+#' @rdname data_adjustedcostbase1
+"data_adjustedcostbase5"
 
-#' @rdname adjustedcostbase.ca1
-"adjustedcostbase.ca6"
+#' @rdname data_adjustedcostbase1
+"data_adjustedcostbase6"

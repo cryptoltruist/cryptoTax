@@ -11,13 +11,15 @@
 #' @importFrom rlang .data
 
 format_pooltool <- function(data) {
+  # There are no transaction types at all for this file type
+  
   # Rename columns
   data <- data %>%
     rename(
       quantity = "stake_rewards",
       total.price = "stake_rewards_value",
       spot.rate = "rate",
-      date = "\\u00ef..date"
+      date = "date" # used to be "\\u00ef..date" ....
     )
   # Have to find a way to remove that special character, "ï" (solution = use "\\u00ef")
 
@@ -38,18 +40,18 @@ format_pooltool <- function(data) {
       comment = paste0("pool = ", .data$pool)
     )
 
+  # Put fees to zero and add exchange
+  data <- merge_exchanges(data) %>%
+    mutate(exchange = "exodus")
+  
   # Select and reorder correct columns
   data <- data %>%
     select(
       "date", "currency", "quantity", "total.price",
       "spot.rate", "transaction", "description", "comment",
-      "revenue.type", "rate.source"
+      "revenue.type", "exchange", "rate.source"
     )
-
-  # Put fees to zero and add exchange
-  data <- merge_exchanges(data) %>%
-    mutate(exchange = "exodus")
-
+  
   # Return result
   data
 }

@@ -20,6 +20,8 @@
 #' @importFrom rlang .data
 
 format_CDC_wallet <- function(data) {
+  known.transactions <- c("", "cost", "Reward")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -29,6 +31,11 @@ format_CDC_wallet <- function(data) {
       comment = "Description",
       date = "Date"
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -95,7 +102,14 @@ format_CDC_wallet <- function(data) {
       .data$quantity * .data$spot.rate,
       .data$total.price
     ))
-
+  
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

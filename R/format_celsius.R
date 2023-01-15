@@ -11,6 +11,10 @@
 #' @importFrom rlang .data
 
 format_celsius <- function(data) {
+  known.transactions <- c(
+    "Reward", "Transfer", "Withdrawal", "Promo Code Reward", 
+    "Referrer Award", "Referred Award")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -19,7 +23,12 @@ format_celsius <- function(data) {
       description = "Transaction.type",
       date = "Date.and.time"
     )
-
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
+  
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::mdy_hm(.data$date))
@@ -63,8 +72,15 @@ format_celsius <- function(data) {
 
   # Merge the "buy" and "sell" objects
   data <- merge_exchanges(EARN) %>%
-    mutate(exchange = "celsius", rate.source = "exchange")
+    mutate(exchange = "celsius", rate.source = "exchange (USD conversion)")
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

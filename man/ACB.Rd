@@ -42,7 +42,7 @@ ACB(
 Calculate realized and unrealized capital gains/losses
 }
 \examples{
-data <- adjustedcostbase.ca1
+data <- data_adjustedcostbase1
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ACB(data, spot.rate = "price")
 }

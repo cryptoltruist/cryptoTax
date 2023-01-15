@@ -23,7 +23,7 @@ All time up in percentage including revenues is...
 
 ```{r}
 # ((value.today + net.numeric + revenues) / sum(ACB.list$ACB) - 1) * 100
-value <- round(((as.numeric(gsub(",", "", report.summary$Amount[6])) + 
+value <- round(((format_dollars(report.summary$Amount[6], "numeric") + 
           last(report.overview$net) + 
           last(table.revenues$total.revenues)) / 
          last(report.overview$total.cost) - 1) * 100, 2)
@@ -142,9 +142,9 @@ pie_revenue
 
 > Those are only taxed at 50%. Your **capital losses** are calculated as **total capital losses** (**\$`r gsub("-", "", tot.sup.loss + sup.losses.total)`**) - **superficial losses** (**\$`r gsub("-", "", sup.losses.total)`**) = **actual capital losses** (**\$`r round(as.numeric(gsub("-", "", tot.sup.loss)), 2)`**).
 
-Your total "proceeds" *for the coins you sold at a **profit*** is: **\$`r format.money(proceeds$proceeds[1])`** (aggregated for all coins). Your total ACB *for the coins you sold at a profit* is: **\$`r format.money(proceeds$ACB.total[1])`** (average of all coins). The difference between the two is your capital gains: **\$`r format.money(proceeds$proceeds[1] - proceeds$ACB.total[1])`**.
+Your total "proceeds" *for the coins you sold at a **profit*** is: **\$`r format.dollars(proceeds$proceeds[1])`** (aggregated for all coins). Your total ACB *for the coins you sold at a profit* is: **\$`r format.dollars(proceeds$ACB.total[1])`** (average of all coins). The difference between the two is your capital gains: **\$`r format.dollars(proceeds$proceeds[1] - proceeds$ACB.total[1])`**.
 
-Your total "proceeds" (adjusted for superficial gains) *for the coins you sold at a **loss*** is: **\$`r format.money(proceeds$proceeds[2])`** (aggregated for all coins). Your total ACB *for the coins you sold at a loss* is: **\$`r format.money(proceeds$ACB.total[2])`** (average of all coins). The difference between the two is your capital losses: **\$`r gsub("-", "", format.money(proceeds$proceeds[2] - proceeds$ACB.total[2]))`**.
+Your total "proceeds" (adjusted for superficial gains) *for the coins you sold at a **loss*** is: **\$`r format.dollars(proceeds$proceeds[2])`** (aggregated for all coins). Your total ACB *for the coins you sold at a loss* is: **\$`r format.dollars(proceeds$ACB.total[2])`** (average of all coins). The difference between the two is your capital losses: **\$`r gsub("-", "", format.dollars(proceeds$proceeds[2] - proceeds$ACB.total[2]))`**.
 
 
 ### Income

@@ -22,7 +22,7 @@ Will output a full crypto tax report in HTML format, which can then be printed o
 }
 \examples{
 \dontrun{
-print_report()
+print_report(tax.year, name, table.revenues, report.summary, sup.losses)
 }
 
 }

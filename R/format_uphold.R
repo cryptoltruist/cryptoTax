@@ -11,6 +11,8 @@
 #' @importFrom rlang .data
 
 format_uphold <- function(data) {
+  known.transactions <- c("in", "out", "transfer")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -19,6 +21,11 @@ format_uphold <- function(data) {
       description = "Type",
       date = "Date"
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -137,11 +144,22 @@ format_uphold <- function(data) {
     mutate(spot.rate = .data$total.price / .data$quantity)
 
   # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap - buy price"
+  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
 
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
-
+  
+  # Arrange in correct order
+  data <- data %>% 
+    arrange(date, desc(.data$total.price))
+  
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

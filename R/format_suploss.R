@@ -7,7 +7,7 @@
 #' @param cl The number of cores to use.
 #' @export
 #' @examples
-#' data <- adjustedcostbase.ca1
+#' data <- data_adjustedcostbase1
 #' format_suploss(data)
 #' @importFrom dplyr mutate %>% filter summarize bind_rows distinct transmute ungroup group_by select arrange rename add_row
 #' @importFrom lubridate %within%

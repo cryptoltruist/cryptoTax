@@ -17,7 +17,8 @@
 #' @importFrom rlang .data
 
 format_CDC <- function(data) {
-  known.kind <- c(
+  # Known transactions ####
+  known.transactions <- c(
     "crypto_earn_program_withdrawn", "rewards_platform_deposit_credited",
     "crypto_earn_extra_interest_paid", "crypto_earn_interest_paid",
     "reimbursement", "crypto_withdrawal", "mco_stake_reward", "referral_card_cashback",
@@ -32,22 +33,6 @@ format_CDC <- function(data) {
     "referral_gift", "lockup_lock"
   )
 
-  new.kind <- !unique(data$Transaction.Kind) %in% known.kind
-
-  if (any(new.kind)) {
-    new.kind.names <- unique(data$Transaction.Kind)[new.kind]
-    new.kind.names <- paste(new.kind.names, collapse = ", ")
-    new.des.names <- data %>%
-      filter(!data$Transaction.Kind %in% known.kind) %>%
-      pull(.data$Transaction.Description) %>%
-      unique()
-    new.des.names <- paste(new.des.names, collapse = ", ")
-    warning(
-      "New transaction kinds detected! These may be unaccounted for: ",
-      new.kind.names, ". Associated description: ", new.des.names
-    )
-  }
-
   # Rename columns ####
   data <- data %>%
     rename(
@@ -57,7 +42,13 @@ format_CDC <- function(data) {
       comment = "Transaction.Description",
       date = "Timestamp..UTC."
     )
-
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description",
+                         description.col = "comment")
+  
   # Add single dates to dataframe ####
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -74,10 +65,14 @@ format_CDC <- function(data) {
   data <- data %>%
     cryptoTax::USD2CAD() %>%
     mutate(
-      CAD.rate = ifelse(.data$Native.Currency == "USD",
+      CAD.rate = ifelse(
+        .data$Native.Currency == "USD",
         .data$CAD.rate,
-        1
-      ),
+        1),
+      rate.source = ifelse(
+        .data$Native.Currency == "USD",
+        "exchange (USD conversion)",
+        "exchange"),
       total.price = .data$Native.Amount * .data$CAD.rate
     )
 
@@ -90,7 +85,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
+      "transaction", "description", "comment", "rate.source"
     ) %>%
     filter(.data$currency != "CAD")
 
@@ -105,7 +100,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
+      "transaction", "description", "comment", "rate.source"
     ) %>%
     filter(.data$currency != "CAD")
 
@@ -121,7 +116,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
+      "transaction", "description", "comment", "rate.source"
     )
 
   # Create a "EARN" object ####
@@ -194,7 +189,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "revenue.type", "description", "comment"
+      "transaction", "revenue.type", "description", "comment", "rate.source"
     )
 
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
@@ -225,7 +220,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
+      "transaction", "description", "comment", "rate.source"
     )
 
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
@@ -252,7 +247,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
+      "transaction", "description", "comment", "rate.source"
     )
 
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
@@ -293,7 +288,7 @@ format_CDC <- function(data) {
     ) %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
+      "transaction", "description", "comment", "rate.source"
     )
 
   if (any(is.na(WITHDRAWALS$quantity))) {
@@ -311,8 +306,15 @@ format_CDC <- function(data) {
 
   # Merge the "buy" and "sell" objects ####
   data <- merge_exchanges(BUY, BUY2, CREDIT, EARN, SELL, SELL2, WITHDRAWALS) %>%
-    mutate(exchange = "CDC", rate.source = "exchange")
+    mutate(exchange = "CDC")
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

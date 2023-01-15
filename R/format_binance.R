@@ -21,6 +21,10 @@
 #' @importFrom rlang .data
 
 format_binance <- function(data) {
+  known.transactions <- c(
+    "Deposit", "Withdraw", "Buy", "Fee", "Referral Kickback", "Sell", 
+    "Simple Earn Flexible Interest", "Distribution", "Stablecoins Auto-Conversion")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -30,7 +34,12 @@ format_binance <- function(data) {
       description = "Operation",
       comment = "Account"
     )
-
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
+  
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -80,7 +89,8 @@ format_binance <- function(data) {
     filter(.data$description != "Fee") %>%
     mutate(
       total.price = BUY$total.price,
-      spot.rate = .data$total.price / .data$quantity
+      spot.rate = .data$total.price / .data$quantity,
+      rate.source = "coinmarketcap (buy price)"
     )
 
   # Extract fees
@@ -112,10 +122,10 @@ format_binance <- function(data) {
   # Merge the "buy" and "sell" objects
   data <- bind_rows(BUY, SELL, EARN, CONVERSIONS) %>%
     mutate(exchange = "binance") %>%
-    arrange(date, desc(.data$total.price)) %>%
+    arrange(date, desc(.data$total.price), .data$transaction) %>%
     select(
-      "date", "quantity", "currency", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "rate.source", "exchange"
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
     )
 
   # Return result

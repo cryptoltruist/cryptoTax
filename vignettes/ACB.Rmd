@@ -28,7 +28,7 @@ We first generate the data:
 
 ```{r}
 library(cryptoTax)
-data <- adjustedcostbase.ca1
+data <- data_adjustedcostbase1
 data
 ```
 
@@ -51,7 +51,7 @@ We first demonstrate the "Violation of the Superficial Loss Rule" by using regul
 ![](images/ACB2.png)
 
 ```{r}
-data <- adjustedcostbase.ca2
+data <- data_adjustedcostbase2
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -74,7 +74,7 @@ We continue with the second superficial loss example. We first demonstrate the "
 ![](images/ACB4.png)
 
 ```{r}
-data <- adjustedcostbase.ca3
+data <- data_adjustedcostbase3
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -96,7 +96,7 @@ We continue with the third superficial loss example (first example in https://ww
 ![](images/ACB6.png)
 
 ```{r}
-data <- adjustedcostbase.ca4
+data <- data_adjustedcostbase4
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -118,7 +118,7 @@ We continue with the fourth superficial loss example (second example in https://
 ![](images/ACB8.png)
 
 ```{r}
-data <- adjustedcostbase.ca5
+data <- data_adjustedcostbase5
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -142,7 +142,7 @@ There are no examples given for this one, so we make our own. adjustedcostbase.c
 Fortunately, `cryptoTax` allows claiming partial losses automatically. We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
 ```{r}
-data <- adjustedcostbase.ca6
+data <- data_adjustedcostbase6
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -168,7 +168,7 @@ Here is an example from CryptoTaxCalculator, showcased at: https://cryptotaxcalc
 ![](images/cryptotaxcalculator1.png)
 
 ```{r}
-data <- cryptotaxcalculator.io1
+data <- data_cryptotaxcalculator1
 ACB(data, transaction = "trade", spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -188,7 +188,7 @@ We continue with the second superficial loss example. We first demonstrate the "
 ![](images/cryptotaxcalculator3.png)
 
 ```{r}
-data <- cryptotaxcalculator.io2
+data <- data_cryptotaxcalculator2
 ACB(data, transaction = "trade", spot.rate = "price", sup.loss = FALSE)
 ```
 
@@ -211,7 +211,7 @@ Here is an example from Coinpanda, showcased at: https://coinpanda.io/blog/crypt
 ![](images/coinpanda2.png)
 
 ```{r}
-data <- coinpanda.io1
+data <- data_coinpanda1
 ACB(data,
   transaction = "type", quantity = "amount",
   total.price = "price", sup.loss = FALSE
@@ -225,7 +225,7 @@ We continue with the second superficial loss example. We first demonstrate the "
 ![](images/coinpanda3.png)
 
 ```{r}
-data <- coinpanda.io2
+data <- data_coinpanda2
 ACB(data,
   transaction = "type", quantity = "amount",
   total.price = "price", sup.loss = FALSE
@@ -248,7 +248,7 @@ Here is an example from Koinly, showcased at: https://koinly.io/blog/calculating
 ![](images/koinly1.png)
 
 ```{r}
-data <- koinly.io
+data <- data_koinly
 ACB(data, sup.loss = FALSE)
 ```
 

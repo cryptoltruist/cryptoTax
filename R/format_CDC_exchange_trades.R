@@ -33,6 +33,8 @@
 #' @importFrom rlang .data
 
 format_CDC_exchange_trades <- function(data) {
+  known.transactions <- c("SELL", "BUY")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -41,6 +43,11 @@ format_CDC_exchange_trades <- function(data) {
       comment = "Symbol",
       date = "Time..UTC."
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -71,7 +78,7 @@ format_CDC_exchange_trades <- function(data) {
   data.fees <- cryptoTax::match_prices(data.fees)
 
   data$fees <- data.fees$Fee * data.fees$spot.rate
-
+  
   # Create a "buy" object
   BUY <- data %>%
     filter(.data$description == "BUY") %>%
@@ -126,7 +133,7 @@ format_CDC_exchange_trades <- function(data) {
 
   # Create a third "sell" object for third currencies...
   SELL3 <- data %>%
-    filter(.data$third.currency == "TRUE") %>%
+    filter(.data$third.currency == TRUE) %>%
     mutate(
       transaction = "sell",
       currency = .data$Fee.Currency,
@@ -140,14 +147,12 @@ format_CDC_exchange_trades <- function(data) {
     )
 
   SELL3 <- data.fees %>%
-    filter(.data$third.currency == "TRUE") %>%
-    select(.data$spot.rate, .data$rate.source) %>%
+    filter(.data$third.currency == TRUE) %>%
+    select("spot.rate", "rate.source") %>%
     cbind(SELL3)
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, BUY2, SELL, SELL2, SELL3) %>%
-    mutate(exchange = "CDC.exchange") %>%
-    arrange(date)
+  data <- merge_exchanges(BUY, BUY2, SELL, SELL2, SELL3)
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data)
@@ -158,6 +163,59 @@ format_CDC_exchange_trades <- function(data) {
       .data$total.price
     ))
 
+  # CORRECT SPOT RATE FOR COIN TO COIN TRANSACTIONS [for sales]
+  # Replace total.price first, then in a second step spot.rate
+  
+  coin.prices <- data %>%
+    filter(.data$transaction %in% c("buy")) %>%
+    mutate(transaction = "sell")
+  
+  # Recreate the SELL object because we need the calculated total prices
+  SELL <- data %>%
+    filter(.data$transaction %in% c("sell"),
+           !grepl("Trading fee paid with", .data$description))
+  
+  # These are the prices I want to replace
+  SELL[which(SELL$date %in% coin.prices$date), "total.price"]
+  
+  # These are the correct prices
+  coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
+  
+  # Let's replace them
+  SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
+    coin.prices$date %in% SELL$date
+  ), "total.price"]
+  
+  # Now let's recalculate spot.rate
+  SELL <- SELL %>%
+    mutate(spot.rate = .data$total.price / .data$quantity)
+  
+  # Let's also replace the rate.source for these transactions
+  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
+  
+  # Temporarily remove trading fees
+  trading.fees <- data %>%
+    filter(grepl("Trading fee paid with", .data$description))
+  
+  data <- data %>%
+    filter(!grepl("Trading fee paid with", .data$description))
+  
+  # Replace these transactions in the main dataframe
+  data[which(data$transaction == "sell"), ] <- SELL
+  
+  # Arrange in correct order
+  data <- data %>% 
+    bind_rows(trading.fees) %>%
+    mutate(exchange = "CDC.exchange") %>% 
+    arrange(date, desc(.data$total.price), .data$transaction)
+  
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "fees", "description", "comment", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

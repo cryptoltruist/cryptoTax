@@ -31,6 +31,9 @@
 #' @importFrom rlang .data
 
 format_CDC_exchange_rewards <- function(data) {
+  known.transactions <- c("", "Reward", "referral_gift")
+  # "referral_gift" is for our manual correction
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -40,7 +43,13 @@ format_CDC_exchange_rewards <- function(data) {
       comment = "Description",
       date = "Date"
     )
-
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description",
+                         description.col = "comment")
+  
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -112,6 +121,13 @@ format_CDC_exchange_rewards <- function(data) {
       .data$quantity * .data$spot.rate,
       .data$total.price
     ))
+  
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
 
   # Make warning
   warning("WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS!")

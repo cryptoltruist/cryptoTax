@@ -13,8 +13,8 @@
 #'   \item{quantity}{how much of the stock/coin}
 #'   ...
 #' }
-#' @source \url{https://coinpanda.io/blog/crypto-taxes-canada-adjusted-cost-base/}
-"cryptotaxcalculator.io1"
+#' @source \url{https://cryptotaxcalculator.io/guides/crypto-tax-canada-cra/}
+"data_cryptotaxcalculator1"
 
-#' @rdname cryptotaxcalculator.io1
-"cryptotaxcalculator.io2"
+#' @rdname data_cryptotaxcalculator1
+"data_cryptotaxcalculator2"

@@ -11,6 +11,8 @@
 #' @importFrom rlang .data
 
 format_exodus <- function(data) {
+  known.transactions <- c("deposit", "withdrawal")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -19,6 +21,11 @@ format_exodus <- function(data) {
       description = "TYPE",
       date = "DATE"
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -94,6 +101,13 @@ format_exodus <- function(data) {
       .data$total.price
     ))
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

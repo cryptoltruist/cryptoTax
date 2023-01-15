@@ -21,6 +21,8 @@
 #' @importFrom rlang .data
 
 format_binance_withdrawals <- function(data) {
+  # There are no transaction types at all for this file type
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -67,6 +69,13 @@ format_binance_withdrawals <- function(data) {
   data <- merge_exchanges(SELL) %>%
     mutate(exchange = "binance")
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", 
+      "transaction", "description", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

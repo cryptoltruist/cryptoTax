@@ -24,6 +24,6 @@ format_suploss(
 Calculate superficial capital losses to be substracted from total capital losses.
 }
 \examples{
-data <- adjustedcostbase.ca1
+data <- data_adjustedcostbase1
 format_suploss(data)
 }

@@ -1,8 +1,8 @@
-# https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/
-# https://www.adjustedcostbase.ca/blog/applying-the-superficial-loss-rule-for-a-partial-disposition-of-shares/
+# https://www.data_adjustedcostbase/blog/what-is-the-superficial-loss-rule/
+# https://www.data_adjustedcostbase/blog/applying-the-superficial-loss-rule-for-a-partial-disposition-of-shares/
 
 test_that("Example #0 - ACB", {
-  data <- adjustedcostbase.ca1
+  data <- data_adjustedcostbase1
   data
   expect_equal(
     ACB(data, spot.rate = "price", sup.loss = FALSE),
@@ -26,7 +26,7 @@ test_that("Example #0 - ACB", {
 })
 
 test_that("Example #1 - ACB", {
-  data <- adjustedcostbase.ca2
+  data <- data_adjustedcostbase2
   data
 
   expect_equal(
@@ -84,7 +84,7 @@ test_that("Example #1 - ACB", {
 })
 
 test_that("Example #2 - ACB", {
-  data <- adjustedcostbase.ca3
+  data <- data_adjustedcostbase3
   data <- data
 
   expect_equal(
@@ -141,7 +141,7 @@ test_that("Example #2 - ACB", {
 })
 
 test_that("Example #3 - ACB", {
-  data <- adjustedcostbase.ca4
+  data <- data_adjustedcostbase4
   data <- data
 
   expect_equal(
@@ -199,7 +199,7 @@ test_that("Example #3 - ACB", {
 })
 
 test_that("Example #4 - ACB", {
-  data <- adjustedcostbase.ca5
+  data <- data_adjustedcostbase5
   data <- data
 
   expect_equal(
@@ -257,7 +257,7 @@ test_that("Example #4 - ACB", {
 })
 
 test_that("Example #5 - ACB", {
-  data <- adjustedcostbase.ca6
+  data <- data_adjustedcostbase6
   data <- data
 
   expect_equal(
@@ -320,7 +320,7 @@ test_that("Example #5 - ACB", {
 })
 
 test_that("Example #6 - CryptoTaxCalculator", {
-  data <- cryptotaxcalculator.io1
+  data <- data_cryptotaxcalculator1
   data <- data
 
   expect_equal(
@@ -384,7 +384,7 @@ test_that("Example #6 - CryptoTaxCalculator", {
 })
 
 test_that("Example #7 - CryptoTaxCalculator", {
-  data <- cryptotaxcalculator.io2
+  data <- data_cryptotaxcalculator2
   data <- data
 
   expect_equal(
@@ -448,7 +448,7 @@ test_that("Example #7 - CryptoTaxCalculator", {
 })
 
 test_that("Example #8 - Coinpanda", {
-  data <- coinpanda.io1
+  data <- data_coinpanda1
   data <- data
 
   expect_equal(
@@ -476,7 +476,7 @@ test_that("Example #8 - Coinpanda", {
 })
 
 test_that("Example #9 - Coinpanda", {
-  data <- coinpanda.io2
+  data <- data_coinpanda2
   data <- data
 
   expect_equal(
@@ -539,7 +539,7 @@ test_that("Example #9 - Coinpanda", {
 })
 
 test_that("Example #10 - Koinly", {
-  data <- koinly.io
+  data <- data_koinly
   data <- data
 
   expect_equal(
@@ -599,3 +599,4 @@ test_that("Example #10 - Koinly", {
     )
   )
 })
+

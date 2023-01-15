@@ -13,7 +13,7 @@
 #' @param cl Number of cores to use for parallel processing.
 #' @export
 #' @examples
-#' data <- adjustedcostbase.ca1
+#' data <- data_adjustedcostbase1
 #' ACB(data, spot.rate = "price", sup.loss = FALSE)
 #' ACB(data, spot.rate = "price")
 #' @importFrom dplyr mutate relocate %>% all_of

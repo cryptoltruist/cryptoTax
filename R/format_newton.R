@@ -17,12 +17,19 @@
 #' @importFrom rlang .data
 
 format_newton <- function(data, filetype = "yearly") {
+  known.transactions <- c("WITHDRAWN", "TRADE", "DEPOSIT")
+  
   # Rename columns
   data <- data %>%
     rename(
       description = "Type",
       date = "Date"
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -95,6 +102,13 @@ format_newton <- function(data, filetype = "yearly") {
   data <- merge_exchanges(BUY, SELL, EARN) %>%
     mutate(exchange = "newton", rate.source = "exchange")
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

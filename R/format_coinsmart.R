@@ -11,6 +11,8 @@
 #' @importFrom rlang .data
 
 format_coinsmart <- function(data) {
+  known.transactions <- c("Withdraw", "Trade", "Quiz", "Deposit", "Referral")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -18,7 +20,16 @@ format_coinsmart <- function(data) {
       description = "TransactionType",
       comment = "ReferenceType",
       date = "TimeStamp"
-    )
+    ) %>% 
+    mutate(comment = trimws(.data$comment))
+    # Have to trim white spaces here because they made a typo
+    # And added a space in "Referral ".
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "comment",
+                         description.col = "description")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -108,9 +119,6 @@ format_coinsmart <- function(data) {
 
   # Create a "earn" object
   EARN <- data %>%
-    mutate(comment = trimws(.data$comment)) %>%
-    # Have to trim white spaces here because they made a typo
-    # And added a space in "Referral ".
     filter(.data$comment %in% c(
       "Quiz",
       "Referral"
@@ -174,7 +182,7 @@ format_coinsmart <- function(data) {
     mutate(spot.rate = .data$total.price / .data$quantity)
 
   # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap - buy price"
+  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
 
   # Create a "withdrawals" object
   WITHDRAWALS <- data %>%
@@ -195,8 +203,9 @@ format_coinsmart <- function(data) {
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
-    mutate(exchange = "coinsmart")
+  data <- bind_rows(BUY, EARN, SELL, WITHDRAWALS) %>%
+    mutate(exchange = "coinsmart") %>%
+    arrange(date, desc(.data$total.price))
 
   # Add trade info in comments
 
@@ -222,6 +231,13 @@ format_coinsmart <- function(data) {
   # Replace values
   data[sort(as.vector(double.index)), "comment"] <- good.string
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

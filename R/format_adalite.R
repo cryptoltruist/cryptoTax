@@ -11,6 +11,8 @@
 #' @importFrom rlang .data
 
 format_adalite <- function(data) {
+  known.transactions <- c("Reward awarded", "Received", "Sent")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -20,6 +22,11 @@ format_adalite <- function(data) {
       date = "Date"
     )
 
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
+  
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::mdy_hm(.data$date))
@@ -80,6 +87,13 @@ format_adalite <- function(data) {
   #                              0,
   #                              total.price))
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

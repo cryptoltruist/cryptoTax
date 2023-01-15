@@ -12,10 +12,12 @@
 #' @importFrom rlang .data
 
 format_gemini <- function(data) {
+  known.transactions <- c("Credit", "Sell", "Buy", "Debit")
+  
   # Remove last summary row
   data <- data %>%
     slice(1:n() - 1)
-
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -23,6 +25,12 @@ format_gemini <- function(data) {
       comment = "Specification",
       date = "Date"
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description",
+                         description.col = "comment")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -157,13 +165,11 @@ format_gemini <- function(data) {
     )
 
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, EARN, EARN2, SELL) %>%
-    mutate(exchange = "gemini") %>%
-    arrange(date)
+  data <- merge_exchanges(BUY, EARN, EARN2, SELL) %>%
+    mutate(exchange = "gemini")
 
-  # Replace NAs with zeros (for the fees column). Also rename column and make positive.
+  # Rename Fee column and make it positive.
   data <- data %>%
-    mutate_at("Fee", ~ replace(., is.na(.), 0)) %>%
     rename(fees = "Fee") %>%
     mutate(fees = .data$fees * -1)
 
@@ -203,11 +209,22 @@ format_gemini <- function(data) {
     mutate(spot.rate = .data$total.price / .data$quantity)
 
   # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap - buy price"
+  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
 
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
-
+  
+  # Arrange in correct order
+  data <- data %>% 
+    arrange(date, desc(.data$total.price))
+  
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

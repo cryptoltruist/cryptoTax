@@ -10,12 +10,12 @@ test_that("shakepay", {
     ), tzone = "UTC", class = c(
       "POSIXct",
       "POSIXt"
-    )), quantity = c(
-      0.00103982, 30, 0.00011, 0.00012, 0.00013,
-      0.00014, 0.00015, 0.00052991
-    ), currency = c(
+    )), currency = c(
       "BTC", "CAD", "BTC",
       "BTC", "BTC", "BTC", "BTC", "BTC"
+    ), quantity = c(
+      0.00103982, 30, 0.00011, 0.00012, 0.00013,
+      0.00014, 0.00015, 0.00052991
     ), total.price = c(
       53.03335,
       30, 5.784023564, 6.034440948, 7.348590444, 8.396926678, 8.71487655,
@@ -62,18 +62,17 @@ test_that("CDC", {
       ), tzone = "UTC", class = c(
         "POSIXct",
         "POSIXt"
-      )), quantity = c(
+      )),currency = c(
+        "BTC", "ETH", "CRO", "CRO", "CRO", "CRO", "CRO",
+        "CRO", "CRO", "ETH", "CRO", "ETH", "CRO", "ETHW", "CRO",
+        "CRO", "BTC", "ETH"
+      ), quantity = c(
         0.000733370962484796, 0.0205920059257571,
         182.436009084234, 117.94682303, 6.40395445376923, 53.61366877,
         86.35723665, 17.36889942, 22.5041772605727, 0.000013775, 8.45262096774194,
         0.000763266828087167, 0.320799213147475, 0.35580671798495, 2.47619047619048,
         37.1602562661344, 0.000532054153123365, 0.00996365482758792
-      ),
-      currency = c(
-        "BTC", "ETH", "CRO", "CRO", "CRO", "CRO", "CRO",
-        "CRO", "CRO", "ETH", "CRO", "ETH", "CRO", "ETHW", "CRO",
-        "CRO", "BTC", "ETH"
-      ), total.price = c(
+      ),total.price = c(
         51.25, 54.21, 53.42,
         30.19035, 1.13, 10.99, 16.94, 9.19, 11.65, 0.05, 1.25, 3.12,
         0.26, 3.2, 1.2, 6.98, 35, 35
@@ -115,7 +114,7 @@ test_that("CDC", {
         "CDC", "CDC", "CDC", "CDC", "CDC"
       ), rate.source = c(
         "exchange",
-        "exchange", "exchange", "exchange", "exchange", "exchange",
+        "exchange", "exchange", "exchange (USD conversion)", "exchange", "exchange",
         "exchange", "exchange", "exchange", "exchange", "exchange",
         "exchange", "exchange", "exchange", "exchange", "exchange",
         "exchange", "exchange"
@@ -246,4 +245,3 @@ test_that("generic4", {
     )), row.names = c(NA, -3L), class = "data.frame")
   )
 })
-

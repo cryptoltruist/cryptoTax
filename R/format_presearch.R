@@ -11,9 +11,18 @@
 #' @importFrom rlang .data
 
 format_presearch <- function(data) {
+  transferred.from <- grep("Transferred from", data$description, value = TRUE)
+  staked.to <- unique(grep("Staked to keyword", data$description, value = TRUE))
+  known.transactions <- c("Search Reward", transferred.from, staked.to)
+  
   # Rename columns
   data <- data %>%
     rename(quantity = "amount")
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description")
 
   # Remove irrelevant columns
   data <- data %>%
@@ -60,6 +69,13 @@ format_presearch <- function(data) {
   data <- merge_exchanges(data) %>%
     mutate(exchange = "presearch")
 
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+  
   # Return result
   data
 }

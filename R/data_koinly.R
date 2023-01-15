@@ -14,4 +14,4 @@
 #'   ...
 #' }
 #' @source \url{https://koinly.io/blog/calculating-crypto-taxes-canada/}
-"koinly.io"
+"data_koinly"

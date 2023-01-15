@@ -15,7 +15,7 @@
 #'   ...
 #' }
 #' @source \url{https://coinpanda.io/blog/crypto-taxes-canada-adjusted-cost-base/}
-"coinpanda.io1"
+"data_coinpanda1"
 
-#' @rdname coinpanda.io1
-"coinpanda.io2"
+#' @rdname data_coinpanda1
+"data_coinpanda2"

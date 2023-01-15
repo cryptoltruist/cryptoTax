@@ -1,7 +1,7 @@
 ## code to prepare `coinpanda.io` data sets goes here
 # https://coinpanda.io/blog/crypto-taxes-canada-adjusted-cost-base/
 
-coinpanda.io1 <- data.frame(
+data_coinpanda1 <- data.frame(
   type = c("buy", "buy", "sell", "buy"),
   date = as.Date(c("2019-08-14", "2019-10-29", "2020-06-05", "2020-09-23")),
   currency = "BTC",
@@ -9,9 +9,9 @@ coinpanda.io1 <- data.frame(
   price = c(1800, 4300, 5700, 8200),
   fees = c(20, 20, 0, 0)
 )
-usethis::use_data(coinpanda.io1, overwrite = TRUE)
+usethis::use_data(data_coinpanda1, overwrite = TRUE)
 
-coinpanda.io2 <- data.frame(
+data_coinpanda2 <- data.frame(
   type = c("buy", "buy", "sell", "buy"),
   date = as.Date(c("2019-08-14", "2019-10-29", "2020-06-05", "2020-06-07")),
   currency = "BTC",
@@ -19,4 +19,4 @@ coinpanda.io2 <- data.frame(
   price = c(1800, 4300, 5700, 7000),
   fees = c(20, 20, 0, 0)
 )
-usethis::use_data(coinpanda.io2, overwrite = TRUE)
+usethis::use_data(data_coinpanda2, overwrite = TRUE)

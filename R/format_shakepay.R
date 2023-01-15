@@ -10,6 +10,9 @@
 #' @importFrom rlang .data
 
 format_shakepay <- function(data) {
+  known.transactions <- c(
+    "shakingsats", "fiat funding", "purchase/sale", "other", "crypto cashout")
+  
   # Rename columns
   data <- data %>%
     rename(
@@ -18,6 +21,12 @@ format_shakepay <- function(data) {
       spot.rate = "Spot.Rate",
       date = "Date"
     )
+  
+  # Check if there's any new transactions
+  check_new_transactions(data, 
+                         known.transactions = known.transactions,
+                         transactions.col = "description",
+                         description.col = "comment")
 
   # Add single dates to dataframe
   data <- data %>%
@@ -108,6 +117,13 @@ format_shakepay <- function(data) {
       rate.source = "exchange"
     ) %>%
     arrange(date)
+  
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
 
   # Return result
   data

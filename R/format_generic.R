@@ -23,15 +23,11 @@
 #' @export
 #' @examples
 #' # Detects correct names even with capitals
-#' data <- data_generic1
-#' data
-#' format_generic(data)
+#' format_generic(data_generic1)
 #'
 #' # In other cases, names can be specified explicitly:
-#' data <- data_generic2
-#' data
 #' format_generic(
-#'   data,
+#'   data_generic2,
 #'   date = "Date.Transaction",
 #'   currency = "Coin",
 #'   quantity = "Amount",
@@ -43,15 +39,11 @@
 #'
 #' # If total.price is missing, it will calculate it based
 #' # on the spot.rate, if available
-#' data <- data_generic3
-#' data
-#' format_generic(data)
+#' format_generic(data_generic3)
 #'
 #' # If both total.price and spot.rate are missing, it will
 #' # scrap the spot.rate from coinmarketcap based on the coin:
-#' data <- data_generic4
-#' data
-#' format_generic(data)
+#' format_generic(data_generic4)
 #'
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange any_of
 #' @importFrom rlang .data
