@@ -22,7 +22,11 @@ data_shakepay <- structure(
     Source...Destination = c("", "", "", "", "", "", "", "", "", ""),
     Blockchain.Transaction.ID = c("", "", "", "", "", "", "", "", "", "")
   ),
-  row.names = c(2L, 3L, 8L, 9L, 14L, 15L, 16L, 17L, 18L, 12L), class = "data.frame"
+  row.names = c(
+    NA,
+    -10L
+  ), class = "data.frame"
 )
 
 usethis::use_data(data_shakepay, overwrite = TRUE)
+

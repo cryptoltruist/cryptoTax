@@ -18,7 +18,7 @@ prepare_list_prices(
 
 \item{end.date}{What date to end reporting prices for.}
 
-\item{force}{Whether to force recreating list.prices even though
+\item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
 \description{

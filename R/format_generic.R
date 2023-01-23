@@ -20,6 +20,8 @@
 #' "rebates", "rewards", "forks", "mining")`)
 #' @param exchange The exchange column
 #' @param timezone The time zone of the transactions
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
 #' # Detects correct names even with capitals
@@ -60,7 +62,8 @@ format_generic <- function(data,
                            comment = "comment",
                            revenue.type = "revenue.type",
                            exchange = "exchange",
-                           timezone = "UTC") {
+                           timezone = "UTC", 
+                           force = FALSE) {
   names(data) <- tolower(names(data))
 
   any_lower <- function(x) {
@@ -103,7 +106,10 @@ format_generic <- function(data,
       )
   } else if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
     "currency" %in% names(data)) {
-    data <- cryptoTax::match_prices(data)
+    data <- match_prices(data, force = force)
+    if (any(is.na(data$spot.rate))) {
+      warning("Could not calculate spot rate. Use `force = TRUE`.")
+    }
   } else if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
     !"currency" %in% names(data)) {
     stop("Cannot calculate 'total.price' without 'spot.rate' or 'currency' columns!")

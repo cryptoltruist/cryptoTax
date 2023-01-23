@@ -17,7 +17,8 @@ format_generic(
   comment = "comment",
   revenue.type = "revenue.type",
   exchange = "exchange",
-  timezone = "UTC"
+  timezone = "UTC",
+  force = FALSE
 )
 }
 \arguments{
@@ -47,6 +48,9 @@ be one of \code{c("airdrops", "referrals", "staking", "promos", "interests", "re
 \item{exchange}{The exchange column}
 
 \item{timezone}{The time zone of the transactions}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a generic .csv transaction history file. This

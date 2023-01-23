@@ -7,7 +7,7 @@
 #' @param coins Which coins to include in the list.
 #' @param start.date What date to start reporting prices for.
 #' @param end.date What date to end reporting prices for.
-#' @param force Whether to force recreating list.prices even though
+#' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
@@ -36,6 +36,7 @@ prepare_list_prices <- function(coins,
     # Define coins from our merged data set
 
     if (is.null(coins)) {
+      # For demonstration purposes
       coins <- c("BTC", "ETH")
     }
 

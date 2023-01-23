@@ -4,16 +4,18 @@
 \alias{format_adalite}
 \title{Format Adalite wallet file}
 \usage{
-format_adalite(data)
+format_adalite(data, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv transaction history file from the Adalite wallet for later ACB processing.
 }
 \examples{
-\dontrun{
+data <- data_adalite
 format_adalite(data)
-}
 }

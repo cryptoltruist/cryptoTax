@@ -8,7 +8,7 @@
 
 - New `pkgdown` website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.
 - Informative progress bars with `format_ACB` and `format_suploss` since these functions are extremely slow with thousands of transactions.
-- Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC)
+- Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, adalite)
 - Now detects new transaction types not accounted for
 - New functions: 
     - `format_generic`, to process most transaction history files not supported by existing functions.
@@ -42,9 +42,8 @@
 
 **Bug Fixes:**
 
-- `format_CDC_exchange_trades`: no longer calculates trading fees paid in third currency twice.
-- `format_shakepay`: now correctly detect CAD referral rewards
-- `format_binance`: now correctly detect interest rewards
+- `format_shakepay`: now correctly detects CAD referral rewards
+- `format_binance`: now correctly detects interest rewards
 - `format_ACB`: 
     - fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.
     - corrected "Total time elapsed:" time unit to always be minutes

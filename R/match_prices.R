@@ -3,6 +3,9 @@
 #' @description Matches prices obtained through the `fetch_prices()` function with the transaction data frame.
 #' @param data The dataframe
 #' @param my.coins Your coins to match
+#' @param start.date What date to start reporting prices for.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
 #' \dontrun{
@@ -12,7 +15,7 @@
 #' @importFrom utils timestamp
 #' @importFrom rlang .data
 
-match_prices <- function(data, my.coins = NULL) {
+match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", force = FALSE) {
   all.data <- data
 
   # Create an empty spot.rate if missing else the function won't work
@@ -36,7 +39,15 @@ match_prices <- function(data, my.coins = NULL) {
 
   # Apply the fetch_prices function to all the coins
   if (!exists("list.prices")) {
-    list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
+    if (is.null(my.coins)) {
+      my.coins <- unique(data$currency)
+    }
+    
+    if (is.null(start.date)) {
+      start.date <- min(data$date)
+    }
+    
+    list.prices <- prepare_list_prices(coins = my.coins, start.date = start.date, force = force)
     list.prices <<- list.prices
   }
 
