@@ -64,7 +64,7 @@
 </ul><p><strong>New Features:</strong></p>
 <ul><li>New <code>pkgdown</code> website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.</li>
 <li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow with thousands of transactions.</li>
-<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC)</li>
+<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, adalite)</li>
 <li>Now detects new transaction types not accounted for</li>
 <li>New functions:
 <ul><li>
@@ -112,11 +112,9 @@
 </ul></li>
 </ul><p><strong>Bug Fixes:</strong></p>
 <ul><li>
-<code>format_CDC_exchange_trades</code>: no longer calculates trading fees paid in third currency twice.</li>
+<code>format_shakepay</code>: now correctly detects CAD referral rewards</li>
 <li>
-<code>format_shakepay</code>: now correctly detect CAD referral rewards</li>
-<li>
-<code>format_binance</code>: now correctly detect interest rewards</li>
+<code>format_binance</code>: now correctly detects interest rewards</li>
 <li>
 <code>format_ACB</code>:
 <ul><li>fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>

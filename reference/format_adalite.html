@@ -64,7 +64,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_adalite</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_adalite</span><span class="op">(</span><span class="va">data</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,13 +72,35 @@
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
 
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_adalite</span></span></span>
 <span class="r-in"><span><span class="fu">format_adalite</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Scraping historical crypto data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Processing historical crypto data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency  quantity total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-17 21:16:00      ADA 0.1691870   0.2961423  1.750385        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-17 21:31:00      ADA 0.1912300   0.3347260  1.750385        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-04-28 16:56:00      ADA 0.3120400   0.5091943  1.631824     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-05-07 16:53:00      ADA 0.3125132   0.6266931  2.005333     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-12 16:56:00      ADA 0.2212410   0.4441940  2.007738     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-05-17 17:16:00      ADA 0.4123210   1.0798503  2.618955     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      description        comment revenue.type exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           Sent Withdrawal Fee         &lt;NA&gt;  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           Sent Withdrawal Fee         &lt;NA&gt;  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
