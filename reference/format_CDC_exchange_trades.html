@@ -70,13 +70,22 @@ exchange for later ACB processing. Only processes trades, not rewards
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_CDC_exchange_trades</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_CDC_exchange_trades</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
+
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,9 +112,39 @@ read the file normally.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_CDC_exchange_trades</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_CDC_exchange_trades</span><span class="op">(</span><span class="va">data_CDC_exchange_trades</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency   quantity total.price    spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-12-24 15:34:45      CRO 13260.1300 10386.66313    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-12-24 15:34:45      ETH     2.0932 10386.66313 4962.0978083        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-12-24 15:34:45      CRO  3555.9000  2785.33736    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-12-24 15:34:45      ETH     0.5600  2785.33736 4973.8167068        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-12-24 15:34:45      CRO  1781.7400  1395.63739    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-12-24 15:34:45      ETH     0.2800  1395.63739 4984.4192352        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-12-24 15:34:45      CRO    26.8500    21.03161    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-12-24 15:34:45      ETH     0.0042    21.03161 5007.5265925        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-12-24 15:34:45      CRO    26.6700    20.89062    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-12-24 15:34:45      ETH     0.0042    20.89062 4973.9565819        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-12-24 15:34:45      CRO    17.7800    13.92708    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-12-24 15:34:45      CRO    17.7800    13.92708    0.7833002         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-12-24 15:34:45      ETH     0.0028    13.92708 4973.9565819        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-12-24 15:34:45      ETH     0.0028    13.92708 4973.9565819        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           fees description comment     exchange               rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  41.54665616        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  11.14134692        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   5.58256082        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   0.08413730        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  0.08355905        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          NA         BUY ETH_CRO CDC.exchange             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  0.05570691        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  0.05570683        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -64,13 +64,22 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_presearch</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_presearch</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
+
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
 
 </dl></div>
 

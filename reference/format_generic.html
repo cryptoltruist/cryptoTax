@@ -90,7 +90,8 @@ column per row.</p>
 <span>  revenue.type <span class="op">=</span> <span class="st">"revenue.type"</span>,</span>
 <span>  exchange <span class="op">=</span> <span class="st">"exchange"</span>,</span>
 <span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
-<span>  force <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -153,6 +154,10 @@ be one of <code>c("airdrops", "referrals", "staking", "promos", "interests", "re
 <dd><p>Whether to force recreating <code>list.prices</code> even though
 it already exists (e.g., if you added new coins or new dates).</p></dd>
 
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
 </dl></div>
 
     <div class="section level2">
@@ -203,11 +208,12 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-in"><span><span class="co"># If both total.price and spot.rate are missing, it will</span></span></span>
 <span class="r-in"><span><span class="co"># scrap the spot.rate from coinmarketcap based on the coin:</span></span></span>
 <span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data_generic4</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Could not calculate spot rate. Use `force = TRUE`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price spot.rate transaction fees</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06      BTC 0.001240          NA        NA         buy 0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04      ETH 0.063067          NA        NA         buy 0.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-03-15 14:12:08      ETH 0.065048          NA        NA        sell 1.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04      ETH 0.063067    146.1197  2316.896         buy 0.72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-03-15 14:12:08      ETH 0.065048    147.9074  2273.820        sell 1.75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           exchange   rate.source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 generic_exchange coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 generic_exchange coinmarketcap</span>

@@ -85,7 +85,7 @@ argument.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_CDC_wallet</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_CDC_wallet</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -93,13 +93,36 @@ argument.</p>
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
 
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_CDC_wallet</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_CDC_wallet</span><span class="op">(</span><span class="va">data_CDC_wallet</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity  total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-12 18:28:50      CRO 0.512510 1.359361e-01 0.2652360     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-23 18:51:53      CRO 1.656708 3.601369e-01 0.2173811     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-21 01:19:01      CRO 0.000200 2.993323e-05 0.1496661        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-06-26 14:51:02      CRO 6.051235 7.076905e-01 0.1169498     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   description                                            comment revenue.type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      Reward                         Auto Withdraw Reward from       staking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      Reward                         Auto Withdraw Reward from       staking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  Withdrawal Outgoing Transaction to abcdefghijklmnopqrstuvwxyz         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      Reward    Withdraw Reward from abcdefghijklmnopqrstuvwxyz      staking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 CDC.wallet coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

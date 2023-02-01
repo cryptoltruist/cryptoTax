@@ -106,7 +106,7 @@ for signup or on the Crypto.com exchange. It must be added manually.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -114,13 +114,58 @@ for signup or on the Crypto.com exchange. It must be added manually.</p>
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
 
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data_CDC_exchange_rewards</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Scraping historical crypto data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Processing historical crypto data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS AND WITHDRAWALS!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency   quantity  total.price    spot.rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-02-19 00:00:00      CRO 1.36512341 0.2227899953 1.632014e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-02-21 00:00:00      CRO 1.36945123 0.2411195812 1.760702e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-15 16:04:21      BTC 0.00000023 0.0182149274 7.919534e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-18 00:00:00      CRO 1.36512310 0.3798900187 2.782826e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-14 06:02:22      BTC 0.00000035 0.0211513332 6.043238e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-06-12 15:21:34      BTC 0.00000630 0.2791139040 4.430379e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-06-27 01:34:00      CRO 0.00100000 0.0001239785 1.239785e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-07-07 00:00:00      CRO 0.01512903 0.0022872188 1.511808e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-07-13 00:00:00      CRO 0.05351230 0.0084128916 1.572142e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-09-07 00:00:00      CRO 0.01521310 0.0035626681 2.341842e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    transaction description                                          comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      revenue      Reward                          BTC Supercharger reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      revenue      Reward                          BTC Supercharger reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      revenue      Reward                          BTC Supercharger reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         sell  Withdrawal                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      revenue      Reward                  Rebate on 0.18512341 CRO at 10%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      revenue      Reward                Rebate on 0.5231512346 CRO at 10%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     revenue      Reward                 Rebate on 0.155125123 CRO at 10%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type     exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          &lt;NA&gt; CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       rebates CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       rebates CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      rebates CDC.exchange coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
