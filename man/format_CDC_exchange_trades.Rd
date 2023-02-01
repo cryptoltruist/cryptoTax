@@ -4,10 +4,15 @@
 \alias{format_CDC_exchange_trades}
 \title{Format CDC exchange file (FOR TRADES ONLY)}
 \usage{
-format_CDC_exchange_trades(data)
+format_CDC_exchange_trades(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv transaction history file from the Crypto.com
@@ -37,7 +42,5 @@ messing with the headers. Thus, when reading the file with
 read the file normally.
 }
 \examples{
-\dontrun{
-format_CDC_exchange_trades(data)
-}
+format_CDC_exchange_trades(data_CDC_exchange_trades)
 }

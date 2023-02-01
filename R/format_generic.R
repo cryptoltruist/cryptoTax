@@ -20,6 +20,7 @@
 #' "rebates", "rewards", "forks", "mining")`)
 #' @param exchange The exchange column
 #' @param timezone The time zone of the transactions
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
@@ -63,7 +64,8 @@ format_generic <- function(data,
                            revenue.type = "revenue.type",
                            exchange = "exchange",
                            timezone = "UTC", 
-                           force = FALSE) {
+                           force = FALSE,
+                           list.prices = NULL) {
   names(data) <- tolower(names(data))
 
   any_lower <- function(x) {
@@ -106,7 +108,7 @@ format_generic <- function(data,
       )
   } else if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
     "currency" %in% names(data)) {
-    data <- match_prices(data, force = force)
+    data <- match_prices(data, list.prices = list.prices, force = force)
     if (any(is.na(data$spot.rate))) {
       warning("Could not calculate spot rate. Use `force = TRUE`.")
     }

@@ -4,9 +4,7 @@
 #' @param data The dataframe
 #' @export
 #' @examples
-#' \dontrun{
-#' format_celsius(data)
-#' }
+#' format_celsius(data_celsius)
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange
 #' @importFrom rlang .data
 
@@ -63,6 +61,7 @@ format_celsius <- function(data) {
         .data$revenue.type %in% c("Promo Code Reward"),
         "promos"
       ),
+      quantity = abs(.data$quantity),
       spot.rate = .data$total.price / .data$quantity
     ) %>%
     select(

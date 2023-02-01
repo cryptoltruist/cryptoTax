@@ -4,10 +4,15 @@
 \alias{format_binance_withdrawals}
 \title{Format Binance withdrawal file}
 \usage{
-format_binance_withdrawals(data)
+format_binance_withdrawals(data, list.prices = NULL, force = TRUE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .xlsx withdrawal history file from Binance for later
@@ -25,7 +30,5 @@ Warning: This does NOT process TRADES See the \code{format_binance_trades()}
 function for this purpose.
 }
 \examples{
-\dontrun{
-format_binance_withdrawals(data)
-}
+format_binance_withdrawals(data_binance_withdrawals)
 }

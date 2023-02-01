@@ -4,16 +4,19 @@
 \alias{format_exodus}
 \title{Format Exodus wallet file}
 \usage{
-format_exodus(data)
+format_exodus(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv transaction history file from the Exodus wallet for later ACB processing.
 }
 \examples{
-\dontrun{
-format_exodus(data)
-}
+format_exodus(data_exodus)
 }

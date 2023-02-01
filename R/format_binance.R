@@ -12,15 +12,16 @@
 #' Warning: This does NOT process WITHDRAWALS (see the
 #' `format_binance_withdrawals()` function for this purpose).
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_binance_earn(data)
-#' }
+#' format_binance(data_binance)
 #' @importFrom dplyr %>% rename mutate across select arrange bind_rows desc
 #' @importFrom rlang .data
 
-format_binance <- function(data) {
+format_binance <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c(
     "Deposit", "Withdraw", "Buy", "Fee", "Referral Kickback", "Sell", 
     "Simple Earn Flexible Interest", "Distribution", "Stablecoins Auto-Conversion")
@@ -68,8 +69,12 @@ format_binance <- function(data) {
     )
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
 
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
+  
   data <- data %>%
     mutate(
       total.price = ifelse(is.na(.data$total.price),
@@ -81,9 +86,22 @@ format_binance <- function(data) {
 
   # Match buys and sells (because these are coin-to-coin exchanges,
   # total.price of buys should overwrite that of sells)
+  # Extract fees
+  FEES <- data %>%
+    filter(.data$description == "Fee")
+  
   BUY <- data %>%
     filter(.data$transaction == "buy")
 
+  # "Stablecoins Auto-Conversion"
+  CONVERSIONS <- BUY %>%
+    filter(.data$description == "Stablecoins Auto-Conversion")
+  
+  BUY <- BUY %>%
+    filter(.data$description != "Stablecoins Auto-Conversion") %>%
+    mutate(fees = FEES$total.price)
+  
+  # Sells
   SELL <- data %>%
     filter(.data$transaction == "sell") %>%
     filter(.data$description != "Fee") %>%
@@ -92,18 +110,6 @@ format_binance <- function(data) {
       spot.rate = .data$total.price / .data$quantity,
       rate.source = "coinmarketcap (buy price)"
     )
-
-  # Extract fees
-  FEES <- data %>%
-    filter(.data$description == "Fee")
-
-  # "Stablecoins Auto-Conversion"
-  CONVERSIONS <- BUY %>%
-    filter(.data$description == "Stablecoins Auto-Conversion")
-
-  BUY <- BUY %>%
-    filter(.data$description != "Stablecoins Auto-Conversion") %>%
-    mutate(fees = FEES$total.price)
 
   # Process revenues
   EARN <- data %>%

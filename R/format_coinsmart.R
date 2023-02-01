@@ -2,15 +2,16 @@
 #'
 #' @description Format a .csv transaction history file from CoinSmart for later ACB processing.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_coinsmart(data)
-#' }
+#' format_coinsmart(data_coinsmart)
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange transmute bind_rows
 #' @importFrom rlang .data
 
-format_coinsmart <- function(data) {
+format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Withdraw", "Trade", "Quiz", "Deposit", "Referral")
   
   # Rename columns
@@ -63,8 +64,13 @@ format_coinsmart <- function(data) {
       1,
       NA
     ))
-  data <- cryptoTax::match_prices(data)
-
+  
+  data <- match_prices(data, list.prices = list.prices, force = force)
+  
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
+  
   # Add total.price
   data <- data %>%
     rowwise() %>%

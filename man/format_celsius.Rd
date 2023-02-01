@@ -13,7 +13,5 @@ format_celsius(data)
 Format a .csv transaction history file from Celsius for later ACB processing.
 }
 \examples{
-\dontrun{
-format_celsius(data)
-}
+format_celsius(data_celsius)
 }

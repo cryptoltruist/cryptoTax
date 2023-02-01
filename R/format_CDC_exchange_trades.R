@@ -24,15 +24,16 @@
 #' `read.csv()`, add the argument `skip = 3`. You will then be able to
 #' read the file normally.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_CDC_exchange_trades(data)
-#' }
+#' format_CDC_exchange_trades(data_CDC_exchange_trades)
 #' @importFrom dplyr %>% rename mutate case_when filter select arrange bind_rows mutate_at
 #' @importFrom rlang .data
 
-format_CDC_exchange_trades <- function(data) {
+format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("SELL", "BUY")
   
   # Rename columns
@@ -75,7 +76,11 @@ format_CDC_exchange_trades <- function(data) {
   data.fees <- data %>%
     mutate(currency = .data$Fee.Currency)
 
-  data.fees <- cryptoTax::match_prices(data.fees)
+  data.fees <- cryptoTax::match_prices(data.fees, list.prices = list.prices, force = force)
+  
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
 
   data$fees <- data.fees$Fee * data.fees$spot.rate
   
@@ -155,7 +160,7 @@ format_CDC_exchange_trades <- function(data) {
   data <- merge_exchanges(BUY, BUY2, SELL, SELL2, SELL3)
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),

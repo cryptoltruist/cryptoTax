@@ -2,15 +2,16 @@
 #'
 #' @description Format a .csv transaction history file from BlockFi for later ACB processing.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_blockfi(data)
-#' }
+#' format_blockfi(data_blockfi)
 #' @importFrom dplyr %>% rename mutate filter select arrange bind_rows
 #' @importFrom rlang .data
 
-format_blockfi <- function(data) {
+format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c(
     "Withdrawal", "BIA Withdraw", "BIA Deposit", "Interest Payment", 
     "Crypto Transfer", "Trade", "Bonus Payment", "Referral Bonus")
@@ -102,7 +103,11 @@ format_blockfi <- function(data) {
     mutate(exchange = "blockfi")
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
+  
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),

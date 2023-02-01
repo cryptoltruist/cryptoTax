@@ -4,10 +4,15 @@
 \alias{format_CDC_wallet}
 \title{Format CDC wallet file}
 \usage{
-format_CDC_wallet(data)
+format_CDC_wallet(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv transaction history file from the Crypto.com DeFi
@@ -21,7 +26,5 @@ The file is semi-column separated; when using \code{read.csv}, add the \code{sep
 argument.
 }
 \examples{
-\dontrun{
-format_CDC_wallet(data)
-}
+format_CDC_wallet(data_CDC_wallet)
 }

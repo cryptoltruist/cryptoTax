@@ -4,7 +4,13 @@
 \alias{match_prices}
 \title{Get Fair Market Value (FMV) of transactions}
 \usage{
-match_prices(data, my.coins = NULL, start.date = "2021-01-01", force = FALSE)
+match_prices(
+  data,
+  my.coins = NULL,
+  start.date = "2021-01-01",
+  list.prices = NULL,
+  force = FALSE
+)
 }
 \arguments{
 \item{data}{The dataframe}
@@ -12,6 +18,8 @@ match_prices(data, my.coins = NULL, start.date = "2021-01-01", force = FALSE)
 \item{my.coins}{Your coins to match}
 
 \item{start.date}{What date to start reporting prices for.}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

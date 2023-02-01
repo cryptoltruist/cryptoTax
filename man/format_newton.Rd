@@ -20,7 +20,5 @@ at this time). If you have multiple years, that means you might have to
 merge the two datasets.
 }
 \examples{
-\dontrun{
-format_newton(data)
-}
+format_newton(data_newton)
 }

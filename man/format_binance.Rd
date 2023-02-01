@@ -4,10 +4,15 @@
 \alias{format_binance}
 \title{Format Binance earn file}
 \usage{
-format_binance(data)
+format_binance(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv earn history file from Binance for later
@@ -25,7 +30,5 @@ Warning: This does NOT process WITHDRAWALS (see the
 \code{format_binance_withdrawals()} function for this purpose).
 }
 \examples{
-\dontrun{
-format_binance_earn(data)
-}
+format_binance(data_binance)
 }

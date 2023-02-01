@@ -2,6 +2,9 @@
 #'
 #' @description Format a .csv transaction history file from Presearch for later ACB processing.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
 #' \dontrun{
@@ -10,7 +13,7 @@
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 
-format_presearch <- function(data) {
+format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   transferred.from <- grep("Transferred from", data$description, value = TRUE)
   staked.to <- unique(grep("Staked to keyword", data$description, value = TRUE))
   known.transactions <- c("Search Reward", transferred.from, staked.to)
@@ -57,7 +60,7 @@ format_presearch <- function(data) {
     ))
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),

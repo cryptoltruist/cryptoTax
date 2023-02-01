@@ -12,15 +12,16 @@
 #' Warning: This does NOT process TRADES See the `format_binance_trades()`
 #' function for this purpose.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_binance_withdrawals(data)
-#' }
+#' format_binance_withdrawals(data_binance_withdrawals)
 #' @importFrom dplyr %>% rename mutate across select arrange bind_rows
 #' @importFrom rlang .data
 
-format_binance_withdrawals <- function(data) {
+format_binance_withdrawals <- function(data, list.prices = NULL, force = TRUE) {
   # There are no transaction types at all for this file type
   
   # Rename columns
@@ -38,10 +39,14 @@ format_binance_withdrawals <- function(data) {
 
   # Make relevant columns numeric
   data <- data %>%
-    mutate(across(.data$Amount:.data$quantity, as.numeric))
+    mutate(across("Amount":"quantity", as.numeric))
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
+  
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),

@@ -22,15 +22,16 @@
 #' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS!
 #'
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_CDC_exchange_rewards(data)
-#' }
+#' format_CDC_exchange_rewards(data_CDC_exchange_rewards)
 #' @importFrom dplyr %>% rename mutate filter select arrange
 #' @importFrom rlang .data
 
-format_CDC_exchange_rewards <- function(data) {
+format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("", "Reward", "referral_gift")
   # "referral_gift" is for our manual correction
   
@@ -114,7 +115,11 @@ format_CDC_exchange_rewards <- function(data) {
     mutate(exchange = "CDC.exchange")
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
+  
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),
@@ -130,7 +135,7 @@ format_CDC_exchange_rewards <- function(data) {
     )
 
   # Make warning
-  warning("WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS!")
+  message("WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS AND WITHDRAWALS!")
 
   # Return result
   data

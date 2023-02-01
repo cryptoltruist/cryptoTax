@@ -18,7 +18,8 @@ format_generic(
   revenue.type = "revenue.type",
   exchange = "exchange",
   timezone = "UTC",
-  force = FALSE
+  force = FALSE,
+  list.prices = NULL
 )
 }
 \arguments{
@@ -51,6 +52,8 @@ be one of \code{c("airdrops", "referrals", "staking", "promos", "interests", "re
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 }
 \description{
 Format a generic .csv transaction history file. This

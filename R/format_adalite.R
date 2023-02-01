@@ -2,6 +2,7 @@
 #'
 #' @description Format a .csv transaction history file from the Adalite wallet for later ACB processing.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
@@ -11,7 +12,7 @@
 #' @importFrom dplyr %>% rename mutate select filter bind_rows
 #' @importFrom rlang .data
 
-format_adalite <- function(data, force = FALSE) {
+format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Reward awarded", "Received", "Sent")
   
   # Rename columns
@@ -74,7 +75,7 @@ format_adalite <- function(data, force = FALSE) {
     mutate(exchange = "adalite")
 
   # Determine spot rate and value of coins
-  data <- match_prices(data, force = force)
+  data <- match_prices(data, list.prices = list.prices, force = force)
 
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")

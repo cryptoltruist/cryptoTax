@@ -11,15 +11,16 @@
 #' argument.
 #'
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_CDC_wallet(data)
-#' }
+#' format_CDC_wallet(data_CDC_wallet)
 #' @importFrom dplyr %>% rename mutate filter select arrange bind_rows mutate_at
 #' @importFrom rlang .data
 
-format_CDC_wallet <- function(data) {
+format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("", "cost", "Reward")
   
   # Rename columns
@@ -95,7 +96,11 @@ format_CDC_wallet <- function(data) {
     mutate(exchange = "CDC.wallet")
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
+  
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),

@@ -10,9 +10,7 @@
 #' "cointracker", or "koinly"). Only "yearly" (default) supported at this time.
 #' @export
 #' @examples
-#' \dontrun{
-#' format_newton(data)
-#' }
+#' format_newton(data_newton)
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 
