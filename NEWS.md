@@ -2,15 +2,16 @@
 
 **Breaking changes:**
 
-- We get rid of the `format_wealtsimple`, `format_BSC`, and `format_binance_trades` functions, since their goal is better fulfilled by the new `format_generic` and `format_binance` functions, respectively.
+- We get rid of the `format_wealtsimple`, `format_BSC`, `format_binance_trades`, `crypto2fiat` functions, since their goal is better fulfilled by the new `format_generic`, `format_binance`, and `match_prices` functions, respectively.
 
 **New Features:**
 
 - New `pkgdown` website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.
 - Informative progress bars with `format_ACB` and `format_suploss` since these functions are extremely slow with thousands of transactions.
-- Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch)
+- Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini)
 - Now detects new transaction types not accounted for
 - New functions: 
+    - `format_detect()`, To automatically detect the right exchange and process it with the corresponding function.
     - `format_generic`, to process most transaction history files not supported by existing functions.
     - `format_binance`, a general version that works with the general transaction report and includes rewards (but not withdrawal fees). We thus get rid of `format_binance_trades` since the former is superior (as it includes more transaction types).
     - `get_latest_transactions`: get latest transaction date by exchange

@@ -4,16 +4,19 @@
 \alias{format_gemini}
 \title{Format Gemini file}
 \usage{
-format_gemini(data)
+format_gemini(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv transaction history file from Gemini for later ACB processing.
 }
 \examples{
-\dontrun{
-format_gemini(data)
-}
+format_gemini(data_gemini)
 }

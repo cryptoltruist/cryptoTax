@@ -2,16 +2,17 @@
 #'
 #' @description Format a .csv transaction history file from Gemini for later ACB processing.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_gemini(data)
-#' }
+#' format_gemini(data_gemini)
 #' @importFrom dplyr %>% slice rename mutate rowwise filter select bind_rows
 #' arrange transmute n contains full_join
 #' @importFrom rlang .data
 
-format_gemini <- function(data) {
+format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Credit", "Sell", "Buy", "Debit")
   
   # Remove last summary row
@@ -97,7 +98,7 @@ format_gemini <- function(data) {
     filter(!is.na(.data$Amount))
 
   data <- full2 %>%
-    rename(quantity = .data$Amount)
+    rename(quantity = "Amount")
 
   # Create a "buy" object
   BUY <- data %>%
@@ -174,7 +175,7 @@ format_gemini <- function(data) {
     mutate(fees = .data$fees * -1)
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data)
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),
@@ -223,7 +224,8 @@ format_gemini <- function(data) {
     select(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
       "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
+    ) %>% 
+    as.data.frame()
   
   # Return result
   data

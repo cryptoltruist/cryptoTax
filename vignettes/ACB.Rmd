@@ -6,7 +6,8 @@ output:
 vignette: >
   %\VignetteIndexEntry{Adjusted Cost Base}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+pkgdown: 
+  as_is: true
 ---
 
 ```{r, include = FALSE}

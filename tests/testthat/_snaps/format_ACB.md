@@ -640,3 +640,64 @@
       3 -0.00001580427 0.4960272 0.2286875
       4             NA 1.2037178 0.1464332
 
+# pooltool
+
+    Code
+      formatted.pooltool
+    Output
+                        date currency  quantity total.price spot.rate transaction
+      1  2021-04-22 22:03:22      ADA 1.0827498    1.974017      1.82     revenue
+      2  2021-04-27 22:22:14      ADA 0.8579850    1.565881      1.83     revenue
+      3  2021-05-02 22:03:54      ADA 1.0193882    1.979399      1.94     revenue
+      4  2021-05-07 22:54:38      ADA 1.0548971    1.790303      1.70     revenue
+      5  2021-05-12 22:12:49      ADA 0.9443321    1.514525      1.60     revenue
+      6  2021-05-17 22:47:25      ADA 1.0198183    1.426898      1.40     revenue
+      7  2021-05-23 03:43:38      ADA 1.1605830    1.806024      1.56     revenue
+      8  2021-05-27 22:07:57      ADA 1.0197753    1.589004      1.56     revenue
+      9  2021-06-01 22:13:58      ADA 0.8392135    1.538300      1.83     revenue
+      10 2021-06-06 22:14:11      ADA 1.1115378    2.072874      1.86     revenue
+         fees description     comment revenue.type    value exchange rate.source
+      1     0 epoch = 228 pool = REKT      staking 1.974017   exodus    pooltool
+      2     0 epoch = 229 pool = REKT      staking 1.565881   exodus    pooltool
+      3     0 epoch = 230 pool = REKT      staking 1.979399   exodus    pooltool
+      4     0 epoch = 231 pool = REKT      staking 1.790303   exodus    pooltool
+      5     0 epoch = 232 pool = REKT      staking 1.514525   exodus    pooltool
+      6     0 epoch = 233 pool = REKT      staking 1.426898   exodus    pooltool
+      7     0 epoch = 234 pool = REKT      staking 1.806024   exodus    pooltool
+      8     0 epoch = 235 pool = REKT      staking 1.589004   exodus    pooltool
+      9     0 epoch = 236 pool = REKT      staking 1.538300   exodus    pooltool
+      10    0 epoch = 237 pool = REKT      staking 2.072874   exodus    pooltool
+         currency2 total.quantity                                    suploss.range
+      1        ADA       1.082750 2021-03-23 22:03:22 UTC--2021-05-22 22:03:22 UTC
+      2        ADA       1.940735 2021-03-28 22:22:14 UTC--2021-05-27 22:22:14 UTC
+      3        ADA       2.960123 2021-04-02 22:03:54 UTC--2021-06-01 22:03:54 UTC
+      4        ADA       4.015020 2021-04-07 22:54:38 UTC--2021-06-06 22:54:38 UTC
+      5        ADA       4.959352 2021-04-12 22:12:49 UTC--2021-06-11 22:12:49 UTC
+      6        ADA       5.979170 2021-04-17 22:47:25 UTC--2021-06-16 22:47:25 UTC
+      7        ADA       7.139753 2021-04-23 03:43:38 UTC--2021-06-22 03:43:38 UTC
+      8        ADA       8.159529 2021-04-27 22:07:57 UTC--2021-06-26 22:07:57 UTC
+      9        ADA       8.998742 2021-05-02 22:13:58 UTC--2021-07-01 22:13:58 UTC
+      10       ADA      10.110280 2021-05-07 22:14:11 UTC--2021-07-06 22:14:11 UTC
+         quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
+      1                0     5.979170                 0    FALSE                 0
+      2                0     8.159529                 0    FALSE                 0
+      3                0     8.159529                 0    FALSE                 0
+      4                0    10.110280                 0    FALSE                 0
+      5                0    10.110280                 0    FALSE                 0
+      6                0    10.110280                 0    FALSE                 0
+      7                0    10.110280                 0    FALSE                 0
+      8                0    10.110280                 0    FALSE                 0
+      9                0    10.110280                 0    FALSE                 0
+      10               0    10.110280                 0    FALSE                 0
+         gains.sup gains.excess gains       ACB ACB.share
+      1         NA           NA    NA  1.974017  1.823152
+      2         NA           NA    NA  3.539898  1.823999
+      3         NA           NA    NA  5.519297  1.864550
+      4         NA           NA    NA  7.309599  1.820564
+      5         NA           NA    NA  8.824124  1.779290
+      6         NA           NA    NA 10.251022  1.714456
+      7         NA           NA    NA 12.057046  1.688720
+      8         NA           NA    NA 13.646050  1.672407
+      9         NA           NA    NA 15.184350  1.687386
+      10        NA           NA    NA 17.257224  1.706899
+

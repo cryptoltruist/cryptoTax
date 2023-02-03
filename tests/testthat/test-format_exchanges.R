@@ -2,7 +2,7 @@ options(scipen = 999)
 
 # Prepare list of coins ####
 my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", 
-              "BUSD", "CEL", "PRE", "ETHW")
+              "BUSD", "CEL", "PRE", "ETHW", "BAT")
 list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
 
 # Generics ####
@@ -39,8 +39,20 @@ test_that("shakepay", {
   expect_snapshot(format_shakepay(data_shakepay))
 })
 
+test_that("newton", {
+  expect_snapshot(format_newton(data_newton))
+})
+
+test_that("pooltool", {
+  expect_snapshot(format_pooltool(data_pooltool))
+})
+
 test_that("CDC", {
   expect_snapshot(suppressMessages(format_CDC(data_CDC)))
+})
+
+test_that("celsius", {
+  expect_snapshot(format_celsius(data_celsius))
 })
 
 test_that("adalite", {
@@ -71,10 +83,6 @@ test_that("CDC wallet", {
   expect_snapshot(format_CDC_wallet(data_CDC_wallet, list.prices = list.prices))
 })
 
-test_that("celsius", {
-  expect_snapshot(format_celsius(data_celsius))
-})
-
 test_that("coinsmart", {
   expect_snapshot(format_coinsmart(data_coinsmart, list.prices = list.prices))
 })
@@ -83,12 +91,33 @@ test_that("exodus", {
   expect_snapshot(format_exodus(data_exodus, list.prices = list.prices))
 })
 
-test_that("exodus", {
+test_that("presearch", {
   expect_snapshot(format_presearch(data_presearch, list.prices = list.prices))
 })
 
-test_that("newton", {
-  expect_snapshot(format_newton(data_newton))
+test_that("gemini", {
+  expect_snapshot(format_gemini(data_gemini, list.prices = list.prices))
+})
+
+# Test format_detect() ####
+
+test_that("format_detect", {
+  expect_snapshot(format_detect(data_shakepay))
+  expect_snapshot(format_detect(data_newton))
+  expect_snapshot(format_detect(data_pooltool))
+  expect_snapshot(format_detect(data_CDC))
+  expect_snapshot(format_detect(data_celsius))
+  expect_snapshot(format_detect(data_adalite, list.prices = list.prices))
+  expect_snapshot(format_detect(data_binance, list.prices = list.prices))
+  expect_snapshot(format_detect(data_binance_withdrawals, list.prices = list.prices))
+  expect_snapshot(format_detect(data_blockfi, list.prices = list.prices))
+  expect_snapshot(format_detect(data_CDC_exchange_rewards, list.prices = list.prices))
+  expect_snapshot(format_detect(data_CDC_exchange_trades, list.prices = list.prices))
+  expect_snapshot(format_detect(data_CDC_wallet, list.prices = list.prices))
+  expect_snapshot(format_detect(data_coinsmart, list.prices = list.prices))
+  expect_snapshot(format_detect(data_exodus, list.prices = list.prices))
+  expect_snapshot(format_detect(data_presearch, list.prices = list.prices))
+  expect_snapshot(format_detect(data_gemini, list.prices = list.prices))
 })
 
 # Add test: timezone!

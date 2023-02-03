@@ -14,6 +14,6 @@ Format a .csv transaction history file from Uphold for later ACB processing.
 }
 \examples{
 \dontrun{
-format_uphold(data)
+format_uphold(data_uphold)
 }
 }

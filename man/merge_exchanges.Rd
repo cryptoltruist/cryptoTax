@@ -13,7 +13,7 @@ merge_exchanges(...)
 Provides a list of transactions, separated by coin..
 }
 \examples{
-\dontrun{
-merge_exchanges(formatted.data)
-}
+shakepay <- format_shakepay(data_shakepay)
+newton <- format_newton(data_newton)
+merge_exchanges(shakepay, newton)
 }

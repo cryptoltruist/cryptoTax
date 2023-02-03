@@ -12,8 +12,10 @@ format_pooltool(data)
 \description{
 Format a .csv transaction history file from the Cardano PoolTool for later ACB processing. Instructions: Use https://pooltool.io/ click on "rewards data for taxes", search your ADA address, scroll to the bottom of the page, and use the export tool to export all transactions. Make sure to use the "Generic(CSV)" format.
 }
-\examples{
-\dontrun{
-format_pooltool(data)
+\details{
+This is necessary e.g., if you used the Exodus wallet which does not report
+ADA rewards in its transaction history file.
 }
+\examples{
+format_pooltool(data_pooltool)
 }

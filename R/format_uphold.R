@@ -5,7 +5,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' format_uphold(data)
+#' format_uphold(data_uphold)
 #' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data

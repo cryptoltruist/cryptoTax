@@ -32,9 +32,12 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
-
+          
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: |
+          coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", "BUSD", "CEL", "PRE", "ETHW", "BAT")
+          list.prices <- prepare_list_prices(coins = coins, start.date = "2021-01-01")
+          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀

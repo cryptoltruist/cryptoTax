@@ -1,12 +1,12 @@
 #' @title Format ADA rewards from blockchain CSV
 #'
 #' @description Format a .csv transaction history file from the Cardano PoolTool for later ACB processing. Instructions: Use https://pooltool.io/ click on "rewards data for taxes", search your ADA address, scroll to the bottom of the page, and use the export tool to export all transactions. Make sure to use the "Generic(CSV)" format.
+#' @details This is necessary e.g., if you used the Exodus wallet which does not report
+#' ADA rewards in its transaction history file.
 #' @param data The dataframe
 #' @export
 #' @examples
-#' \dontrun{
-#' format_pooltool(data)
-#' }
+#' format_pooltool(data_pooltool)
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 

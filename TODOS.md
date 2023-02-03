@@ -12,9 +12,7 @@
 
 ## Features
 
-- New function: `format_detect()`! To automatically detect the right exchange and process it with the corresponding function.
-- Make sample data sets for all exchanges (remaining: gemini, pooltool).
-- New error message for functions where it is required: "You must first create an object 'list.prices' using `prepare_list_prices()` before using this function." [or just add it as a required argument?? Would do the same thing... think about this].
+- Missing data: uphold
 - For `report_revenues()`, better and more clearly accommodate tax year
 - Finish the Shiny app: editable table, see <https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/>
 
@@ -33,6 +31,6 @@
 
 ## Vignettes
 
-- List benefits: full transparency on algorithms (open code), in control of your data (no need to upload it on another platform), can use and reuse your script (no need to start all over from scratch), no limit on number of transactions, easy to automatically recategorize transactions, community can contribute, etc.
+- List benefits: full transparency on algorithms (open code), in control of your data (no need to upload it on another platform), can use and reuse your script (no need to start all over from scratch), no limit on number of transactions, easy to automatically recategorize transactions, unlimited flexibility, community can contribute, etc.
 - Explain in vignette how to add option to change whether different transaction types (cashback, airdrops) are considered as part of taxable revenue stream.
 - Write a longer vignette on the general workflow using `prepare_list_prices` and several (all?) exchanges, etc.

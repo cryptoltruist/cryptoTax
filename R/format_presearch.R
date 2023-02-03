@@ -7,9 +7,7 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' format_presearch(data)
-#' }
+#' format_presearch(data_presearch)
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 
