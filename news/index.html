@@ -60,14 +60,16 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="cryptotax-002">cryptoTax 0.0.2<a class="anchor" aria-label="anchor" href="#cryptotax-002"></a></h2>
 <p><strong>Breaking changes:</strong></p>
-<ul><li>We get rid of the <code>format_wealtsimple</code>, <code>format_BSC</code>, and <code>format_binance_trades</code> functions, since their goal is better fulfilled by the new <code>format_generic</code> and <code>format_binance</code> functions, respectively.</li>
+<ul><li>We get rid of the <code>format_wealtsimple</code>, <code>format_BSC</code>, <code>format_binance_trades</code>, <code>crypto2fiat</code> functions, since their goal is better fulfilled by the new <code>format_generic</code>, <code>format_binance</code>, and <code>match_prices</code> functions, respectively.</li>
 </ul><p><strong>New Features:</strong></p>
 <ul><li>New <code>pkgdown</code> website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.</li>
 <li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow with thousands of transactions.</li>
-<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch)</li>
+<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini)</li>
 <li>Now detects new transaction types not accounted for</li>
 <li>New functions:
 <ul><li>
+<code><a href="../reference/format_detect.html">format_detect()</a></code>, To automatically detect the right exchange and process it with the corresponding function.</li>
+<li>
 <code>format_generic</code>, to process most transaction history files not supported by existing functions.</li>
 <li>
 <code>format_binance</code>, a general version that works with the general transaction report and includes rewards (but not withdrawal fees). We thus get rid of <code>format_binance_trades</code> since the former is superior (as it includes more transaction types).</li>

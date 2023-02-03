@@ -43,9 +43,6 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.html</loc>
   </url>
   <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/crypto2fiat.html</loc>
-  </url>
-  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/cryptoTax-package.html</loc>
   </url>
   <url>
@@ -106,6 +103,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_newton.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_pooltool.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_presearch.html</loc>
   </url>
   <url>
@@ -146,6 +146,9 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_detect.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_dollars.html</loc>

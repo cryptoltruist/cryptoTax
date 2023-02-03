@@ -64,7 +64,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_gemini</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_gemini</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,13 +72,57 @@
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
 
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_gemini</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_gemini</span><span class="op">(</span><span class="va">data_gemini</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency     quantity total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-04-09 22:50:55      BTC 9.662784e-04          NA        NA         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-04-09 22:50:55      LTC 2.466906e-01          NA        NA        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-09 22:53:57      BTC 6.051912e-06          NA        NA         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-09 22:53:57      LTC 1.640820e-03          NA        NA        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-04-09 23:20:53      BAT 4.871952e+01          NA        NA         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-04-09 23:20:53      BTC 9.507300e-04          NA        NA        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-04-10 23:22:04      BTC 2.850256e-04          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-08 16:14:54      BAT 2.833935e+00          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-05-16 12:55:02      BAT 3.085288e+00          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-05-16 13:35:19      BAT 5.007481e+00          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-06-18 01:38:54      BAT 6.834323e+00          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            fees description               comment revenue.type exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.303409e-06      LTCBTC                Market         &lt;NA&gt;   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            NA      LTCBTC                Market         &lt;NA&gt;   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  3.651810e-08      LTCBTC                 Limit         &lt;NA&gt;   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4            NA      LTCBTC                 Limit         &lt;NA&gt;   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            NA      BATBTC                 Limit         &lt;NA&gt;   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1.814241e-06      BATBTC                 Limit         &lt;NA&gt;   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7            NA      Credit Administrative Credit    referrals   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8            NA      Credit Administrative Credit    referrals   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9            NA      Credit               Deposit     airdrops   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10           NA      Credit               Deposit     airdrops   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11           NA      Credit               Deposit     airdrops   gemini</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1              coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3              coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7              coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8              coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9              coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11             coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

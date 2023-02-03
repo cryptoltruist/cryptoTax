@@ -73,12 +73,37 @@
 <dd><p>The dataframe</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>This is necessary e.g., if you used the Exodus wallet which does not report
+ADA rewards in its transaction history file.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_pooltool</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_pooltool</span><span class="op">(</span><span class="va">data_pooltool</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency  quantity total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-04-22 22:03:22      ADA 1.0827498    1.974017      1.82     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-04-27 22:22:14      ADA 0.8579850    1.565881      1.83     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-05-02 22:03:54      ADA 1.0193882    1.979399      1.94     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-05-07 22:54:38      ADA 1.0548971    1.790303      1.70     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-12 22:12:49      ADA 0.9443321    1.514525      1.60     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-05-17 22:47:25      ADA 1.0198183    1.426898      1.40     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-05-23 03:43:38      ADA 1.1605830    1.806024      1.56     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-27 22:07:57      ADA 1.0197753    1.589004      1.56     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-06-01 22:13:58      ADA 0.8392135    1.538300      1.83     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-06-06 22:14:11      ADA 1.1115378    2.072874      1.86     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    description     comment revenue.type exchange rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  epoch = 228 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  epoch = 229 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  epoch = 230 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  epoch = 231 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  epoch = 232 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  epoch = 233 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  epoch = 234 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  epoch = 235 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  epoch = 236 pool = REKT      staking   exodus    pooltool</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 epoch = 237 pool = REKT      staking   exodus    pooltool</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
