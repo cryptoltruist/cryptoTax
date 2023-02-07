@@ -23,7 +23,8 @@ In this vignette, we will demonstrate that calculations of the adjusted cost bas
 
 To begin, we will replicate the basic ACB example showcased in https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/
 
-![](images/ACB0.png)
+
+> ![](images/ACB0.png)
 
 We first generate the data:
 
@@ -35,7 +36,7 @@ data
 
 Next, we generate the calculations to achieve the following result:
 
-![](images/ACB1.png)
+> ![](images/ACB1.png)
 
 ```{r}
 ACB(data, spot.rate = "price", sup.loss = FALSE)
@@ -49,7 +50,7 @@ We will now replicate the more advanced superficial loss example showcased at ht
 
 We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
-![](images/ACB2.png)
+> ![](images/ACB2.png)
 
 ```{r}
 data <- data_adjustedcostbase2
@@ -58,7 +59,7 @@ ACB(data, spot.rate = "price", sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/ACB3.png)
+> ![](images/ACB3.png)
 
 Per default, setting `sup.loss = TRUE` (the default) generates a lot of columns to provide as much information as possible. To make it look as short as the adjustedcostbase.ca example, we can subselect relevant columns:
 
@@ -72,7 +73,7 @@ ACB(data, spot.rate = "price") %>%
 
 We continue with the second superficial loss example. We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
-![](images/ACB4.png)
+> ![](images/ACB4.png)
 
 ```{r}
 data <- data_adjustedcostbase3
@@ -81,7 +82,7 @@ ACB(data, spot.rate = "price", sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/ACB5.png)
+> ![](images/ACB5.png)
 
 ```{r}
 ACB(data, spot.rate = "price") %>%
@@ -94,7 +95,7 @@ We continue with the third superficial loss example (first example in https://ww
 
 ### When Shares are Sold at a Loss and then Partially Reacquired within the Superficial Loss Period
 
-![](images/ACB6.png)
+> ![](images/ACB6.png)
 
 ```{r}
 data <- data_adjustedcostbase4
@@ -103,7 +104,7 @@ ACB(data, spot.rate = "price", sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/ACB7.png)
+> ![](images/ACB7.png)
 
 ```{r}
 ACB(data, spot.rate = "price") %>%
@@ -116,7 +117,7 @@ We continue with the fourth superficial loss example (second example in https://
 
 ### When Shares are Purchased and then Partially Sold within the Superficial Loss Period
 
-![](images/ACB8.png)
+> ![](images/ACB8.png)
 
 ```{r}
 data <- data_adjustedcostbase5
@@ -125,7 +126,7 @@ ACB(data, spot.rate = "price", sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/ACB9.png)
+> ![](images/ACB9.png)
 
 ```{r}
 ACB(data, spot.rate = "price") %>%
@@ -166,7 +167,7 @@ ACB(data, spot.rate = "price") %>%
 
 Here is an example from CryptoTaxCalculator, showcased at: https://cryptotaxcalculator.io/guides/crypto-tax-canada-cra/. We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
-![](images/cryptotaxcalculator1.png)
+> ![](images/cryptotaxcalculator1.png)
 
 ```{r}
 data <- data_cryptotaxcalculator1
@@ -175,7 +176,7 @@ ACB(data, transaction = "trade", spot.rate = "price", sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/cryptotaxcalculator2.png)
+> ![](images/cryptotaxcalculator2.png)
 
 ```{r}
 ACB(data, transaction = "trade", spot.rate = "price") %>%
@@ -186,7 +187,7 @@ ACB(data, transaction = "trade", spot.rate = "price") %>%
 
 We continue with the second superficial loss example. We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
-![](images/cryptotaxcalculator3.png)
+> ![](images/cryptotaxcalculator3.png)
 
 ```{r}
 data <- data_cryptotaxcalculator2
@@ -195,7 +196,7 @@ ACB(data, transaction = "trade", spot.rate = "price", sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/cryptotaxcalculator4.png)
+> ![](images/cryptotaxcalculator4.png)
 
 ```{r}
 ACB(data, transaction = "trade", spot.rate = "price") %>%
@@ -208,8 +209,8 @@ ACB(data, transaction = "trade", spot.rate = "price") %>%
 
 Here is an example from Coinpanda, showcased at: https://coinpanda.io/blog/crypto-taxes-canada-adjusted-cost-base/. The first example does not require the superficial loss rule so we can set it to `FALSE` without worry.
 
-![](images/coinpanda1.png)
-![](images/coinpanda2.png)
+> ![](images/coinpanda1.png)
+> ![](images/coinpanda2.png)
 
 ```{r}
 data <- data_coinpanda1
@@ -223,7 +224,7 @@ ACB(data,
 
 We continue with the second superficial loss example. We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
-![](images/coinpanda3.png)
+> ![](images/coinpanda3.png)
 
 ```{r}
 data <- data_coinpanda2
@@ -235,7 +236,7 @@ ACB(data,
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/coinpanda4.png)
+> ![](images/coinpanda4.png)
 
 ```{r}
 ACB(data, transaction = "type", quantity = "amount", total.price = "price") %>%
@@ -246,7 +247,7 @@ ACB(data, transaction = "type", quantity = "amount", total.price = "price") %>%
 
 Here is an example from Koinly, showcased at: https://koinly.io/blog/calculating-crypto-taxes-canada/. We first demonstrate the "Violation of the Superficial Loss Rule" by using regular ACB *without* accounting for superficial losses:
 
-![](images/koinly1.png)
+> ![](images/koinly1.png)
 
 ```{r}
 data <- data_koinly
@@ -255,7 +256,7 @@ ACB(data, sup.loss = FALSE)
 
 Next, we do it the correct way, *accounting* for superficial losses:
 
-![](images/koinly2.png)
+> ![](images/koinly2.png)
 
 ```{r}
 ACB(data) %>%

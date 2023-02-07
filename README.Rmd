@@ -45,7 +45,7 @@ remotes::install_github("cryptoltruist/cryptoTax")
 
 ```{r}
 library(cryptoTax)
-data <- adjustedcostbase.ca1
+data <- data_adjustedcostbase1
 data
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
@@ -68,6 +68,7 @@ Currently, the following exchanges are supported with the `format_*` functions:
 1. Pooltool (ADA)
 1. Presearch
 1. Shakepay
+1. Uphold
 
 To support another exchange not listed here, please open an issue. You can also prepare your own file according to the style of one of those exchanges and use the corresponding function.
 

@@ -38,7 +38,7 @@ remotes::install_github("cryptoltruist/cryptoTax")
 
 ``` r
 library(cryptoTax)
-data <- adjustedcostbase.ca1
+data <- data_adjustedcostbase1
 data
 ```
 
@@ -80,6 +80,7 @@ functions:
 10. Pooltool (ADA)
 11. Presearch
 12. Shakepay
+13. Uphold
 
 To support another exchange not listed here, please open an issue. You
 can also prepare your own file according to the style of one of those
@@ -108,9 +109,9 @@ all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)
-#> Process started at 2023-01-08 20:30:32. Please be patient as the transactions process.
+#> Process started at 2023-02-07 12:03:02. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2023-01-08 20:30:34. Total time elapsed: 0.03 minutes
+#> Process ended at 2023-02-07 12:03:03. Total time elapsed: 0.03 minutes
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
@@ -133,15 +134,16 @@ report_overview(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
   local.timezone = "America/Toronto"
 )
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 ```
 
 | date.last           | currency | total.quantity | cost.share | total.cost | gains | losses |   net | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
 |:--------------------|:---------|---------------:|-----------:|-----------:|------:|-------:|------:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
-| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 |  0.00 |       0.08 |       44.65 |               NA |            -16.01 |         -16.01 | CRO       |
-| 2021-07-25 18:22:02 | BTC      |      0.0013612 |   43035.55 |      58.58 | 20.57 |      0 | 20.57 |   22883.51 |       31.15 |               NA |            -27.43 |         -27.43 | BTC       |
-| 2021-07-28 23:23:04 | ETH      |      0.0114054 |    2685.19 |      30.63 |  8.25 |      0 |  8.25 |    1715.01 |       19.56 |               NA |            -11.07 |         -11.07 | ETH       |
-| 2021-07-11 20:19:55 | ETHW     |      0.3558067 |       8.99 |       3.20 |  0.00 |      0 |  0.00 |       4.39 |        1.56 |               NA |             -1.64 |          -1.64 | ETHW      |
-| 2021-07-28 23:23:04 | Total    |             NA |         NA |     153.07 | 28.82 |      0 | 28.82 |         NA |       96.92 |                0 |            -56.15 |         -56.15 | Total     |
+| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 |  0.00 |       0.11 |       57.60 |               NA |             -3.06 |          -3.06 | CRO       |
+| 2021-07-25 18:22:02 | BTC      |      0.0013612 |   43035.55 |      58.58 | 20.57 |      0 | 20.57 |   30681.42 |       41.76 |               NA |            -16.82 |         -16.82 | BTC       |
+| 2021-07-28 23:23:04 | ETH      |      0.0114054 |    2685.19 |      30.63 |  8.25 |      0 |  8.25 |    2179.85 |       24.86 |               NA |             -5.77 |          -5.77 | ETH       |
+| 2021-07-11 20:19:55 | ETHW     |      0.3558067 |       8.99 |       3.20 |  0.00 |      0 |  0.00 |       5.68 |        2.02 |               NA |             -1.18 |          -1.18 | ETHW      |
+| 2021-07-28 23:23:04 | Total    |             NA |         NA |     153.07 | 28.82 |      0 | 28.82 |         NA |      126.24 |                0 |            -26.83 |         -26.83 | Total     |
 
 ``` r
 
@@ -150,6 +152,7 @@ report_summary(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
   local.timezone = "America/Toronto"
 )
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 ```
 
 | Type              | Amount  | currency |
@@ -159,12 +162,12 @@ report_summary(formatted.ACB,
 | losses            | 0.00    | CAD      |
 | net               | 28.81   | CAD      |
 | total.cost        | 153.07  | CAD      |
-| value.today       | 96.92   | CAD      |
+| value.today       | 126.24  | CAD      |
 | unrealized.gains  | 0.00    | CAD      |
-| unrealized.losses | -56.15  | CAD      |
-| unrealized.net    | -56.15  | CAD      |
-| percentage.up     | -36.68% | CAD      |
-| all.time.up       | -17.86% | CAD      |
+| unrealized.losses | -26.83  | CAD      |
+| unrealized.net    | -26.83  | CAD      |
+| percentage.up     | -17.53% | CAD      |
+| all.time.up       | 1.30%   | CAD      |
 
 ### Revenue estimation
 
