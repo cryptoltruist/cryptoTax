@@ -29,7 +29,6 @@ Imports:
     lubridate,
     priceR,
     curl,
-    tidyquant,
     ggplot2,
     ggrepel,
     RColorBrewer,

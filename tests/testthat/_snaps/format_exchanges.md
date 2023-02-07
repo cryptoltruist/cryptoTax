@@ -583,6 +583,38 @@
       10   gemini             coinmarketcap
       11   gemini             coinmarketcap
 
+# uphold
+
+    Code
+      format_uphold(data_uphold, list.prices = list.prices)
+    Output
+                        date currency    quantity total.price   spot.rate transaction
+      1  2021-01-07 02:40:31      BAT  1.59081275   0.5114264   0.3214875     revenue
+      2  2021-02-09 14:26:49      BAT 12.69812163   6.8805827   0.5418583     revenue
+      3  2021-03-06 21:32:36      BAT  0.37591275   0.3203871   0.8522910     revenue
+      4  2021-03-07 21:46:57      LTC  0.24129740  57.0095475 236.2625850         buy
+      5  2021-03-07 21:46:57      BAT 52.59871206  57.0095475   1.0838582        sell
+      6  2021-03-07 21:54:09      LTC  0.00300000   0.7087878 236.2625850        sell
+      7  2021-04-05 12:22:00      BAT  8.52198415  13.2125179   1.5504039     revenue
+      8  2021-04-06 03:41:42      LTC  0.00300000   0.8643769 288.1256316        sell
+      9  2021-04-06 04:47:00      LTC  0.03605981  10.3897561 288.1256316         buy
+      10 2021-04-06 04:47:00      BAT  8.52198415  10.3897561   1.2191710        sell
+      11 2021-05-11 07:12:24      BAT  0.47521985   0.7777261   1.6365606     revenue
+      12 2021-06-09 04:52:23      BAT  0.67207415   0.5586404   0.8312183     revenue
+         description         comment revenue.type exchange               rate.source
+      1           in            <NA>     airdrops   uphold             coinmarketcap
+      2           in            <NA>     airdrops   uphold             coinmarketcap
+      3           in            <NA>     airdrops   uphold             coinmarketcap
+      4        trade         BAT-LTC         <NA>   uphold             coinmarketcap
+      5        trade         BAT-LTC         <NA>   uphold coinmarketcap (buy price)
+      6          out withdrawal fees         <NA>   uphold             coinmarketcap
+      7           in            <NA>     airdrops   uphold             coinmarketcap
+      8          out withdrawal fees         <NA>   uphold             coinmarketcap
+      9        trade         BAT-LTC         <NA>   uphold             coinmarketcap
+      10       trade         BAT-LTC         <NA>   uphold coinmarketcap (buy price)
+      11          in            <NA>     airdrops   uphold             coinmarketcap
+      12          in            <NA>     airdrops   uphold             coinmarketcap
+
 # format_detect
 
     Code
@@ -899,6 +931,47 @@
 ---
 
     Code
+      format_detect(data_CDC_exchange_rewards, list.prices = list.prices)
+    Message <simpleMessage>
+      WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS AND WITHDRAWALS!
+    Output
+                        date currency   quantity  total.price     spot.rate
+      1  2021-02-19 00:00:00      CRO 1.36512341 0.2227899953     0.1632014
+      2  2021-02-21 00:00:00      CRO 1.36945123 0.2411195812     0.1760702
+      3  2021-04-15 16:04:21      BTC 0.00000023 0.0182149274 79195.3367033
+      4  2021-04-18 00:00:00      CRO 1.36512310 0.3798900187     0.2782826
+      5  2021-05-14 06:02:22      BTC 0.00000035 0.0211513332 60432.3807116
+      6  2021-06-12 15:21:34      BTC 0.00000630 0.2791139040 44303.7942802
+      7  2021-06-27 01:34:00      CRO 0.00100000 0.0001239785     0.1239785
+      8  2021-07-07 00:00:00      CRO 0.01512903 0.0022872188     0.1511808
+      9  2021-07-13 00:00:00      CRO 0.05351230 0.0084128916     0.1572142
+      10 2021-09-07 00:00:00      CRO 0.01521310 0.0035626681     0.2341842
+         transaction description                                          comment
+      1      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
+      2      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
+      3      revenue      Reward                          BTC Supercharger reward
+      4      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
+      5      revenue      Reward                          BTC Supercharger reward
+      6      revenue      Reward                          BTC Supercharger reward
+      7         sell  Withdrawal                                             <NA>
+      8      revenue      Reward                  Rebate on 0.18512341 CRO at 10%
+      9      revenue      Reward                Rebate on 0.5231512346 CRO at 10%
+      10     revenue      Reward                 Rebate on 0.155125123 CRO at 10%
+         revenue.type     exchange   rate.source
+      1     interests CDC.exchange coinmarketcap
+      2     interests CDC.exchange coinmarketcap
+      3     interests CDC.exchange coinmarketcap
+      4     interests CDC.exchange coinmarketcap
+      5     interests CDC.exchange coinmarketcap
+      6     interests CDC.exchange coinmarketcap
+      7          <NA> CDC.exchange coinmarketcap
+      8       rebates CDC.exchange coinmarketcap
+      9       rebates CDC.exchange coinmarketcap
+      10      rebates CDC.exchange coinmarketcap
+
+---
+
+    Code
       format_detect(data_CDC_exchange_trades, list.prices = list.prices)
     Output
                         date currency   quantity total.price    spot.rate transaction
@@ -931,6 +1004,27 @@
       12          NA         BUY ETH_CRO CDC.exchange             coinmarketcap
       13  0.05570691        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       14  0.05570683        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+
+---
+
+    Code
+      format_detect(data_CDC_wallet, list.prices = list.prices)
+    Output
+                       date currency quantity   total.price spot.rate transaction
+      1 2021-04-12 18:28:50      CRO 0.512510 0.13593610436 0.2652360     revenue
+      2 2021-04-23 18:51:53      CRO 1.656708 0.36013687043 0.2173811     revenue
+      3 2021-05-21 01:19:01      CRO 0.000200 0.00002993323 0.1496661        sell
+      4 2021-06-26 14:51:02      CRO 6.051235 0.70769054418 0.1169498     revenue
+        description                                            comment revenue.type
+      1      Reward                         Auto Withdraw Reward from       staking
+      2      Reward                         Auto Withdraw Reward from       staking
+      3  Withdrawal Outgoing Transaction to abcdefghijklmnopqrstuvwxyz         <NA>
+      4      Reward    Withdraw Reward from abcdefghijklmnopqrstuvwxyz      staking
+          exchange   rate.source
+      1 CDC.wallet coinmarketcap
+      2 CDC.wallet coinmarketcap
+      3 CDC.wallet coinmarketcap
+      4 CDC.wallet coinmarketcap
 
 ---
 
@@ -1047,4 +1141,36 @@
       9    gemini             coinmarketcap
       10   gemini             coinmarketcap
       11   gemini             coinmarketcap
+
+---
+
+    Code
+      format_detect(data_uphold, list.prices = list.prices)
+    Output
+                        date currency    quantity total.price   spot.rate transaction
+      1  2021-01-07 02:40:31      BAT  1.59081275   0.5114264   0.3214875     revenue
+      2  2021-02-09 14:26:49      BAT 12.69812163   6.8805827   0.5418583     revenue
+      3  2021-03-06 21:32:36      BAT  0.37591275   0.3203871   0.8522910     revenue
+      4  2021-03-07 21:46:57      LTC  0.24129740  57.0095475 236.2625850         buy
+      5  2021-03-07 21:46:57      BAT 52.59871206  57.0095475   1.0838582        sell
+      6  2021-03-07 21:54:09      LTC  0.00300000   0.7087878 236.2625850        sell
+      7  2021-04-05 12:22:00      BAT  8.52198415  13.2125179   1.5504039     revenue
+      8  2021-04-06 03:41:42      LTC  0.00300000   0.8643769 288.1256316        sell
+      9  2021-04-06 04:47:00      LTC  0.03605981  10.3897561 288.1256316         buy
+      10 2021-04-06 04:47:00      BAT  8.52198415  10.3897561   1.2191710        sell
+      11 2021-05-11 07:12:24      BAT  0.47521985   0.7777261   1.6365606     revenue
+      12 2021-06-09 04:52:23      BAT  0.67207415   0.5586404   0.8312183     revenue
+         description         comment revenue.type exchange               rate.source
+      1           in            <NA>     airdrops   uphold             coinmarketcap
+      2           in            <NA>     airdrops   uphold             coinmarketcap
+      3           in            <NA>     airdrops   uphold             coinmarketcap
+      4        trade         BAT-LTC         <NA>   uphold             coinmarketcap
+      5        trade         BAT-LTC         <NA>   uphold coinmarketcap (buy price)
+      6          out withdrawal fees         <NA>   uphold             coinmarketcap
+      7           in            <NA>     airdrops   uphold             coinmarketcap
+      8          out withdrawal fees         <NA>   uphold             coinmarketcap
+      9        trade         BAT-LTC         <NA>   uphold             coinmarketcap
+      10       trade         BAT-LTC         <NA>   uphold coinmarketcap (buy price)
+      11          in            <NA>     airdrops   uphold             coinmarketcap
+      12          in            <NA>     airdrops   uphold             coinmarketcap
 

@@ -49,6 +49,113 @@
       7        NA           NA       NA 53.03335  31384.02
       8        NA           NA 14.63777 36.40264  31384.02
 
+# newton
+
+    Code
+      formatted.newton
+    Output
+                       date currency   quantity total.price  spot.rate transaction
+      1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy
+      2 2021-04-04 22:53:46      CAD 25.0000000   0.0000000     1.0000     revenue
+      3 2021-04-04 22:55:55      ETH  0.0198712  25.0142098  1258.8173         buy
+      4 2021-04-21 19:57:26      BTC  0.0034300 153.1241354 44642.6051         buy
+      5 2021-05-12 21:37:42      BTC  0.0000040   0.3049013 76225.3175         buy
+      6 2021-05-12 21:52:40      BTC  0.0032130 156.1241341 48591.3894        sell
+      7 2021-06-16 18:49:11      CAD 25.0000000   0.0000000     1.0000     revenue
+        fees      description revenue.type       value exchange rate.source currency2
+      1    0            TRADE         <NA>  23.4912731   newton    exchange       LTC
+      2    0 Referral Program    referrals  25.0000000   newton    exchange       CAD
+      3    0            TRADE         <NA>  25.0142098   newton    exchange       ETH
+      4    0            TRADE         <NA> 153.1241354   newton    exchange       BTC
+      5    0            TRADE         <NA>   0.3049013   newton    exchange       BTC
+      6    0            TRADE         <NA> 156.1241341   newton    exchange       BTC
+      7    0 Referral Program    referrals  25.0000000   newton    exchange       CAD
+        total.quantity                                    suploss.range
+      1      0.1048291 2021-03-05 22:50:12 UTC--2021-05-04 22:50:12 UTC
+      2     25.0000000 2021-03-05 22:53:46 UTC--2021-05-04 22:53:46 UTC
+      3      0.0198712 2021-03-05 22:55:55 UTC--2021-05-04 22:55:55 UTC
+      4      0.0034300 2021-03-22 19:57:26 UTC--2021-05-21 19:57:26 UTC
+      5      0.0034340 2021-04-12 21:37:42 UTC--2021-06-11 21:37:42 UTC
+      6      0.0002210 2021-04-12 21:52:40 UTC--2021-06-11 21:52:40 UTC
+      7     50.0000000 2021-05-17 18:49:11 UTC--2021-07-16 18:49:11 UTC
+        quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
+      1       0.1048291    0.1048291          0.000000    FALSE           0.00000
+      2       0.0000000   25.0000000          0.000000    FALSE           0.00000
+      3       0.0198712    0.0198712          0.000000    FALSE           0.00000
+      4       0.0034340    0.0002210          0.000000    FALSE           0.00000
+      5       0.0034340    0.0002210          0.000000    FALSE           0.00000
+      6       0.0034340    0.0002210          0.003213    FALSE          12.56924
+      7       0.0000000   50.0000000          0.000000    FALSE           0.00000
+        gains.sup gains.excess    gains        ACB  ACB.share
+      1        NA           NA       NA  23.491273   224.0911
+      2        NA           NA       NA   0.000000     0.0000
+      3        NA           NA       NA  25.014210  1258.8173
+      4        NA           NA       NA 153.124135 44642.6051
+      5        NA           NA       NA 153.429037 44679.3933
+      6        NA           NA 12.56924   9.874146 44679.3933
+      7        NA           NA       NA   0.000000     0.0000
+
+# pooltool
+
+    Code
+      formatted.pooltool
+    Output
+                        date currency  quantity total.price spot.rate transaction
+      1  2021-04-22 22:03:22      ADA 1.0827498    1.974017      1.82     revenue
+      2  2021-04-27 22:22:14      ADA 0.8579850    1.565881      1.83     revenue
+      3  2021-05-02 22:03:54      ADA 1.0193882    1.979399      1.94     revenue
+      4  2021-05-07 22:54:38      ADA 1.0548971    1.790303      1.70     revenue
+      5  2021-05-12 22:12:49      ADA 0.9443321    1.514525      1.60     revenue
+      6  2021-05-17 22:47:25      ADA 1.0198183    1.426898      1.40     revenue
+      7  2021-05-23 03:43:38      ADA 1.1605830    1.806024      1.56     revenue
+      8  2021-05-27 22:07:57      ADA 1.0197753    1.589004      1.56     revenue
+      9  2021-06-01 22:13:58      ADA 0.8392135    1.538300      1.83     revenue
+      10 2021-06-06 22:14:11      ADA 1.1115378    2.072874      1.86     revenue
+         fees description     comment revenue.type    value exchange rate.source
+      1     0 epoch = 228 pool = REKT      staking 1.974017   exodus    pooltool
+      2     0 epoch = 229 pool = REKT      staking 1.565881   exodus    pooltool
+      3     0 epoch = 230 pool = REKT      staking 1.979399   exodus    pooltool
+      4     0 epoch = 231 pool = REKT      staking 1.790303   exodus    pooltool
+      5     0 epoch = 232 pool = REKT      staking 1.514525   exodus    pooltool
+      6     0 epoch = 233 pool = REKT      staking 1.426898   exodus    pooltool
+      7     0 epoch = 234 pool = REKT      staking 1.806024   exodus    pooltool
+      8     0 epoch = 235 pool = REKT      staking 1.589004   exodus    pooltool
+      9     0 epoch = 236 pool = REKT      staking 1.538300   exodus    pooltool
+      10    0 epoch = 237 pool = REKT      staking 2.072874   exodus    pooltool
+         currency2 total.quantity                                    suploss.range
+      1        ADA       1.082750 2021-03-23 22:03:22 UTC--2021-05-22 22:03:22 UTC
+      2        ADA       1.940735 2021-03-28 22:22:14 UTC--2021-05-27 22:22:14 UTC
+      3        ADA       2.960123 2021-04-02 22:03:54 UTC--2021-06-01 22:03:54 UTC
+      4        ADA       4.015020 2021-04-07 22:54:38 UTC--2021-06-06 22:54:38 UTC
+      5        ADA       4.959352 2021-04-12 22:12:49 UTC--2021-06-11 22:12:49 UTC
+      6        ADA       5.979170 2021-04-17 22:47:25 UTC--2021-06-16 22:47:25 UTC
+      7        ADA       7.139753 2021-04-23 03:43:38 UTC--2021-06-22 03:43:38 UTC
+      8        ADA       8.159529 2021-04-27 22:07:57 UTC--2021-06-26 22:07:57 UTC
+      9        ADA       8.998742 2021-05-02 22:13:58 UTC--2021-07-01 22:13:58 UTC
+      10       ADA      10.110280 2021-05-07 22:14:11 UTC--2021-07-06 22:14:11 UTC
+         quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
+      1                0     5.979170                 0    FALSE                 0
+      2                0     8.159529                 0    FALSE                 0
+      3                0     8.159529                 0    FALSE                 0
+      4                0    10.110280                 0    FALSE                 0
+      5                0    10.110280                 0    FALSE                 0
+      6                0    10.110280                 0    FALSE                 0
+      7                0    10.110280                 0    FALSE                 0
+      8                0    10.110280                 0    FALSE                 0
+      9                0    10.110280                 0    FALSE                 0
+      10               0    10.110280                 0    FALSE                 0
+         gains.sup gains.excess gains       ACB ACB.share
+      1         NA           NA    NA  1.974017  1.823152
+      2         NA           NA    NA  3.539898  1.823999
+      3         NA           NA    NA  5.519297  1.864550
+      4         NA           NA    NA  7.309599  1.820564
+      5         NA           NA    NA  8.824124  1.779290
+      6         NA           NA    NA 10.251022  1.714456
+      7         NA           NA    NA 12.057046  1.688720
+      8         NA           NA    NA 13.646050  1.672407
+      9         NA           NA    NA 15.184350  1.687386
+      10        NA           NA    NA 17.257224  1.706899
+
 # CDC
 
     Code
@@ -188,72 +295,6 @@
       17           NA -2.181422 14.06858 69882.7777778
       18           NA  8.245672 30.62567  2685.1921836
 
-# blockfi
-
-    Code
-      formatted.blockfi
-    Output
-                       date currency     quantity total.price    spot.rate
-      1 2021-05-29 21:43:44      BTC  0.000018512   0.7858598 42451.369876
-      2 2021-05-29 21:43:44      LTC  0.022451200   4.6255734   206.027889
-      3 2021-06-13 21:43:44      BTC  0.000184120   0.0000000 45381.388034
-      4 2021-06-30 21:43:44      BTC  0.000047234   2.0770535 43973.694092
-      5 2021-06-30 21:43:44      LTC  0.010125120   1.8084980   178.614968
-      6 2021-07-29 21:43:44     USDC  0.038241000   0.0477449     1.248526
-      7 2021-08-07 21:43:44      BTC  0.000441230   0.0000000 54847.843168
-      8 2021-10-24 04:29:23      LTC  0.165122140  68.0777573   412.287276
-      9 2021-10-24 04:29:23     USDC 55.000000000  68.0777573     1.237777
-        transaction fees      description revenue.type      value exchange
-      1     revenue    0 Interest Payment    interests  0.7858598  blockfi
-      2     revenue    0 Interest Payment    interests  4.6255734  blockfi
-      3     revenue    0   Referral Bonus    referrals  8.3556212  blockfi
-      4     revenue    0 Interest Payment    interests  2.0770535  blockfi
-      5     revenue    0 Interest Payment    interests  1.8084980  blockfi
-      6     revenue    0 Interest Payment    interests  0.0477449  blockfi
-      7     revenue    0    Bonus Payment       promos 24.2005138  blockfi
-      8        sell    0            Trade         <NA> 68.0777573  blockfi
-      9         buy    0            Trade         <NA> 68.0777573  blockfi
-                      rate.source currency2 total.quantity
-      1             coinmarketcap       BTC    0.000018512
-      2             coinmarketcap       LTC    0.022451200
-      3             coinmarketcap       BTC    0.000202632
-      4             coinmarketcap       BTC    0.000249866
-      5             coinmarketcap       LTC    0.032576320
-      6             coinmarketcap      USDC    0.038241000
-      7             coinmarketcap       BTC    0.000691096
-      8 coinmarketcap (buy price)       LTC   -0.132545820
-      9             coinmarketcap      USDC   55.038241000
-                                           suploss.range quantity.60days share.left60
-      1 2021-04-29 21:43:44 UTC--2021-06-28 21:43:44 UTC               0  0.000202632
-      2 2021-04-29 21:43:44 UTC--2021-06-28 21:43:44 UTC               0  0.022451200
-      3 2021-05-14 21:43:44 UTC--2021-07-13 21:43:44 UTC               0  0.000249866
-      4 2021-05-31 21:43:44 UTC--2021-07-30 21:43:44 UTC               0  0.000249866
-      5 2021-05-31 21:43:44 UTC--2021-07-30 21:43:44 UTC               0  0.032576320
-      6 2021-06-29 21:43:44 UTC--2021-08-28 21:43:44 UTC               0  0.038241000
-      7 2021-07-08 21:43:44 UTC--2021-09-06 21:43:44 UTC               0  0.000691096
-      8 2021-09-24 04:29:23 UTC--2021-11-23 04:29:23 UTC               0 -0.132545820
-      9 2021-09-24 04:29:23 UTC--2021-11-23 04:29:23 UTC              55 55.038241000
-        sup.loss.quantity sup.loss gains.uncorrected gains.sup gains.excess    gains
-      1                 0    FALSE           0.00000        NA           NA       NA
-      2                 0    FALSE           0.00000        NA           NA       NA
-      3                 0    FALSE           0.00000        NA           NA       NA
-      4                 0    FALSE           0.00000        NA           NA       NA
-      5                 0    FALSE           0.00000        NA           NA       NA
-      6                 0    FALSE           0.00000        NA           NA       NA
-      7                 0    FALSE           0.00000        NA           NA       NA
-      8                 0    FALSE          35.46488        NA           NA 35.46488
-      9                 0    FALSE           0.00000        NA           NA       NA
-                ACB    ACB.share
-      1   0.7858598 42451.369876
-      2   4.6255734   206.027889
-      3   0.7858598  3878.260882
-      4   2.8629132 11457.794281
-      5   6.4340713   197.507617
-      6   0.0477449     1.248526
-      7   2.8629132  4142.569521
-      8 -26.1788091     0.000000
-      9  68.1255022     1.237785
-
 # celsius
 
     Code
@@ -319,6 +360,72 @@
       7 2.6908883 1630.9605
       8 2.6908883  879.6906
       9 3.1076662  995.2081
+
+# blockfi
+
+    Code
+      formatted.blockfi
+    Output
+                       date currency     quantity total.price    spot.rate
+      1 2021-05-29 21:43:44      BTC  0.000018512   0.7858598 42451.369876
+      2 2021-05-29 21:43:44      LTC  0.022451200   4.6255734   206.027889
+      3 2021-06-13 21:43:44      BTC  0.000184120   0.0000000 45381.388034
+      4 2021-06-30 21:43:44      BTC  0.000047234   2.0770535 43973.694092
+      5 2021-06-30 21:43:44      LTC  0.010125120   1.8084980   178.614968
+      6 2021-07-29 21:43:44     USDC  0.038241000   0.0477449     1.248526
+      7 2021-08-07 21:43:44      BTC  0.000441230   0.0000000 54847.843168
+      8 2021-10-24 04:29:23      LTC  0.165122140  68.0777573   412.287276
+      9 2021-10-24 04:29:23     USDC 55.000000000  68.0777573     1.237777
+        transaction fees      description revenue.type      value exchange
+      1     revenue    0 Interest Payment    interests  0.7858598  blockfi
+      2     revenue    0 Interest Payment    interests  4.6255734  blockfi
+      3     revenue    0   Referral Bonus    referrals  8.3556212  blockfi
+      4     revenue    0 Interest Payment    interests  2.0770535  blockfi
+      5     revenue    0 Interest Payment    interests  1.8084980  blockfi
+      6     revenue    0 Interest Payment    interests  0.0477449  blockfi
+      7     revenue    0    Bonus Payment       promos 24.2005138  blockfi
+      8        sell    0            Trade         <NA> 68.0777573  blockfi
+      9         buy    0            Trade         <NA> 68.0777573  blockfi
+                      rate.source currency2 total.quantity
+      1             coinmarketcap       BTC    0.000018512
+      2             coinmarketcap       LTC    0.022451200
+      3             coinmarketcap       BTC    0.000202632
+      4             coinmarketcap       BTC    0.000249866
+      5             coinmarketcap       LTC    0.032576320
+      6             coinmarketcap      USDC    0.038241000
+      7             coinmarketcap       BTC    0.000691096
+      8 coinmarketcap (buy price)       LTC   -0.132545820
+      9             coinmarketcap      USDC   55.038241000
+                                           suploss.range quantity.60days share.left60
+      1 2021-04-29 21:43:44 UTC--2021-06-28 21:43:44 UTC               0  0.000202632
+      2 2021-04-29 21:43:44 UTC--2021-06-28 21:43:44 UTC               0  0.022451200
+      3 2021-05-14 21:43:44 UTC--2021-07-13 21:43:44 UTC               0  0.000249866
+      4 2021-05-31 21:43:44 UTC--2021-07-30 21:43:44 UTC               0  0.000249866
+      5 2021-05-31 21:43:44 UTC--2021-07-30 21:43:44 UTC               0  0.032576320
+      6 2021-06-29 21:43:44 UTC--2021-08-28 21:43:44 UTC               0  0.038241000
+      7 2021-07-08 21:43:44 UTC--2021-09-06 21:43:44 UTC               0  0.000691096
+      8 2021-09-24 04:29:23 UTC--2021-11-23 04:29:23 UTC               0 -0.132545820
+      9 2021-09-24 04:29:23 UTC--2021-11-23 04:29:23 UTC              55 55.038241000
+        sup.loss.quantity sup.loss gains.uncorrected gains.sup gains.excess    gains
+      1                 0    FALSE           0.00000        NA           NA       NA
+      2                 0    FALSE           0.00000        NA           NA       NA
+      3                 0    FALSE           0.00000        NA           NA       NA
+      4                 0    FALSE           0.00000        NA           NA       NA
+      5                 0    FALSE           0.00000        NA           NA       NA
+      6                 0    FALSE           0.00000        NA           NA       NA
+      7                 0    FALSE           0.00000        NA           NA       NA
+      8                 0    FALSE          35.46488        NA           NA 35.46488
+      9                 0    FALSE           0.00000        NA           NA       NA
+                ACB    ACB.share
+      1   0.7858598 42451.369876
+      2   4.6255734   206.027889
+      3   0.7858598  3878.260882
+      4   2.8629132 11457.794281
+      5   6.4340713   197.507617
+      6   0.0477449     1.248526
+      7   2.8629132  4142.569521
+      8 -26.1788091     0.000000
+      9  68.1255022     1.237785
 
 # adalite
 
@@ -475,52 +582,6 @@
       10           NA    NA  0.00000 0.00000000
       11           NA    NA 78.90639 0.07880395
 
-# newton
-
-    Code
-      formatted.newton
-    Output
-                       date currency   quantity total.price  spot.rate transaction
-      1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy
-      2 2021-04-04 22:53:46      CAD 25.0000000   0.0000000     1.0000     revenue
-      3 2021-04-04 22:55:55      ETH  0.0198712  25.0142098  1258.8173         buy
-      4 2021-04-21 19:57:26      BTC  0.0034300 153.1241354 44642.6051         buy
-      5 2021-05-12 21:37:42      BTC  0.0000040   0.3049013 76225.3175         buy
-      6 2021-05-12 21:52:40      BTC  0.0032130 156.1241341 48591.3894        sell
-      7 2021-06-16 18:49:11      CAD 25.0000000   0.0000000     1.0000     revenue
-        fees      description revenue.type       value exchange rate.source currency2
-      1    0            TRADE         <NA>  23.4912731   newton    exchange       LTC
-      2    0 Referral Program    referrals  25.0000000   newton    exchange       CAD
-      3    0            TRADE         <NA>  25.0142098   newton    exchange       ETH
-      4    0            TRADE         <NA> 153.1241354   newton    exchange       BTC
-      5    0            TRADE         <NA>   0.3049013   newton    exchange       BTC
-      6    0            TRADE         <NA> 156.1241341   newton    exchange       BTC
-      7    0 Referral Program    referrals  25.0000000   newton    exchange       CAD
-        total.quantity                                    suploss.range
-      1      0.1048291 2021-03-05 22:50:12 UTC--2021-05-04 22:50:12 UTC
-      2     25.0000000 2021-03-05 22:53:46 UTC--2021-05-04 22:53:46 UTC
-      3      0.0198712 2021-03-05 22:55:55 UTC--2021-05-04 22:55:55 UTC
-      4      0.0034300 2021-03-22 19:57:26 UTC--2021-05-21 19:57:26 UTC
-      5      0.0034340 2021-04-12 21:37:42 UTC--2021-06-11 21:37:42 UTC
-      6      0.0002210 2021-04-12 21:52:40 UTC--2021-06-11 21:52:40 UTC
-      7     50.0000000 2021-05-17 18:49:11 UTC--2021-07-16 18:49:11 UTC
-        quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
-      1       0.1048291    0.1048291          0.000000    FALSE           0.00000
-      2       0.0000000   25.0000000          0.000000    FALSE           0.00000
-      3       0.0198712    0.0198712          0.000000    FALSE           0.00000
-      4       0.0034340    0.0002210          0.000000    FALSE           0.00000
-      5       0.0034340    0.0002210          0.000000    FALSE           0.00000
-      6       0.0034340    0.0002210          0.003213    FALSE          12.56924
-      7       0.0000000   50.0000000          0.000000    FALSE           0.00000
-        gains.sup gains.excess    gains        ACB  ACB.share
-      1        NA           NA       NA  23.491273   224.0911
-      2        NA           NA       NA   0.000000     0.0000
-      3        NA           NA       NA  25.014210  1258.8173
-      4        NA           NA       NA 153.124135 44642.6051
-      5        NA           NA       NA 153.429037 44679.3933
-      6        NA           NA 12.56924   9.874146 44679.3933
-      7        NA           NA       NA   0.000000     0.0000
-
 # CDC exchange rewards
 
     Code
@@ -640,64 +701,87 @@
       3 -0.00001580427 0.4960272 0.2286875
       4             NA 1.2037178 0.1464332
 
-# pooltool
+# uphold
 
     Code
-      formatted.pooltool
+      formatted.uphold
     Output
-                        date currency  quantity total.price spot.rate transaction
-      1  2021-04-22 22:03:22      ADA 1.0827498    1.974017      1.82     revenue
-      2  2021-04-27 22:22:14      ADA 0.8579850    1.565881      1.83     revenue
-      3  2021-05-02 22:03:54      ADA 1.0193882    1.979399      1.94     revenue
-      4  2021-05-07 22:54:38      ADA 1.0548971    1.790303      1.70     revenue
-      5  2021-05-12 22:12:49      ADA 0.9443321    1.514525      1.60     revenue
-      6  2021-05-17 22:47:25      ADA 1.0198183    1.426898      1.40     revenue
-      7  2021-05-23 03:43:38      ADA 1.1605830    1.806024      1.56     revenue
-      8  2021-05-27 22:07:57      ADA 1.0197753    1.589004      1.56     revenue
-      9  2021-06-01 22:13:58      ADA 0.8392135    1.538300      1.83     revenue
-      10 2021-06-06 22:14:11      ADA 1.1115378    2.072874      1.86     revenue
-         fees description     comment revenue.type    value exchange rate.source
-      1     0 epoch = 228 pool = REKT      staking 1.974017   exodus    pooltool
-      2     0 epoch = 229 pool = REKT      staking 1.565881   exodus    pooltool
-      3     0 epoch = 230 pool = REKT      staking 1.979399   exodus    pooltool
-      4     0 epoch = 231 pool = REKT      staking 1.790303   exodus    pooltool
-      5     0 epoch = 232 pool = REKT      staking 1.514525   exodus    pooltool
-      6     0 epoch = 233 pool = REKT      staking 1.426898   exodus    pooltool
-      7     0 epoch = 234 pool = REKT      staking 1.806024   exodus    pooltool
-      8     0 epoch = 235 pool = REKT      staking 1.589004   exodus    pooltool
-      9     0 epoch = 236 pool = REKT      staking 1.538300   exodus    pooltool
-      10    0 epoch = 237 pool = REKT      staking 2.072874   exodus    pooltool
-         currency2 total.quantity                                    suploss.range
-      1        ADA       1.082750 2021-03-23 22:03:22 UTC--2021-05-22 22:03:22 UTC
-      2        ADA       1.940735 2021-03-28 22:22:14 UTC--2021-05-27 22:22:14 UTC
-      3        ADA       2.960123 2021-04-02 22:03:54 UTC--2021-06-01 22:03:54 UTC
-      4        ADA       4.015020 2021-04-07 22:54:38 UTC--2021-06-06 22:54:38 UTC
-      5        ADA       4.959352 2021-04-12 22:12:49 UTC--2021-06-11 22:12:49 UTC
-      6        ADA       5.979170 2021-04-17 22:47:25 UTC--2021-06-16 22:47:25 UTC
-      7        ADA       7.139753 2021-04-23 03:43:38 UTC--2021-06-22 03:43:38 UTC
-      8        ADA       8.159529 2021-04-27 22:07:57 UTC--2021-06-26 22:07:57 UTC
-      9        ADA       8.998742 2021-05-02 22:13:58 UTC--2021-07-01 22:13:58 UTC
-      10       ADA      10.110280 2021-05-07 22:14:11 UTC--2021-07-06 22:14:11 UTC
-         quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
-      1                0     5.979170                 0    FALSE                 0
-      2                0     8.159529                 0    FALSE                 0
-      3                0     8.159529                 0    FALSE                 0
-      4                0    10.110280                 0    FALSE                 0
-      5                0    10.110280                 0    FALSE                 0
-      6                0    10.110280                 0    FALSE                 0
-      7                0    10.110280                 0    FALSE                 0
-      8                0    10.110280                 0    FALSE                 0
-      9                0    10.110280                 0    FALSE                 0
-      10               0    10.110280                 0    FALSE                 0
-         gains.sup gains.excess gains       ACB ACB.share
-      1         NA           NA    NA  1.974017  1.823152
-      2         NA           NA    NA  3.539898  1.823999
-      3         NA           NA    NA  5.519297  1.864550
-      4         NA           NA    NA  7.309599  1.820564
-      5         NA           NA    NA  8.824124  1.779290
-      6         NA           NA    NA 10.251022  1.714456
-      7         NA           NA    NA 12.057046  1.688720
-      8         NA           NA    NA 13.646050  1.672407
-      9         NA           NA    NA 15.184350  1.687386
-      10        NA           NA    NA 17.257224  1.706899
+                        date currency    quantity total.price   spot.rate transaction
+      1  2021-01-07 02:40:31      BAT  1.59081275   0.0000000   0.3214875     revenue
+      2  2021-02-09 14:26:49      BAT 12.69812163   0.0000000   0.5418583     revenue
+      3  2021-03-06 21:32:36      BAT  0.37591275   0.0000000   0.8522910     revenue
+      4  2021-03-07 21:46:57      BAT 52.59871206  57.0095475   1.0838582        sell
+      5  2021-03-07 21:46:57      LTC  0.24129740  57.0095475 236.2625850         buy
+      6  2021-03-07 21:54:09      LTC  0.00300000   0.7087878 236.2625850        sell
+      7  2021-04-05 12:22:00      BAT  8.52198415   0.0000000   1.5504039     revenue
+      8  2021-04-06 03:41:42      LTC  0.00300000   0.8643769 288.1256316        sell
+      9  2021-04-06 04:47:00      BAT  8.52198415  10.3897561   1.2191710        sell
+      10 2021-04-06 04:47:00      LTC  0.03605981  10.3897561 288.1256316         buy
+      11 2021-05-11 07:12:24      BAT  0.47521985   0.0000000   1.6365606     revenue
+      12 2021-06-09 04:52:23      BAT  0.67207415   0.0000000   0.8312183     revenue
+         fees description         comment revenue.type      value exchange
+      1     0          in            <NA>     airdrops  0.5114264   uphold
+      2     0          in            <NA>     airdrops  6.8805827   uphold
+      3     0          in            <NA>     airdrops  0.3203871   uphold
+      4     0       trade         BAT-LTC         <NA> 57.0095475   uphold
+      5     0       trade         BAT-LTC         <NA> 57.0095475   uphold
+      6     0         out withdrawal fees         <NA>  0.7087878   uphold
+      7     0          in            <NA>     airdrops 13.2125179   uphold
+      8     0         out withdrawal fees         <NA>  0.8643769   uphold
+      9     0       trade         BAT-LTC         <NA> 10.3897561   uphold
+      10    0       trade         BAT-LTC         <NA> 10.3897561   uphold
+      11    0          in            <NA>     airdrops  0.7777261   uphold
+      12    0          in            <NA>     airdrops  0.5586404   uphold
+                       rate.source currency2 total.quantity
+      1              coinmarketcap       BAT      1.5908128
+      2              coinmarketcap       BAT     14.2889344
+      3              coinmarketcap       BAT     14.6648471
+      4  coinmarketcap (buy price)       BAT    -37.9338649
+      5              coinmarketcap       LTC      0.2412974
+      6              coinmarketcap       LTC      0.2382974
+      7              coinmarketcap       BAT    -29.4118808
+      8              coinmarketcap       LTC      0.2352974
+      9  coinmarketcap (buy price)       BAT    -37.9338649
+      10             coinmarketcap       LTC      0.2713572
+      11             coinmarketcap       BAT    -37.4586451
+      12             coinmarketcap       BAT    -36.7865709
+                                            suploss.range quantity.60days
+      1  2020-12-08 02:40:31 UTC--2021-02-06 02:40:31 UTC       0.0000000
+      2  2021-01-10 14:26:49 UTC--2021-03-11 14:26:49 UTC       0.0000000
+      3  2021-02-04 21:32:36 UTC--2021-04-05 21:32:36 UTC       0.0000000
+      4  2021-02-05 21:46:57 UTC--2021-04-06 21:46:57 UTC       0.0000000
+      5  2021-02-05 21:46:57 UTC--2021-04-06 21:46:57 UTC       0.2773572
+      6  2021-02-05 21:54:09 UTC--2021-04-06 21:54:09 UTC       0.2773572
+      7  2021-03-06 12:22:00 UTC--2021-05-05 12:22:00 UTC       0.0000000
+      8  2021-03-07 03:41:42 UTC--2021-05-06 03:41:42 UTC       0.2773572
+      9  2021-03-07 04:47:00 UTC--2021-05-06 04:47:00 UTC       0.0000000
+      10 2021-03-07 04:47:00 UTC--2021-05-06 04:47:00 UTC       0.2773572
+      11 2021-04-11 07:12:24 UTC--2021-06-10 07:12:24 UTC       0.0000000
+      12 2021-05-10 04:52:23 UTC--2021-07-09 04:52:23 UTC       0.0000000
+         share.left60 sup.loss.quantity sup.loss gains.uncorrected gains.sup
+      1     1.5908128             0.000    FALSE         0.0000000        NA
+      2   -37.9338649             0.000    FALSE         0.0000000        NA
+      3   -29.4118808             0.000    FALSE         0.0000000        NA
+      4   -37.9338649             0.000    FALSE        57.0095475        NA
+      5     0.2713572             0.000    FALSE         0.0000000        NA
+      6     0.2713572             0.003    FALSE         0.0000000        NA
+      7   -37.9338649             0.000    FALSE         0.0000000        NA
+      8     0.2713572             0.003    FALSE         0.1555891        NA
+      9   -37.9338649             0.000    FALSE        10.3897561        NA
+      10    0.2713572             0.000    FALSE         0.0000000        NA
+      11  -36.7865709             0.000    FALSE         0.0000000        NA
+      12  -36.7865709             0.000    FALSE         0.0000000        NA
+         gains.excess      gains      ACB ACB.share
+      1            NA         NA  0.00000    0.0000
+      2            NA         NA  0.00000    0.0000
+      3            NA         NA  0.00000    0.0000
+      4            NA 57.0095475  0.00000    0.0000
+      5            NA         NA 57.00955  236.2626
+      6            NA         NA 56.30076  236.2626
+      7            NA         NA  0.00000    0.0000
+      8            NA  0.1555891 55.59197  236.2626
+      9            NA 10.3897561  0.00000    0.0000
+      10           NA         NA 65.98173  243.1545
+      11           NA         NA  0.00000    0.0000
+      12           NA         NA  0.00000    0.0000
 

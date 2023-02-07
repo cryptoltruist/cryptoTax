@@ -99,6 +99,10 @@ test_that("gemini", {
   expect_snapshot(format_gemini(data_gemini, list.prices = list.prices))
 })
 
+test_that("uphold", {
+  expect_snapshot(format_uphold(data_uphold, list.prices = list.prices))
+})
+
 # Test format_detect() ####
 
 test_that("format_detect", {
@@ -118,6 +122,7 @@ test_that("format_detect", {
   expect_snapshot(format_detect(data_exodus, list.prices = list.prices))
   expect_snapshot(format_detect(data_presearch, list.prices = list.prices))
   expect_snapshot(format_detect(data_gemini, list.prices = list.prices))
+  expect_snapshot(format_detect(data_uphold, list.prices = list.prices))
 })
 
 # Add test: timezone!

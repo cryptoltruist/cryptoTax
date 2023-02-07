@@ -8,7 +8,7 @@
 
 - New `pkgdown` website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.
 - Informative progress bars with `format_ACB` and `format_suploss` since these functions are extremely slow with thousands of transactions.
-- Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini)
+- Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini, uphold)
 - Now detects new transaction types not accounted for
 - New functions: 
     - `format_detect()`, To automatically detect the right exchange and process it with the corresponding function.

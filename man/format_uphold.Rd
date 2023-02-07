@@ -4,16 +4,19 @@
 \alias{format_uphold}
 \title{Format Uphold file}
 \usage{
-format_uphold(data)
+format_uphold(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Format a .csv transaction history file from Uphold for later ACB processing.
 }
 \examples{
-\dontrun{
 format_uphold(data_uphold)
-}
 }

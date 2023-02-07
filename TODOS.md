@@ -12,7 +12,6 @@
 
 ## Features
 
-- Missing data: uphold
 - For `report_revenues()`, better and more clearly accommodate tax year
 - Finish the Shiny app: editable table, see <https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/>
 

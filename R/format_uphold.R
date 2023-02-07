@@ -2,15 +2,16 @@
 #'
 #' @description Format a .csv transaction history file from Uphold for later ACB processing.
 #' @param data The dataframe
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
 #' format_uphold(data_uphold)
-#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' @importFrom rlang .data
 
-format_uphold <- function(data) {
+format_uphold <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("in", "out", "transfer")
   
   # Rename columns
@@ -109,7 +110,7 @@ format_uphold <- function(data) {
     ))
 
   # Determine spot rate and value of coins
-  data <- match_prices(data)
+  data <- match_prices(data, list.prices = list.prices, force = force)
 
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),

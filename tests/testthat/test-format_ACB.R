@@ -13,22 +13,34 @@ test_that("shakepay", {
   expect_snapshot(formatted.shakepay)
 })
 
+test_that("newton", {
+  x <- format_newton(data_newton)
+  formatted.newton <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.newton)
+})
+
+test_that("pooltool", {
+  x <- format_pooltool(data_pooltool)
+  formatted.pooltool <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.pooltool)
+})
+
 test_that("CDC", {
   x <- format_CDC(data_CDC)
   formatted.CDC <- suppressWarnings(suppressMessages(as.data.frame(format_ACB(x))))
   expect_snapshot(formatted.CDC)
 })
 
-test_that("blockfi", {
-  x <- format_blockfi(data_blockfi, list.prices = list.prices)
-  formatted.blockfi <- suppressWarnings(as.data.frame(format_ACB(x)))
-  expect_snapshot(formatted.blockfi)
-})
-
 test_that("celsius", {
   x <- format_celsius(data_celsius)
   formatted.celsius <- suppressWarnings(as.data.frame(format_ACB(x)))
   expect_snapshot(formatted.celsius)
+})
+
+test_that("blockfi", {
+  x <- format_blockfi(data_blockfi, list.prices = list.prices)
+  formatted.blockfi <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.blockfi)
 })
 
 test_that("adalite", {
@@ -49,13 +61,6 @@ test_that("presearch", {
   expect_snapshot(formatted.presearch)
 })
 
-test_that("newton", {
-  x <- format_newton(data_newton)
-  formatted.newton <- suppressWarnings(as.data.frame(format_ACB(x)))
-  expect_snapshot(formatted.newton)
-})
-
-
 test_that("CDC exchange rewards", {
   x <- format_CDC_exchange_rewards(data_CDC_exchange_rewards, list.prices = list.prices)
   formatted.binance.rewards <- suppressWarnings(as.data.frame(format_ACB(x)))
@@ -68,10 +73,10 @@ test_that("CDC wallet", {
   expect_snapshot(formatted.CDC.wallet)
 })
 
-test_that("pooltool", {
-  x <- format_pooltool(data_pooltool)
-  formatted.pooltool <- suppressWarnings(as.data.frame(format_ACB(x)))
-  expect_snapshot(formatted.pooltool)
+test_that("uphold", {
+  x <- format_uphold(data_uphold, list.prices = list.prices)
+  formatted.uphold <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.uphold)
 })
 
 # Message: The first transaction for this currency cannot be a sale. 
@@ -91,7 +96,7 @@ test_that("gemini", {
 # have purchase transactions before.
 test_that("exodus", {
   skip("trade starts with sale")
-  x <- format_exodus(data_exodus)
+  x <- format_exodus(data_exodus, list.prices = list.prices)
   formatted.exodus <- suppressWarnings(as.data.frame(format_ACB(x)))
   expect_snapshot(formatted.exodus)
 })
