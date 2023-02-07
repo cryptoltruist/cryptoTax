@@ -126,7 +126,7 @@
 </h1>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">adjustedcostbase.ca1</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_adjustedcostbase1</span></span>
 <span><span class="va">data</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -264,6 +264,7 @@
 <li>Pooltool (ADA)</li>
 <li>Presearch</li>
 <li>Shakepay</li>
+<li>Uphold</li>
 </ol>
 <p>To support another exchange not listed here, please open an issue. You can also prepare your own file according to the style of one of those exchanges and use the corresponding function.</p>
 </div>
@@ -291,9 +292,9 @@
 <span></span>
 <span><span class="co"># Format data with ACB</span></span>
 <span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Process started at 2023-01-08 20:30:32. Please be patient as the transactions process.</span></span>
+<span><span class="co">#&gt; Process started at 2023-02-07 12:03:02. Please be patient as the transactions process.</span></span>
 <span><span class="co">#&gt; [Formatting ACB (progress bar repeats for each coin)...]</span></span>
-<span><span class="co">#&gt; Process ended at 2023-01-08 20:30:34. Total time elapsed: 0.03 minutes</span></span>
+<span><span class="co">#&gt; Process ended at 2023-02-07 12:03:03. Total time elapsed: 0.03 minutes</span></span>
 <span></span>
 <span><span class="co"># Let's get a preview of the output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">19</span>, <span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">14</span>, <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -461,7 +462,8 @@
 <span><span class="fu"><a href="reference/report_overview.html">report_overview</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -505,11 +507,11 @@
 <td align="right">0.00</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">0.08</td>
-<td align="right">44.65</td>
+<td align="right">0.11</td>
+<td align="right">57.60</td>
 <td align="right">NA</td>
-<td align="right">-16.01</td>
-<td align="right">-16.01</td>
+<td align="right">-3.06</td>
+<td align="right">-3.06</td>
 <td align="left">CRO</td>
 </tr>
 <tr class="even">
@@ -521,11 +523,11 @@
 <td align="right">20.57</td>
 <td align="right">0</td>
 <td align="right">20.57</td>
-<td align="right">22883.51</td>
-<td align="right">31.15</td>
+<td align="right">30681.42</td>
+<td align="right">41.76</td>
 <td align="right">NA</td>
-<td align="right">-27.43</td>
-<td align="right">-27.43</td>
+<td align="right">-16.82</td>
+<td align="right">-16.82</td>
 <td align="left">BTC</td>
 </tr>
 <tr class="odd">
@@ -537,11 +539,11 @@
 <td align="right">8.25</td>
 <td align="right">0</td>
 <td align="right">8.25</td>
-<td align="right">1715.01</td>
-<td align="right">19.56</td>
+<td align="right">2179.85</td>
+<td align="right">24.86</td>
 <td align="right">NA</td>
-<td align="right">-11.07</td>
-<td align="right">-11.07</td>
+<td align="right">-5.77</td>
+<td align="right">-5.77</td>
 <td align="left">ETH</td>
 </tr>
 <tr class="even">
@@ -553,11 +555,11 @@
 <td align="right">0.00</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">4.39</td>
-<td align="right">1.56</td>
+<td align="right">5.68</td>
+<td align="right">2.02</td>
 <td align="right">NA</td>
-<td align="right">-1.64</td>
-<td align="right">-1.64</td>
+<td align="right">-1.18</td>
+<td align="right">-1.18</td>
 <td align="left">ETHW</td>
 </tr>
 <tr class="odd">
@@ -570,10 +572,10 @@
 <td align="right">0</td>
 <td align="right">28.82</td>
 <td align="right">NA</td>
-<td align="right">96.92</td>
+<td align="right">126.24</td>
 <td align="right">0</td>
-<td align="right">-56.15</td>
-<td align="right">-56.15</td>
+<td align="right">-26.83</td>
+<td align="right">-26.83</td>
 <td align="left">Total</td>
 </tr>
 </tbody>
@@ -584,7 +586,8 @@
 <span><span class="fu"><a href="reference/report_summary.html">report_summary</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Type</th>
@@ -619,7 +622,7 @@
 </tr>
 <tr class="even">
 <td align="left">value.today</td>
-<td align="left">96.92</td>
+<td align="left">126.24</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
@@ -629,22 +632,22 @@
 </tr>
 <tr class="even">
 <td align="left">unrealized.losses</td>
-<td align="left">-56.15</td>
+<td align="left">-26.83</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
 <td align="left">unrealized.net</td>
-<td align="left">-56.15</td>
+<td align="left">-26.83</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="even">
 <td align="left">percentage.up</td>
-<td align="left">-36.68%</td>
+<td align="left">-17.53%</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
 <td align="left">all.time.up</td>
-<td align="left">-17.86%</td>
+<td align="left">1.30%</td>
 <td align="left">CAD</td>
 </tr>
 </tbody>

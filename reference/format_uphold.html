@@ -64,7 +64,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_uphold</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_uphold</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,13 +72,47 @@
     <dl><dt>data</dt>
 <dd><p>The dataframe</p></dd>
 
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">format_uphold</span><span class="op">(</span><span class="va">data_uphold</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_uphold</span><span class="op">(</span><span class="va">data_uphold</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency    quantity total.price  spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-01-07 02:40:31      BAT  1.59081275          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-02-09 14:26:49      BAT 12.69812163          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-03-06 21:32:36      BAT  0.37591275          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-03-07 21:46:57      LTC  0.24129740  57.0095475 236.262585         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-03-07 21:46:57      BAT 52.59871206  57.0095475   1.083858        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-03-07 21:54:09      LTC  0.00300000   0.7087878 236.262585        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-04-05 12:22:00      BAT  8.52198415          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-04-06 03:41:42      LTC  0.00300000   0.8643769 288.125632        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-04-06 04:47:00      LTC  0.03605981  10.3897561 288.125632         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-04-06 04:47:00      BAT  8.52198415  10.3897561   1.219171        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-05-11 07:12:24      BAT  0.47521985          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-06-09 04:52:23      BAT  0.67207415          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    description         comment revenue.type exchange               rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        trade         BAT-LTC         &lt;NA&gt;   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        trade         BAT-LTC         &lt;NA&gt;   uphold coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          out withdrawal fees         &lt;NA&gt;   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          out withdrawal fees         &lt;NA&gt;   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        trade         BAT-LTC         &lt;NA&gt;   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       trade         BAT-LTC         &lt;NA&gt;   uphold coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

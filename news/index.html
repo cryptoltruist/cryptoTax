@@ -60,42 +60,41 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="cryptotax-002">cryptoTax 0.0.2<a class="anchor" aria-label="anchor" href="#cryptotax-002"></a></h2>
 <p><strong>Breaking changes:</strong></p>
-<ul><li>We get rid of the <code>format_wealtsimple</code>, <code>format_BSC</code>, <code>format_binance_trades</code>, <code>crypto2fiat</code> functions, since their goal is better fulfilled by the new <code>format_generic</code>, <code>format_binance</code>, and <code>match_prices</code> functions, respectively.</li>
+<ul><li>We get rid of the <code>format_wealtsimple()</code>, <code>format_BSC()</code>, <code>format_binance_trades()</code>, <code>crypto2fiat()</code> functions, since their goal is better fulfilled by the new <code><a href="../reference/format_generic.html">format_generic()</a></code>, <code><a href="../reference/format_binance.html">format_binance()</a></code>, and <code><a href="../reference/match_prices.html">match_prices()</a></code> functions, respectively.</li>
 </ul><p><strong>New Features:</strong></p>
 <ul><li>New <code>pkgdown</code> website with two vignettes: one for calculating ACB and the other about tax treatments and decisions.</li>
-<li>Informative progress bars with <code>format_ACB</code> and <code>format_suploss</code> since these functions are extremely slow with thousands of transactions.</li>
-<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini)</li>
+<li>Informative progress bars with <code><a href="../reference/format_ACB.html">format_ACB()</a></code> and <code><a href="../reference/format_suploss.html">format_suploss()</a></code> since these functions are extremely slow with thousands of transactions.</li>
+<li>Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini, uphold)</li>
 <li>Now detects new transaction types not accounted for</li>
 <li>New functions:
 <ul><li>
 <code><a href="../reference/format_detect.html">format_detect()</a></code>, To automatically detect the right exchange and process it with the corresponding function.</li>
 <li>
-<code>format_generic</code>, to process most transaction history files not supported by existing functions.</li>
+<code><a href="../reference/format_generic.html">format_generic()</a></code>, to process most transaction history files not supported by existing functions.</li>
 <li>
-<code>format_binance</code>, a general version that works with the general transaction report and includes rewards (but not withdrawal fees). We thus get rid of <code>format_binance_trades</code> since the former is superior (as it includes more transaction types).</li>
+<code><a href="../reference/format_binance.html">format_binance()</a></code>, a general version that works with the general transaction report and includes rewards (but not withdrawal fees). We thus get rid of <code>format_binance_trades()</code> since the former is superior (as it includes more transaction types).</li>
 <li>
-<code>get_latest_transactions</code>: get latest transaction date by exchange</li>
+<code><a href="../reference/get_latest_transactions.html">get_latest_transactions()</a></code>: get latest transaction date by exchange</li>
 <li>
-<code>check_missing_transactions</code>: show you rows with negative total balances to help identify missing transactions.</li>
+<code><a href="../reference/check_missing_transactions.html">check_missing_transactions()</a></code>: show you rows with negative total balances to help identify missing transactions.</li>
 <li>
-<code>format_dollars</code>: to format numeric values with comma for thousands separator.</li>
+<code><a href="../reference/format_dollars.html">format_dollars()</a></code>: to format numeric values with comma for thousands separator.</li>
 </ul></li>
 </ul><p><strong>Improvements:</strong></p>
 <ul><li>
-<code>format_blockfi</code> and <code>CDC_exchange_trades</code> now correctly match prices for purchases and sales for trades (instead of relying on their corresponding daily spot rates).</li>
+<code><a href="../reference/format_blockfi.html">format_blockfi()</a></code> and <code><a href="../reference/format_CDC_exchange_trades.html">format_CDC_exchange_trades()</a></code> now correctly match prices for purchases and sales for trades (instead of relying on their corresponding daily spot rates).</li>
 <li>Consistently use plural for reward types.</li>
 <li>Massive improvements in speed by using joins for price lookups (instead of making a new API request for each row) for both prices of coins and USD to CAD conversions.</li>
 <li>When prices are fetched through <code>priceR</code> (for USD to CAD conversions), now indicates the source of the price accordingly (<code>rate.source = "exchange (USD conversion)"</code>)</li>
-<li>New tests for <code>format_shakepay</code>, <code>format_CDC</code>, <code>format_generic</code>, and <code>ACB</code>.</li>
-<li>All <code>format_*</code> functions: now reorder columns in a consistent fashion.</li>
+<li>All <code>format_*</code> functions: now reorder columns in a consistent fashion + tests for all (and <code><a href="../reference/ACB.html">ACB()</a></code>).</li>
 <li>
-<code>ACB_suploss</code>: integrates the primary <code>ACB</code> function, which accordingly gains a new logical argument, <code>suploss</code>.</li>
+<code>ACB_suploss()</code>: integrates the primary <code><a href="../reference/ACB.html">ACB()</a></code> function, which accordingly gains a new logical argument, <code>suploss</code>.</li>
 <li>
-<code>format_suploss</code>: integrates <code>ACB</code> when <code>suploss = TRUE</code>, and gains a greatly improved code base.</li>
+<code><a href="../reference/format_suploss.html">format_suploss()</a></code>: integrates <code><a href="../reference/ACB.html">ACB()</a></code> when <code>suploss = TRUE</code>, and gains a greatly improved code base.</li>
 <li>
-<code>add_quantities</code>: switches from a for-loop to <code>dplyr</code> code.</li>
+<code>add_quantities()</code>: switches from a for-loop to <code>dplyr</code> code.</li>
 <li>
-<code>ACB</code>:
+<code><a href="../reference/ACB.html">ACB()</a></code>:
 <ul><li>new warning messages:
 <ul><li>when not providing first buy transactions (so no ACB…)</li>
 <li>when more than one currency are provided at a time</li>
@@ -103,27 +102,27 @@
 </ul></li>
 </ul></li>
 <li>
-<code>report_revenues</code> and <code>crypto_pie</code>: Now support forks and mining.</li>
+<code><a href="../reference/report_revenues.html">report_revenues()</a></code> and <code><a href="../reference/crypto_pie.html">crypto_pie()</a></code>: Now support forks and mining.</li>
 <li>
-<code>format_newton</code>: updated to the new format</li>
+<code><a href="../reference/format_newton.html">format_newton()</a></code>: updated to the new format</li>
 <li>
-<code>format_CDC</code>:
+<code><a href="../reference/format_CDC.html">format_CDC()</a></code>:
 <ul><li>new warning message when withdrawal fees could not be detected automatically.</li>
 <li>new transaction types supported: forks (“admin_wallet_credited”), sales (“crypto_viban_exchange”, “card_top_up”, “crypto_wallet_swap_debited”), and supercharger rewards (“supercharger_reward_to_app_credited”)</li>
 <li>On coinmarketcap, after 2022-05-28, LUNA gets renamed to LUNC, and the LUNA2 fork gets renamed to LUNA. This is confusing because on CDC, they use the terms LUNA and LUNC (which are the same), and LUNA2, which is the new LUNA fork. Therefore, we now rename “LUNA” transactions (on CDC) to “LUNC”, and “LUNA2” to “LUNA”.</li>
 </ul></li>
 </ul><p><strong>Bug Fixes:</strong></p>
 <ul><li>
-<code>format_shakepay</code>: now correctly detects CAD referral rewards</li>
+<code><a href="../reference/format_shakepay.html">format_shakepay()</a></code>: now correctly detects CAD referral rewards</li>
 <li>
-<code>format_binance</code>: now correctly detects interest rewards</li>
+<code><a href="../reference/format_binance.html">format_binance()</a></code>: now correctly detects interest rewards</li>
 <li>
-<code>format_ACB</code>:
+<code><a href="../reference/format_ACB.html">format_ACB()</a></code>:
 <ul><li>fixed a bug whereas a superficial loss of quantity = 0 would prevent the computation of the ACB.</li>
 <li>corrected “Total time elapsed:” time unit to always be minutes</li>
 </ul></li>
 <li>
-<code>ACB</code>: now correctly accept alternative column names</li>
+<code><a href="../reference/ACB.html">ACB()</a></code>: now correctly accept alternative column names</li>
 <li>Fixed a bug for NANO/XNO</li>
 <li>Fixed various R CMD check errors, warnings, and notes.</li>
 </ul></div>
