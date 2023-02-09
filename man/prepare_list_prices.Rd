@@ -31,6 +31,6 @@ errors.
 }
 \examples{
 \dontrun{
-match_prices(data)
+prepare_list_prices(data)
 }
 }

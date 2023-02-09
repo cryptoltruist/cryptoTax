@@ -785,3 +785,483 @@
       11           NA         NA  0.00000    0.0000
       12           NA         NA  0.00000    0.0000
 
+# gemini
+
+    Code
+      formatted.gemini
+    Output
+                        date currency        quantity total.price     spot.rate
+      1  2021-04-08 22:22:22      LTC  1.000000000000 286.0000000   286.0000000
+      2  2021-04-09 22:50:55      BTC  0.000966278356  70.6618968 73127.8895000
+      3  2021-04-09 22:50:55      LTC  0.246690598398  70.6618968   286.4393588
+      4  2021-04-09 22:53:57      BTC  0.000006051912   0.4425635 73127.8895000
+      5  2021-04-09 22:53:57      LTC  0.001640820000   0.4425635   269.7209419
+      6  2021-04-09 23:20:53      BAT 48.719519585106  86.3881744     1.7731738
+      7  2021-04-09 23:20:53      BTC  0.000950730015  86.3881744 90865.0963117
+      8  2021-04-10 23:22:04      BTC  0.000285025578   0.0000000 73954.0922149
+      9  2021-05-08 16:14:54      BAT  2.833934780210   0.0000000     1.7142652
+      10 2021-05-16 12:55:02      BAT  3.085288331282   0.0000000     1.3801796
+      11 2021-05-16 13:35:19      BAT  5.007481461482   0.0000000     1.3801796
+      12 2021-06-18 01:38:54      BAT  6.834322542857   0.0000000     0.7883027
+         transaction            fees                     description
+      1          buy 0.0000000000000 fake transaction for format_ACB
+      2          buy 0.0000023034086                          LTCBTC
+      3         sell 0.0000000000000                          LTCBTC
+      4          buy 0.0000000365181                          LTCBTC
+      5         sell 0.0000000000000                          LTCBTC
+      6          buy 0.0000000000000                          BATBTC
+      7         sell 0.0000018142411                          BATBTC
+      8      revenue 0.0000000000000                          Credit
+      9      revenue 0.0000000000000                          Credit
+      10     revenue 0.0000000000000                          Credit
+      11     revenue 0.0000000000000                          Credit
+      12     revenue 0.0000000000000                          Credit
+                       comment revenue.type       value exchange
+      1                   <NA>         <NA> 286.0000000   gemini
+      2                 Market         <NA>  70.6618968   gemini
+      3                 Market         <NA>  70.6618968   gemini
+      4                  Limit         <NA>   0.4425635   gemini
+      5                  Limit         <NA>   0.4425635   gemini
+      6                  Limit         <NA>  86.3881744   gemini
+      7                  Limit         <NA>  86.3881744   gemini
+      8  Administrative Credit    referrals  21.0788079   gemini
+      9  Administrative Credit    referrals   4.8581158   gemini
+      10               Deposit     airdrops   4.2582521   gemini
+      11               Deposit     airdrops   6.9112238   gemini
+      12               Deposit     airdrops   5.3875147   gemini
+                       rate.source currency2 total.quantity
+      1                       fake       LTC  1.00000000000
+      2              coinmarketcap       BTC  0.00096627836
+      3  coinmarketcap (buy price)       LTC  0.75330940160
+      4              coinmarketcap       BTC  0.00097233027
+      5  coinmarketcap (buy price)       LTC  0.75166858160
+      6              coinmarketcap       BAT 48.71951958511
+      7  coinmarketcap (buy price)       BTC  0.00002160025
+      8              coinmarketcap       BTC  0.00030662583
+      9              coinmarketcap       BAT 51.55345436532
+      10             coinmarketcap       BAT 54.63874269660
+      11             coinmarketcap       BAT 59.64622415808
+      12             coinmarketcap       BAT 66.48054670094
+                                            suploss.range quantity.60days
+      1  2021-03-09 22:22:22 UTC--2021-05-08 22:22:22 UTC    1.0000000000
+      2  2021-03-10 22:50:55 UTC--2021-05-09 22:50:55 UTC    0.0009723303
+      3  2021-03-10 22:50:55 UTC--2021-05-09 22:50:55 UTC    1.0000000000
+      4  2021-03-10 22:53:57 UTC--2021-05-09 22:53:57 UTC    0.0009723303
+      5  2021-03-10 22:53:57 UTC--2021-05-09 22:53:57 UTC    1.0000000000
+      6  2021-03-10 23:20:53 UTC--2021-05-09 23:20:53 UTC   48.7195195851
+      7  2021-03-10 23:20:53 UTC--2021-05-09 23:20:53 UTC    0.0009723303
+      8  2021-03-11 23:22:04 UTC--2021-05-10 23:22:04 UTC    0.0009723303
+      9  2021-04-08 16:14:54 UTC--2021-06-07 16:14:54 UTC   48.7195195851
+      10 2021-04-16 12:55:02 UTC--2021-06-15 12:55:02 UTC    0.0000000000
+      11 2021-04-16 13:35:19 UTC--2021-06-15 13:35:19 UTC    0.0000000000
+      12 2021-05-19 01:38:54 UTC--2021-07-18 01:38:54 UTC    0.0000000000
+          share.left60 sup.loss.quantity sup.loss gains.uncorrected gains.sup
+      1   0.7516685816        0.00000000    FALSE         0.0000000        NA
+      2   0.0003066258        0.00000000    FALSE         0.0000000        NA
+      3   0.7516685816        0.24669060    FALSE         0.1083857        NA
+      4   0.0003066258        0.00000000    FALSE         0.0000000        NA
+      5   0.7516685816        0.00164082     TRUE        -0.0267110 -0.026711
+      6  51.5534543653        0.00000000    FALSE         0.0000000        NA
+      7   0.0003066258        0.00095073    FALSE        16.8632908        NA
+      8   0.0003066258        0.00000000    FALSE         0.0000000        NA
+      9  59.6462241581        0.00000000    FALSE         0.0000000        NA
+      10 59.6462241581        0.00000000    FALSE         0.0000000        NA
+      11 59.6462241581        0.00000000    FALSE         0.0000000        NA
+      12 66.4805467009        0.00000000    FALSE         0.0000000        NA
+         gains.excess      gains        ACB    ACB.share
+      1            NA         NA 286.000000   286.000000
+      2            NA         NA  70.661899 73127.891884
+      3            NA  0.1083857 215.446489   286.000000
+      4            NA         NA  71.104463 73127.891906
+      5            NA         NA 215.003925   286.035536
+      6            NA         NA  86.388174     1.773174
+      7            NA 16.8632908   1.579581 73127.891906
+      8            NA         NA   1.579581  5151.493263
+      9            NA         NA  86.388174     1.675701
+      10           NA         NA  86.388174     1.581079
+      11           NA         NA  86.388174     1.448343
+      12           NA         NA  86.388174     1.299450
+
+# exodus
+
+    Code
+      formatted.exodus
+    Output
+                       date currency  quantity total.price    spot.rate transaction
+      1 2021-04-25 22:06:11      LTC 0.0028860   0.6412590   222.196455         buy
+      2 2021-04-25 23:08:12      ADA 0.3564820   0.6675172     1.872513         buy
+      3 2021-05-12 12:15:28      BTC 0.0001006   4.4569617 44303.794280         buy
+      4 2021-05-12 22:31:35      ETH 0.0029000   8.3322534  2873.190813         buy
+      5 2021-05-25 22:06:11      LTC 0.0014430   0.3206295   222.196455        sell
+      6 2021-05-25 23:08:12      ADA 0.1782410   0.3337586     1.872513        sell
+      7 2021-06-12 12:15:28      BTC 0.0000503   2.2284809 44303.794280        sell
+      8 2021-06-12 22:31:35      ETH 0.0014500   4.1661267  2873.190813        sell
+        fees                     description revenue.type     value exchange
+      1    0 fake transaction for format_ACB         <NA> 0.6412590   exodus
+      2    0 fake transaction for format_ACB         <NA> 0.6675172   exodus
+      3    0 fake transaction for format_ACB         <NA> 4.4569617   exodus
+      4    0 fake transaction for format_ACB         <NA> 8.3322534   exodus
+      5    0                      withdrawal         <NA> 0.3206295   exodus
+      6    0                      withdrawal         <NA> 0.3337586   exodus
+      7    0                      withdrawal         <NA> 2.2284809   exodus
+      8    0                      withdrawal         <NA> 4.1661267   exodus
+          rate.source currency2 total.quantity
+      1 coinmarketcap       LTC      0.0028860
+      2 coinmarketcap       ADA      0.3564820
+      3 coinmarketcap       BTC      0.0001006
+      4 coinmarketcap       ETH      0.0029000
+      5 coinmarketcap       LTC      0.0014430
+      6 coinmarketcap       ADA      0.1782410
+      7 coinmarketcap       BTC      0.0000503
+      8 coinmarketcap       ETH      0.0014500
+                                           suploss.range quantity.60days share.left60
+      1 2021-03-26 22:06:11 UTC--2021-05-25 22:06:11 UTC       0.0028860    0.0014430
+      2 2021-03-26 23:08:12 UTC--2021-05-25 23:08:12 UTC       0.3564820    0.1782410
+      3 2021-04-12 12:15:28 UTC--2021-06-11 12:15:28 UTC       0.0001006    0.0001006
+      4 2021-04-12 22:31:35 UTC--2021-06-11 22:31:35 UTC       0.0029000    0.0029000
+      5 2021-04-25 22:06:11 UTC--2021-06-24 22:06:11 UTC       0.0028860    0.0014430
+      6 2021-04-25 23:08:12 UTC--2021-06-24 23:08:12 UTC       0.3564820    0.1782410
+      7 2021-05-13 12:15:28 UTC--2021-07-12 12:15:28 UTC       0.0000000    0.0000503
+      8 2021-05-13 22:31:35 UTC--2021-07-12 22:31:35 UTC       0.0000000    0.0014500
+        sup.loss.quantity sup.loss gains.uncorrected gains.sup gains.excess gains
+      1          0.000000    FALSE                 0        NA           NA    NA
+      2          0.000000    FALSE                 0        NA           NA    NA
+      3          0.000000    FALSE                 0        NA           NA    NA
+      4          0.000000    FALSE                 0        NA           NA    NA
+      5          0.001443    FALSE                 0        NA           NA    NA
+      6          0.178241    FALSE                 0        NA           NA    NA
+      7          0.000000    FALSE                 0        NA           NA    NA
+      8          0.000000    FALSE                 0        NA           NA    NA
+              ACB    ACB.share
+      1 0.6412590   222.196455
+      2 0.6675172     1.872513
+      3 4.4569617 44303.794280
+      4 8.3322534  2873.190813
+      5 0.3206295   222.196455
+      6 0.3337586     1.872513
+      7 2.2284809 44303.794280
+      8 4.1661267  2873.190813
+
+# binance
+
+    Code
+      formatted.binance
+    Output
+                        date currency   quantity     total.price    spot.rate
+      1  2021-03-08 22:22:22      ETH 1.00000000 3098.1375390000  3098.137539
+      2  2021-03-29 17:07:20      ETH 0.19521000  604.7874290312  3098.137539
+      3  2021-03-29 17:07:20      ETH 0.14123140  576.1484034622  4079.463940
+      4  2021-03-29 17:07:20      ETH 0.11240000  346.6301409993  3083.898052
+      5  2021-03-29 17:07:20      ETH 0.10512900  339.4166416482  3228.572912
+      6  2021-03-29 17:07:20      ETH 0.00899120   71.6572783212  7969.712421
+      7  2021-03-29 17:07:20      ETH 0.00612410   64.4915504891 10530.780113
+      8  2021-03-29 17:07:20      LTC 2.53200000  604.7874290312   238.857594
+      9  2021-03-29 17:07:20      LTC 2.41210000  576.1484034622   238.857594
+      10 2021-03-29 17:07:20      LTC 1.45120000  346.6301409993   238.857594
+      11 2021-03-29 17:07:20      LTC 1.42100000  339.4166416482   238.857594
+      12 2021-03-29 17:07:20      LTC 0.30000000   71.6572783212   238.857594
+      13 2021-03-29 17:07:20      LTC 0.27000000   64.4915504891   238.857594
+      14 2021-03-29 17:07:20      LTC 0.00202500    0.0000000000   238.857594
+      15 2021-03-29 17:07:20      LTC 0.00127520    0.0000000000   238.857594
+      16 2021-03-29 17:07:20      LTC 0.00113100    0.0000000000   238.857594
+      17 2021-03-29 17:07:20      LTC 0.00049230    0.0000000000   238.857594
+      18 2021-03-29 17:07:20      LTC 0.00007000    0.0000000000   238.857594
+      19 2021-03-29 17:07:20      LTC 0.00005000    0.0000000000   238.857594
+      20 2021-03-29 18:12:55      ETH 0.44124211  975.0811577125  2209.855169
+      21 2021-03-29 18:12:55      ETH 0.42124000  930.8793915313  2209.855169
+      22 2021-03-29 18:12:55      ETH 0.00021470    0.0000000000  2209.855169
+      23 2021-03-29 18:12:55      ETH 0.00009251    0.0000000000  2209.855169
+      24 2021-03-29 18:12:55      LTC 1.60000000  975.0811577125   609.425724
+      25 2021-03-29 18:12:55      LTC 1.23000000  930.8793915313   756.812513
+      26 2021-11-05 04:32:23     BUSD 0.10512330    0.1309574574     1.245751
+      27 2022-11-17 11:54:25     ETHW 0.00012050    0.0006084561     5.049428
+      28 2022-11-27 08:05:35     BUSD 5.77124200    7.7365241364     1.340530
+         transaction       fees                     description comment revenue.type
+      1          buy 0.00000000 fake transaction for format_ACB    <NA>         <NA>
+      2         sell 0.00000000                             Buy    Spot         <NA>
+      3         sell 0.00000000                             Buy    Spot         <NA>
+      4         sell 0.00000000                             Buy    Spot         <NA>
+      5         sell 0.00000000                             Buy    Spot         <NA>
+      6         sell 0.00000000                             Buy    Spot         <NA>
+      7         sell 0.00000000                             Buy    Spot         <NA>
+      8          buy 1.77256221                             Buy    Spot         <NA>
+      9          buy 1.38824034                             Buy    Spot         <NA>
+      10         buy 1.29484702                             Buy    Spot         <NA>
+      11         buy 0.74595227                             Buy    Spot         <NA>
+      12         buy 0.07165728                             Buy    Spot         <NA>
+      13         buy 0.05016009                             Buy    Spot         <NA>
+      14     revenue 0.00000000               Referral Kickback    Spot      rebates
+      15     revenue 0.00000000               Referral Kickback    Spot      rebates
+      16     revenue 0.00000000               Referral Kickback    Spot      rebates
+      17     revenue 0.00000000               Referral Kickback    Spot      rebates
+      18     revenue 0.00000000               Referral Kickback    Spot      rebates
+      19     revenue 0.00000000               Referral Kickback    Spot      rebates
+      20         buy 4.69179655                            Sell    Spot         <NA>
+      21         buy 1.35331531                            Sell    Spot         <NA>
+      22     revenue 0.00000000               Referral Kickback    Spot      rebates
+      23     revenue 0.00000000               Referral Kickback    Spot      rebates
+      24        sell 0.00000000                            Sell    Spot         <NA>
+      25        sell 0.00000000                            Sell    Spot         <NA>
+      26     revenue 0.00000000   Simple Earn Flexible Interest    Earn    interests
+      27     revenue 0.00000000                    Distribution    Spot        forks
+      28         buy 0.00000000     Stablecoins Auto-Conversion    Spot         <NA>
+                   value exchange               rate.source currency2 total.quantity
+      1  3098.1375390000  binance                      fake       ETH      1.0000000
+      2   604.7874290312  binance coinmarketcap (buy price)       ETH      0.8047900
+      3   576.1484034622  binance coinmarketcap (buy price)       ETH      0.6635586
+      4   346.6301409993  binance coinmarketcap (buy price)       ETH      0.5511586
+      5   339.4166416482  binance coinmarketcap (buy price)       ETH      0.4460296
+      6    71.6572783212  binance coinmarketcap (buy price)       ETH      0.4370384
+      7    64.4915504891  binance coinmarketcap (buy price)       ETH      0.4309143
+      8   604.7874290312  binance             coinmarketcap       LTC      2.5320000
+      9   576.1484034622  binance             coinmarketcap       LTC      4.9441000
+      10  346.6301409993  binance             coinmarketcap       LTC      6.3953000
+      11  339.4166416482  binance             coinmarketcap       LTC      7.8163000
+      12   71.6572783212  binance             coinmarketcap       LTC      8.1163000
+      13   64.4915504891  binance             coinmarketcap       LTC      8.3863000
+      14    0.4836866287  binance             coinmarketcap       LTC      8.3883250
+      15    0.3045912044  binance             coinmarketcap       LTC      8.3896002
+      16    0.2701479393  binance             coinmarketcap       LTC      8.3907312
+      17    0.1175895937  binance             coinmarketcap       LTC      8.3912235
+      18    0.0167200316  binance             coinmarketcap       LTC      8.3912935
+      19    0.0119428797  binance             coinmarketcap       LTC      8.3913435
+      20  975.0811577125  binance             coinmarketcap       ETH      0.8721564
+      21  930.8793915313  binance             coinmarketcap       ETH      1.2933964
+      22    0.4744559049  binance             coinmarketcap       ETH      1.2936111
+      23    0.2044337017  binance             coinmarketcap       ETH      1.2937036
+      24  975.0811577125  binance coinmarketcap (buy price)       LTC      6.7913435
+      25  930.8793915313  binance coinmarketcap (buy price)       LTC      5.5613435
+      26    0.1309574574  binance             coinmarketcap      BUSD      0.1051233
+      27    0.0006084561  binance             coinmarketcap      ETHW      0.0001205
+      28    7.7365241364  binance             coinmarketcap      BUSD      5.8763653
+                                            suploss.range quantity.60days
+      1  2021-02-06 22:22:22 UTC--2021-04-07 22:22:22 UTC        1.862482
+      2  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        1.862482
+      3  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        1.862482
+      4  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        1.862482
+      5  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        1.862482
+      6  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        1.862482
+      7  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        1.862482
+      8  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      9  2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      10 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      11 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      12 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      13 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      14 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      15 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      16 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      17 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      18 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      19 2021-02-27 17:07:20 UTC--2021-04-28 17:07:20 UTC        8.386300
+      20 2021-02-27 18:12:55 UTC--2021-04-28 18:12:55 UTC        1.862482
+      21 2021-02-27 18:12:55 UTC--2021-04-28 18:12:55 UTC        1.862482
+      22 2021-02-27 18:12:55 UTC--2021-04-28 18:12:55 UTC        1.862482
+      23 2021-02-27 18:12:55 UTC--2021-04-28 18:12:55 UTC        1.862482
+      24 2021-02-27 18:12:55 UTC--2021-04-28 18:12:55 UTC        8.386300
+      25 2021-02-27 18:12:55 UTC--2021-04-28 18:12:55 UTC        8.386300
+      26 2021-10-06 04:32:23 UTC--2021-12-05 04:32:23 UTC        0.000000
+      27 2022-10-18 11:54:25 UTC--2022-12-17 11:54:25 UTC        0.000000
+      28 2022-10-28 08:05:35 UTC--2022-12-27 08:05:35 UTC        5.771242
+         share.left60 sup.loss.quantity sup.loss  gains.uncorrected gains.sup
+      1     1.2937036         0.0000000    FALSE   0.00000000000000        NA
+      2     1.2937036         0.1952100    FALSE   0.00000004302819        NA
+      3     1.2937036         0.1412314    FALSE 138.59410143664024        NA
+      4     1.2937036         0.1124000     TRUE  -1.60051838434890 -1.600518
+      5     1.2937036         0.1051290    FALSE  13.40725450509069        NA
+      6     1.2937036         0.0089912    FALSE  43.77519438928842        NA
+      7     1.2937036         0.0061241    FALSE  45.50046251335351        NA
+      8     5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      9     5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      10    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      11    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      12    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      13    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      14    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      15    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      16    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      17    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      18    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      19    5.5613435         0.0000000    FALSE   0.00000000000000        NA
+      20    1.2937036         0.0000000    FALSE   0.00000000000000        NA
+      21    1.2937036         0.0000000    FALSE   0.00000000000000        NA
+      22    1.2937036         0.0000000    FALSE   0.00000000000000        NA
+      23    1.2937036         0.0000000    FALSE   0.00000000000000        NA
+      24    5.5613435         1.6000000    FALSE 592.12367527210836        NA
+      25    5.5613435         1.2300000    FALSE 636.48082690530441        NA
+      26    0.1051233         0.0000000    FALSE   0.00000000000000        NA
+      27    0.0001205         0.0000000    FALSE   0.00000000000000        NA
+      28    5.8763653         0.0000000    FALSE   0.00000000000000        NA
+         gains.excess              gains             ACB   ACB.share
+      1            NA                 NA 3098.1375390000 3098.137539
+      2            NA   0.00000004302819 2493.3501100118 3098.137539
+      3            NA 138.59410143664024 2055.7958079863 3098.137539
+      4            NA                 NA 1709.1656669870 3101.041455
+      5            NA  13.40725450509069 1383.1562798439 3101.041455
+      6            NA  43.77519438928842 1355.2741959119 3101.041455
+      7            NA  45.50046251335351 1336.2831079362 3101.041455
+      8            NA                 NA  606.5599912393  239.557658
+      9            NA                 NA 1184.0966350401  239.496902
+      10           NA                 NA 1532.0216230586  239.554301
+      11           NA                 NA 1872.1842169742  239.523076
+      12           NA                 NA 1943.9131525738  239.507307
+      13           NA                 NA 2008.4548631577  239.492370
+      14           NA                 NA 2008.4548631577  239.434555
+      15           NA                 NA 2008.4548631577  239.398161
+      16           NA                 NA 2008.4548631577  239.365893
+      17           NA                 NA 2008.4548631577  239.351849
+      18           NA                 NA 2008.4548631577  239.349853
+      19           NA                 NA 2008.4548631577  239.348427
+      20           NA                 NA 2316.0560621952 2655.551270
+      21           NA                 NA 3248.2887690322 2511.440997
+      22           NA                 NA 3248.2887690322 2511.024174
+      23           NA                 NA 3248.2887690322 2510.844616
+      24           NA 592.12367527210836 1625.4973807173  239.348427
+      25           NA 636.48082690530441 1331.0988160913  239.348427
+      26           NA                 NA    0.1309574574    1.245751
+      27           NA                 NA    0.0006084561    5.049428
+      28           NA                 NA    7.8674815938    1.338835
+
+# binance withdrawals
+
+    Code
+      formatted.binance.withdrawals
+    Output
+                       date currency quantity total.price spot.rate transaction fees
+      1 2021-03-28 17:13:50      LTC 0.002000   0.6403742  320.1871         buy    0
+      2 2021-03-28 18:15:14      ETH 0.000142   0.4746407 3342.5405         buy    0
+      3 2021-04-06 19:55:52      ETH 0.000124   0.5312236 4284.0612         buy    0
+      4 2021-04-28 17:13:50      LTC 0.001000   0.3201871  320.1871        sell    0
+      5 2021-04-28 18:15:14      ETH 0.000071   0.2373204 3342.5405        sell    0
+      6 2021-05-06 19:55:52      ETH 0.000062   0.2656118 4284.0612        sell    0
+                            description exchange   rate.source currency2
+      1 fake transaction for format_ACB  binance coinmarketcap       LTC
+      2 fake transaction for format_ACB  binance coinmarketcap       ETH
+      3 fake transaction for format_ACB  binance coinmarketcap       ETH
+      4                 Withdrawal fees  binance coinmarketcap       LTC
+      5                 Withdrawal fees  binance coinmarketcap       ETH
+      6                 Withdrawal fees  binance coinmarketcap       ETH
+        total.quantity                                    suploss.range
+      1       0.002000 2021-02-26 17:13:50 UTC--2021-04-27 17:13:50 UTC
+      2       0.000142 2021-02-26 18:15:14 UTC--2021-04-27 18:15:14 UTC
+      3       0.000266 2021-03-07 19:55:52 UTC--2021-05-06 19:55:52 UTC
+      4       0.001000 2021-03-29 17:13:50 UTC--2021-05-28 17:13:50 UTC
+      5       0.000195 2021-03-29 18:15:14 UTC--2021-05-28 18:15:14 UTC
+      6       0.000133 2021-04-06 19:55:52 UTC--2021-06-05 19:55:52 UTC
+        quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
+      1        0.002000     0.002000          0.000000    FALSE        0.00000000
+      2        0.000266     0.000266          0.000000    FALSE        0.00000000
+      3        0.000266     0.000133          0.000000    FALSE        0.00000000
+      4        0.000000     0.001000          0.000000    FALSE        0.00000000
+      5        0.000124     0.000133          0.000071     TRUE       -0.03116221
+      6        0.000124     0.000133          0.000062    FALSE        0.02125423
+          gains.sup gains.excess      gains       ACB ACB.share
+      1          NA           NA         NA 0.6403742  320.1871
+      2          NA           NA         NA 0.4746407 3342.5405
+      3          NA           NA         NA 1.0058643 3781.4449
+      4          NA           NA         NA 0.3201871  320.1871
+      5 -0.03116221           NA         NA 0.7685440 3941.2511
+      6          NA           NA 0.02125423 0.5241864 3941.2511
+
+# CDC exchange trades
+
+    Code
+      formatted.CDC.exchange.trades
+    Output
+                        date currency   quantity total.price    spot.rate transaction
+      1  2021-03-08 22:22:22      ETH     1.0000  3098.13754 3098.1375390         buy
+      2  2021-12-24 15:34:45      CRO 13260.1300 10386.66313    0.7833002         buy
+      3  2021-12-24 15:34:45      CRO  3555.9000  2785.33736    0.7833002         buy
+      4  2021-12-24 15:34:45      CRO  1781.7400  1395.63739    0.7833002         buy
+      5  2021-12-24 15:34:45      CRO    26.8500    21.03161    0.7833002         buy
+      6  2021-12-24 15:34:45      CRO    26.6700    20.89062    0.7833002         buy
+      7  2021-12-24 15:34:45      CRO    17.7800    13.92708    0.7833002         buy
+      8  2021-12-24 15:34:45      CRO    17.7800    13.92708    0.7833002         buy
+      9  2021-12-24 15:34:45      ETH     2.0932 10386.66313 4962.0978083        sell
+      10 2021-12-24 15:34:45      ETH     0.5600  2785.33736 4973.8167068        sell
+      11 2021-12-24 15:34:45      ETH     0.2800  1395.63739 4984.4192352        sell
+      12 2021-12-24 15:34:45      ETH     0.0042    21.03161 5007.5265925        sell
+      13 2021-12-24 15:34:45      ETH     0.0042    20.89062 4973.9565819        sell
+      14 2021-12-24 15:34:45      ETH     0.0028    13.92708 4973.9565819        sell
+      15 2021-12-24 15:34:45      ETH     0.0028    13.92708 4973.9565819        sell
+                fees                     description comment     exchange
+      1   0.00000000 fake transaction for format_ACB    <NA> CDC.exchange
+      2   0.00000000                             BUY ETH_CRO CDC.exchange
+      3   0.00000000                             BUY ETH_CRO CDC.exchange
+      4   0.00000000                             BUY ETH_CRO CDC.exchange
+      5   0.00000000                             BUY ETH_CRO CDC.exchange
+      6   0.00000000                             BUY ETH_CRO CDC.exchange
+      7   0.00000000                             BUY ETH_CRO CDC.exchange
+      8   0.00000000                             BUY ETH_CRO CDC.exchange
+      9  41.54665616                            SELL ETH_CRO CDC.exchange
+      10 11.14134692                            SELL ETH_CRO CDC.exchange
+      11  5.58256082                            SELL ETH_CRO CDC.exchange
+      12  0.08413730                            SELL ETH_CRO CDC.exchange
+      13  0.08355905                            SELL ETH_CRO CDC.exchange
+      14  0.05570691                            SELL ETH_CRO CDC.exchange
+      15  0.05570683                            SELL ETH_CRO CDC.exchange
+                       rate.source currency2 total.quantity
+      1                       fake       ETH         1.0000
+      2              coinmarketcap       CRO     13260.1300
+      3              coinmarketcap       CRO     16816.0300
+      4              coinmarketcap       CRO     18597.7700
+      5              coinmarketcap       CRO     18624.6200
+      6              coinmarketcap       CRO     18651.2900
+      7              coinmarketcap       CRO     18669.0700
+      8              coinmarketcap       CRO     18686.8500
+      9  coinmarketcap (buy price)       ETH        -1.0932
+      10 coinmarketcap (buy price)       ETH        -1.6532
+      11 coinmarketcap (buy price)       ETH        -1.9332
+      12 coinmarketcap (buy price)       ETH        -1.9374
+      13 coinmarketcap (buy price)       ETH        -1.9416
+      14 coinmarketcap (buy price)       ETH        -1.9444
+      15 coinmarketcap (buy price)       ETH        -1.9472
+                                            suploss.range quantity.60days
+      1  2021-02-06 22:22:22 UTC--2021-04-07 22:22:22 UTC            1.00
+      2  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      3  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      4  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      5  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      6  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      7  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      8  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC        18686.85
+      9  2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+      10 2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+      11 2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+      12 2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+      13 2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+      14 2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+      15 2021-11-24 15:34:45 UTC--2022-01-23 15:34:45 UTC            0.00
+         share.left60 sup.loss.quantity sup.loss gains.uncorrected gains.sup
+      1        1.0000                 0    FALSE           0.00000        NA
+      2    18686.8500                 0    FALSE           0.00000        NA
+      3    18686.8500                 0    FALSE           0.00000        NA
+      4    18686.8500                 0    FALSE           0.00000        NA
+      5    18686.8500                 0    FALSE           0.00000        NA
+      6    18686.8500                 0    FALSE           0.00000        NA
+      7    18686.8500                 0    FALSE           0.00000        NA
+      8    18686.8500                 0    FALSE           0.00000        NA
+      9       -1.9472                 0    FALSE        3860.09498        NA
+      10      -1.9472                 0    FALSE        2774.19601        NA
+      11      -1.9472                 0    FALSE        1390.05483        NA
+      12      -1.9472                 0    FALSE          20.94747        NA
+      13      -1.9472                 0    FALSE          20.80706        NA
+      14      -1.9472                 0    FALSE          13.87137        NA
+      15      -1.9472                 0    FALSE          13.87137        NA
+         gains.excess      gains       ACB    ACB.share
+      1            NA         NA  3098.138 3098.1375390
+      2            NA         NA 10386.663    0.7833002
+      3            NA         NA 13172.000    0.7833002
+      4            NA         NA 14567.638    0.7833002
+      5            NA         NA 14588.669    0.7833002
+      6            NA         NA 14609.560    0.7833002
+      7            NA         NA 14623.487    0.7833002
+      8            NA         NA 14637.414    0.7833002
+      9            NA 3860.09498 -3386.884    0.0000000
+      10           NA 2774.19601 -5121.841    0.0000000
+      11           NA 1390.05483 -5989.319    0.0000000
+      12           NA   20.94747 -6002.332    0.0000000
+      13           NA   20.80706 -6015.344    0.0000000
+      14           NA   13.87137 -6024.019    0.0000000
+      15           NA   13.87137 -6032.693    0.0000000
+

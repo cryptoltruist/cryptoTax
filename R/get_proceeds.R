@@ -1,19 +1,18 @@
 #' @title Get proceeds of all sold coins
 #'
 #' @description Get proceeds of sold coins, ACB of sold coins, and resulting difference between the two, capital gains.
-#' @param data The dataframe formatted.ACB,
+#' @param formatted.ACB The dataframe formatted.ACB,
 #' @param tax.year which year
 #' @param local.timezone which time zone
 #' @export
 #' @examples
-#' \dontrun{
-#' ACB(data)
-#' }
+#' all.data <- format_shakepay(data_shakepay)
+#' formatted.ACB <- format_ACB(all.data)
+#' get_proceeds(formatted.ACB, 2021)
 #' @importFrom dplyr mutate %>% filter ungroup summarize relocate bind_rows
 #' @importFrom rlang .data
 
-get_proceeds <- function(data, tax.year, local.timezone) {
-  formatted.ACB <- data
+get_proceeds <- function(formatted.ACB, tax.year, local.timezone = Sys.timezone()) {
   formatted.ACB.year <- formatted.ACB %>%
     mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
     filter(lubridate::year(.data$datetime.local) == tax.year)

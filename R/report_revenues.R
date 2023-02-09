@@ -6,9 +6,9 @@
 #' @param local.timezone Which time zone to use for the date of the report.
 #' @export
 #' @examples
-#' \dontrun{
+#' all.data <- format_shakepay(data_shakepay)
+#' formatted.ACB <- format_ACB(all.data)
 #' report_revenues(formatted.ACB)
-#' }
 #' @importFrom dplyr %>% filter mutate group_by select summarize slice arrange
 #' add_row across full_join
 #' @importFrom rlang .data
@@ -23,7 +23,7 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
     revenues <- revenues %>%
       mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
       filter(lubridate::year(.data$datetime.local) == tax.year)
-    warning("revenues have been filtered for tax year ", tax.year)
+    message("Note: revenues have been filtered for tax year ", tax.year)
   }
 
   # Get all revenues for selected year

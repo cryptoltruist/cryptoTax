@@ -21,7 +21,7 @@ report_revenues(
 Provides a summary of revenues from all sources.
 }
 \examples{
-\dontrun{
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
 report_revenues(formatted.ACB)
-}
 }

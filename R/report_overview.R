@@ -7,9 +7,9 @@
 #' @param local.timezone Which time zone to use for the date of the report.
 #' @export
 #' @examples
-#' \dontrun{
-#' report_overview(formatted.ACB)
-#' }
+#' all.data <- format_shakepay(data_shakepay)
+#' formatted.ACB <- format_ACB(all.data)
+#' report_overview(formatted.ACB, today.data = FALSE)
 #' @importFrom dplyr %>% filter mutate group_by summarize slice_tail bind_rows
 #' arrange add_row across full_join last
 

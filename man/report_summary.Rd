@@ -24,7 +24,7 @@ report_summary(
 Provides a summary of realized capital gains and losses (and total).
 }
 \examples{
-\dontrun{
-report_summary(formatted.ACB)
-}
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
+report_summary(formatted.ACB, today.data = FALSE)
 }

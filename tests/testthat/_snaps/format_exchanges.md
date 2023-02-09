@@ -272,62 +272,62 @@
       25 2021-11-05 04:32:23     BUSD 0.10512330   0.1309574574     1.245751
       26 2022-11-17 11:54:25     ETHW 0.00012050   0.0006084561     5.049428
       27 2022-11-27 08:05:35     BUSD 5.77124200   7.7365241364     1.340530
-         transaction                   description comment revenue.type exchange
-      1          buy                           Buy    Spot         <NA>  binance
-      2         sell                           Buy    Spot         <NA>  binance
-      3          buy                           Buy    Spot         <NA>  binance
-      4         sell                           Buy    Spot         <NA>  binance
-      5          buy                           Buy    Spot         <NA>  binance
-      6         sell                           Buy    Spot         <NA>  binance
-      7          buy                           Buy    Spot         <NA>  binance
-      8         sell                           Buy    Spot         <NA>  binance
-      9          buy                           Buy    Spot         <NA>  binance
-      10        sell                           Buy    Spot         <NA>  binance
-      11         buy                           Buy    Spot         <NA>  binance
-      12        sell                           Buy    Spot         <NA>  binance
-      13     revenue             Referral Kickback    Spot      rebates  binance
-      14     revenue             Referral Kickback    Spot      rebates  binance
-      15     revenue             Referral Kickback    Spot      rebates  binance
-      16     revenue             Referral Kickback    Spot      rebates  binance
-      17     revenue             Referral Kickback    Spot      rebates  binance
-      18     revenue             Referral Kickback    Spot      rebates  binance
-      19         buy                          Sell    Spot         <NA>  binance
-      20        sell                          Sell    Spot         <NA>  binance
-      21         buy                          Sell    Spot         <NA>  binance
-      22        sell                          Sell    Spot         <NA>  binance
-      23     revenue             Referral Kickback    Spot      rebates  binance
-      24     revenue             Referral Kickback    Spot      rebates  binance
-      25     revenue Simple Earn Flexible Interest    Earn    interests  binance
-      26     revenue                  Distribution    Spot        forks  binance
-      27         buy   Stablecoins Auto-Conversion    Spot         <NA>  binance
-                       rate.source
-      1              coinmarketcap
-      2  coinmarketcap (buy price)
-      3              coinmarketcap
-      4  coinmarketcap (buy price)
-      5              coinmarketcap
-      6  coinmarketcap (buy price)
-      7              coinmarketcap
-      8  coinmarketcap (buy price)
-      9              coinmarketcap
-      10 coinmarketcap (buy price)
-      11             coinmarketcap
-      12 coinmarketcap (buy price)
-      13             coinmarketcap
-      14             coinmarketcap
-      15             coinmarketcap
-      16             coinmarketcap
-      17             coinmarketcap
-      18             coinmarketcap
-      19             coinmarketcap
-      20 coinmarketcap (buy price)
-      21             coinmarketcap
-      22 coinmarketcap (buy price)
-      23             coinmarketcap
-      24             coinmarketcap
-      25             coinmarketcap
-      26             coinmarketcap
-      27             coinmarketcap
+         transaction       fees                   description comment revenue.type
+      1          buy 1.77256221                           Buy    Spot         <NA>
+      2         sell         NA                           Buy    Spot         <NA>
+      3          buy 1.38824034                           Buy    Spot         <NA>
+      4         sell         NA                           Buy    Spot         <NA>
+      5          buy 1.29484702                           Buy    Spot         <NA>
+      6         sell         NA                           Buy    Spot         <NA>
+      7          buy 0.74595227                           Buy    Spot         <NA>
+      8         sell         NA                           Buy    Spot         <NA>
+      9          buy 0.07165728                           Buy    Spot         <NA>
+      10        sell         NA                           Buy    Spot         <NA>
+      11         buy 0.05016009                           Buy    Spot         <NA>
+      12        sell         NA                           Buy    Spot         <NA>
+      13     revenue         NA             Referral Kickback    Spot      rebates
+      14     revenue         NA             Referral Kickback    Spot      rebates
+      15     revenue         NA             Referral Kickback    Spot      rebates
+      16     revenue         NA             Referral Kickback    Spot      rebates
+      17     revenue         NA             Referral Kickback    Spot      rebates
+      18     revenue         NA             Referral Kickback    Spot      rebates
+      19         buy 4.69179655                          Sell    Spot         <NA>
+      20        sell         NA                          Sell    Spot         <NA>
+      21         buy 1.35331531                          Sell    Spot         <NA>
+      22        sell         NA                          Sell    Spot         <NA>
+      23     revenue         NA             Referral Kickback    Spot      rebates
+      24     revenue         NA             Referral Kickback    Spot      rebates
+      25     revenue         NA Simple Earn Flexible Interest    Earn    interests
+      26     revenue         NA                  Distribution    Spot        forks
+      27         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
+         exchange               rate.source
+      1   binance             coinmarketcap
+      2   binance coinmarketcap (buy price)
+      3   binance             coinmarketcap
+      4   binance coinmarketcap (buy price)
+      5   binance             coinmarketcap
+      6   binance coinmarketcap (buy price)
+      7   binance             coinmarketcap
+      8   binance coinmarketcap (buy price)
+      9   binance             coinmarketcap
+      10  binance coinmarketcap (buy price)
+      11  binance             coinmarketcap
+      12  binance coinmarketcap (buy price)
+      13  binance             coinmarketcap
+      14  binance             coinmarketcap
+      15  binance             coinmarketcap
+      16  binance             coinmarketcap
+      17  binance             coinmarketcap
+      18  binance             coinmarketcap
+      19  binance             coinmarketcap
+      20  binance coinmarketcap (buy price)
+      21  binance             coinmarketcap
+      22  binance coinmarketcap (buy price)
+      23  binance             coinmarketcap
+      24  binance             coinmarketcap
+      25  binance             coinmarketcap
+      26  binance             coinmarketcap
+      27  binance             coinmarketcap
 
 # binance withdrawals
 
@@ -619,6 +619,8 @@
 
     Code
       format_detect(data_shakepay)
+    Message <simpleMessage>
+      Exchange detected: shakepay
     Output
                        date currency    quantity total.price spot.rate transaction
       1 2021-05-07 14:50:41      BTC  0.00103982   53.033350  51002.43         buy
@@ -643,6 +645,8 @@
 
     Code
       format_detect(data_newton)
+    Message <simpleMessage>
+      Exchange detected: newton
     Output
                        date currency   quantity total.price  spot.rate transaction
       1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy
@@ -665,6 +669,8 @@
 
     Code
       format_detect(data_pooltool)
+    Message <simpleMessage>
+      Exchange detected: pooltool
     Output
                         date currency  quantity total.price spot.rate transaction
       1  2021-04-22 22:03:22      ADA 1.0827498    1.974017      1.82     revenue
@@ -693,6 +699,8 @@
 
     Code
       format_detect(data_CDC)
+    Message <simpleMessage>
+      Exchange detected: CDC
     Output
                         date currency       quantity total.price     spot.rate
       1  2021-05-03 22:05:50      BTC   0.0007333710    51.25000 69882.7777778
@@ -756,6 +764,8 @@
 
     Code
       format_detect(data_celsius)
+    Message <simpleMessage>
+      Exchange detected: celsius
     Output
                        date currency       quantity total.price  spot.rate
       1 2021-03-03 21:11:00      BTC 0.000707598916  50.6235600  71542.733
@@ -782,6 +792,8 @@
 
     Code
       format_detect(data_adalite, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: adalite
     Output
                        date currency  quantity total.price spot.rate transaction
       1 2021-04-28 16:56:00      ADA 0.3120400   0.5091943  1.631824     revenue
@@ -802,6 +814,8 @@
 
     Code
       format_detect(data_binance, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: binance
     Output
                         date currency   quantity    total.price    spot.rate
       1  2021-03-29 17:07:20      LTC 2.53200000 604.7874290312   238.857594
@@ -831,67 +845,69 @@
       25 2021-11-05 04:32:23     BUSD 0.10512330   0.1309574574     1.245751
       26 2022-11-17 11:54:25     ETHW 0.00012050   0.0006084561     5.049428
       27 2022-11-27 08:05:35     BUSD 5.77124200   7.7365241364     1.340530
-         transaction                   description comment revenue.type exchange
-      1          buy                           Buy    Spot         <NA>  binance
-      2         sell                           Buy    Spot         <NA>  binance
-      3          buy                           Buy    Spot         <NA>  binance
-      4         sell                           Buy    Spot         <NA>  binance
-      5          buy                           Buy    Spot         <NA>  binance
-      6         sell                           Buy    Spot         <NA>  binance
-      7          buy                           Buy    Spot         <NA>  binance
-      8         sell                           Buy    Spot         <NA>  binance
-      9          buy                           Buy    Spot         <NA>  binance
-      10        sell                           Buy    Spot         <NA>  binance
-      11         buy                           Buy    Spot         <NA>  binance
-      12        sell                           Buy    Spot         <NA>  binance
-      13     revenue             Referral Kickback    Spot      rebates  binance
-      14     revenue             Referral Kickback    Spot      rebates  binance
-      15     revenue             Referral Kickback    Spot      rebates  binance
-      16     revenue             Referral Kickback    Spot      rebates  binance
-      17     revenue             Referral Kickback    Spot      rebates  binance
-      18     revenue             Referral Kickback    Spot      rebates  binance
-      19         buy                          Sell    Spot         <NA>  binance
-      20        sell                          Sell    Spot         <NA>  binance
-      21         buy                          Sell    Spot         <NA>  binance
-      22        sell                          Sell    Spot         <NA>  binance
-      23     revenue             Referral Kickback    Spot      rebates  binance
-      24     revenue             Referral Kickback    Spot      rebates  binance
-      25     revenue Simple Earn Flexible Interest    Earn    interests  binance
-      26     revenue                  Distribution    Spot        forks  binance
-      27         buy   Stablecoins Auto-Conversion    Spot         <NA>  binance
-                       rate.source
-      1              coinmarketcap
-      2  coinmarketcap (buy price)
-      3              coinmarketcap
-      4  coinmarketcap (buy price)
-      5              coinmarketcap
-      6  coinmarketcap (buy price)
-      7              coinmarketcap
-      8  coinmarketcap (buy price)
-      9              coinmarketcap
-      10 coinmarketcap (buy price)
-      11             coinmarketcap
-      12 coinmarketcap (buy price)
-      13             coinmarketcap
-      14             coinmarketcap
-      15             coinmarketcap
-      16             coinmarketcap
-      17             coinmarketcap
-      18             coinmarketcap
-      19             coinmarketcap
-      20 coinmarketcap (buy price)
-      21             coinmarketcap
-      22 coinmarketcap (buy price)
-      23             coinmarketcap
-      24             coinmarketcap
-      25             coinmarketcap
-      26             coinmarketcap
-      27             coinmarketcap
+         transaction       fees                   description comment revenue.type
+      1          buy 1.77256221                           Buy    Spot         <NA>
+      2         sell         NA                           Buy    Spot         <NA>
+      3          buy 1.38824034                           Buy    Spot         <NA>
+      4         sell         NA                           Buy    Spot         <NA>
+      5          buy 1.29484702                           Buy    Spot         <NA>
+      6         sell         NA                           Buy    Spot         <NA>
+      7          buy 0.74595227                           Buy    Spot         <NA>
+      8         sell         NA                           Buy    Spot         <NA>
+      9          buy 0.07165728                           Buy    Spot         <NA>
+      10        sell         NA                           Buy    Spot         <NA>
+      11         buy 0.05016009                           Buy    Spot         <NA>
+      12        sell         NA                           Buy    Spot         <NA>
+      13     revenue         NA             Referral Kickback    Spot      rebates
+      14     revenue         NA             Referral Kickback    Spot      rebates
+      15     revenue         NA             Referral Kickback    Spot      rebates
+      16     revenue         NA             Referral Kickback    Spot      rebates
+      17     revenue         NA             Referral Kickback    Spot      rebates
+      18     revenue         NA             Referral Kickback    Spot      rebates
+      19         buy 4.69179655                          Sell    Spot         <NA>
+      20        sell         NA                          Sell    Spot         <NA>
+      21         buy 1.35331531                          Sell    Spot         <NA>
+      22        sell         NA                          Sell    Spot         <NA>
+      23     revenue         NA             Referral Kickback    Spot      rebates
+      24     revenue         NA             Referral Kickback    Spot      rebates
+      25     revenue         NA Simple Earn Flexible Interest    Earn    interests
+      26     revenue         NA                  Distribution    Spot        forks
+      27         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
+         exchange               rate.source
+      1   binance             coinmarketcap
+      2   binance coinmarketcap (buy price)
+      3   binance             coinmarketcap
+      4   binance coinmarketcap (buy price)
+      5   binance             coinmarketcap
+      6   binance coinmarketcap (buy price)
+      7   binance             coinmarketcap
+      8   binance coinmarketcap (buy price)
+      9   binance             coinmarketcap
+      10  binance coinmarketcap (buy price)
+      11  binance             coinmarketcap
+      12  binance coinmarketcap (buy price)
+      13  binance             coinmarketcap
+      14  binance             coinmarketcap
+      15  binance             coinmarketcap
+      16  binance             coinmarketcap
+      17  binance             coinmarketcap
+      18  binance             coinmarketcap
+      19  binance             coinmarketcap
+      20  binance coinmarketcap (buy price)
+      21  binance             coinmarketcap
+      22  binance coinmarketcap (buy price)
+      23  binance             coinmarketcap
+      24  binance             coinmarketcap
+      25  binance             coinmarketcap
+      26  binance             coinmarketcap
+      27  binance             coinmarketcap
 
 ---
 
     Code
       format_detect(data_binance_withdrawals, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: binance_withdrawals
     Output
                        date currency quantity total.price spot.rate transaction
       1 2021-04-28 17:13:50      LTC 0.001000   0.3201871  320.1871        sell
@@ -906,6 +922,8 @@
 
     Code
       format_detect(data_blockfi, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: blockfi
     Output
                        date currency     quantity total.price    spot.rate
       1 2021-05-29 21:43:44      LTC  0.022451200   4.6255734   206.027889
@@ -934,6 +952,7 @@
       format_detect(data_CDC_exchange_rewards, list.prices = list.prices)
     Message <simpleMessage>
       WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS AND WITHDRAWALS!
+      Exchange detected: CDC_exchange_rewards
     Output
                         date currency   quantity  total.price     spot.rate
       1  2021-02-19 00:00:00      CRO 1.36512341 0.2227899953     0.1632014
@@ -973,6 +992,8 @@
 
     Code
       format_detect(data_CDC_exchange_trades, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: CDC_exchange_trades
     Output
                         date currency   quantity total.price    spot.rate transaction
       1  2021-12-24 15:34:45      CRO 13260.1300 10386.66313    0.7833002         buy
@@ -1009,6 +1030,8 @@
 
     Code
       format_detect(data_CDC_wallet, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: CDC_wallet
     Output
                        date currency quantity   total.price spot.rate transaction
       1 2021-04-12 18:28:50      CRO 0.512510 0.13593610436 0.2652360     revenue
@@ -1030,6 +1053,8 @@
 
     Code
       format_detect(data_coinsmart, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: coinsmart
     Output
                        date currency  quantity total.price    spot.rate transaction
       1 2021-04-25 16:11:24      ADA 198.50000 237.9374300     1.198677         buy
@@ -1046,6 +1071,8 @@
 
     Code
       format_detect(data_exodus, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: exodus
     Output
                        date currency  quantity total.price    spot.rate transaction
       1 2021-05-25 22:06:11      LTC 0.0014430   0.3206295   222.196455        sell
@@ -1062,6 +1089,8 @@
 
     Code
       format_detect(data_presearch, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: presearch
     Output
                         date currency quantity total.price  spot.rate transaction
       1  2021-04-27 17:45:18      PRE     0.13  0.01209844 0.09306492     revenue
@@ -1104,6 +1133,8 @@
 
     Code
       format_detect(data_gemini, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: gemini
     Output
                         date currency        quantity total.price     spot.rate
       1  2021-04-09 22:50:55      BTC  0.000966278356  70.6618968 73127.8895000
@@ -1146,6 +1177,8 @@
 
     Code
       format_detect(data_uphold, list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: uphold
     Output
                         date currency    quantity total.price   spot.rate transaction
       1  2021-01-07 02:40:31      BAT  1.59081275   0.5114264   0.3214875     revenue

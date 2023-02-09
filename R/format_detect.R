@@ -84,5 +84,7 @@ format_detect <- function(data, list.prices = NULL, force = FALSE) {
     uphold = {format_uphold(data, list.prices = list.prices, force = force)},
   )
   
+  message("Exchange detected: ", condition)
+  
   formatted.data
 }

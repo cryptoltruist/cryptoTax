@@ -4,16 +4,16 @@
 \alias{listby_coin}
 \title{List transactions by coin}
 \usage{
-listby_coin(data)
+listby_coin(formatted.ACB)
 }
 \arguments{
-\item{data}{The dataframe}
+\item{formatted.ACB}{The dataframe}
 }
 \description{
 Provides a list of transactions, separated by coin..
 }
 \examples{
-\dontrun{
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
 listby_coin(formatted.ACB)
-}
 }

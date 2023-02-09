@@ -35,8 +35,11 @@ jobs:
           
       - name: Build site
         run: |
-          coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", "BUSD", "CEL", "PRE", "ETHW", "BAT")
-          list.prices <- cryptoTax::prepare_list_prices(coins = coins, start.date = "2021-01-01")
+          my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
+          list.prices1 <- cryptoTax::prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
+          my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
+          list.prices2 <- cryptoTax::prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
+          list.prices <- dplyr::bind_rows(list.prices1, list.prices2)
           pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 

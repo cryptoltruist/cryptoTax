@@ -1,9 +1,13 @@
 options(scipen = 999)
 
 # Prepare list of coins ####
-my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", 
-              "BUSD", "CEL", "PRE", "ETHW", "BAT")
-list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
+my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
+list.prices1 <- prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
+
+my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
+list.prices2 <- prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
+
+list.prices <- bind_rows(list.prices1, list.prices2)
 
 # Tests start here ####
 
@@ -79,57 +83,85 @@ test_that("uphold", {
   expect_snapshot(formatted.uphold)
 })
 
-# Message: The first transaction for this currency cannot be a sale. 
-# Please make sure you are not missing any transactions.
-# Can't fix: verified (because it's a trading pair, there will always be 
-# coin that cannot be a purchase before.
 test_that("gemini", {
-  skip("trade starts with sale")
   x <- format_gemini(data_gemini, list.prices = list.prices)
+  # Add row to fix error: The first transaction for this currency cannot be a sale. 
+  x <- x %>% 
+    dplyr::add_row(date = lubridate::as_datetime("2021-04-08 22:22:22"),
+                   currency = "LTC",
+                   quantity = 1,
+                   total.price = 286,
+                   spot.rate = 286,
+                   transaction = "buy",
+                   description = "fake transaction for format_ACB",
+                   exchange = "gemini",
+                   rate.source = "fake") %>% 
+    merge_exchanges()
   formatted.gemini <- suppressWarnings(as.data.frame(format_ACB(x)))
   expect_snapshot(formatted.gemini)
 })
 
-# Message: The first transaction for this currency cannot be a sale. 
-# Please make sure you are not missing any transactions.
-# Can't fix: verified (because it is withdrawals, it cannot
-# have purchase transactions before.
 test_that("exodus", {
-  skip("trade starts with sale")
   x <- format_exodus(data_exodus, list.prices = list.prices)
+  # Add row to fix error: The first transaction for this currency cannot be a sale. 
+  df <- x %>% 
+    dplyr::mutate(date = date - months(1), 
+                  quantity = quantity * 2,
+                  total.price = total.price * 2,
+                  transaction = "buy",
+                  description = "fake transaction for format_ACB")
+  x <- merge_exchanges(x, df)
   formatted.exodus <- suppressWarnings(as.data.frame(format_ACB(x)))
   expect_snapshot(formatted.exodus)
 })
 
-# Message: The first transaction for this currency cannot be a sale. 
-# Please make sure you are not missing any transactions.
-# Can't fix: verified (because it's a trading pair, there will always be 
-# coin that cannot be a purchase before.
 test_that("binance", {
-  skip("trade starts with sale")
-  formatted.binance <- format_binance(data_binance, list.prices = list.prices)
-  expect_snapshot(format_ACB(formatted.binance))
+  x <- format_binance(data_binance, list.prices = list.prices)
+  # Add row to fix error: The first transaction for this currency cannot be a sale. 
+  x <- x %>% 
+    dplyr::add_row(date = lubridate::as_datetime("2021-03-08 22:22:22"),
+                   currency = "ETH",
+                   quantity = 1,
+                   total.price = 3098.137539,
+                   spot.rate = 3098.137539,
+                   transaction = "buy",
+                   description = "fake transaction for format_ACB",
+                   exchange = "binance",
+                   rate.source = "fake") %>% 
+    merge_exchanges()
+  formatted.binance <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.binance)
 })
 
-# Message: The first transaction for this currency cannot be a sale. 
-# Please make sure you are not missing any transactions.
-# Can't fix: verified (because it is withdrawals, it cannot
-# have purchase transactions before.
 test_that("binance withdrawals", {
-  skip("trade starts with sale")
-  formatted.binance.withdrawals <- format_binance_withdrawals(
-    data_binance_withdrawals, list.prices = list.prices)
-  expect_snapshot(format_ACB(formatted.binance.withdrawals))
+  x <- format_binance_withdrawals(data_binance_withdrawals, list.prices = list.prices)
+  # Add row to fix error: The first transaction for this currency cannot be a sale. 
+  df <- x %>% 
+    dplyr::mutate(date = date - months(1), 
+                  quantity = quantity * 2,
+                  total.price = total.price * 2,
+                  transaction = "buy",
+                  description = "fake transaction for format_ACB")
+  x <- merge_exchanges(x, df)
+  formatted.binance.withdrawals <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.binance.withdrawals)
 })
 
-# Message: The first transaction for this currency cannot be a sale. 
-# Please make sure you are not missing any transactions.
-# Can't fix: verified (because it's a trading pair, there will always be 
-# coin that cannot be a purchase before.
 test_that("CDC exchange trades", {
-  skip("trade starts with sale")
   x <- format_CDC_exchange_trades(data_CDC_exchange_trades, list.prices = list.prices)
-  formatted.binance.trades <- suppressWarnings(as.data.frame(format_ACB(x)))
-  expect_snapshot(formatted.binance.trades)
+  # Add row to fix error: The first transaction for this currency cannot be a sale. 
+  x <- x %>% 
+    dplyr::add_row(date = lubridate::as_datetime("2021-03-08 22:22:22"),
+                   currency = "ETH",
+                   quantity = 1,
+                   total.price = 3098.137539,
+                   spot.rate = 3098.137539,
+                   transaction = "buy",
+                   description = "fake transaction for format_ACB",
+                   exchange = "CDC.exchange",
+                   rate.source = "fake") %>% 
+    merge_exchanges()
+  formatted.CDC.exchange.trades <- suppressWarnings(as.data.frame(format_ACB(x)))
+  expect_snapshot(formatted.CDC.exchange.trades)
 })
 

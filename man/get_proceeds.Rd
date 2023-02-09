@@ -4,10 +4,10 @@
 \alias{get_proceeds}
 \title{Get proceeds of all sold coins}
 \usage{
-get_proceeds(data, tax.year, local.timezone)
+get_proceeds(formatted.ACB, tax.year, local.timezone = Sys.timezone())
 }
 \arguments{
-\item{data}{The dataframe formatted.ACB,}
+\item{formatted.ACB}{The dataframe formatted.ACB,}
 
 \item{tax.year}{which year}
 
@@ -17,7 +17,7 @@ get_proceeds(data, tax.year, local.timezone)
 Get proceeds of sold coins, ACB of sold coins, and resulting difference between the two, capital gains.
 }
 \examples{
-\dontrun{
-ACB(data)
-}
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
+get_proceeds(formatted.ACB, 2021)
 }

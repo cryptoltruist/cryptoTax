@@ -12,7 +12,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' match_prices(data)
+#' prepare_list_prices(data)
 #' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows left_join arrange
 #' @importFrom utils timestamp
