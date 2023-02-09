@@ -64,21 +64,79 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">listby_coin</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">listby_coin</span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
+    <dl><dt>formatted.ACB</dt>
 <dd><p>The dataframe</p></dd>
 
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-09 01:07:52. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-09 01:07:53. Total time elapsed: 0.01 minutes</span>
 <span class="r-in"><span><span class="fu">listby_coin</span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $BTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency   quantity total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-05-07 14:50:41      BTC 0.00103982    53.03335  51002.43         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-08 12:12:57      BTC 0.00011000     0.00000  52582.03     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-09 12:22:07      BTC 0.00012000     0.00000  50287.01     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-05-21 12:47:14      BTC 0.00013000     0.00000  56527.62     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-06-11 12:03:31      BTC 0.00014000     0.00000  59978.05     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-06-23 12:21:49      BTC 0.00015000     0.00000  58099.18     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-07-10 00:52:19      BTC 0.00052991    31.26848  59007.15        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   fees   description  comment revenue.type     value exchange rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0 purchase/sale purchase         &lt;NA&gt; 53.033350 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0   shakingsats   credit     airdrops  5.784024 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    0   shakingsats   credit     airdrops  6.034441 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    0   shakingsats   credit     airdrops  7.348590 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    0   shakingsats   credit     airdrops  8.396927 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    0   shakingsats   credit     airdrops  8.714877 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    0 purchase/sale     sale         &lt;NA&gt; 31.268480 shakepay    exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   currency2 total.quantity                                    suploss.range</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       BTC     0.00103982 2021-04-07 14:50:41 UTC--2021-06-06 14:50:41 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       BTC     0.00114982 2021-04-08 12:12:57 UTC--2021-06-07 12:12:57 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       BTC     0.00126982 2021-04-09 12:22:07 UTC--2021-06-08 12:22:07 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       BTC     0.00139982 2021-04-21 12:47:14 UTC--2021-06-20 12:47:14 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       BTC     0.00153982 2021-05-12 12:03:31 UTC--2021-07-11 12:03:31 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       BTC     0.00168982 2021-05-24 12:21:49 UTC--2021-07-23 12:21:49 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       BTC     0.00115991 2021-06-10 00:52:19 UTC--2021-08-09 00:52:19 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      0.00103982   0.00139982                 0    FALSE           0.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      0.00103982   0.00139982                 0    FALSE           0.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      0.00103982   0.00139982                 0    FALSE           0.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      0.00103982   0.00153982                 0    FALSE           0.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      0.00000000   0.00115991                 0    FALSE           0.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      0.00000000   0.00115991                 0    FALSE           0.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      0.00000000   0.00115991                 0    FALSE          14.63777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   gains.sup gains.excess    gains      ACB ACB.share</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA           NA       NA 53.03335  51002.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        NA           NA       NA 53.03335  46123.18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA           NA       NA 53.03335  41764.46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA           NA       NA 53.03335  37885.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA           NA       NA 53.03335  34441.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA           NA       NA 53.03335  31384.02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        NA           NA 14.63777 36.40264  31384.02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price spot.rate transaction fees</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-05-07 21:25:36      CAD       30           0         1     revenue    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   description comment revenue.type value exchange rate.source currency2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       other  credit    referrals    30 shakepay    exchange       CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   total.quantity                                    suploss.range</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1             30 2021-04-07 21:25:36 UTC--2021-06-06 21:25:36 UTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               0           30                 0    FALSE                 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   gains.sup gains.excess gains ACB ACB.share</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA           NA    NA   0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

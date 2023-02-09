@@ -64,12 +64,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_proceeds</span><span class="op">(</span><span class="va">data</span>, <span class="va">tax.year</span>, <span class="va">local.timezone</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_proceeds</span><span class="op">(</span><span class="va">formatted.ACB</span>, <span class="va">tax.year</span>, local.timezone <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/timezones.html" class="external-link">Sys.timezone</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
+    <dl><dt>formatted.ACB</dt>
 <dd><p>The dataframe formatted.ACB,</p></dd>
 
 
@@ -84,9 +84,17 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-09 01:07:51. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-09 01:07:52. Total time elapsed: 0.01 minutes</span>
+<span class="r-in"><span><span class="fu">get_proceeds</span><span class="op">(</span><span class="va">formatted.ACB</span>, <span class="fl">2021</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Loss proceeds (and gains) adjusted for superficial losses. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     type proceeds ACB.total    gains</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Gains 31.26848  16.63071 14.63777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Losses  0.00000   0.00000  0.00000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
