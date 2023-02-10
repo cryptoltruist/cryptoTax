@@ -30,9 +30,6 @@ An object of class \code{data.frame} with 2 rows and 4 columns.
 
 An object of class \code{data.frame} with 5 rows and 4 columns.
 }
-\source{
-\url{https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/, https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/}
-}
 \usage{
 data_adjustedcostbase1
 
@@ -49,5 +46,11 @@ data_adjustedcostbase6
 \description{
 Data sets from adjustedcostbase.ca to demonstrate adjusted cost base as well as
 capital gains/losses. Used as demo for our own \code{\link[=ACB]{ACB()}} function.
+}
+\references{
+\itemize{
+\item https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/
+\item https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/
+}
 }
 \keyword{datasets}

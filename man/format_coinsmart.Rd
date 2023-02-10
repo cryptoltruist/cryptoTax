@@ -18,7 +18,7 @@ it already exists (e.g., if you added new coins or new dates).}
 Format a .csv transaction history file from CoinSmart for later ACB processing.
 }
 \examples{
-\donttest {
+\donttest{
 format_coinsmart(data_coinsmart)
 }
 }

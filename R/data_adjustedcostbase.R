@@ -13,7 +13,9 @@
 #'   \item{fees}{any transaction fees}
 #'   ...
 #' }
-#' @source \url{https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/; https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/}
+#' @references 
+#' - https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/
+#' - https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/
 "data_adjustedcostbase1"
 
 #' @rdname data_adjustedcostbase1
