@@ -30,12 +30,14 @@ test_that("pooltool", {
 })
 
 test_that("CDC", {
+  testthat::skip_on_cran()
   x <- format_CDC(data_CDC)
   formatted.CDC <- suppressWarnings(suppressMessages(as.data.frame(format_ACB(x))))
   expect_snapshot(formatted.CDC)
 })
 
 test_that("celsius", {
+  testthat::skip_on_cran()
   x <- format_celsius(data_celsius)
   formatted.celsius <- suppressWarnings(as.data.frame(format_ACB(x)))
   expect_snapshot(formatted.celsius)

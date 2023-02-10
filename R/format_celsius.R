@@ -4,7 +4,9 @@
 #' @param data The dataframe
 #' @export
 #' @examples
+#' \donttest{
 #' format_celsius(data_celsius)
+#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange
 #' @importFrom rlang .data
 

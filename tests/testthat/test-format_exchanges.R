@@ -52,10 +52,12 @@ test_that("pooltool", {
 })
 
 test_that("CDC", {
+  testthat::skip_on_cran()
   expect_snapshot(suppressMessages(format_CDC(data_CDC)))
 })
 
 test_that("celsius", {
+  testthat::skip_on_cran()
   expect_snapshot(format_celsius(data_celsius))
 })
 

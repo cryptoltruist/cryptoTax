@@ -1,44 +1,45 @@
-options(scipen = 999)
-
-# Prepare list of coins ####
-my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
-list.prices1 <- prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
-
-my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
-list.prices2 <- prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
-
-list.prices <- bind_rows(list.prices1, list.prices2)
-
-# Generate string list of exchanges ####
-exchanges <- paste0(c(
-  "adalite",
-  "binance",
-  "binance_withdrawals",
-  "blockfi",
-  "CDC",
-  "CDC_exchange_rewards",
-  "CDC_exchange_trades",
-  "CDC_wallet",
-  "celsius",
-  "coinsmart",
-  "exodus",
-  "gemini",
-  "newton",
-  "pooltool",
-  "presearch",
-  "shakepay",
-  "uphold"))
-
-data_exchanges <- paste0("data_", exchanges)
-
-formatted.data <- suppressMessages(lapply(data_exchanges, function(x) {
-  format_detect(eval(parse(text = x)), list.prices = list.prices)
-})) %>% 
-  merge_exchanges()
-
-# Format data ####
-
 test_that("full workflow", {
+  testthat::skip_on_cran()
+  
+  options(scipen = 999)
+  
+  # Prepare list of coins ####
+  my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
+  list.prices1 <- prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
+  
+  my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
+  list.prices2 <- prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
+  
+  list.prices <- bind_rows(list.prices1, list.prices2)
+  
+  # Generate string list of exchanges ####
+  exchanges <- paste0(c(
+    "adalite",
+    "binance",
+    "binance_withdrawals",
+    "blockfi",
+    "CDC",
+    "CDC_exchange_rewards",
+    "CDC_exchange_trades",
+    "CDC_wallet",
+    "celsius",
+    "coinsmart",
+    "exodus",
+    "gemini",
+    "newton",
+    "pooltool",
+    "presearch",
+    "shakepay",
+    "uphold"))
+  
+  data_exchanges <- paste0("data_", exchanges)
+  
+  formatted.data <- suppressMessages(lapply(data_exchanges, function(x) {
+    format_detect(eval(parse(text = x)), list.prices = list.prices)
+  })) %>% 
+    merge_exchanges()
+  
+  # Format data ####
   expect_warning(formatted.ACB <<- suppressMessages(format_ACB(
     formatted.data), "negative values"))
   
@@ -98,6 +99,7 @@ test_that("full workflow", {
   print_report(tax.year = "2021", 
                name = "Mr. Cryptoltruist", 
                report.info)
-  })
+  
+  unlink("full_report.html")
+})
 
-unlink("full_report.html")

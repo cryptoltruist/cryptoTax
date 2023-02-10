@@ -11,7 +11,9 @@
 - Added example data sets (ACB, cryptotaxcalculator, coinpanda, koinly, shakepay, CDC, CDC exchange rewards, CDC exchange trades, CDC wallet, adalite, binance, binance withdrawals, blockfi, celsius, coinsmart, exodus, newton, presearch, pooltool, gemini, uphold)
 - Now detects new transaction types not accounted for
 - New functions: 
-    - `format_detect()`, To automatically detect the right exchange and process it with the corresponding function.
+    - `prepare_report()` to get all the required information for `print_report()` in one go.
+    - `get_sup_losses` was it was the last missing piece to get all the info needed for `prepare_report()`.
+    - `format_detect()`, to automatically detect the right exchange and process it with the corresponding function.
     - `format_generic()`, to process most transaction history files not supported by existing functions.
     - `format_binance()`, a general version that works with the general transaction report and includes rewards (but not withdrawal fees). We thus get rid of `format_binance_trades()` since the former is superior (as it includes more transaction types).
     - `get_latest_transactions()`: get latest transaction date by exchange

@@ -6,8 +6,10 @@
 #' @param currency What to convert from
 #' @export
 #' @examples
+#' \donttest{
 #' formatted.dates <- format_shakepay(data_shakepay)[1]
 #' USD2CAD(formatted.dates)
+#' }
 #' @importFrom dplyr %>% filter pull inner_join
 #' @importFrom rlang .data
 

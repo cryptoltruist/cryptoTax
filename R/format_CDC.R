@@ -11,8 +11,10 @@
 #' @param data The dataframe
 #' @export
 #' @examples
+#' \donttest{
 #' formatted.CDC <- format_CDC(data_CDC)
 #' formatted.CDC
+#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange bind_rows case_when
 #' @importFrom rlang .data
 
