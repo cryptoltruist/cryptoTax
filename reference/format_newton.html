@@ -36,6 +36,7 @@ merge the two datasets.'><meta property="og:image" content="https://cryptoltruis
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/ACB.html">Adjusted Cost Base</a>
+    <a class="dropdown-item" href="../articles/report.html">Full Tax Report</a>
     <a class="dropdown-item" href="../articles/references.html">Tax treatments and decisions</a>
   </div>
 </li>
@@ -94,14 +95,14 @@ merge the two datasets.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_newton</span><span class="op">(</span><span class="va">data_newton</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency   quantity total.price  spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-04 22:53:46      CAD 25.0000000  25.0000000     1.0000     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-04-04 22:55:55      ETH  0.0198712  25.0142098  1258.8173         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-04-21 19:57:26      BTC  0.0034300 153.1241354 44642.6051         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-12 21:37:42      BTC  0.0000040   0.3049013 76225.3175         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-05-12 21:52:40      BTC  0.0032130 156.1241341 48591.3894        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-06-16 18:49:11      CAD 25.0000000  25.0000000     1.0000     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency   quantity  total.price  spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-04 22:50:12      LTC  0.1048291   23.4912731   224.0911         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-04 22:53:46      CAD 25.0000000   25.0000000     1.0000     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-04-04 22:55:55      ETH  2.7198712 3423.8221510  1258.8178         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-04-21 19:57:26      BTC  0.0034300  153.1241354 44642.6051         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-12 21:37:42      BTC  0.0000040    0.3049013 76225.3175         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-05-12 21:52:40      BTC  0.0032130  156.1241341 48591.3894        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-06-16 18:49:11      CAD 25.0000000   25.0000000     1.0000     revenue</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        description revenue.type exchange rate.source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1            TRADE         &lt;NA&gt;   newton    exchange</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Referral Program    referrals   newton    exchange</span>

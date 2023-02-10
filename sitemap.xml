@@ -22,6 +22,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/articles/references.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/articles/report.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/authors.html</loc>
   </url>
   <url>
@@ -184,10 +187,16 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/full_report.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_latest_transactions.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/index.html</loc>
@@ -203,6 +212,9 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/print_report.html</loc>

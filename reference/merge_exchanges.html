@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/ACB.html">Adjusted Cost Base</a>
+    <a class="dropdown-item" href="../articles/report.html">Full Tax Report</a>
     <a class="dropdown-item" href="../articles/references.html">Tax treatments and decisions</a>
   </div>
 </li>
@@ -79,22 +80,22 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">shakepay</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">newton</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_newton.html">format_newton</a></span><span class="op">(</span><span class="va">data_newton</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">merge_exchanges</span><span class="op">(</span><span class="va">shakepay</span>, <span class="va">newton</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency    quantity total.price  spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-04-04 22:50:12      LTC  0.10482910  23.4912731   224.0911         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-04-04 22:53:46      CAD 25.00000000  25.0000000     1.0000     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-04 22:55:55      ETH  0.01987120  25.0142098  1258.8173         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-21 19:57:26      BTC  0.00343000 153.1241354 44642.6051         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-07 14:50:41      BTC  0.00103982  53.0333500 51002.4331         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-05-07 21:25:36      CAD 30.00000000  30.0000000     1.0000     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-05-08 12:12:57      BTC  0.00011000   5.7840236 52582.0324     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-09 12:22:07      BTC  0.00012000   6.0344409 50287.0079     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-05-12 21:37:42      BTC  0.00000400   0.3049013 76225.3175         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-05-12 21:52:40      BTC  0.00321300 156.1241341 48591.3894        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-05-21 12:47:14      BTC  0.00013000   7.3485904 56527.6188     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-06-11 12:03:31      BTC  0.00014000   8.3969267 59978.0477     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-06-16 18:49:11      CAD 25.00000000  25.0000000     1.0000     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-06-23 12:21:49      BTC  0.00015000   8.7148765 58099.1770     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 2021-07-10 00:52:19      BTC  0.00052991  31.2684800 59007.1522        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency    quantity  total.price  spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-04-04 22:50:12      LTC  0.10482910   23.4912731   224.0911         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-04-04 22:53:46      CAD 25.00000000   25.0000000     1.0000     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-04 22:55:55      ETH  2.71987120 3423.8221510  1258.8178         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-21 19:57:26      BTC  0.00343000  153.1241354 44642.6051         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-07 14:50:41      BTC  0.00103982   53.0333500 51002.4331         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-05-07 21:25:36      CAD 30.00000000   30.0000000     1.0000     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-05-08 12:12:57      BTC  0.00011000    5.7840236 52582.0324     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-09 12:22:07      BTC  0.00012000    6.0344409 50287.0079     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.3175         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.3894        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-05-21 12:47:14      BTC  0.00013000    7.3485904 56527.6188     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-06-11 12:03:31      BTC  0.00014000    8.3969267 59978.0477     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.0000     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-06-23 12:21:49      BTC  0.00015000    8.7148765 58099.1770     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 2021-07-10 00:52:19      BTC  0.00052991   31.2684800 59007.1522        sell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         description  comment revenue.type exchange rate.source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1             TRADE     &lt;NA&gt;         &lt;NA&gt;   newton    exchange</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  Referral Program     &lt;NA&gt;    referrals   newton    exchange</span>

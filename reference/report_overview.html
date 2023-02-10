@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/ACB.html">Adjusted Cost Base</a>
+    <a class="dropdown-item" href="../articles/report.html">Full Tax Report</a>
     <a class="dropdown-item" href="../articles/references.html">Tax treatments and decisions</a>
   </div>
 </li>
@@ -68,7 +69,9 @@
 <span>  <span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  tax.year <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span>  local.timezone <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/timezones.html" class="external-link">Sys.timezone</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  local.timezone <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/timezones.html" class="external-link">Sys.timezone</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,16 +92,25 @@
 <dt>local.timezone</dt>
 <dd><p>Which time zone to use for the date of the report.</p></dd>
 
+
+<dt>list.prices</dt>
+<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+
+
+<dt>force</dt>
+<dd><p>Whether to force recreating <code>list.prices</code> even though
+it already exists (e.g., if you added new coins or new dates).</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-09 01:07:55. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-10 20:55:08. Please be patient as the transactions process.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-09 01:07:56. Total time elapsed: 0.01 minutes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-10 20:55:09. Total time elapsed: 0.01 minutes</span>
 <span class="r-in"><span><span class="fu">report_overview</span><span class="op">(</span><span class="va">formatted.ACB</span>, today.data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             date.last currency total.quantity cost.share total.cost gains</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-07-10 00:52:19      BTC     0.00115991   31384.02       36.4 14.64</span>

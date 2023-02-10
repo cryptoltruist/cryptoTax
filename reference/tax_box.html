@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/ACB.html">Adjusted Cost Base</a>
+    <a class="dropdown-item" href="../articles/report.html">Full Tax Report</a>
     <a class="dropdown-item" href="../articles/references.html">Tax treatments and decisions</a>
   </div>
 </li>
@@ -88,10 +89,60 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my.list.prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepare_list_prices.html">prepare_list_prices</a></span><span class="op">(</span>coins <span class="op">=</span> <span class="st">"BTC"</span>, start.date <span class="op">=</span> <span class="st">"2021-01-01"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-10 20:55:11. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-10 20:55:11. Total time elapsed: 0.01 minutes</span>
+<span class="r-in"><span><span class="va">report.summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="report_summary.html">report_summary</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, today.data <span class="op">=</span> <span class="cn">TRUE</span>, list.prices <span class="op">=</span> <span class="va">my.list.prices</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sup.losses</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_sup_losses.html">get_sup_losses</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, <span class="fl">2021</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">table.revenues</span> <span class="op">&lt;-</span> <span class="fu"><a href="report_revenues.html">report_revenues</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, <span class="fl">2021</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: revenues have been filtered for tax year 2021</span>
+<span class="r-in"><span><span class="va">proceeds</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_proceeds.html">get_proceeds</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, <span class="fl">2021</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Loss proceeds (and gains) adjusted for superficial losses. </span>
+<span class="r-in"><span><span class="fu">tax_box</span><span class="op">(</span><span class="va">report.summary</span>, <span class="va">sup.losses</span>, <span class="va">table.revenues</span>, <span class="va">proceeds</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Description    Amount</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     Gains proceeds 31.268480</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          Gains ACB 16.630708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3              Gains 14.637772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       50% of gains  7.318886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Outlays of gains  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    Losses proceeds  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         Losses ACB  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8             Losses  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      50% of losses  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Outlays of losses  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    Foreign income  0.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     Foreign gains 14.637772</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                       Comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                              Proceeds of sold coins (gains)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                   ACB of sold coins (gains)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                      Proceeds - ACB (gains)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                               Half of gains</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Expenses and trading fees (gains). Normally already integrated in the ACB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                             Proceeds of sold coins (losses)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                  ACB of sold coins (losses)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                     Proceeds - ACB (losses)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                                              Half of losses</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Expenses and trading fees (losses). Normally already integrated in the ACB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        Income from crypto interest or staking is considered foreign income</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12              Capital gains from crypto is considered foreign capital gains</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                             Line</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                Schedule 3, line 15199 column 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                Schedule 3, line 15199 column 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       Schedule 3, lines 15199 column 5 &amp; 15300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  T1, line 12700; Schedule 3, line 15300, 19900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                   Tax software</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                Schedule 3, line 15199 column 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                Schedule 3, line 15199 column 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       Schedule 3, lines 15199 column 5 &amp; 15300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  T1, line 12700; Schedule 3, line 15300, 19900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                  Tax software</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                         T1, line 12100, T1135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                         T1135</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

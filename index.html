@@ -70,6 +70,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/ACB.html">Adjusted Cost Base</a>
+    <a class="dropdown-item" href="articles/report.html">Full Tax Report</a>
     <a class="dropdown-item" href="articles/references.html">Tax treatments and decisions</a>
   </div>
 </li>
@@ -105,6 +106,7 @@
 </h1>
 </div>
 <p><em>Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary</em>.</p>
+<hr>
 <p>Helps calculate crypto taxes in R.</p>
 <ol style="list-style-type: decimal">
 <li>First, by allowing you to format .CSV files from various exchanges to one large dataframe of organized transactions.</li>
@@ -113,6 +115,22 @@
 <li>Fourth, by calculating superficial losses as well, if desired.</li>
 </ol>
 <p>This is a work in progress. If you notice bugs, please report them: <a href="https://github.com/cryptoltruist/cryptoTax/issues" class="external-link uri">https://github.com/cryptoltruist/cryptoTax/issues</a>.</p>
+</div>
+<div class="section level1">
+<h1 id="why-use-cryptotax">Why use <code>cryptoTax</code>?<a class="anchor" aria-label="anchor" href="#why-use-cryptotax"></a>
+</h1>
+<p>What are the benefits of using an R package to do your crypto taxes as opposed to an online commercial software?</p>
+<ol style="list-style-type: decimal">
+<li>Full transparency on algorithms (open code)</li>
+<li>You stay in control of your data (no need to upload it on another platform)</li>
+<li>You can reuse your script (no need to start from scratch every year)</li>
+<li>No limit on the number of transactions</li>
+<li>Easy to automatically recategorize transactions as desired</li>
+<li>Unlimited flexibility thanks to the power of R</li>
+<li>The community can contribute for continuous improvement and feature requests</li>
+<li>Easy to export a csv or excel file from all formatted transactions</li>
+<li>It is free</li>
+</ol>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -250,7 +268,7 @@
 <div class="section level1">
 <h1 id="supported-exchanges">Supported exchanges<a class="anchor" aria-label="anchor" href="#supported-exchanges"></a>
 </h1>
-<p>Currently, the following exchanges are supported with the <code>format_*</code> functions:</p>
+<p>Currently, the following exchanges are supported with the <code>format_*</code> (or <code><a href="reference/format_detect.html">format_detect()</a></code>) functions:</p>
 <ol style="list-style-type: decimal">
 <li>Adalite</li>
 <li>Binance</li>
@@ -292,9 +310,9 @@
 <span></span>
 <span><span class="co"># Format data with ACB</span></span>
 <span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Process started at 2023-02-07 12:03:02. Please be patient as the transactions process.</span></span>
+<span><span class="co">#&gt; Process started at 2023-02-10 14:53:31. Please be patient as the transactions process.</span></span>
 <span><span class="co">#&gt; [Formatting ACB (progress bar repeats for each coin)...]</span></span>
-<span><span class="co">#&gt; Process ended at 2023-02-07 12:03:03. Total time elapsed: 0.03 minutes</span></span>
+<span><span class="co">#&gt; Process ended at 2023-02-10 14:53:33. Total time elapsed: 0.03 minutes</span></span>
 <span></span>
 <span><span class="co"># Let's get a preview of the output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">19</span>, <span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">14</span>, <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -461,9 +479,9 @@
 <code class="sourceCode R"><span><span class="co"># Get latest ACB.share for each coin (ACB)</span></span>
 <span><span class="fu"><a href="reference/report_overview.html">report_overview</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
-<span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span></span></code></pre></div>
+<span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="va">list.prices</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="11%">
@@ -508,10 +526,10 @@
 <td align="right">0</td>
 <td align="right">0.00</td>
 <td align="right">0.11</td>
-<td align="right">57.60</td>
+<td align="right">57.82</td>
 <td align="right">NA</td>
-<td align="right">-3.06</td>
-<td align="right">-3.06</td>
+<td align="right">-2.84</td>
+<td align="right">-2.84</td>
 <td align="left">CRO</td>
 </tr>
 <tr class="even">
@@ -523,11 +541,11 @@
 <td align="right">20.57</td>
 <td align="right">0</td>
 <td align="right">20.57</td>
-<td align="right">30681.42</td>
-<td align="right">41.76</td>
+<td align="right">30099.59</td>
+<td align="right">40.97</td>
 <td align="right">NA</td>
-<td align="right">-16.82</td>
-<td align="right">-16.82</td>
+<td align="right">-17.61</td>
+<td align="right">-17.61</td>
 <td align="left">BTC</td>
 </tr>
 <tr class="odd">
@@ -539,11 +557,11 @@
 <td align="right">8.25</td>
 <td align="right">0</td>
 <td align="right">8.25</td>
-<td align="right">2179.85</td>
-<td align="right">24.86</td>
+<td align="right">2149.95</td>
+<td align="right">24.52</td>
 <td align="right">NA</td>
-<td align="right">-5.77</td>
-<td align="right">-5.77</td>
+<td align="right">-6.11</td>
+<td align="right">-6.11</td>
 <td align="left">ETH</td>
 </tr>
 <tr class="even">
@@ -555,11 +573,11 @@
 <td align="right">0.00</td>
 <td align="right">0</td>
 <td align="right">0.00</td>
-<td align="right">5.68</td>
-<td align="right">2.02</td>
+<td align="right">5.29</td>
+<td align="right">1.88</td>
 <td align="right">NA</td>
-<td align="right">-1.18</td>
-<td align="right">-1.18</td>
+<td align="right">-1.32</td>
+<td align="right">-1.32</td>
 <td align="left">ETHW</td>
 </tr>
 <tr class="odd">
@@ -572,10 +590,10 @@
 <td align="right">0</td>
 <td align="right">28.82</td>
 <td align="right">NA</td>
-<td align="right">126.24</td>
+<td align="right">125.19</td>
 <td align="right">0</td>
-<td align="right">-26.83</td>
-<td align="right">-26.83</td>
+<td align="right">-27.88</td>
+<td align="right">-27.88</td>
 <td align="left">Total</td>
 </tr>
 </tbody>
@@ -585,9 +603,10 @@
 <span><span class="co"># Get summary of realized capital gains and losses</span></span>
 <span><span class="fu"><a href="reference/report_summary.html">report_summary</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
-<span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
+<span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="va">list.prices</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span></span></code></pre></div>
+<span><span class="co">#&gt; gains, losses, and net have been filtered for tax year 2021 (time zone = America/Toronto)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Type</th>
@@ -622,7 +641,7 @@
 </tr>
 <tr class="even">
 <td align="left">value.today</td>
-<td align="left">126.24</td>
+<td align="left">125.19</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
@@ -632,22 +651,22 @@
 </tr>
 <tr class="even">
 <td align="left">unrealized.losses</td>
-<td align="left">-26.83</td>
+<td align="left">-27.88</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
 <td align="left">unrealized.net</td>
-<td align="left">-26.83</td>
+<td align="left">-27.88</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="even">
 <td align="left">percentage.up</td>
-<td align="left">-17.53%</td>
+<td align="left">-18.21%</td>
 <td align="left">CAD</td>
 </tr>
 <tr class="odd">
 <td align="left">all.time.up</td>
-<td align="left">1.30%</td>
+<td align="left">0.61%</td>
 <td align="left">CAD</td>
 </tr>
 </tbody>
@@ -658,6 +677,7 @@
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table.revenues</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/report_revenues.html">report_revenues</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Note: revenues have been filtered for tax year 2021</span></span>
 <span><span class="va">table.revenues</span></span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -748,6 +768,7 @@
 <span><span class="co"># Plot revenues by reward type</span></span>
 <span><span class="fu"><a href="reference/crypto_pie.html">crypto_pie</a></span><span class="op">(</span><span class="va">table.revenues</span>, by <span class="op">=</span> <span class="st">"revenue.type"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-revenues-2.png"><!-- --></p>
+<hr>
 <p><em>Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary</em>.</p>
 </div>
 </div>

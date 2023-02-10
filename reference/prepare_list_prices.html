@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/ACB.html">Adjusted Cost Base</a>
+    <a class="dropdown-item" href="../articles/report.html">Full Tax Report</a>
     <a class="dropdown-item" href="../articles/references.html">Tax treatments and decisions</a>
   </div>
 </li>
@@ -100,9 +101,23 @@ errors.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">prepare_list_prices</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my.coins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BTC"</span>, <span class="st">"ETH"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">my.list.prices</span> <span class="op">&lt;-</span> <span class="fu">prepare_list_prices</span><span class="op">(</span>coins <span class="op">=</span> <span class="va">my.coins</span>, start.date <span class="op">=</span> <span class="st">"2023-01-01"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">my.list.prices</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Rowwise: </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   timestamp              id slug    name  symbol ref_cur  open  high   low close</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2021-01-02 <span style="color: #949494;">23:59:06</span>     2 liteco… Lite… LTC    CAD      161.  179.  157.  174.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2021-01-03 <span style="color: #949494;">23:59:06</span>     2 liteco… Lite… LTC    CAD      174.  209.  173.  204.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2021-01-04 <span style="color: #949494;">23:59:06</span>     2 liteco… Lite… LTC    CAD      204.  220.  182.  198.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2021-01-05 <span style="color: #949494;">23:59:06</span>     2 liteco… Lite… LTC    CAD      198.  206.  188.  201.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2021-01-06 <span style="color: #949494;">23:59:06</span>     2 liteco… Lite… LTC    CAD      201.  215.  197.  214.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2021-01-07 <span style="color: #949494;">23:59:06</span>     2 liteco… Lite… LTC    CAD      214.  230.  206.  215.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 9 more variables: volume &lt;dbl&gt;, market_cap &lt;dbl&gt;, time_open &lt;dttm&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   time_close &lt;dttm&gt;, time_high &lt;dttm&gt;, time_low &lt;dttm&gt;, spot.rate2 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   currency &lt;chr&gt;, date2 &lt;date&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
