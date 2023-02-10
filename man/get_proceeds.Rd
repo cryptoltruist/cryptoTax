@@ -7,7 +7,7 @@
 get_proceeds(formatted.ACB, tax.year, local.timezone = Sys.timezone())
 }
 \arguments{
-\item{formatted.ACB}{The dataframe formatted.ACB,}
+\item{formatted.ACB}{The \code{formatted.ACB} object,}
 
 \item{tax.year}{which year}
 

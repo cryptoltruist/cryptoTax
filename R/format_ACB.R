@@ -57,7 +57,7 @@ format_ACB <- function(data,
   }
 
   if (sup.loss == TRUE) {
-    warning("WARNING: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.")
+    message("Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.")
   }
 
   # Benchmarks

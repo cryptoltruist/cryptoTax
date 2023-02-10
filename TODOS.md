@@ -21,4 +21,3 @@
 
 - List benefits: full transparency on algorithms (open code), in control of your data (no need to upload it on another platform), can use and reuse your script (no need to start all over from scratch), no limit on number of transactions, easy to automatically recategorize transactions, unlimited flexibility, community can contribute, etc.
 - Explain in vignette how to add option to change whether different transaction types (cashback, airdrops) are considered as part of taxable revenue stream.
-- Write a longer vignette on the general workflow using `prepare_list_prices` and several (all?) exchanges, etc.

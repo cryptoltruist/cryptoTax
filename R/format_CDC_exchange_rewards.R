@@ -19,7 +19,7 @@
 #' Note that this code does not include the initial referral reward in CRO
 #' for signup or on the Crypto.com exchange. It must be added manually.
 #'
-#' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS!
+#' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS, ONLY REWARDS AND WITHDRAWALS!
 #'
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
@@ -133,9 +133,6 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Make warning
-  message("WARNING: DOES NOT DOWNLOAD/PROCESS TRADES, ONLY REWARDS AND WITHDRAWALS!")
 
   # Return result
   data

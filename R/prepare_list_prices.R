@@ -11,9 +11,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
-#' \dontrun{
-#' prepare_list_prices(data)
-#' }
+#' my.coins <- c("BTC", "ETH")
+#' my.list.prices <- prepare_list_prices(coins = my.coins, start.date = "2023-01-01")
+#' head(my.list.prices)
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows left_join arrange
 #' @importFrom utils timestamp
 #' @importFrom rlang .data

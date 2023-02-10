@@ -30,7 +30,7 @@ need to try a few times before it process correctly and without
 errors.
 }
 \examples{
-\dontrun{
-prepare_list_prices(data)
-}
+my.coins <- c("BTC", "ETH")
+my.list.prices <- prepare_list_prices(coins = my.coins, start.date = "2023-01-01")
+head(my.list.prices)
 }

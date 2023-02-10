@@ -19,8 +19,12 @@ tax_box(report.summary, sup.losses, table.revenues, proceeds)
 Output a simple table with all the relevant tax information and tax form line numbers.
 }
 \examples{
-\dontrun{
-ACB(data)
-}
-
+my.list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
+report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)
+sup.losses <- get_sup_losses(formatted.ACB, 2021)
+table.revenues <- report_revenues(formatted.ACB, 2021)
+proceeds <- get_proceeds(formatted.ACB, 2021)
+tax_box(report.summary, sup.losses, table.revenues, proceeds)
 }

@@ -8,7 +8,9 @@ report_overview(
   formatted.ACB,
   today.data = TRUE,
   tax.year = "all",
-  local.timezone = Sys.timezone()
+  local.timezone = Sys.timezone(),
+  list.prices = NULL,
+  force = FALSE
 )
 }
 \arguments{
@@ -19,6 +21,11 @@ report_overview(
 \item{tax.year}{Which tax year(s) to include.}
 
 \item{local.timezone}{Which time zone to use for the date of the report.}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \description{
 Provides a summary of Adjusted Cost Base (ACB) per share, as well as realized and unrealized gains/losses (plus net value), per coin.

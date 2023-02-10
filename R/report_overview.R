@@ -5,6 +5,9 @@
 #' @param today.data whether to fetch today's data.
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
+#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param force Whether to force recreating `list.prices` even though
+#' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
 #' all.data <- format_shakepay(data_shakepay)
@@ -14,7 +17,7 @@
 #' arrange add_row across full_join last
 
 report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
-                            local.timezone = Sys.timezone()) {
+                            local.timezone = Sys.timezone(), list.prices = NULL, force = FALSE) {
   if (today.data == TRUE && curl::has_internet() == FALSE) {
     message("Attention: You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
     today.data <- FALSE
@@ -72,11 +75,15 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
         !grepl("NFT", .data$currency)
       ) %>%
       mutate(
-        date.temp = date,
+        date.temp = .data$date,
         date = last(list.prices$timestamp)
       )
 
-    rates <- cryptoTax::match_prices(rates)
+    if (is.null(list.prices)) {
+      stop("`list.prices` is NULL. It must be provided.")
+    }
+    
+    rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
 
     rates <- rates %>%
       mutate(

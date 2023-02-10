@@ -10,6 +10,5 @@
 #' @importFrom dplyr %>% bind_rows arrange
 
 merge_exchanges <- function(...) {
-  list <- list(...)
-  bind_rows(list) %>% arrange(date)
+  bind_rows(...) %>% arrange(date)
 }

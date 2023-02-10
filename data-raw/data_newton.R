@@ -10,13 +10,13 @@ data_newton <- structure(list(Date = c(
   "TRADE", "WITHDRAWN", "WITHDRAWN", "TRADE", "DEPOSIT", "TRADE"
 ), Received.Quantity = c(
   25, 156.124134098, 0.000004, 0.00343,
-  NA, NA, 0.0198712, 25, 0.1048291
+  NA, NA, 2.7198712, 25, 0.1048291
 ), Received.Currency = c(
   "CAD",
   "CAD", "BTC", "BTC", "", "", "ETH", "CAD", "LTC"
 ), Sent.Quantity = c(
   NA,
-  0.003213, 0.30490127, 153.1241354, 0.0182109, 0.0123412, 25.0142098,
+  0.003213, 0.30490127, 153.1241354, 0.0182109, 0.0123412, 3423.822151,
   NA, 23.491273124
 ), Sent.Currency = c(
   "", "BTC", "CAD", "CAD", "LTC",

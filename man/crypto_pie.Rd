@@ -15,7 +15,11 @@ crypto_pie(table.revenues, by = "exchange")
 Format a .csv file from Newton for later ACB processing.
 }
 \examples{
-\dontrun{
-crypto_pie(data)
-}
+shakepay <- format_shakepay(data_shakepay)
+newton <- format_newton(data_newton)
+all.data <- merge_exchanges(shakepay, newton)
+formatted.ACB <- format_ACB(all.data)
+table.revenues <- report_revenues(formatted.ACB)
+crypto_pie(table.revenues)
+crypto_pie(table.revenues, by = "revenue.type")
 }

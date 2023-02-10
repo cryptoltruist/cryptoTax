@@ -34,7 +34,7 @@ exchange stake), among others.
 Note that this code does not include the initial referral reward in CRO
 for signup or on the Crypto.com exchange. It must be added manually.
 
-WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS!
+WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS, ONLY REWARDS AND WITHDRAWALS!
 }
 \examples{
 format_CDC_exchange_rewards(data_CDC_exchange_rewards)

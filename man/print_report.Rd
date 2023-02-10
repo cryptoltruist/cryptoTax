@@ -4,25 +4,25 @@
 \alias{print_report}
 \title{Print full crypto tax report}
 \usage{
-print_report(tax.year, name, table.revenues, report.summary, sup.losses)
+print_report(tax.year, name, report.info)
 }
 \arguments{
 \item{tax.year}{The tax year desired.}
 
 \item{name}{Name of the individual for the report.}
 
-\item{table.revenues}{The table of revenues.}
-
-\item{report.summary}{The report summary.}
-
-\item{sup.losses}{The calculated superficial losses.}
+\item{report.info}{The report info obtained from \code{prepare_report()}.}
 }
 \description{
 Will output a full crypto tax report in HTML format, which can then be printed or saved as PDF.
 }
 \examples{
-\dontrun{
-print_report(tax.year, name, table.revenues, report.summary, sup.losses)
+\donttest{
+list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
+report.info <- prepare_report(formatted.ACB)
+print_report(tax.year, name, report.info)
 }
 
 }

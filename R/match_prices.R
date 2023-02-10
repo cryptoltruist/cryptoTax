@@ -17,6 +17,7 @@
 #' @importFrom rlang .data
 
 match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.prices = NULL, force = FALSE) {
+  
   all.data <- data
 
   # Create an empty spot.rate if missing else the function won't work
@@ -75,3 +76,4 @@ match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.
     select(-c("date2", "spot.rate2"))
   new.data
 }
+

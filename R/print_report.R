@@ -3,46 +3,36 @@
 #' @description Will output a full crypto tax report in HTML format, which can then be printed or saved as PDF.
 #' @param tax.year The tax year desired.
 #' @param name Name of the individual for the report.
-#' @param table.revenues The table of revenues.
-#' @param report.summary The report summary.
-#' @param sup.losses The calculated superficial losses.
+#' @param report.info The report info obtained from `prepare_report()`.
 #' @export
 #' @examples
-#' \dontrun{
-#' print_report(tax.year, name, table.revenues, report.summary, sup.losses)
+#' \donttest{
+#' list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+#' all.data <- format_shakepay(data_shakepay)
+#' formatted.ACB <- format_ACB(all.data)
+#' report.info <- prepare_report(formatted.ACB)
+#' print_report(tax.year, name, report.info)
 #' }
 #'
-print_report <- function(tax.year, name, table.revenues, report.summary, sup.losses) {
+print_report <- function(tax.year, name, report.info) {
   rlang::check_installed(c("flextable", "rmarkdown"),
     reason = "for this function."
   )
   person.name <- paste("Name:", name)
-  # table.revenues <- get("table.revenues", envir = .GlobalEnv)
-  total.income.numeric <- dplyr::last(table.revenues$staking) +
-    dplyr::last(table.revenues$interests)
-  total.income.numeric <<- total.income.numeric
+  total.income.numeric <- dplyr::last(report.info$table.revenues$staking) +
+    dplyr::last(report.info$table.revenues$interests)
   total.income <- format_dollars(total.income.numeric)
-  total.income <<- total.income
-  total.cost <- report.summary$Amount[5]
-  total.cost <<- total.cost
-  gains <- report.summary$Amount[2]
-  gains <<- gains
+  total.cost <- report.info$report.summary$Amount[5]
+  gains <- report.info$report.summary$Amount[2]
   gains.numeric <- format_dollars(gains, "numeric")
   gains.50 <- format_dollars(gains.numeric * 0.5)
-  gains.50 <<- gains.50
-  losses <- report.summary$Amount[3]
-  losses <<- losses
-  net <- report.summary$Amount[4]
-  net <<- net
+  losses <- report.info$report.summary$Amount[3]
+  net <- report.info$report.summary$Amount[4]
   net.numeric <- format_dollars(net, "numeric")
   net.50 <- format_dollars(net.numeric * 0.5)
-  net.50 <<- net.50
   total.tax <- format_dollars(net.numeric * 0.5 + total.income.numeric)
-  total.tax <<- total.tax
-  sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
-  sup.losses.total <<- sup.losses.total
+  sup.losses.total <- report.info$sup.losses[nrow(sup.losses), "sup.loss"]
   tot.losses <- format_dollars(as.numeric(losses) - sup.losses.total)
-  tot.losses <<- tot.losses
   tot.sup.loss <- as.numeric(tot.losses) + sup.losses.total
   if (tax.year == "all") {
     tax.year <- "all years"
@@ -52,5 +42,7 @@ print_report <- function(tax.year, name, table.revenues, report.summary, sup.los
   rmarkdown::render(system.file("full_report.Rmd", package = "cryptoTax"),
     output_dir = getwd()
   )
-  rstudioapi::viewer("full_report.html")
+  if (interactive()) {
+    rstudioapi::viewer("full_report.html")
+  }
 }

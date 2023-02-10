@@ -1,7 +1,7 @@
 #' @title Get proceeds of all sold coins
 #'
 #' @description Get proceeds of sold coins, ACB of sold coins, and resulting difference between the two, capital gains.
-#' @param formatted.ACB The dataframe formatted.ACB,
+#' @param formatted.ACB The `formatted.ACB` object,
 #' @param tax.year which year
 #' @param local.timezone which time zone
 #' @export
@@ -67,6 +67,6 @@ get_proceeds <- function(formatted.ACB, tax.year, local.timezone = Sys.timezone(
 
   bind_rows(only.gains.sum, only.losses.sum) %>%
     mutate(type = c("Gains", "Losses")) %>%
-    relocate(.data$type) %>%
+    relocate("type") %>%
     as.data.frame()
 }

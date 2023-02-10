@@ -23,6 +23,8 @@ navbar:
     menu:
       - text: Adjusted Cost Base
         href: articles/ACB.html
+      - text: Full Tax Report
+        href: articles/report.html
       - text: Tax treatments and decisions
         href: articles/references.html
   - text: Functions

@@ -7,10 +7,15 @@
 #' @param proceeds proceeds
 #' @export
 #' @examples
-#' \dontrun{
-#' ACB(data)
-#' }
-#'
+#' my.list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+#' all.data <- format_shakepay(data_shakepay)
+#' formatted.ACB <- format_ACB(all.data)
+#' report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)
+#' sup.losses <- get_sup_losses(formatted.ACB, 2021)
+#' table.revenues <- report_revenues(formatted.ACB, 2021)
+#' proceeds <- get_proceeds(formatted.ACB, 2021)
+#' tax_box(report.summary, sup.losses, table.revenues, proceeds)
+
 tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
   losses <- report.summary$Amount[3]
   sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
