@@ -18,7 +18,7 @@ A data frame with 8 rows and 7 variables:
 }
 }
 \source{
-\url{https://coinsmart.com/}
+\url{https://www.coinsmart.com/}
 }
 \usage{
 data_coinsmart

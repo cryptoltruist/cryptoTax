@@ -7,7 +7,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest {
 #' format_coinsmart(data_coinsmart)
+#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange transmute bind_rows
 #' @importFrom rlang .data
 

@@ -80,7 +80,8 @@ ACB(data, spot.rate = "price", sup.loss = FALSE)
 | 2014-09-25 | sell        |       40 |    90 |   10 |        3600 |             60 | 5409 |     90.15 |   -16 |
 
 For more on calculating the ACB, as well as superficial losses, see the
-[corresponding vignette](cryptoTaxarticles/ACB.html).
+[corresponding
+vignette](https://cryptoltruist.github.io/cryptoTax/articles/ACB.html).
 
 # Supported exchanges
 
@@ -128,9 +129,9 @@ all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)
-#> Process started at 2023-02-10 14:53:31. Please be patient as the transactions process.
+#> Process started at 2023-02-10 17:20:47. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2023-02-10 14:53:33. Total time elapsed: 0.03 minutes
+#> Process ended at 2023-02-10 17:20:49. Total time elapsed: 0.02 minutes
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
@@ -154,6 +155,7 @@ report_overview(formatted.ACB,
   local.timezone = "America/Toronto",
   list.prices = list.prices
 )
+#> gains, losses, and net have been filtered for tax year 2021
 ```
 
 | date.last           | currency | total.quantity | cost.share | total.cost | gains | losses |   net | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |

@@ -15,7 +15,7 @@ A data frame with 15 rows and 4 variables:
 }
 }
 \source{
-\url{http://blockfi.com/}
+\url{https://blockfi.com/}
 }
 \usage{
 data_blockfi

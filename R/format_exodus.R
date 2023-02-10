@@ -7,7 +7,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest {
 #' format_exodus(data_exodus)
+#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange transmute
 #' @importFrom rlang .data
 

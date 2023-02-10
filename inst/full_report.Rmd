@@ -98,7 +98,7 @@ sub2 %>%
 ```{r sup loss}
 
 report.info$sup.losses %>%
-  tax_table(type = 3)
+  tax_table(report.info, type = 3)
 
 ```
 

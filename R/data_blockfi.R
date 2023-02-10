@@ -11,5 +11,5 @@
 #'   \item{Confirmed.At}{the date}
 #'   ...
 #' }
-#' @source \url{http://blockfi.com/}
+#' @source \url{https://blockfi.com/}
 "data_blockfi"

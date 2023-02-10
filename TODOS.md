@@ -8,7 +8,6 @@
 
 ## Features
 
-- Prepare for CRAN(?)
 - Finish the Shiny app: editable table, see <https://www.r-bloggers.com/2019/04/edit-datatables-in-r-shiny-app/>
 
 ## Code optimization

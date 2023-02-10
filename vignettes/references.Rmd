@@ -21,7 +21,7 @@ The following section describes the tax decisions and behaviours of `cryptoTax` 
 # Trades & transaction fees
 
 -   Transaction fees are integrated in ACB as per regular ACB calculations
-    -   (https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains)
+    -   (https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/)
 -   Trading fees between two coins are usually integrated to the buy side rather than the sell side
     -   There is no documentation on this but it needs to be integrated on either side, and it makes sense to integrate to the buy side.
 -   For coin-to-coin trades, the price of the purchased coin is fetched from coinmarketcap, and it is reused as the price of the sold coin (when not available from the exchange itself). In this way, the price from the purchase and the sale match (using different spot rates from the two coins would prevent the prices from matching).
@@ -80,7 +80,7 @@ If the sale would bring the total quantity of the share/coin to zero and is not 
 >
 > But you're not obligated to partially claim the loss; you can opt for the entire loss to be denied (and carried forward in most cases). If the loss is relatively small it may not be worth the headache of performing these calculations to determine the partially allowable loss. And remember that when the superficially loss rule denies a capital loss, the amount of the capital loss can usually be added to the ACB of the reacquired shares, so that the loss is effectively carried forward as opposed to being permanently denied.
 >
-> (https://www.adjustedcostbase.ca/blog/applying-the-superficial-loss-rule-for-a-partial-disposition-of-shares)
+> (https://www.adjustedcostbase.ca/blog/applying-the-superficial-loss-rule-for-a-partial-disposition-of-shares/)
 
 # Superficial gains
 
@@ -92,7 +92,7 @@ There is no such thing as superficial gains.
 
 > Since the superficial loss rule denies capital losses under certain circumstances, you might ask, can capital gains be avoided in certain cases? For example, if you sell shares and realize a capital gain, but immediately repurchase the shares, can you call this a "superficial gain" and defer the capital gain? The answer is no: you cannot defer the capital gain and there is no such thing as a "superficial gain." The capital gain is taxable immediately in the current tax year, even if the shares are repurchased within 30 days.
 >
-> (https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule)
+> (https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/)
 
 # Gas/network fees
 
@@ -135,7 +135,7 @@ We adopt a **conservative** approach and treat network fees as a disposition at 
 
 > Gas fees on transfers can be added back to the basis of the token.
 >
-> (https://www.cointracker.io/blog/how-to-claim-tax-benefits-on-your-cryptocurrency-gas-fees)
+> (https://www.cointracker.io/blog/how-to-claim-tax-benefits-on-your-cryptocurrency-gas-fees/)
 
 ## MetricsCPA (CPA from Reddit)
 
@@ -161,7 +161,7 @@ Here, revenue from crypto is considered foreign income, because it is localized 
 
 > The CRA views bitcoin as "specified foreign property" under Section 233.3 of the Income Tax Act.
 >
-> (https://quickbooks.intuit.com/ca/resources/taxes/how-to-claim-cryptocurrency-on-your-income-tax-in-canada)
+> (https://quickbooks.intuit.com/ca/resources/taxes/how-to-claim-cryptocurrency-on-your-income-tax-in-canada/)
 
 # Taxable income
 
@@ -171,7 +171,7 @@ Airdrops, rewards, referrals, promos, are considered a purchase at 0\$ ACB (incl
 
 Similarly to credit card cashback, discounts are considered a purchase at FMV (fair market value) at the time of reception, but not as income and they do not trigger a tax event. This includes certain services from Crypto.com:
 
--   Prepaid card cashback (including Spotify, Netflixy, Amazon Prime "reimbursements")
+-   Prepaid card cashback (including Spotify, Netflix, Amazon Prime "reimbursements")
 -   "Pay" service for rewards on:
     -   topping-up phones
     -   internet purchases
@@ -202,7 +202,7 @@ Similarly to credit card cashback, discounts are considered a purchase at FMV (f
 
 > For airdrops and hard forks, unlike the US where guidance is unclear, in Canada the cost basis is zero for these coins. Therefore when the coins are disposed the entire proceeds are considered capital gains (for individuals) or income (for businesses).
 >
-> https://help.cointracker.io/en/articles/1920821-how-does-cryptocurrency-taxation-work-in-canada
+> https://support.cointracker.io/hc/en-us/articles/4413071347857
 
 ## CoinPanda
 
@@ -210,7 +210,7 @@ Similarly to credit card cashback, discounts are considered a purchase at FMV (f
 >
 > The CRA has not issued specific guidance to the tax treatment of cryptocurrency airdrops, but a safe approach is to pay capital gains tax when you later decide to sell the coins. Similar to crypto received from mining, you should assume a cost basis equal to zero because you did not pay anything to acquire the coins.
 >
-> (https://coinpanda.io/crypto-taxes-canada-cra)
+> (https://coinpanda.io/guides/crypto-taxes-canada/)
 
 ## MetricsCPA (CPA from Reddit)
 

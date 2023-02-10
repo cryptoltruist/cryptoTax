@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Helps calculate crypto taxes in R. First, by allowing you to format .CSV files from various exchanges to one large dataframe of organized transactions. Second, by allowing you to calculate your Adjusted Cost Base (ACB), ACB per share, and realized and unrealized capital gains/losses. Third, by calculating revenues gained from staking, interest, airdrops, etc. Fourth, by calculating superficial losses as well. Only supports basic or simple tax scenarios (for now). *Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary*.
+Helps calculate crypto taxes in R. First, by allowing you to format .CSV files from various exchanges to one large data frame of organized transactions. Second, by allowing you to calculate your Adjusted Cost Base (ACB), ACB per share, and realized and unrealized capital gains/losses. Third, by calculating revenues gained from staking, interest, airdrops, etc. Fourth, by calculating superficial losses as well. *Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary*.
 }
 \seealso{
 Useful links:
@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Mr. Cryptoltruist \email{93457844+cryptoltruist@users.noreply.github.com}
+\strong{Maintainer}: Mr. Cryptoltruist \email{mr.cryptoltruist@gmail.com}
 
 }
 \keyword{internal}

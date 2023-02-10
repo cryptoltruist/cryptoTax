@@ -24,5 +24,8 @@ formatted.ACB <- format_ACB(all.data)
 report.info <- prepare_report(formatted.ACB, list.prices)
 print_report(2021, "Mr. Cryptoltruist", report.info)
 }
+\dontshow{
+unlink("full_report.html")
+}
 
 }

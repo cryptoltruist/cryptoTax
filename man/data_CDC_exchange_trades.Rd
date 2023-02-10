@@ -21,7 +21,7 @@ A data frame with 7 rows and 10 variables:
 }
 }
 \source{
-\url{https://crypto.com/exchange}
+\url{https://crypto.com/exchange/}
 }
 \usage{
 data_CDC_exchange_trades

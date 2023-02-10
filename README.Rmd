@@ -66,7 +66,7 @@ data
 ACB(data, spot.rate = "price", sup.loss = FALSE)
 ```
 
-For more on calculating the ACB, as well as superficial losses, see the [corresponding vignette](cryptoTaxarticles/ACB.html).
+For more on calculating the ACB, as well as superficial losses, see the [corresponding vignette](https://cryptoltruist.github.io/cryptoTax/articles/ACB.html).
 
 # Supported exchanges
 

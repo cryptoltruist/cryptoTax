@@ -13,6 +13,9 @@
 #' report.info <- prepare_report(formatted.ACB, list.prices)
 #' print_report(2021, "Mr. Cryptoltruist", report.info)
 #' }
+#' \dontshow{
+#' unlink("full_report.html")
+#' }
 #'
 print_report <- function(tax.year, name, report.info) {
   rlang::check_installed(c("flextable", "rmarkdown"),
@@ -34,7 +37,6 @@ print_report <- function(tax.year, name, report.info) {
   sup.losses.total <- report.info$sup.losses[nrow(report.info$sup.losses), "sup.loss"]
   tot.losses <- format_dollars(as.numeric(losses) - sup.losses.total)
   tot.sup.loss <- as.numeric(tot.losses) + sup.losses.total
-  # sup.losses <- report.info$sup.losses
   if (tax.year == "all") {
     tax.year <- "all years"
   } else {

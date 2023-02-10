@@ -19,5 +19,5 @@
 #'   \item{TxHash}{transaction hash}
 #'   ...
 #' }
-#' @source \url{https://crypto.com/exchange}
+#' @source \url{https://crypto.com/exchange/}
 "data_CDC_exchange_rewards"

@@ -14,5 +14,5 @@
 #'   \item{TimeStamp}{the date}
 #'   ...
 #' }
-#' @source \url{https://coinsmart.com/}
+#' @source \url{https://www.coinsmart.com/}
 "data_coinsmart"

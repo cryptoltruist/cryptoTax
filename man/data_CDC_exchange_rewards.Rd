@@ -23,7 +23,7 @@ A data frame with 10 rows and 12 variables:
 }
 }
 \source{
-\url{https://crypto.com/exchange}
+\url{https://crypto.com/exchange/}
 }
 \usage{
 data_CDC_exchange_rewards

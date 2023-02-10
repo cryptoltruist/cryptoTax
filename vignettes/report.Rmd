@@ -50,7 +50,7 @@ formatted.data <- merge_exchanges(formatted.data)
 
 # Adjusted Cost Base
 
-Next, we can begin processing that data. We start by formatting the [Adjusted Cost Base (ACB)](articles/ACB.html) of each transaction. The `formatted.ACB` is going to be our core object with which we will be working for all future steps.
+Next, we can begin processing that data. We start by formatting the [Adjusted Cost Base (ACB)](https://cryptoltruist.github.io/cryptoTax/articles/ACB.html) of each transaction. The `formatted.ACB` is going to be our core object with which we will be working for all future steps.
 
 ```{r format_ACB}
 formatted.ACB <- format_ACB(formatted.data)
@@ -120,7 +120,6 @@ if (tax.year == "all") {
   tax.year <- tax.year
 }
 
-# sup.losses <- report.info$sup.losses
 ```
 
 ---

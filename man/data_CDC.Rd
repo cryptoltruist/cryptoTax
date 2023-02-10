@@ -12,7 +12,7 @@ A data frame with 19 rows and 11 variables:
 \item{Currency}{the currency}
 \item{Amount}{quantity}
 \item{To.Currency}{currency of the other traded coin}
-\item{To.Amount}{quanity of the other traded coin}
+\item{To.Amount}{quantity of the other traded coin}
 \item{Native.Currency}{usually CAD}
 \item{Native.Amount}{equivalent value in CAD}
 \item{Native.Amount..in.USD.}{equivalent value in USD}

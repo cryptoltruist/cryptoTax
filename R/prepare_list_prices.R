@@ -22,6 +22,10 @@ prepare_list_prices <- function(coins,
                                 start.date,
                                 end.date = lubridate::now("UTC"),
                                 force = FALSE) {
+  if (isFALSE(curl::has_internet())) {
+    stop("Attention: You need Internet access to fetch historical prices.")
+  }
+  
   # List all active coins
   if (!exists("coins.list")) {
     coins.list <- crypto2::crypto_list(only_active = TRUE)
