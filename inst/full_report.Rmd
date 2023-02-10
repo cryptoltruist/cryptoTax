@@ -12,14 +12,14 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=6.5, fig.height=6.5,
 
 ### Summary
 
-```{r}
+```{r summary}
 
 report.info$report.summary[-1,] %>% 
   tax_table()
 
 ```
 
-```{r, echo=FALSE}
+```{r values, echo=FALSE}
 # ((value.today + net.numeric + revenues) / sum(ACB.list$ACB) - 1) * 100
 value <- round(((format_dollars(report.info$report.summary$Amount[6], "numeric") + 
           last(report.info$report.overview$net) + 
@@ -31,11 +31,11 @@ value2 <- round(last(report.info$report.overview$net) + last(
 
 ```
 
-All time up in percentage (including all unrealized gains and revenues received) is `r paste0(value, "%")` CAD. In absolute dollars, that is `r paste0(value2 + last(report.info$table.revenues$total.revenues))` CAD.
+All time up in percentage (including all unrealized gains and revenues received) is `r paste0(value, "%")`. In absolute dollars, that is `r paste0(value2 + last(report.info$table.revenues$total.revenues))` CAD.
 
 ### Overview
 
-```{r}
+```{r overview}
 
 # Attempting to add header rows midway of the table
 
@@ -83,7 +83,7 @@ sub %>%
 
 ### Current Value
 
-```{r}
+```{r current value}
 
 sub2 <- report.info$report.overview %>% 
   select(currency, cost.share, total.cost, rate.today:currency2)
@@ -95,7 +95,7 @@ sub2 %>%
 
 ### Superficial losses
 
-```{r}
+```{r sup loss}
 
 report.info$sup.losses %>%
   tax_table(type = 3)
@@ -104,7 +104,7 @@ report.info$sup.losses %>%
 
 ### Revenues
 
-```{r}
+```{r revenues}
 
 report.info$table.revenues %>% 
   tax_table(repeat.header = TRUE)
@@ -113,13 +113,13 @@ report.info$table.revenues %>%
 
 ### Revenue Sources by **Exchanges**
 
-```{r}
+```{r pie_exchange}
 report.info$pie_exchange
 ```
 
 ### Revenue Sources by **Types**
 
-```{r}
+```{r pie_revenue}
 report.info$pie_revenue
 ```
 

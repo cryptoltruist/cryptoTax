@@ -85,14 +85,14 @@
     Code
       format_newton(data_newton)
     Output
-                       date currency   quantity total.price  spot.rate transaction
-      1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy
-      2 2021-04-04 22:53:46      CAD 25.0000000  25.0000000     1.0000     revenue
-      3 2021-04-04 22:55:55      ETH  0.0198712  25.0142098  1258.8173         buy
-      4 2021-04-21 19:57:26      BTC  0.0034300 153.1241354 44642.6051         buy
-      5 2021-05-12 21:37:42      BTC  0.0000040   0.3049013 76225.3175         buy
-      6 2021-05-12 21:52:40      BTC  0.0032130 156.1241341 48591.3894        sell
-      7 2021-06-16 18:49:11      CAD 25.0000000  25.0000000     1.0000     revenue
+                       date currency   quantity  total.price  spot.rate transaction
+      1 2021-04-04 22:50:12      LTC  0.1048291   23.4912731   224.0911         buy
+      2 2021-04-04 22:53:46      CAD 25.0000000   25.0000000     1.0000     revenue
+      3 2021-04-04 22:55:55      ETH  2.7198712 3423.8221510  1258.8178         buy
+      4 2021-04-21 19:57:26      BTC  0.0034300  153.1241354 44642.6051         buy
+      5 2021-05-12 21:37:42      BTC  0.0000040    0.3049013 76225.3175         buy
+      6 2021-05-12 21:52:40      BTC  0.0032130  156.1241341 48591.3894        sell
+      7 2021-06-16 18:49:11      CAD 25.0000000   25.0000000     1.0000     revenue
              description revenue.type exchange rate.source
       1            TRADE         <NA>   newton    exchange
       2 Referral Program    referrals   newton    exchange
@@ -646,14 +646,14 @@
     Message <simpleMessage>
       Exchange detected: newton
     Output
-                       date currency   quantity total.price  spot.rate transaction
-      1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy
-      2 2021-04-04 22:53:46      CAD 25.0000000  25.0000000     1.0000     revenue
-      3 2021-04-04 22:55:55      ETH  0.0198712  25.0142098  1258.8173         buy
-      4 2021-04-21 19:57:26      BTC  0.0034300 153.1241354 44642.6051         buy
-      5 2021-05-12 21:37:42      BTC  0.0000040   0.3049013 76225.3175         buy
-      6 2021-05-12 21:52:40      BTC  0.0032130 156.1241341 48591.3894        sell
-      7 2021-06-16 18:49:11      CAD 25.0000000  25.0000000     1.0000     revenue
+                       date currency   quantity  total.price  spot.rate transaction
+      1 2021-04-04 22:50:12      LTC  0.1048291   23.4912731   224.0911         buy
+      2 2021-04-04 22:53:46      CAD 25.0000000   25.0000000     1.0000     revenue
+      3 2021-04-04 22:55:55      ETH  2.7198712 3423.8221510  1258.8178         buy
+      4 2021-04-21 19:57:26      BTC  0.0034300  153.1241354 44642.6051         buy
+      5 2021-05-12 21:37:42      BTC  0.0000040    0.3049013 76225.3175         buy
+      6 2021-05-12 21:52:40      BTC  0.0032130  156.1241341 48591.3894        sell
+      7 2021-06-16 18:49:11      CAD 25.0000000   25.0000000     1.0000     revenue
              description revenue.type exchange rate.source
       1            TRADE         <NA>   newton    exchange
       2 Referral Program    referrals   newton    exchange

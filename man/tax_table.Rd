@@ -4,10 +4,12 @@
 \alias{tax_table}
 \title{Format tax table for final HTML report}
 \usage{
-tax_table(table, repeat.header = FALSE, type = 1)
+tax_table(table, report.info, repeat.header = FALSE, type = 1)
 }
 \arguments{
 \item{table}{The table to format}
+
+\item{report.info}{The report info obtained from \code{prepare_report()}.}
 
 \item{repeat.header}{Logical, whether to repeat headers at the bottom.}
 
@@ -15,4 +17,10 @@ tax_table(table, repeat.header = FALSE, type = 1)
 }
 \description{
 Format tax tables for the final rmd/html report.
+}
+\examples{
+all.data <- format_shakepay(data_shakepay)
+formatted.ACB <- format_ACB(all.data)
+x <- get_sup_losses(formatted.ACB, 2021)
+tax_table(x)
 }

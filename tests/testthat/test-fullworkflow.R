@@ -90,17 +90,14 @@ test_that("full workflow", {
   
   expect_s3_class(tax.box, "data.frame")
   
+  report.info <- prepare_report(formatted.ACB, list.prices)
+  
+  expect_type(report.info, "list")
+  
   # Report
   print_report(tax.year = "2021", 
                name = "Mr. Cryptoltruist", 
-               table.revenues,
-               report.summary, 
-               report.overview, 
-               sup.losses,
-               pie_exchange,
-               pie_revenue, 
-               proceeds, 
-               tax.box)
+               report.info)
   })
 
 unlink("full_report.html")

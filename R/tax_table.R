@@ -4,11 +4,17 @@
 #' @param table The table to format
 #' @param repeat.header Logical, whether to repeat headers at the bottom.
 #' @param type Type of table, one of 1 (default), 2, or 3.
+#' @param report.info The report info obtained from `prepare_report()`.
 #' @export
+#' @examples 
+#' all.data <- format_shakepay(data_shakepay)
+#' formatted.ACB <- format_ACB(all.data)
+#' x <- get_sup_losses(formatted.ACB, 2021)
+#' tax_table(x)
 #' @importFrom dplyr %>% filter arrange mutate select summarize desc
 #' @importFrom rlang .data
 
-tax_table <- function(table, repeat.header = FALSE, type = 1) {
+tax_table <- function(table, report.info, repeat.header = FALSE, type = 1) {
   rlang::check_installed(c("flextable", "rmarkdown"),
     reason = "for this function."
   )
@@ -42,9 +48,9 @@ tax_table <- function(table, repeat.header = FALSE, type = 1) {
 
   if (type == 3) {
     flex.table <- flex.table %>%
-      flextable::bold(part = "header") %>%
-      flextable::bold(i = nrow(sup.losses)) %>%
-      flextable::hline(i = nrow(sup.losses) - 1)
+      flextable::bold(part = "header") #%>%
+      #flextable::bold(i = nrow(table)) %>%
+      #flextable::hline(i = nrow(table) - 1)
   }
   flex.table
 }

@@ -4,10 +4,12 @@
 \alias{prepare_report}
 \title{Prepare info for full crypto tax report}
 \usage{
-prepare_report(formatted.ACB)
+prepare_report(formatted.ACB, list.prices = NULL)
 }
 \arguments{
 \item{formatted.ACB}{The \code{formatted.ACB} object.}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 }
 \description{
 Prepare all required information for a full crypto tax report.
@@ -16,6 +18,6 @@ Prepare all required information for a full crypto tax report.
 list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data)
-x <- prepare_report(formatted.ACB)
+x <- prepare_report(formatted.ACB, list.prices)
 x$proceeds
 }

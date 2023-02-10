@@ -54,46 +54,46 @@
     Code
       formatted.newton
     Output
-                       date currency   quantity total.price  spot.rate transaction
-      1 2021-04-04 22:50:12      LTC  0.1048291  23.4912731   224.0911         buy
-      2 2021-04-04 22:53:46      CAD 25.0000000   0.0000000     1.0000     revenue
-      3 2021-04-04 22:55:55      ETH  0.0198712  25.0142098  1258.8173         buy
-      4 2021-04-21 19:57:26      BTC  0.0034300 153.1241354 44642.6051         buy
-      5 2021-05-12 21:37:42      BTC  0.0000040   0.3049013 76225.3175         buy
-      6 2021-05-12 21:52:40      BTC  0.0032130 156.1241341 48591.3894        sell
-      7 2021-06-16 18:49:11      CAD 25.0000000   0.0000000     1.0000     revenue
-        fees      description revenue.type       value exchange rate.source currency2
-      1    0            TRADE         <NA>  23.4912731   newton    exchange       LTC
-      2    0 Referral Program    referrals  25.0000000   newton    exchange       CAD
-      3    0            TRADE         <NA>  25.0142098   newton    exchange       ETH
-      4    0            TRADE         <NA> 153.1241354   newton    exchange       BTC
-      5    0            TRADE         <NA>   0.3049013   newton    exchange       BTC
-      6    0            TRADE         <NA> 156.1241341   newton    exchange       BTC
-      7    0 Referral Program    referrals  25.0000000   newton    exchange       CAD
-        total.quantity                                    suploss.range
-      1      0.1048291 2021-03-05 22:50:12 UTC--2021-05-04 22:50:12 UTC
-      2     25.0000000 2021-03-05 22:53:46 UTC--2021-05-04 22:53:46 UTC
-      3      0.0198712 2021-03-05 22:55:55 UTC--2021-05-04 22:55:55 UTC
-      4      0.0034300 2021-03-22 19:57:26 UTC--2021-05-21 19:57:26 UTC
-      5      0.0034340 2021-04-12 21:37:42 UTC--2021-06-11 21:37:42 UTC
-      6      0.0002210 2021-04-12 21:52:40 UTC--2021-06-11 21:52:40 UTC
-      7     50.0000000 2021-05-17 18:49:11 UTC--2021-07-16 18:49:11 UTC
+                       date currency   quantity  total.price  spot.rate transaction
+      1 2021-04-04 22:50:12      LTC  0.1048291   23.4912731   224.0911         buy
+      2 2021-04-04 22:53:46      CAD 25.0000000    0.0000000     1.0000     revenue
+      3 2021-04-04 22:55:55      ETH  2.7198712 3423.8221510  1258.8178         buy
+      4 2021-04-21 19:57:26      BTC  0.0034300  153.1241354 44642.6051         buy
+      5 2021-05-12 21:37:42      BTC  0.0000040    0.3049013 76225.3175         buy
+      6 2021-05-12 21:52:40      BTC  0.0032130  156.1241341 48591.3894        sell
+      7 2021-06-16 18:49:11      CAD 25.0000000    0.0000000     1.0000     revenue
+        fees      description revenue.type        value exchange rate.source
+      1    0            TRADE         <NA>   23.4912731   newton    exchange
+      2    0 Referral Program    referrals   25.0000000   newton    exchange
+      3    0            TRADE         <NA> 3423.8221510   newton    exchange
+      4    0            TRADE         <NA>  153.1241354   newton    exchange
+      5    0            TRADE         <NA>    0.3049013   newton    exchange
+      6    0            TRADE         <NA>  156.1241341   newton    exchange
+      7    0 Referral Program    referrals   25.0000000   newton    exchange
+        currency2 total.quantity                                    suploss.range
+      1       LTC      0.1048291 2021-03-05 22:50:12 UTC--2021-05-04 22:50:12 UTC
+      2       CAD     25.0000000 2021-03-05 22:53:46 UTC--2021-05-04 22:53:46 UTC
+      3       ETH      2.7198712 2021-03-05 22:55:55 UTC--2021-05-04 22:55:55 UTC
+      4       BTC      0.0034300 2021-03-22 19:57:26 UTC--2021-05-21 19:57:26 UTC
+      5       BTC      0.0034340 2021-04-12 21:37:42 UTC--2021-06-11 21:37:42 UTC
+      6       BTC      0.0002210 2021-04-12 21:52:40 UTC--2021-06-11 21:52:40 UTC
+      7       CAD     50.0000000 2021-05-17 18:49:11 UTC--2021-07-16 18:49:11 UTC
         quantity.60days share.left60 sup.loss.quantity sup.loss gains.uncorrected
       1       0.1048291    0.1048291          0.000000    FALSE           0.00000
       2       0.0000000   25.0000000          0.000000    FALSE           0.00000
-      3       0.0198712    0.0198712          0.000000    FALSE           0.00000
+      3       2.7198712    2.7198712          0.000000    FALSE           0.00000
       4       0.0034340    0.0002210          0.000000    FALSE           0.00000
       5       0.0034340    0.0002210          0.000000    FALSE           0.00000
       6       0.0034340    0.0002210          0.003213    FALSE          12.56924
       7       0.0000000   50.0000000          0.000000    FALSE           0.00000
-        gains.sup gains.excess    gains        ACB  ACB.share
-      1        NA           NA       NA  23.491273   224.0911
-      2        NA           NA       NA   0.000000     0.0000
-      3        NA           NA       NA  25.014210  1258.8173
-      4        NA           NA       NA 153.124135 44642.6051
-      5        NA           NA       NA 153.429037 44679.3933
-      6        NA           NA 12.56924   9.874146 44679.3933
-      7        NA           NA       NA   0.000000     0.0000
+        gains.sup gains.excess    gains         ACB  ACB.share
+      1        NA           NA       NA   23.491273   224.0911
+      2        NA           NA       NA    0.000000     0.0000
+      3        NA           NA       NA 3423.822151  1258.8178
+      4        NA           NA       NA  153.124135 44642.6051
+      5        NA           NA       NA  153.429037 44679.3933
+      6        NA           NA 12.56924    9.874146 44679.3933
+      7        NA           NA       NA    0.000000     0.0000
 
 # pooltool
 

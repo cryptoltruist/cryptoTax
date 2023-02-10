@@ -16,8 +16,3 @@
 - Use `format_generic` as much as possible in every other `format_*` function, whenever possible, to reduce code redundancy.
 - Fix duplicated columns in sup loss calculations
 - Check <https://github.com/BittyTax/BittyTax> for general inspiration
-
-## Vignettes
-
-- List benefits: full transparency on algorithms (open code), in control of your data (no need to upload it on another platform), can use and reuse your script (no need to start all over from scratch), no limit on number of transactions, easy to automatically recategorize transactions, unlimited flexibility, community can contribute, etc.
-- Explain in vignette how to add option to change whether different transaction types (cashback, airdrops) are considered as part of taxable revenue stream.

@@ -13,6 +13,8 @@ coverage](https://codecov.io/gh/cryptoltruist/cryptoTax/branch/main/graph/badge.
 are no guarantees whatsoever in relation to the use of this package.
 Please consult a tax professional as necessary*.
 
+------------------------------------------------------------------------
+
 Helps calculate crypto taxes in R.
 
 1.  First, by allowing you to format .CSV files from various exchanges
@@ -25,6 +27,23 @@ Helps calculate crypto taxes in R.
 
 This is a work in progress. If you notice bugs, please report them:
 <https://github.com/cryptoltruist/cryptoTax/issues>.
+
+# Why use `cryptoTax`?
+
+What are the benefits of using an R package to do your crypto taxes as
+opposed to an online commercial software?
+
+1.  Full transparency on algorithms (open code)
+2.  You stay in control of your data (no need to upload it on another
+    platform)
+3.  You can reuse your script (no need to start from scratch every year)
+4.  No limit on the number of transactions
+5.  Easy to automatically recategorize transactions as desired
+6.  Unlimited flexibility thanks to the power of R
+7.  The community can contribute for continuous improvement and feature
+    requests
+8.  Easy to export a csv or excel file from all formatted transactions
+9.  It is free
 
 # Installation
 
@@ -65,8 +84,8 @@ For more on calculating the ACB, as well as superficial losses, see the
 
 # Supported exchanges
 
-Currently, the following exchanges are supported with the `format_*`
-functions:
+Currently, the following exchanges are supported with the `format_*` (or
+`format_detect()`) functions:
 
 1.  Adalite
 2.  Binance
@@ -109,9 +128,9 @@ all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)
-#> Process started at 2023-02-07 12:03:02. Please be patient as the transactions process.
+#> Process started at 2023-02-10 14:53:31. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2023-02-07 12:03:03. Total time elapsed: 0.03 minutes
+#> Process ended at 2023-02-10 14:53:33. Total time elapsed: 0.03 minutes
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
@@ -132,27 +151,28 @@ as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
 # Get latest ACB.share for each coin (ACB)
 report_overview(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
-  local.timezone = "America/Toronto"
+  local.timezone = "America/Toronto",
+  list.prices = list.prices
 )
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 ```
 
 | date.last           | currency | total.quantity | cost.share | total.cost | gains | losses |   net | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
 |:--------------------|:---------|---------------:|-----------:|-----------:|------:|-------:|------:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
-| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 |  0.00 |       0.11 |       57.60 |               NA |             -3.06 |          -3.06 | CRO       |
-| 2021-07-25 18:22:02 | BTC      |      0.0013612 |   43035.55 |      58.58 | 20.57 |      0 | 20.57 |   30681.42 |       41.76 |               NA |            -16.82 |         -16.82 | BTC       |
-| 2021-07-28 23:23:04 | ETH      |      0.0114054 |    2685.19 |      30.63 |  8.25 |      0 |  8.25 |    2179.85 |       24.86 |               NA |             -5.77 |          -5.77 | ETH       |
-| 2021-07-11 20:19:55 | ETHW     |      0.3558067 |       8.99 |       3.20 |  0.00 |      0 |  0.00 |       5.68 |        2.02 |               NA |             -1.18 |          -1.18 | ETHW      |
-| 2021-07-28 23:23:04 | Total    |             NA |         NA |     153.07 | 28.82 |      0 | 28.82 |         NA |      126.24 |                0 |            -26.83 |         -26.83 | Total     |
+| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |      0 |  0.00 |       0.11 |       57.82 |               NA |             -2.84 |          -2.84 | CRO       |
+| 2021-07-25 18:22:02 | BTC      |      0.0013612 |   43035.55 |      58.58 | 20.57 |      0 | 20.57 |   30099.59 |       40.97 |               NA |            -17.61 |         -17.61 | BTC       |
+| 2021-07-28 23:23:04 | ETH      |      0.0114054 |    2685.19 |      30.63 |  8.25 |      0 |  8.25 |    2149.95 |       24.52 |               NA |             -6.11 |          -6.11 | ETH       |
+| 2021-07-11 20:19:55 | ETHW     |      0.3558067 |       8.99 |       3.20 |  0.00 |      0 |  0.00 |       5.29 |        1.88 |               NA |             -1.32 |          -1.32 | ETHW      |
+| 2021-07-28 23:23:04 | Total    |             NA |         NA |     153.07 | 28.82 |      0 | 28.82 |         NA |      125.19 |                0 |            -27.88 |         -27.88 | Total     |
 
 ``` r
 
 # Get summary of realized capital gains and losses
 report_summary(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
-  local.timezone = "America/Toronto"
+  local.timezone = "America/Toronto",
+  list.prices = list.prices
 )
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> gains, losses, and net have been filtered for tax year 2021 (time zone = America/Toronto)
 ```
 
 | Type              | Amount  | currency |
@@ -162,17 +182,18 @@ report_summary(formatted.ACB,
 | losses            | 0.00    | CAD      |
 | net               | 28.81   | CAD      |
 | total.cost        | 153.07  | CAD      |
-| value.today       | 126.24  | CAD      |
+| value.today       | 125.19  | CAD      |
 | unrealized.gains  | 0.00    | CAD      |
-| unrealized.losses | -26.83  | CAD      |
-| unrealized.net    | -26.83  | CAD      |
-| percentage.up     | -17.53% | CAD      |
-| all.time.up       | 1.30%   | CAD      |
+| unrealized.losses | -27.88  | CAD      |
+| unrealized.net    | -27.88  | CAD      |
+| percentage.up     | -18.21% | CAD      |
+| all.time.up       | 0.61%   | CAD      |
 
 ### Revenue estimation
 
 ``` r
 table.revenues <- report_revenues(formatted.ACB, tax.year = "2021")
+#> Note: revenues have been filtered for tax year 2021
 table.revenues
 ```
 
@@ -197,6 +218,8 @@ crypto_pie(table.revenues, by = "revenue.type")
 ```
 
 ![](man/figures/README-revenues-2.png)<!-- -->
+
+------------------------------------------------------------------------
 
 *Disclaimer: This is not financial advice. Use at your own risks. There
 are no guarantees whatsoever in relation to the use of this package.

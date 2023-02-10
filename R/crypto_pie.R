@@ -38,7 +38,7 @@ crypto_pie <- function(table.revenues, by = "exchange") {
   if (by == "revenue.type") {
     table.revenues <- table.revenues %>%
       filter(.data$exchange != "total") %>%
-      select(.data$airdrops:.data$mining) %>%
+      select("airdrops":"mining") %>%
       summarize(across(tidyselect::where(is.numeric), sum, na.rm = TRUE)) %>%
       round(2) %>%
       t() %>%
@@ -48,7 +48,7 @@ crypto_pie <- function(table.revenues, by = "exchange") {
     colnames(table.revenues) <- c("total.revenues", by)
 
     pie.data <- table.revenues %>%
-      select(.data$total.revenues:.data$revenue.type) %>%
+      select("total.revenues":"revenue.type") %>%
       arrange(desc(.data$revenue.type)) %>%
       mutate(position = cumsum(.data$total.revenues) - 0.5 * .data$total.revenues)
 
@@ -64,7 +64,7 @@ crypto_pie <- function(table.revenues, by = "exchange") {
   # Make the actual pie chart!
   pie <- pie.data %>%
     ggplot2::ggplot(ggplot2::aes(x = "", y = .data$total.revenues, fill = .data[[by]])) +
-    ggplot2::geom_col(width = 2.5, colour = "black", size = 1.5) +
+    ggplot2::geom_col(width = 2.5, colour = "black", linewidth = 1.5) +
     ggplot2::scale_fill_manual(values = mycolors) +
     ggplot2::coord_polar("y") +
     ggrepel::geom_label_repel(ggplot2::aes(y = .data$position, label = .data$my.label),

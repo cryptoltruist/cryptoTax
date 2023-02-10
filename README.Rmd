@@ -24,6 +24,8 @@ options(scipen=999)
 
 *Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary*.
 
+---
+
 Helps calculate crypto taxes in R.
 
 1. First, by allowing you to format .CSV files from various exchanges to one large dataframe of organized transactions.
@@ -32,6 +34,20 @@ Helps calculate crypto taxes in R.
 4. Fourth, by calculating superficial losses as well, if desired.
 
 This is a work in progress. If you notice bugs, please report them: https://github.com/cryptoltruist/cryptoTax/issues.
+
+# Why use `cryptoTax`?
+
+What are the benefits of using an R package to do your crypto taxes as opposed to an online commercial software?
+
+1. Full transparency on algorithms (open code)
+2. You stay in control of your data (no need to upload it on another platform)
+3. You can reuse your script (no need to start from scratch every year)
+4. No limit on the number of transactions
+5. Easy to automatically recategorize transactions as desired
+6. Unlimited flexibility thanks to the power of R
+7. The community can contribute for continuous improvement and feature requests
+8. Easy to export a csv or excel file from all formatted transactions
+9. It is free
 
 # Installation
 
@@ -54,7 +70,7 @@ For more on calculating the ACB, as well as superficial losses, see the [corresp
 
 # Supported exchanges
 
-Currently, the following exchanges are supported with the `format_*` functions:
+Currently, the following exchanges are supported with the `format_*` (or `format_detect()`) functions:
 
 1. Adalite
 1. Binance
@@ -104,13 +120,15 @@ as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
 # Get latest ACB.share for each coin (ACB)
 report_overview(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
-  local.timezone = "America/Toronto"
+  local.timezone = "America/Toronto",
+  list.prices = list.prices
 )
 
 # Get summary of realized capital gains and losses
 report_summary(formatted.ACB,
   today.data = TRUE, tax.year = "2021",
-  local.timezone = "America/Toronto"
+  local.timezone = "America/Toronto",
+  list.prices = list.prices
 )
 ```
 
@@ -126,5 +144,7 @@ crypto_pie(table.revenues)
 # Plot revenues by reward type
 crypto_pie(table.revenues, by = "revenue.type")
 ```
+
+---
 
 *Disclaimer: This is not financial advice. Use at your own risks. There are no guarantees whatsoever in relation to the use of this package. Please consult a tax professional as necessary*.

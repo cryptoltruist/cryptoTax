@@ -21,8 +21,8 @@ Will output a full crypto tax report in HTML format, which can then be printed o
 list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data)
-report.info <- prepare_report(formatted.ACB)
-print_report(tax.year, name, report.info)
+report.info <- prepare_report(formatted.ACB, list.prices)
+print_report(2021, "Mr. Cryptoltruist", report.info)
 }
 
 }

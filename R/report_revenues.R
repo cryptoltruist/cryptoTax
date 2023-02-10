@@ -32,14 +32,14 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
   # Get all revenues for selected year
   revenues2 <- revenues %>%
     group_by(.data$exchange) %>%
-    select(.data$exchange, .data$date, .data$value) %>%
+    select("exchange", "date", "value") %>%
     rename(last.date = "date") %>%
     summarize(total.revenues = sum(.data$value))
 
   revenues.dates <- revenues %>%
     group_by(.data$exchange) %>%
     filter(date == max(.data$date)) %>%
-    select(.data$exchange, .data$date)
+    select("exchange", "date")
 
   # Add revenue.type
   airdrops <- revenues %>%
@@ -95,9 +95,9 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
     Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "exchange"), .)
 
   table <- table %>%
-    rename(date.last = .data$date) %>%
+    rename(date.last = "date") %>%
     arrange(desc(.data$total.revenues)) %>%
-    mutate(across(.data$total.revenues, round, 2)) %>%
+    mutate(across("total.revenues", round, 2)) %>%
     slice(1) %>%
     as.data.frame()
 

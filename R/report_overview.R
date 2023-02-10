@@ -33,7 +33,7 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
       mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
       filter(lubridate::year(.data$datetime.local) == tax.year)
 
-    warning("gains, losses, and net have been filtered for tax year ", tax.year)
+    message("gains, losses, and net have been filtered for tax year ", tax.year)
   }
 
   if (tax.year == "all") {

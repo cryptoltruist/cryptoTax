@@ -10,8 +10,8 @@
 #' list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data)
-#' report.info <- prepare_report(formatted.ACB)
-#' print_report(tax.year, name, report.info)
+#' report.info <- prepare_report(formatted.ACB, list.prices)
+#' print_report(2021, "Mr. Cryptoltruist", report.info)
 #' }
 #'
 print_report <- function(tax.year, name, report.info) {
@@ -31,9 +31,10 @@ print_report <- function(tax.year, name, report.info) {
   net.numeric <- format_dollars(net, "numeric")
   net.50 <- format_dollars(net.numeric * 0.5)
   total.tax <- format_dollars(net.numeric * 0.5 + total.income.numeric)
-  sup.losses.total <- report.info$sup.losses[nrow(sup.losses), "sup.loss"]
+  sup.losses.total <- report.info$sup.losses[nrow(report.info$sup.losses), "sup.loss"]
   tot.losses <- format_dollars(as.numeric(losses) - sup.losses.total)
   tot.sup.loss <- as.numeric(tot.losses) + sup.losses.total
+  # sup.losses <- report.info$sup.losses
   if (tax.year == "all") {
     tax.year <- "all years"
   } else {

@@ -56,7 +56,9 @@ Next, we can begin processing that data. We start by formatting the [Adjusted Co
 formatted.ACB <- format_ACB(formatted.data)
 ```
 
-We get a warning that there are negative values in some places, thefore that we might have forgotten some transactions. The `check_missing_transactions()` function makes it easy to identify which transactions (and therefore which coin) are concerned with this.
+> Per default, `format_ACB()` considers taxable revenue (and not aquisition at $0 ACB) the following transaction types: staking, interests, and mining. If you want a different treatment for those transactions (or other types of revenues like cashback and airdrops), use the `as.revenue` argument of `format_ACB()`.
+
+We get a warning that there are negative values in some places, therefore that we might have forgotten some transactions. The `check_missing_transactions()` function makes it easy to identify which transactions (and therefore which coin) are concerned with this.
 
 ```{r check_missing_transactions}
 check_missing_transactions(formatted.ACB)
@@ -75,7 +77,7 @@ At this stage, it is possible to list transactions by coin, if you have few tran
 Next, we need to calculate a few extra bits of information for the final report. Fortunately, the `prepare_report()` function makes this easy for us.
 
 ```{r prepare_report}
-report.info <- prepare_report(formatted.ACB)
+report.info <- prepare_report(formatted.ACB, list.prices)
 ```
 
 The `report.info` object is a list containing all the different info (tables, figures) necessary for the final report. They can be accessed individually too:
@@ -118,7 +120,7 @@ if (tax.year == "all") {
   tax.year <- tax.year
 }
 
-sup.losses <- report.info$sup.losses
+# sup.losses <- report.info$sup.losses
 ```
 
 ---
@@ -129,6 +131,6 @@ sup.losses <- report.info$sup.losses
 
 Date: `r format(Sys.time(), '%c')`
 
-```{r print_report child, child = "../inst/full_report.Rmd."}
+```{r print_report child, child = system.file("full_report.Rmd", package = "cryptoTax")}
 
 ```
