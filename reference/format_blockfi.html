@@ -86,7 +86,8 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_blockfi</span><span class="op">(</span><span class="va">data_blockfi</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">format_blockfi</span><span class="op">(</span><span class="va">data_blockfi</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Could not calculate spot rate. Use `force = TRUE`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency     quantity total.price spot.rate transaction</span>
@@ -109,6 +110,7 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7    Bonus Payment       promos  blockfi             coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8            Trade         &lt;NA&gt;  blockfi             coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9            Trade         &lt;NA&gt;  blockfi coinmarketcap (buy price)</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

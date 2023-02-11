@@ -81,19 +81,21 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">shakepay</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">shakepay</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">newton</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_newton.html">format_newton</a></span><span class="op">(</span><span class="va">data_newton</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="merge_exchanges.html">merge_exchanges</a></span><span class="op">(</span><span class="va">shakepay</span>, <span class="va">newton</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-11 00:04:50. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-11 20:24:26. Please be patient as the transactions process.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-11 00:04:50. Total time elapsed: 0.01 minutes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-11 20:24:27. Total time elapsed: 0.02 minutes</span>
 <span class="r-in"><span><span class="va">table.revenues</span> <span class="op">&lt;-</span> <span class="fu"><a href="report_revenues.html">report_revenues</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">crypto_pie</span><span class="op">(</span><span class="va">table.revenues</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="crypto_pie-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">crypto_pie</span><span class="op">(</span><span class="va">table.revenues</span>, by <span class="op">=</span> <span class="st">"revenue.type"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="crypto_pie-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
