@@ -13,5 +13,7 @@ format_celsius(data)
 Format a .csv transaction history file from Celsius for later ACB processing.
 }
 \examples{
+\donttest{
 format_celsius(data_celsius)
+}
 }

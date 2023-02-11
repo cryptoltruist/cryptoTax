@@ -17,6 +17,8 @@ USD2CAD(data, conversion = "USD", currency = "CAD")
 This function allows you to convert USD to CAD.
 }
 \examples{
+\donttest{
 formatted.dates <- format_shakepay(data_shakepay)[1]
 USD2CAD(formatted.dates)
+}
 }
