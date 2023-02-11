@@ -107,10 +107,10 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-10 23:22:35. Please be patient as the transactions process.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-11 00:01:25. Please be patient as the transactions process.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-10 23:22:36. Total time elapsed: 0.01 minutes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-11 00:01:26. Total time elapsed: 0.01 minutes</span>
 <span class="r-in"><span><span class="fu">report_overview</span><span class="op">(</span><span class="va">formatted.ACB</span>, today.data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             date.last currency total.quantity cost.share total.cost gains</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-07-10 00:52:19      BTC     0.00115991   31384.02       36.4 14.64</span>
