@@ -29,7 +29,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest{
 #' format_CDC_exchange_trades(data_CDC_exchange_trades)
+#' }
 #' @importFrom dplyr %>% rename mutate case_when filter select arrange bind_rows mutate_at
 #' @importFrom rlang .data
 

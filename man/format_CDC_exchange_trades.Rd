@@ -42,5 +42,7 @@ messing with the headers. Thus, when reading the file with
 read the file normally.
 }
 \examples{
+\donttest{
 format_CDC_exchange_trades(data_CDC_exchange_trades)
+}
 }

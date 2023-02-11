@@ -2,12 +2,20 @@
 % Please edit documentation in R/format_detect.R
 \name{format_detect}
 \alias{format_detect}
+\alias{format_detect.data.frame}
+\alias{format_detect.list}
 \title{Detect transaction file exchange and format it}
 \usage{
-format_detect(data, list.prices = NULL, force = FALSE)
+format_detect(data, ...)
+
+\method{format_detect}{data.frame}(data, list.prices = NULL, force = FALSE, ...)
+
+\method{format_detect}{list}(data, list.prices = NULL, force = FALSE, ...)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{...}{Used for other methods.}
 
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 
@@ -21,4 +29,5 @@ it with the proper function for later ACB processing.
 \examples{
 format_detect(data_shakepay)
 format_detect(data_newton)
+format_detect(list(data_shakepay, data_newton))
 }

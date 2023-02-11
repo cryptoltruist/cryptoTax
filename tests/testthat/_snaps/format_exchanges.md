@@ -613,7 +613,7 @@
       11          in            <NA>     airdrops   uphold             coinmarketcap
       12          in            <NA>     airdrops   uphold             coinmarketcap
 
-# format_detect
+# format_detect single
 
     Code
       format_detect(data_shakepay)
@@ -1203,4 +1203,80 @@
       10       trade         BAT-LTC         <NA>   uphold coinmarketcap (buy price)
       11          in            <NA>     airdrops   uphold             coinmarketcap
       12          in            <NA>     airdrops   uphold             coinmarketcap
+
+# format_detect list
+
+    Code
+      format_detect(list(data_shakepay, data_newton, data_adalite), list.prices = list.prices)
+    Message <simpleMessage>
+      Exchange detected: shakepay
+      Exchange detected: newton
+      Exchange detected: adalite
+    Output
+                        date currency    quantity  total.price    spot.rate
+      1  2021-04-04 22:50:12      LTC  0.10482910   23.4912731   224.091146
+      2  2021-04-04 22:53:46      CAD 25.00000000   25.0000000     1.000000
+      3  2021-04-04 22:55:55      ETH  2.71987120 3423.8221510  1258.817752
+      4  2021-04-21 19:57:26      BTC  0.00343000  153.1241354 44642.605073
+      5  2021-04-28 16:56:00      ADA  0.31204000    0.5091943     1.631824
+      6  2021-05-07 14:50:41      BTC  0.00103982   53.0333500 51002.433113
+      7  2021-05-07 16:53:00      ADA  0.31251320    0.6266931     2.005333
+      8  2021-05-07 21:25:36      CAD 30.00000000   30.0000000     1.000000
+      9  2021-05-08 12:12:57      BTC  0.00011000    5.7840236 52582.032400
+      10 2021-05-09 12:22:07      BTC  0.00012000    6.0344409 50287.007900
+      11 2021-05-12 16:56:00      ADA  0.22124100    0.4441940     2.007738
+      12 2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.317500
+      13 2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.389386
+      14 2021-05-17 17:16:00      ADA  0.41232100    1.0798503     2.618955
+      15 2021-05-17 21:16:00      ADA  0.16918700    0.4430932     2.618955
+      16 2021-05-17 21:31:00      ADA  0.19123000    0.5008228     2.618955
+      17 2021-05-21 12:47:14      BTC  0.00013000    7.3485904 56527.618800
+      18 2021-06-11 12:03:31      BTC  0.00014000    8.3969267 59978.047700
+      19 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.000000
+      20 2021-06-23 12:21:49      BTC  0.00015000    8.7148765 58099.177000
+      21 2021-07-10 00:52:19      BTC  0.00052991   31.2684800 59007.152158
+         transaction      description        comment revenue.type exchange
+      1          buy            TRADE           <NA>         <NA>   newton
+      2      revenue Referral Program           <NA>    referrals   newton
+      3          buy            TRADE           <NA>         <NA>   newton
+      4          buy            TRADE           <NA>         <NA>   newton
+      5      revenue   Reward awarded           <NA>      staking  adalite
+      6          buy    purchase/sale       purchase         <NA> shakepay
+      7      revenue   Reward awarded           <NA>      staking  adalite
+      8      revenue            other         credit    referrals shakepay
+      9      revenue      shakingsats         credit     airdrops shakepay
+      10     revenue      shakingsats         credit     airdrops shakepay
+      11     revenue   Reward awarded           <NA>      staking  adalite
+      12         buy            TRADE           <NA>         <NA>   newton
+      13        sell            TRADE           <NA>         <NA>   newton
+      14     revenue   Reward awarded           <NA>      staking  adalite
+      15        sell             Sent Withdrawal Fee         <NA>  adalite
+      16        sell             Sent Withdrawal Fee         <NA>  adalite
+      17     revenue      shakingsats         credit     airdrops shakepay
+      18     revenue      shakingsats         credit     airdrops shakepay
+      19     revenue Referral Program           <NA>    referrals   newton
+      20     revenue      shakingsats         credit     airdrops shakepay
+      21        sell    purchase/sale           sale         <NA> shakepay
+           rate.source
+      1       exchange
+      2       exchange
+      3       exchange
+      4       exchange
+      5  coinmarketcap
+      6       exchange
+      7  coinmarketcap
+      8       exchange
+      9       exchange
+      10      exchange
+      11 coinmarketcap
+      12      exchange
+      13      exchange
+      14 coinmarketcap
+      15 coinmarketcap
+      16 coinmarketcap
+      17      exchange
+      18      exchange
+      19      exchange
+      20      exchange
+      21      exchange
 

@@ -44,8 +44,7 @@ exchanges <- list(
   data_coinsmart, data_exodus, data_gemini, data_newton, data_pooltool, data_presearch,
   data_shakepay, data_uphold)
 
-formatted.data <- lapply(exchanges, format_detect)
-formatted.data <- merge_exchanges(formatted.data)
+formatted.data <- format_detect(exchanges)
 ```
 
 # Adjusted Cost Base

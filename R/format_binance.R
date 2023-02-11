@@ -17,7 +17,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest{
 #' format_binance(data_binance)
+#' }
 #' @importFrom dplyr %>% rename mutate across select arrange bind_rows desc
 #' @importFrom rlang .data
 

@@ -27,7 +27,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest{
 #' format_CDC_exchange_rewards(data_CDC_exchange_rewards)
+#' }
 #' @importFrom dplyr %>% rename mutate filter select arrange
 #' @importFrom rlang .data
 

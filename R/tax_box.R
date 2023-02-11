@@ -7,6 +7,7 @@
 #' @param proceeds proceeds
 #' @export
 #' @examples
+#' \donttest{
 #' my.list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data)
@@ -15,6 +16,7 @@
 #' table.revenues <- report_revenues(formatted.ACB, 2021)
 #' proceeds <- get_proceeds(formatted.ACB, 2021)
 #' tax_box(report.summary, sup.losses, table.revenues, proceeds)
+#' }
 
 tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
   losses <- report.summary$Amount[3]

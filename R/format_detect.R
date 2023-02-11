@@ -6,14 +6,22 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
-#' @export
+#' @param ... Used for other methods.
 #' @examples
 #' format_detect(data_shakepay)
 #' format_detect(data_newton)
+#' format_detect(list(data_shakepay, data_newton))
 #' @importFrom dplyr %>% rename mutate select filter bind_rows
 #' @importFrom rlang .data
 
-format_detect <- function(data, list.prices = NULL, force = FALSE) {
+#' @export
+format_detect <- function (data, ...) {
+  UseMethod("format_detect", data)
+}
+
+#' @rdname format_detect
+#' @export
+format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
   
   # Extract data col names
   data.names <- toString(names(data))
@@ -86,5 +94,13 @@ format_detect <- function(data, list.prices = NULL, force = FALSE) {
   
   message("Exchange detected: ", condition)
   
+  formatted.data
+}
+
+#' @rdname format_detect
+#' @export
+format_detect.list <- function(data, list.prices = NULL, force = FALSE, ...) {
+  formatted.data <- lapply(data, format_detect, list.prices = list.prices, force = force)
+  formatted.data <- merge_exchanges(formatted.data)
   formatted.data
 }

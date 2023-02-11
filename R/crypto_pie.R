@@ -5,6 +5,7 @@
 #' @param by To plot by which element, one of `c("exchange", "revenue.type")`.
 #' @export
 #' @examples
+#' \donttest{
 #' shakepay <- format_shakepay(data_shakepay)
 #' newton <- format_newton(data_newton)
 #' all.data <- merge_exchanges(shakepay, newton)
@@ -12,6 +13,7 @@
 #' table.revenues <- report_revenues(formatted.ACB)
 #' crypto_pie(table.revenues)
 #' crypto_pie(table.revenues, by = "revenue.type")
+#' }
 #' @importFrom dplyr %>% filter arrange mutate select summarize desc
 #' @importFrom rlang .data
 

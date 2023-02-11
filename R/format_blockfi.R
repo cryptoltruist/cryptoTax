@@ -7,7 +7,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest{
 #' format_blockfi(data_blockfi)
+#' }
 #' @importFrom dplyr %>% rename mutate filter select arrange bind_rows
 #' @importFrom rlang .data
 

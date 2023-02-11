@@ -46,7 +46,9 @@
 #'
 #' # If both total.price and spot.rate are missing, it will
 #' # scrap the spot.rate from coinmarketcap based on the coin:
+#' \donttest{
 #' format_generic(data_generic4)
+#' }
 #'
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange any_of
 #' @importFrom rlang .data

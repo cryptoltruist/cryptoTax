@@ -52,12 +52,10 @@ test_that("pooltool", {
 })
 
 test_that("CDC", {
-  testthat::skip_on_cran()
   expect_snapshot(suppressMessages(format_CDC(data_CDC)))
 })
 
 test_that("celsius", {
-  testthat::skip_on_cran()
   expect_snapshot(format_celsius(data_celsius))
 })
 
@@ -111,7 +109,7 @@ test_that("uphold", {
 
 # Test format_detect() ####
 
-test_that("format_detect", {
+test_that("format_detect single", {
   expect_snapshot(format_detect(data_shakepay))
   expect_snapshot(format_detect(data_newton))
   expect_snapshot(format_detect(data_pooltool))
@@ -129,6 +127,11 @@ test_that("format_detect", {
   expect_snapshot(format_detect(data_presearch, list.prices = list.prices))
   expect_snapshot(format_detect(data_gemini, list.prices = list.prices))
   expect_snapshot(format_detect(data_uphold, list.prices = list.prices))
+})
+
+test_that("format_detect list", {
+  expect_snapshot(format_detect(list(data_shakepay, data_newton, data_adalite), 
+                                list.prices = list.prices))
 })
 
 # Add test: timezone!

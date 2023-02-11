@@ -30,5 +30,7 @@ Warning: This does NOT process TRADES See the \code{format_binance_trades()}
 function for this purpose.
 }
 \examples{
+\donttest{
 format_binance_withdrawals(data_binance_withdrawals)
+}
 }

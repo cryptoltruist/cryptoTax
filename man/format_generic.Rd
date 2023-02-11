@@ -84,6 +84,8 @@ format_generic(data_generic3)
 
 # If both total.price and spot.rate are missing, it will
 # scrap the spot.rate from coinmarketcap based on the coin:
+\donttest{
 format_generic(data_generic4)
+}
 
 }

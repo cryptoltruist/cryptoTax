@@ -5,11 +5,13 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @export
 #' @examples
+#' \donttest{
 #' list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data)
 #' x <- prepare_report(formatted.ACB, list.prices)
 #' x$proceeds
+#' }
 
 prepare_report <- function(formatted.ACB, list.prices = NULL) {
   report.overview <- report_overview(

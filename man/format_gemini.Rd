@@ -18,5 +18,7 @@ it already exists (e.g., if you added new coins or new dates).}
 Format a .csv transaction history file from Gemini for later ACB processing.
 }
 \examples{
+\donttest{
 format_gemini(data_gemini)
+}
 }

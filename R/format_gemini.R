@@ -7,7 +7,9 @@
 #' it already exists (e.g., if you added new coins or new dates).
 #' @export
 #' @examples
+#' \donttest{
 #' format_gemini(data_gemini)
+#' }
 #' @importFrom dplyr %>% slice rename mutate rowwise filter select bind_rows
 #' arrange transmute n contains full_join
 #' @importFrom rlang .data
