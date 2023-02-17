@@ -72,7 +72,8 @@ along with ACB per share and realized capital gains or losses.</p>
 <span>  <span class="va">data</span>,</span>
 <span>  as.revenue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"staking"</span>, <span class="st">"interests"</span>, <span class="st">"mining"</span><span class="op">)</span>,</span>
 <span>  sup.loss <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  cl <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -94,16 +95,23 @@ along with ACB per share and realized capital gains or losses.</p>
 <dt>cl</dt>
 <dd><p>Number of cores to use for parallel processing.</p></dd>
 
+
+<dt>verbose</dt>
+<dd><p>Logical: if <code>FALSE</code>, does not print progress bar or warnings
+to console.</p></dd>
+
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A data frame, formatted for the Adjusted Cost Base (ACB).</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">format_ACB</span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process started at 2023-02-11 20:24:33. Please be patient as the transactions process.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [Formatting ACB (progress bar repeats for each coin)...]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Process ended at 2023-02-11 20:24:33. Total time elapsed: 0.01 minutes</span>
+<span class="r-in"><span><span class="fu">format_ACB</span><span class="op">(</span><span class="va">all.data</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 26</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   currency [2]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   date                currency  quantity total.p…¹ spot.…² trans…³  fees descr…⁴</span>

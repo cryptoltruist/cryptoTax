@@ -160,6 +160,12 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A data frame of exchange transactions, formatted for further processing.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -208,7 +214,6 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># If both total.price and spot.rate are missing, it will</span></span></span>
 <span class="r-in"><span><span class="co"># scrap the spot.rate from coinmarketcap based on the coin:</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data_generic4</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Could not calculate spot rate. Use `force = TRUE`.</span>
@@ -220,7 +225,6 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 generic_exchange coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 generic_exchange coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 generic_exchange coinmarketcap</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

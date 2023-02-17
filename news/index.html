@@ -61,7 +61,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="cryptotax-002">cryptoTax 0.0.2<a class="anchor" aria-label="anchor" href="#cryptotax-002"></a></h2>
 <p><strong>Breaking changes:</strong></p>
-<ul><li>We get rid of the <code>format_wealtsimple()</code>, <code>format_BSC()</code>, <code>format_binance_trades()</code>, <code>crypto2fiat()</code> functions, since their goal is better fulfilled by the new <code><a href="../reference/format_generic.html">format_generic()</a></code>, <code><a href="../reference/format_binance.html">format_binance()</a></code>, and <code><a href="../reference/match_prices.html">match_prices()</a></code> functions, respectively.</li>
+<ul><li>We get rid of the <code>format_wealtsimple()</code>, <code>format_BSC()</code>, <code>format_binance_trades()</code>, <code>crypto2fiat()</code>, and <code>fetch_prices()</code> functions, since their goal is better fulfilled by the new <code><a href="../reference/format_generic.html">format_generic()</a></code>, <code><a href="../reference/format_binance.html">format_binance()</a></code>, <code><a href="../reference/match_prices.html">match_prices()</a></code>, and <code><a href="../reference/prepare_list_prices.html">prepare_list_prices()</a></code> functions, respectively.</li>
 </ul><p><strong>New Features:</strong></p>
 <ul><li>New <code>pkgdown</code> website with three vignettes: (1) calculating ACB, (2) full tax report, and (3) tax treatments and decisions.</li>
 <li>Informative progress bars with <code><a href="../reference/format_ACB.html">format_ACB()</a></code> and <code><a href="../reference/format_suploss.html">format_suploss()</a></code> since these functions are extremely slow with thousands of transactions.</li>

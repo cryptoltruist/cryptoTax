@@ -125,11 +125,16 @@ for signup or on the Crypto.com exchange. It must be added manually.</p>
 it already exists (e.g., if you added new coins or new dates).</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A data frame of exchange transactions, formatted for further processing.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data_CDC_exchange_rewards</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data_CDC_exchange_rewards</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency   quantity  total.price    spot.rate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-02-19 00:00:00      CRO 1.36512341 0.2227899953 1.632014e-01</span>
@@ -164,7 +169,6 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8       rebates CDC.exchange coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9       rebates CDC.exchange coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10      rebates CDC.exchange coinmarketcap</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
