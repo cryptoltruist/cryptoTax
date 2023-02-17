@@ -1,13 +1,16 @@
 #' @title Get proceeds of all sold coins
 #'
-#' @description Get proceeds of sold coins, ACB of sold coins, and resulting difference between the two, capital gains.
+#' @description Get proceeds of sold coins, ACB of sold coins, and resulting 
+#' difference between the two, capital gains.
 #' @param formatted.ACB The `formatted.ACB` object,
 #' @param tax.year which year
 #' @param local.timezone which time zone
+#' @return A data frame, with the following columns: type, proceeds, ACB.total, 
+#' gains.
 #' @export
 #' @examples
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' get_proceeds(formatted.ACB, 2021)
 #' @importFrom dplyr mutate %>% filter ungroup summarize relocate bind_rows
 #' @importFrom rlang .data
@@ -62,8 +65,6 @@ get_proceeds <- function(formatted.ACB, tax.year, local.timezone = Sys.timezone(
   #              ACB.total = sum(ACB.quantity),
   #              gains = proceeds - ACB.total)
   # }
-
-  cat("Loss proceeds (and gains) adjusted for superficial losses. \n")
 
   bind_rows(only.gains.sum, only.losses.sum) %>%
     mutate(type = c("Gains", "Losses")) %>%

@@ -13,11 +13,16 @@ get_proceeds(formatted.ACB, tax.year, local.timezone = Sys.timezone())
 
 \item{local.timezone}{which time zone}
 }
+\value{
+A data frame, with the following columns: type, proceeds, ACB.total,
+gains.
+}
 \description{
-Get proceeds of sold coins, ACB of sold coins, and resulting difference between the two, capital gains.
+Get proceeds of sold coins, ACB of sold coins, and resulting
+difference between the two, capital gains.
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 get_proceeds(formatted.ACB, 2021)
 }

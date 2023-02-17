@@ -2,7 +2,7 @@
 
 **Breaking changes:**
 
-- We get rid of the `format_wealtsimple()`, `format_BSC()`, `format_binance_trades()`, `crypto2fiat()` functions, since their goal is better fulfilled by the new `format_generic()`, `format_binance()`, and `match_prices()` functions, respectively.
+- We get rid of the `format_wealtsimple()`, `format_BSC()`, `format_binance_trades()`, `crypto2fiat()`, and `fetch_prices()` functions, since their goal is better fulfilled by the new `format_generic()`, `format_binance()`, `match_prices()`, and `prepare_list_prices()` functions, respectively.
 
 **New Features:**
 

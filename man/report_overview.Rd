@@ -27,11 +27,16 @@ report_overview(
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
+\value{
+A summary data frame, containing at least the following columns:
+date.last, currency, total.quantity, cost.share, total.cost, gains,
+losses, net, currency.
+}
 \description{
 Provides a summary of Adjusted Cost Base (ACB) per share, as well as realized and unrealized gains/losses (plus net value), per coin.
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_overview(formatted.ACB, today.data = FALSE)
 }

@@ -9,11 +9,15 @@ get_latest_transactions(formatted.ACB)
 \arguments{
 \item{formatted.ACB}{The formatted.ACB file}
 }
+\value{
+A data frame with two columns: the name of the exchange as well
+as the date of the latest transaction.
+}
 \description{
 Get the date from the latest transactions per exchange
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 get_latest_transactions(formatted.ACB)
 }

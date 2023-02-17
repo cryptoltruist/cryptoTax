@@ -17,11 +17,16 @@ report_revenues(
 
 \item{local.timezone}{Which time zone to use for the date of the report.}
 }
+\value{
+A data frame, with the following columns: exchange, date.last,
+total.revenues, airdrops, referrals, staking, promos, interests, rebates,
+rewards, forks, mining, currency.
+}
 \description{
 Provides a summary of revenues from all sources.
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_revenues(formatted.ACB)
 }

@@ -4,6 +4,8 @@
 #' Can be converted back from this format to numeric using `to = "numeric"`.
 #' @param x The formatted.ACB file
 #' @param to What to convert to, with otions `c("character", "numeric")`.
+#' @return A value representing dollars, either as a formatted 
+#' character string or as a numeric value.
 #' @export
 #' @examples
 #' x <- format_dollars(1010.92)

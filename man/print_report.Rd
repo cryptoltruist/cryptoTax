@@ -13,17 +13,18 @@ print_report(tax.year, name, report.info)
 
 \item{report.info}{The report info obtained from \code{prepare_report()}.}
 }
+\value{
+An HTML page containing a crypto tax report.
+}
 \description{
 Will output a full crypto tax report in HTML format, which can then be printed or saved as PDF.
 }
 \examples{
-\donttest{
 list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report.info <- prepare_report(formatted.ACB, list.prices)
 print_report(2021, "Mr. Cryptoltruist", report.info)
-}
 \dontshow{
 unlink("full_report.html")
 }

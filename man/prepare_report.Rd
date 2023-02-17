@@ -11,15 +11,18 @@ prepare_report(formatted.ACB, list.prices = NULL)
 
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 }
+\value{
+A list, containing the following objects: report.overview,
+report.summary, proceeds, sup.losses, table.revenues, tax.box,
+pie_exchange, pie_revenue.
+}
 \description{
 Prepare all required information for a full crypto tax report.
 }
 \examples{
-\donttest{
 list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 x <- prepare_report(formatted.ACB, list.prices)
 x$proceeds
-}
 }

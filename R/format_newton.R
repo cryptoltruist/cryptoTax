@@ -8,6 +8,7 @@
 #' @param data The dataframe
 #' @param filetype Which Newton file format to use, one of c("yearly",
 #' "cointracker", or "koinly"). Only "yearly" (default) supported at this time.
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
 #' format_newton(data_newton)

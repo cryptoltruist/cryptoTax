@@ -23,6 +23,7 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
 #' # Detects correct names even with capitals
@@ -46,9 +47,7 @@
 #'
 #' # If both total.price and spot.rate are missing, it will
 #' # scrap the spot.rate from coinmarketcap based on the coin:
-#' \donttest{
 #' format_generic(data_generic4)
-#' }
 #'
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange any_of
 #' @importFrom rlang .data

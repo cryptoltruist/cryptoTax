@@ -4,6 +4,7 @@
 #' @details This is necessary e.g., if you used the Exodus wallet which does not report
 #' ADA rewards in its transaction history file.
 #' @param data The dataframe
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
 #' format_pooltool(data_pooltool)

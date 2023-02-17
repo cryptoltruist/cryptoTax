@@ -9,12 +9,11 @@
 #' certainly inaccurate. You will have to make a manual correction for the
 #' withdrawal fees after using `format_CDC`, on the resulting dataframe.
 #' @param data The dataframe
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
-#' \donttest{
 #' formatted.CDC <- format_CDC(data_CDC)
 #' formatted.CDC
-#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange bind_rows case_when
 #' @importFrom rlang .data
 

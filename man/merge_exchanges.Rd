@@ -9,6 +9,10 @@ merge_exchanges(...)
 \arguments{
 \item{...}{To pass the other exchanges to be merged.}
 }
+\value{
+A data frame, with rows binded and arranged, of the provided
+data frames.
+}
 \description{
 Provides a list of transactions, separated by coin..
 }

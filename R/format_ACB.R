@@ -7,17 +7,21 @@
 #' `c("staking", "interests", "mining")`.
 #' @param sup.loss Logical, whether to take superficial losses into account.
 #' @param cl Number of cores to use for parallel processing.
+#' @param verbose Logical: if `FALSE`, does not print progress bar or warnings
+#' to console.
+#' @return A data frame, formatted for the Adjusted Cost Base (ACB).
 #' @export
 #' @examples
 #' all.data <- format_shakepay(data_shakepay)
-#' format_ACB(all.data)
+#' format_ACB(all.data, verbose = FALSE)
 #' @importFrom dplyr %>% arrange group_by group_modify relocate mutate
 #' @importFrom rlang .data
 
 format_ACB <- function(data,
                        as.revenue = c("staking", "interests", "mining"),
                        sup.loss = TRUE,
-                       cl = NULL) {
+                       cl = NULL,
+                       verbose = TRUE) {
   if (any(is.na(data$total.price))) {
     stop("Column 'total.price' cannot have any missing values. Please double check your file.")
   } else if (any(is.na(data$transaction))) {
@@ -30,14 +34,16 @@ format_ACB <- function(data,
 
   # Benchmarks
   start_time <- Sys.time()
-  cat(paste0(
-    "Process started at ", start_time,
-    ". Please be patient as the transactions process.\n"
-  ))
+  if (isTRUE(verbose)) {
+    cat(paste0(
+      "Process started at ", start_time,
+      ". Please be patient as the transactions process.\n"
+    ))  
+    
+    cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
+  }
 
   all.data <- data
-
-  cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
 
   capital.gains <- all.data %>%
     arrange(date) %>%
@@ -45,28 +51,33 @@ format_ACB <- function(data,
     group_by(.data$currency, .drop = FALSE) %>%
     group_modify(~ ACB(
       .x,
-      total.price = "total.price", as.revenue = as.revenue,
-      sup.loss = sup.loss
+      total.price = "total.price", 
+      as.revenue = as.revenue,
+      sup.loss = sup.loss,
+      verbose = verbose
     )) %>%
     arrange(date) %>%
     relocate("date", .before = "currency") %>%
     relocate("fees", .before = "description")
 
-  if (any(capital.gains$total.quantity < 0)) {
+  if (any(capital.gains$total.quantity < 0) && isTRUE(verbose)) {
     warning("WARNING: Some balances have negative values. Double-check for missing transactions.\n")
   }
 
-  if (sup.loss == TRUE) {
+  if (isTRUE(sup.loss) && isTRUE(verbose)) {
     message("Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.")
   }
 
   # Benchmarks
   end_time <- Sys.time()
   total_time <- difftime(end_time, start_time, units = "min")
-  cat(paste0(
-    "Process ended at ", end_time, ". Total time elapsed: ",
-    round(total_time, 2), " minutes\n"
-  ))
-
+  
+  if (isTRUE(verbose)) {
+    cat(paste0(
+      "Process ended at ", end_time, ". Total time elapsed: ",
+      round(total_time, 2), " minutes\n"
+    ))
+  }
+  
   capital.gains
 }

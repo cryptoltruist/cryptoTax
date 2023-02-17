@@ -6,6 +6,8 @@
 #' @param transactions.col The name of the transaction column
 #' @param description.col The name of the description column,
 #' if available.
+#' @return A warning, if there are new transactions. Returns
+#' nothing otherwise.
 #' @export
 #' @examples
 #' data <- data_CDC[1:5, ]

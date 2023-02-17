@@ -11,6 +11,10 @@ format_dollars(x, to = "character")
 
 \item{to}{What to convert to, with otions \code{c("character", "numeric")}.}
 }
+\value{
+A value representing dollars, either as a formatted
+character string or as a numeric value.
+}
 \description{
 Format numeric values with comma for thousands separator.
 Can be converted back from this format to numeric using \code{to = "numeric"}.

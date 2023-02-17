@@ -14,6 +14,9 @@ format_CDC_exchange_rewards(data, list.prices = NULL, force = FALSE)
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a .csv transaction history file from the
 Crypto.com exchange for later ACB processing. Only processes
@@ -37,7 +40,5 @@ for signup or on the Crypto.com exchange. It must be added manually.
 WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS, ONLY REWARDS AND WITHDRAWALS!
 }
 \examples{
-\donttest{
 format_CDC_exchange_rewards(data_CDC_exchange_rewards)
-}
 }

@@ -5,11 +5,10 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
-#' \donttest{
 #' format_coinsmart(data_coinsmart)
-#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange transmute bind_rows
 #' @importFrom rlang .data
 

@@ -7,6 +7,7 @@
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param ... Used for other methods.
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @examples
 #' format_detect(data_shakepay)
 #' format_detect(data_newton)

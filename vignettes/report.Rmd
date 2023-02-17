@@ -23,7 +23,7 @@ First, you want to fetch the price information for all your coins.
 
 > *Note*: Some exchanges don't require fetching this information from coinmarketcap because they already give the CAD value of your trades or revenues. However, this is still necessary to get the current value, and therefore your unrealized gains and losses.
 
-```{r list.prices}
+```{r list.prices, eval=FALSE}
 library(cryptoTax)
 
 my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", "BUSD", "CEL", "PRE", "ETHW", "BAT")
@@ -31,7 +31,19 @@ list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
 
 ```
 
-> *Note*: When you have a lot of coins, it can be better to split the calls to coinmarketcap in two or more and row bind the results with `rbind()` because otherwise we risk getting an error from the coinmarketcap API.
+> *Note*: When you have a lot of coins, it can be better to split the calls to coinmarketcap in two or more and row bind the results with `rbind()` because otherwise we risk getting an error from the coinmarketcap API. See below for an example:
+
+```{r list.prices2}
+library(cryptoTax)
+
+my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
+my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
+
+list.prices1 <- prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
+list.prices2 <- prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
+
+list.prices <- rbind(list.prices1, list.prices2)
+```
 
 # Formatting your data
 

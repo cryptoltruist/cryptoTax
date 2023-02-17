@@ -2,6 +2,7 @@
 #'
 #' @description Format a .csv transaction history file from Shakepay for later ACB processing.
 #' @param data The dataframe
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
 #' formatted.shakepay <- format_shakepay(data_shakepay)

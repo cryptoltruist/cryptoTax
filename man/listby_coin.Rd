@@ -9,11 +9,14 @@ listby_coin(formatted.ACB)
 \arguments{
 \item{formatted.ACB}{The dataframe}
 }
+\value{
+A list of formatted data frames, by coin.
+}
 \description{
 Provides a list of transactions, separated by coin..
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 listby_coin(formatted.ACB)
 }

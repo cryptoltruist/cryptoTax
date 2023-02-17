@@ -8,10 +8,12 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @return A summary data frame, containing at least the following columns:
+#' Type, Amount, currency.
 #' @export
 #' @examples
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report_summary(formatted.ACB, today.data = FALSE)
 #' @importFrom dplyr %>% filter mutate group_by ungroup select summarize slice_tail arrange add_row rename
 #' @importFrom rlang .data

@@ -9,6 +9,9 @@ format_CDC(data)
 \arguments{
 \item{data}{The dataframe}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a .csv transaction history file from Crypto.com for later
 ACB processing.
@@ -22,8 +25,6 @@ certainly inaccurate. You will have to make a manual correction for the
 withdrawal fees after using \code{format_CDC}, on the resulting dataframe.
 }
 \examples{
-\donttest{
 formatted.CDC <- format_CDC(data_CDC)
 formatted.CDC
-}
 }

@@ -4,10 +4,11 @@
 #' @param table The table to format
 #' @param repeat.header Logical, whether to repeat headers at the bottom.
 #' @param type Type of table, one of 1 (default), 2, or 3.
+#' @return A flextable object, with certain formatting features. 
 #' @export
 #' @examples 
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' x <- get_sup_losses(formatted.ACB, 2021)
 #' tax_table(x)
 #' @importFrom dplyr %>% filter arrange mutate select summarize desc

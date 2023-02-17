@@ -4,12 +4,13 @@
 #' @param tax.year The tax year desired.
 #' @param name Name of the individual for the report.
 #' @param report.info The report info obtained from `prepare_report()`.
+#' @return An HTML page containing a crypto tax report.
 #' @export
 #' @examples
 #' \donttest{
 #' list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report.info <- prepare_report(formatted.ACB, list.prices)
 #' print_report(2021, "Mr. Cryptoltruist", report.info)
 #' }

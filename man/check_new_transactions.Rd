@@ -21,6 +21,10 @@ check_new_transactions(
 \item{description.col}{The name of the description column,
 if available.}
 }
+\value{
+A warning, if there are new transactions. Returns
+nothing otherwise.
+}
 \description{
 Check for new transactions for a given exchange
 }

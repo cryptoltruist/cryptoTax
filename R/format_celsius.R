@@ -2,11 +2,10 @@
 #'
 #' @description Format a .csv transaction history file from Celsius for later ACB processing.
 #' @param data The dataframe
+#' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
-#' \donttest{
 #' format_celsius(data_celsius)
-#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange
 #' @importFrom rlang .data
 

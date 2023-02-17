@@ -27,11 +27,15 @@ report_summary(
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
+\value{
+A summary data frame, containing at least the following columns:
+Type, Amount, currency.
+}
 \description{
 Provides a summary of realized capital gains and losses (and total).
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_summary(formatted.ACB, today.data = FALSE)
 }

@@ -13,12 +13,13 @@ USD2CAD(data, conversion = "USD", currency = "CAD")
 
 \item{currency}{What to convert from}
 }
+\value{
+A data frame, with the following columns: date, CAD.rate.
+}
 \description{
 This function allows you to convert USD to CAD.
 }
 \examples{
-\donttest{
 formatted.dates <- format_shakepay(data_shakepay)[1]
 USD2CAD(formatted.dates)
-}
 }

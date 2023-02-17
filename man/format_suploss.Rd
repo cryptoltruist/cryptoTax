@@ -20,6 +20,10 @@ format_suploss(
 
 \item{cl}{The number of cores to use.}
 }
+\value{
+A data frame of formatted transactions, with added columns
+with information about superficial losses.
+}
 \description{
 Calculate superficial capital losses to be substracted from total capital losses.
 }

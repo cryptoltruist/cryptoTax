@@ -9,6 +9,9 @@ format_shakepay(data)
 \arguments{
 \item{data}{The dataframe}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a .csv transaction history file from Shakepay for later ACB processing.
 }

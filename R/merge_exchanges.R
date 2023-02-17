@@ -2,6 +2,8 @@
 #'
 #' @description Provides a list of transactions, separated by coin..
 #' @param ... To pass the other exchanges to be merged.
+#' @return A data frame, with rows binded and arranged, of the provided 
+#' data frames.
 #' @export
 #' @examples
 #' shakepay <- format_shakepay(data_shakepay)

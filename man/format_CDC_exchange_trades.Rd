@@ -14,6 +14,9 @@ format_CDC_exchange_trades(data, list.prices = NULL, force = FALSE)
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a .csv transaction history file from the Crypto.com
 exchange for later ACB processing. Only processes trades, not rewards
@@ -42,7 +45,5 @@ messing with the headers. Thus, when reading the file with
 read the file normally.
 }
 \examples{
-\donttest{
 format_CDC_exchange_trades(data_CDC_exchange_trades)
-}
 }

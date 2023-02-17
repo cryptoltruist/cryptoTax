@@ -24,11 +24,14 @@ match_prices(
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
+\value{
+A data frame, with the following added columns: spot.rate.
+}
 \description{
-Matches prices obtained through the \code{fetch_prices()} function with the transaction data frame.
+Matches prices obtained through the \code{prepare_list_prices()}
+function with the transaction data frame.
 }
 \examples{
-\dontrun{
+data <- format_shakepay(data_shakepay)[c(1:2)]
 match_prices(data)
-}
 }

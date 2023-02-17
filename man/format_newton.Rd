@@ -12,6 +12,9 @@ format_newton(data, filetype = "yearly")
 \item{filetype}{Which Newton file format to use, one of c("yearly",
 "cointracker", or "koinly"). Only "yearly" (default) supported at this time.}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a .csv transaction history file from Newton for later ACB
 processing. When downloading from Newton, please choose the yearly reports

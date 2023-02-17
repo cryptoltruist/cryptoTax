@@ -11,6 +11,11 @@
 #' @param as.revenue Name of as.revenue column
 #' @param sup.loss Logical, whether to calculate superficial losses
 #' @param cl Number of cores to use for parallel processing.
+#' @param verbose Logical: if `FALSE`, does not print progress bar or 
+#' warnings to console.
+#' @return A data frame, with the following columns: date, transaction, 
+#' quantity, price, fees, total.price, total.quantity, ACB, ACB.share, 
+#' gains
 #' @export
 #' @examples
 #' data <- data_adjustedcostbase1
@@ -28,7 +33,8 @@ ACB <- function(data,
                 spot.rate = "spot.rate",
                 as.revenue = c("staking", "interests", "mining"),
                 sup.loss = TRUE,
-                cl = NULL) {
+                cl = NULL,
+                verbose = TRUE) {
   # Excludes staking, interests, mining
 
   if (!data[1, transaction] %in% c("buy", "revenue")) {
@@ -123,11 +129,16 @@ ACB <- function(data,
     width = 100
   ) # Width of the progress bar
 
-  pb$tick(0)
+  if (isTRUE(verbose)) {
+    pb$tick(0)
+  }
 
   for (i in seq_len(nrow(data))) {
-    # Update progress bar
-    pb$tick()
+    
+    if (isTRUE(verbose)) {
+      # Update progress bar
+      pb$tick()
+    }
 
     # Loop ####
 

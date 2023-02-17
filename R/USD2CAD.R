@@ -4,12 +4,11 @@
 #' @param data The data
 #' @param conversion What to convert to
 #' @param currency What to convert from
+#' @return A data frame, with the following columns: date, CAD.rate. 
 #' @export
 #' @examples
-#' \donttest{
 #' formatted.dates <- format_shakepay(data_shakepay)[1]
 #' USD2CAD(formatted.dates)
-#' }
 #' @importFrom dplyr %>% filter pull inner_join
 #' @importFrom rlang .data
 

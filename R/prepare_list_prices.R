@@ -9,6 +9,9 @@
 #' @param end.date What date to end reporting prices for.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @return A data frame, with the following columns: timestamp, id, slug, 
+#' name, symbol, ref_cur, open, high, low, close, volume, market_cap, 
+#' time_open, time_close, time_high, time_low, spot.rate2, currency, date2.
 #' @export
 #' @examples
 #' my.coins <- c("BTC", "ETH")

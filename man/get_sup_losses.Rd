@@ -13,11 +13,14 @@ get_sup_losses(formatted.ACB, tax.year, local.timezone = Sys.timezone())
 
 \item{local.timezone}{which time zone}
 }
+\value{
+A data frame, with the following columns: currency, sup.loss.
+}
 \description{
 Get superficial loss amounts
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-formatted.ACB <- format_ACB(all.data)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 get_sup_losses(formatted.ACB, 2021)
 }

@@ -8,7 +8,8 @@ format_ACB(
   data,
   as.revenue = c("staking", "interests", "mining"),
   sup.loss = TRUE,
-  cl = NULL
+  cl = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -20,6 +21,12 @@ format_ACB(
 \item{sup.loss}{Logical, whether to take superficial losses into account.}
 
 \item{cl}{Number of cores to use for parallel processing.}
+
+\item{verbose}{Logical: if \code{FALSE}, does not print progress bar or warnings
+to console.}
+}
+\value{
+A data frame, formatted for the Adjusted Cost Base (ACB).
 }
 \description{
 Formats transaction data with Adjusted Cost Base (ACB),
@@ -27,5 +34,5 @@ along with ACB per share and realized capital gains or losses.
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)
-format_ACB(all.data)
+format_ACB(all.data, verbose = FALSE)
 }

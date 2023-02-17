@@ -55,6 +55,9 @@ it already exists (e.g., if you added new coins or new dates).}
 
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a generic .csv transaction history file. This
 function requires one transaction per row, so will not work with
@@ -84,8 +87,6 @@ format_generic(data_generic3)
 
 # If both total.price and spot.rate are missing, it will
 # scrap the spot.rate from coinmarketcap based on the coin:
-\donttest{
 format_generic(data_generic4)
-}
 
 }

@@ -3,17 +3,16 @@
 #' @description Format a .csv file from Newton for later ACB processing.
 #' @param table.revenues The revenue table to plot
 #' @param by To plot by which element, one of `c("exchange", "revenue.type")`.
+#' @return A ggplot2 object in the form of a pie chart.
 #' @export
 #' @examples
-#' \donttest{
 #' shakepay <- format_shakepay(data_shakepay)
 #' newton <- format_newton(data_newton)
 #' all.data <- merge_exchanges(shakepay, newton)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' table.revenues <- report_revenues(formatted.ACB)
 #' crypto_pie(table.revenues)
 #' crypto_pie(table.revenues, by = "revenue.type")
-#' }
 #' @importFrom dplyr %>% filter arrange mutate select summarize desc
 #' @importFrom rlang .data
 

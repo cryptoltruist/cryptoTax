@@ -5,6 +5,8 @@
 #' @param transaction Name of transaction column
 #' @param quantity Name of quantity column
 #' @param cl The number of cores to use.
+#' @return A data frame of formatted transactions, with added columns
+#' with information about superficial losses.
 #' @export
 #' @examples
 #' data <- data_adjustedcostbase1

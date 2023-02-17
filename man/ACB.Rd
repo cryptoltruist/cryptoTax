@@ -14,7 +14,8 @@ ACB(
   spot.rate = "spot.rate",
   as.revenue = c("staking", "interests", "mining"),
   sup.loss = TRUE,
-  cl = NULL
+  cl = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,14 @@ ACB(
 \item{sup.loss}{Logical, whether to calculate superficial losses}
 
 \item{cl}{Number of cores to use for parallel processing.}
+
+\item{verbose}{Logical: if \code{FALSE}, does not print progress bar or
+warnings to console.}
+}
+\value{
+A data frame, with the following columns: date, transaction,
+quantity, price, fees, total.price, total.quantity, ACB, ACB.share,
+gains
 }
 \description{
 Calculate realized and unrealized capital gains/losses

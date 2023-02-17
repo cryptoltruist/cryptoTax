@@ -4,10 +4,11 @@
 #' @param formatted.ACB The dataframe `formatted.ACB`,
 #' @param tax.year which year
 #' @param local.timezone which time zone
+#' @return A data frame, with the following columns: currency, sup.loss.
 #' @export
 #' @examples
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' get_sup_losses(formatted.ACB, 2021)
 #' @importFrom dplyr mutate %>% filter summarize add_row across
 #' @importFrom rlang .data

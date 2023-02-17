@@ -1,17 +1,18 @@
 #' @title Get Fair Market Value (FMV) of transactions
 #'
-#' @description Matches prices obtained through the `fetch_prices()` function with the transaction data frame.
+#' @description Matches prices obtained through the `prepare_list_prices()`
+#' function with the transaction data frame.
 #' @param data The dataframe
 #' @param my.coins Your coins to match
 #' @param start.date What date to start reporting prices for.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @return A data frame, with the following added columns: spot.rate.
 #' @export
 #' @examples
-#' \dontrun{
+#' data <- format_shakepay(data_shakepay)[c(1:2)]
 #' match_prices(data)
-#' }
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows left_join arrange
 #' @importFrom utils timestamp
 #' @importFrom rlang .data
@@ -39,7 +40,7 @@ match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.
   all.data <- all.data %>%
     mutate(spot.rate = ifelse(.data$currency == "TCAD", 1, .data$spot.rate))
 
-  # Apply the fetch_prices function to all the coins
+  # Apply the prepare_list_prices function to all the coins
   if (is.null(list.prices)) {
     if (is.null(my.coins)) {
       my.coins <- unique(data$currency)

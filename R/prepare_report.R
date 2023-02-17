@@ -3,15 +3,16 @@
 #' @description Prepare all required information for a full crypto tax report.
 #' @param formatted.ACB The `formatted.ACB` object.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @return A list, containing the following objects: report.overview, 
+#' report.summary, proceeds, sup.losses, table.revenues, tax.box, 
+#' pie_exchange, pie_revenue.
 #' @export
 #' @examples
-#' \donttest{
 #' list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' x <- prepare_report(formatted.ACB, list.prices)
 #' x$proceeds
-#' }
 
 prepare_report <- function(formatted.ACB, list.prices = NULL) {
   report.overview <- report_overview(

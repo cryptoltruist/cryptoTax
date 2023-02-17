@@ -14,11 +14,12 @@ format_blockfi(data, list.prices = NULL, force = FALSE)
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }
+\value{
+A data frame of exchange transactions, formatted for further processing.
+}
 \description{
 Format a .csv transaction history file from BlockFi for later ACB processing.
 }
 \examples{
-\donttest{
 format_blockfi(data_blockfi)
-}
 }

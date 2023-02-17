@@ -4,10 +4,13 @@
 #' @param formatted.ACB The formatted ACB data.
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
+#' @return A data frame, with the following columns: exchange, date.last, 
+#' total.revenues, airdrops, referrals, staking, promos, interests, rebates, 
+#' rewards, forks, mining, currency.
 #' @export
 #' @examples
 #' all.data <- format_shakepay(data_shakepay)
-#' formatted.ACB <- format_ACB(all.data)
+#' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report_revenues(formatted.ACB)
 #' @importFrom dplyr %>% filter mutate group_by select summarize slice arrange
 #' add_row across full_join

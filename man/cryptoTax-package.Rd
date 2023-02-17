@@ -4,7 +4,7 @@
 \name{cryptoTax-package}
 \alias{cryptoTax}
 \alias{cryptoTax-package}
-\title{cryptoTax: Crypto Taxes in R (Canada Only)}
+\title{cryptoTax: Report Crypto Taxes (Canada Only)}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
