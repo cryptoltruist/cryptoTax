@@ -271,7 +271,8 @@
       24 2021-05-29 18:12:55      ETH 0.00009251    0.2621969885 2834.255631
       25 2021-11-05 04:32:23     BUSD 0.10512330    0.1309574574    1.245751
       26 2022-11-17 11:54:25     ETHW 0.00012050    0.0006084561    5.049428
-      27 2022-11-27 08:05:35     BUSD 5.77124200    7.7365241364    1.340530
+      27 2022-11-27 08:05:35     USDC 5.77124200    7.7366916521    1.340559
+      28 2022-11-27 08:05:35     BUSD 5.77124200    7.7365241364    1.340530
          transaction       fees                   description comment revenue.type
       1          buy 1.52893297                           Buy    Spot         <NA>
       2         sell         NA                           Buy    Spot         <NA>
@@ -299,7 +300,8 @@
       24     revenue         NA             Referral Kickback    Spot      rebates
       25     revenue         NA Simple Earn Flexible Interest    Earn    interests
       26     revenue         NA                  Distribution    Spot        forks
-      27         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      27        sell         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      28         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
          exchange               rate.source
       1   binance             coinmarketcap
       2   binance coinmarketcap (buy price)
@@ -328,6 +330,7 @@
       25  binance             coinmarketcap
       26  binance             coinmarketcap
       27  binance             coinmarketcap
+      28  binance             coinmarketcap
 
 # binance withdrawals
 
@@ -842,7 +845,8 @@
       24 2021-05-29 18:12:55      ETH 0.00009251    0.2621969885 2834.255631
       25 2021-11-05 04:32:23     BUSD 0.10512330    0.1309574574    1.245751
       26 2022-11-17 11:54:25     ETHW 0.00012050    0.0006084561    5.049428
-      27 2022-11-27 08:05:35     BUSD 5.77124200    7.7365241364    1.340530
+      27 2022-11-27 08:05:35     USDC 5.77124200    7.7366916521    1.340559
+      28 2022-11-27 08:05:35     BUSD 5.77124200    7.7365241364    1.340530
          transaction       fees                   description comment revenue.type
       1          buy 1.52893297                           Buy    Spot         <NA>
       2         sell         NA                           Buy    Spot         <NA>
@@ -870,7 +874,8 @@
       24     revenue         NA             Referral Kickback    Spot      rebates
       25     revenue         NA Simple Earn Flexible Interest    Earn    interests
       26     revenue         NA                  Distribution    Spot        forks
-      27         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      27        sell         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      28         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
          exchange               rate.source
       1   binance             coinmarketcap
       2   binance coinmarketcap (buy price)
@@ -899,6 +904,7 @@
       25  binance             coinmarketcap
       26  binance             coinmarketcap
       27  binance             coinmarketcap
+      28  binance             coinmarketcap
 
 ---
 

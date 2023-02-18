@@ -5,7 +5,7 @@
 \alias{data_binance}
 \title{Sample data set of a fictive Binance transaction history file}
 \format{
-A data frame with 38 rows and 7 variables:
+A data frame with 39 rows and 7 variables:
 \describe{
 \item{User_ID}{user ID}
 \item{UTC_Time}{the date}

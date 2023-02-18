@@ -3,7 +3,7 @@
 #' A fictive Binance data set to demonstrate [data_binance()].
 #'
 #' @docType data
-#' @format A data frame with 38 rows and 7 variables:
+#' @format A data frame with 39 rows and 7 variables:
 #' \describe{
 #'   \item{User_ID}{user ID}
 #'   \item{UTC_Time}{the date}

@@ -95,9 +95,9 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
   
   BUY <- data %>%
     filter(.data$transaction == "buy")
-
+  
   # "Stablecoins Auto-Conversion"
-  CONVERSIONS <- BUY %>%
+  CONVERSIONS.BUY <- BUY %>%
     filter(.data$description == "Stablecoins Auto-Conversion")
   
   BUY <- BUY %>%
@@ -107,18 +107,25 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
   # Sells
   SELL <- data %>%
     filter(.data$transaction == "sell") %>%
-    filter(.data$description != "Fee") %>%
+    filter(.data$description != "Fee")
+  
+  # "Stablecoins Auto-Conversion"
+  CONVERSIONS.SELL <- SELL %>%
+    filter(.data$description == "Stablecoins Auto-Conversion")
+  
+  SELL <- SELL %>%
+    filter(.data$description != "Stablecoins Auto-Conversion") %>%
     mutate(
       total.price = BUY$total.price,
       spot.rate = .data$total.price / .data$quantity,
       rate.source = "coinmarketcap (buy price)"
     )
-
+  
   # Process revenues
   EARN <- data %>%
     filter(grepl("Interest", .data$description) |
-      grepl("Referral", .data$description) |
-      grepl("Distribution", .data$description)) %>%
+             grepl("Referral", .data$description) |
+             grepl("Distribution", .data$description)) %>%
     mutate(
       transaction = "revenue",
       revenue.type = case_when(
@@ -127,9 +134,9 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
         grepl("Distribution", .data$description) ~ "forks"
       )
     )
-
+  
   # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, SELL, EARN, CONVERSIONS) %>%
+  data <- bind_rows(BUY, SELL, EARN, CONVERSIONS.BUY, CONVERSIONS.SELL) %>%
     mutate(exchange = "binance") %>%
     arrange(date, desc(.data$total.price), .data$transaction) %>%
     select(

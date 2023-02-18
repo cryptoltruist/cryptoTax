@@ -4,7 +4,7 @@
 \alias{format_binance_withdrawals}
 \title{Format Binance withdrawal file}
 \usage{
-format_binance_withdrawals(data, list.prices = NULL, force = TRUE)
+format_binance_withdrawals(data, list.prices = NULL, force = FALSE)
 }
 \arguments{
 \item{data}{The dataframe}

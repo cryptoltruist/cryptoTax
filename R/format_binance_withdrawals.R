@@ -22,7 +22,7 @@
 #' @importFrom dplyr %>% rename mutate across select arrange bind_rows
 #' @importFrom rlang .data
 
-format_binance_withdrawals <- function(data, list.prices = NULL, force = TRUE) {
+format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) {
   # There are no transaction types at all for this file type
   
   # Rename columns

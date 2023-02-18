@@ -8,9 +8,8 @@ data_binance <- structure(list(
     "12345678", "12345678", "12345678", "12345678", "12345678", "12345678",
     "12345678", "12345678", "12345678", "12345678", "12345678", "12345678",
     "12345678", "12345678", "12345678", "12345678", "12345678", "12345678",
-    "12345678", "12345678", "12345678", "12345678", "12345678"
-  ),
-  UTC_Time = c(
+    "12345678", "12345678", "12345678", "12345678", "12345678", "12345678"
+  ), UTC_Time = c(
     "2021-04-03 19:21:10", "2021-04-03 20:02:50",
     "2021-05-29 17:05:33", "2021-05-29 17:07:20", "2021-05-29 17:07:20",
     "2021-05-29 17:07:20", "2021-05-29 17:07:20", "2021-05-29 17:07:20",
@@ -23,42 +22,45 @@ data_binance <- structure(list(
     "2021-05-29 17:07:20", "2021-05-29 18:12:55", "2021-05-29 18:12:55",
     "2021-05-29 18:12:55", "2021-05-29 18:12:55", "2021-05-29 18:12:55",
     "2021-05-29 18:12:55", "2021-05-29 18:12:55", "2021-05-29 18:12:55",
-    "2021-11-05 04:32:23", "2022-11-17 11:54:25", "2022-11-27 08:05:35"
+    "2021-11-05 04:32:23", "2022-11-17 11:54:25", "2022-11-27 08:05:35",
+    "2022-11-27 08:05:35"
   ), Account = c(
-    "Spot", "Spot", "Spot", "Spot", "Spot", "Spot",
+    "Spot", "Spot", "Spot", "Spot",
     "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot",
     "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot",
     "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot",
-    "Spot", "Spot", "Spot", "Spot", "Spot", "Earn", "Spot", "Spot"
+    "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Spot", "Earn",
+    "Spot", "Spot", "Spot"
   ), Operation = c(
-    "Deposit", "Withdraw", "Deposit", "Buy",
-    "Fee", "Buy", "Buy", "Fee", "Referral Kickback", "Buy", "Buy",
-    "Buy", "Buy", "Buy", "Buy", "Referral Kickback", "Buy", "Fee",
-    "Referral Kickback", "Referral Kickback", "Buy", "Fee", "Buy",
-    "Referral Kickback", "Fee", "Fee", "Referral Kickback", "Fee",
-    "Sell", "Referral Kickback", "Fee", "Sell", "Sell", "Sell",
+    "Deposit", "Withdraw",
+    "Deposit", "Buy", "Fee", "Buy", "Buy", "Fee", "Referral Kickback",
+    "Buy", "Buy", "Buy", "Buy", "Buy", "Buy", "Referral Kickback",
+    "Buy", "Fee", "Referral Kickback", "Referral Kickback", "Buy",
+    "Fee", "Buy", "Referral Kickback", "Fee", "Fee", "Referral Kickback",
+    "Fee", "Sell", "Referral Kickback", "Fee", "Sell", "Sell", "Sell",
     "Referral Kickback", "Simple Earn Flexible Interest", "Distribution",
-    "Stablecoins Auto-Conversion"
-  ), Coin = c(
-    "ETH", "ETH", "ETH",
-    "ETH", "LTC", "ETH", "LTC", "LTC", "LTC", "ETH", "LTC", "ETH",
-    "ETH", "ETH", "LTC", "LTC", "LTC", "LTC", "LTC", "LTC", "LTC",
-    "LTC", "LTC", "LTC", "LTC", "LTC", "LTC", "ETH", "LTC", "ETH",
-    "ETH", "LTC", "ETH", "ETH", "ETH", "BUSD", "ETHW", "BUSD"
+    "Stablecoins Auto-Conversion", "Stablecoins Auto-Conversion"
+  ),
+  Coin = c(
+    "ETH", "ETH", "ETH", "ETH", "LTC", "ETH", "LTC",
+    "LTC", "LTC", "ETH", "LTC", "ETH", "ETH", "ETH", "LTC", "LTC",
+    "LTC", "LTC", "LTC", "LTC", "LTC", "LTC", "LTC", "LTC", "LTC",
+    "LTC", "LTC", "ETH", "LTC", "ETH", "ETH", "LTC", "ETH", "ETH",
+    "ETH", "BUSD", "ETHW", "BUSD", "USDC"
   ), Change = c(
-    0.0007, -0.0007, 0.741231, -0.0061241, -0.003123,
-    -0.1412314, 2.532, -0.00021, 0.00005, -0.0089912, 0.3, -0.1124,
-    -0.19521, -0.105129, 2.4121, 0.001131, 1.4512, -0.005421,
-    0.0004923, 0.002025, 0.27, -0.005812, 1.421, 0.00007, -0.007421,
-    -0.0003, 0.0012752, -0.0006124, -1.23, 0.0002147, -0.002123124,
-    -1.6, 0.42124, 0.44124211, 0.00009251, 0.1051233, 0.0001205,
-    5.771242
+    0.0007,
+    -0.0007, 0.741231, -0.0061241, -0.003123, -0.1412314, 2.532,
+    -0.00021, 0.00005, -0.0089912, 0.3, -0.1124, -0.19521, -0.105129,
+    2.4121, 0.001131, 1.4512, -0.005421, 0.0004923, 0.002025,
+    0.27, -0.005812, 1.421, 0.00007, -0.007421, -0.0003, 0.0012752,
+    -0.0006124, -1.23, 0.0002147, -0.002123124, -1.6, 0.42124,
+    0.44124211, 0.00009251, 0.1051233, 0.0001205, 5.771242, -5.771242
   ), Remark = c(
-    "", "Withdraw fee is included", "",
+    "", "Withdraw fee is included", "", "", "",
     "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
     "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-    "", "", "", "", ""
+    "", "", "", ""
   )
-), row.names = c(NA, -38L), class = "data.frame")
+), row.names = c(NA, 39L), class = "data.frame")
 
 usethis::use_data(data_binance, overwrite = TRUE)

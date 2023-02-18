@@ -1,5 +1,5 @@
 test_that("full workflow", {
-  testthat::skip_on_cran()
+  #testthat::skip_on_cran()
   
   options(scipen = 999)
   
@@ -40,8 +40,9 @@ test_that("full workflow", {
     merge_exchanges()
   
   # Format data ####
-  expect_warning(formatted.ACB <<- suppressMessages(format_ACB(
-    formatted.data), "negative values"))
+  expect_warning(suppressMessages(format_ACB(formatted.data), "negative values"))
+  
+  formatted.ACB <- format_ACB(formatted.data, verbose = FALSE)
   
   expect_s3_class(formatted.ACB, "data.frame")
   
