@@ -68,7 +68,7 @@ ACB processing.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_binance_withdrawals</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_binance_withdrawals</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -107,10 +107,7 @@ function for this purpose.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_binance_withdrawals</span><span class="op">(</span><span class="va">data_binance_withdrawals</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Scraping historical crypto data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">❯</span> Processing historical crypto data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price spot.rate transaction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-28 17:13:50      LTC  1.0e-03   0.3201871  320.1871        sell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-28 18:15:14      ETH  7.1e-05   0.2373204 3342.5405        sell</span>

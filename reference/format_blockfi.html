@@ -94,27 +94,26 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_blockfi</span><span class="op">(</span><span class="va">data_blockfi</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Could not calculate spot rate. Use `force = TRUE`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency     quantity total.price spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-05-29 21:43:44      LTC  0.022451200    4.625573  206.0279     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-29 21:43:44      BTC  0.000018512          NA        NA     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-06-13 21:43:44      BTC  0.000184120          NA        NA     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-06-30 21:43:44      LTC  0.010125120    1.808498  178.6150     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-06-30 21:43:44      BTC  0.000047234          NA        NA     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-07-29 21:43:44     USDC  0.038241000          NA        NA     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-08-07 21:43:44      BTC  0.000441230          NA        NA     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 2021-10-24 04:29:23     USDC 55.000000000          NA        NA         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9 2021-10-24 04:29:23      LTC  0.165122140          NA        NA        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        description revenue.type exchange               rate.source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Interest Payment    interests  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Interest Payment    interests  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   Referral Bonus    referrals  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Interest Payment    interests  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Interest Payment    interests  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Interest Payment    interests  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    Bonus Payment       promos  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8            Trade         &lt;NA&gt;  blockfi             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9            Trade         &lt;NA&gt;  blockfi coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency     quantity total.price    spot.rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-05-29 21:43:44      LTC  0.022451200   4.6255734   206.027889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-29 21:43:44      BTC  0.000018512   0.7858598 42451.369876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-06-13 21:43:44      BTC  0.000184120   8.3556212 45381.388034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-06-30 21:43:44      BTC  0.000047234   2.0770535 43973.694092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-06-30 21:43:44      LTC  0.010125120   1.8084980   178.614968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-07-29 21:43:44     USDC  0.038241000   0.0477449     1.248526</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-08-07 21:43:44      BTC  0.000441230  24.2005138 54847.843168</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8 2021-10-24 04:29:23     USDC 55.000000000  68.0777573     1.237777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9 2021-10-24 04:29:23      LTC  0.165122140  68.0777573   412.287276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   transaction      description revenue.type exchange               rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     revenue Interest Payment    interests  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     revenue Interest Payment    interests  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     revenue   Referral Bonus    referrals  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     revenue Interest Payment    interests  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     revenue Interest Payment    interests  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     revenue Interest Payment    interests  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     revenue    Bonus Payment       promos  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         buy            Trade         &lt;NA&gt;  blockfi             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        sell            Trade         &lt;NA&gt;  blockfi coinmarketcap (buy price)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
