@@ -87,8 +87,11 @@ At this stage, it is possible to list transactions by coin, if you have few tran
 
 Next, we need to calculate a few extra bits of information for the final report. Fortunately, the `prepare_report()` function makes this easy for us.
 
-```{r prepare_report}
-report.info <- prepare_report(formatted.ACB, list.prices)
+```{r prepare_report, message=FALSE}
+report.info <- prepare_report(formatted.ACB, 
+                              tax.year = 2021, 
+                              local.timezone = "America/Toronto",
+                              list.prices = list.prices)
 ```
 
 The `report.info` object is a list containing all the different info (tables, figures) necessary for the final report. They can be accessed individually too:
@@ -105,7 +108,7 @@ print_report(tax.year = "2021",
              report.info)
 ```
 
-```{r report prep, echo=FALSE, message=FALSE}
+```{r report prep, echo=FALSE, message=FALSE, warning=FALSE}
 library(dplyr)
 tax.year <- "2021"
 name <- "Mr. Cryptoltruist"

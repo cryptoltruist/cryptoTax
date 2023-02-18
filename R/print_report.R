@@ -11,7 +11,7 @@
 #' list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-#' report.info <- prepare_report(formatted.ACB, list.prices)
+#' report.info <- prepare_report(formatted.ACB, 2021, list.prices = list.prices)
 #' print_report(2021, "Mr. Cryptoltruist", report.info)
 #' }
 #' \dontshow{

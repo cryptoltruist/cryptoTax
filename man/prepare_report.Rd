@@ -32,6 +32,6 @@ Prepare all required information for a full crypto tax report.
 list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-x <- prepare_report(formatted.ACB, list.prices)
+x <- prepare_report(formatted.ACB, list.prices = list.prices)
 x$proceeds
 }
