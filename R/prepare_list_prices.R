@@ -86,6 +86,10 @@ prepare_list_prices <- function(coins,
 
     coin_hist <<- coin_hist
 
+    if (!"symbol" %in% names(coin_hist)) {
+      stop("'coin_hist' could not fetch correctly. Please try again.")
+    }
+    
     list.prices <- coin_hist %>%
       rowwise() %>%
       mutate(
