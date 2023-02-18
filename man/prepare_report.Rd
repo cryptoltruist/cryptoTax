@@ -4,10 +4,19 @@
 \alias{prepare_report}
 \title{Prepare info for full crypto tax report}
 \usage{
-prepare_report(formatted.ACB, list.prices = NULL)
+prepare_report(
+  formatted.ACB,
+  tax.year = "all",
+  local.timezone = Sys.timezone(),
+  list.prices = NULL
+)
 }
 \arguments{
 \item{formatted.ACB}{The \code{formatted.ACB} object.}
+
+\item{tax.year}{The tax year desired.}
+
+\item{local.timezone}{Which time zone to use for the date of the report.}
 
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 }
