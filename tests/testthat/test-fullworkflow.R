@@ -1,5 +1,5 @@
 test_that("full workflow", {
-  #testthat::skip_on_cran()
+  testthat::skip_on_cran()
   
   options(scipen = 999)
   

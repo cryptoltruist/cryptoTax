@@ -13,4 +13,7 @@
 ^codecov\.yml$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
-^tests/testthat/test-fullworkflow.R$
+^vignettes/ACB.Rmd$
+^vignettes/report.Rmd$
+^vignettes/references.Rmd$
+

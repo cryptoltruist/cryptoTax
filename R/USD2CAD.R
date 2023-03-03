@@ -13,6 +13,7 @@
 #' @importFrom rlang .data
 
 USD2CAD <- function(data, conversion = "USD", currency = "CAD") {
+  check_internet()
   if (!exists("USD2CAD.table")) {
     USD2CAD.table <- priceR::historical_exchange_rates(
       conversion,
