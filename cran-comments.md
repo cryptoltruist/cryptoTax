@@ -1,3 +1,10 @@
+## cryptoTax 0.0.3
+
+> Packages which use Internet resources should fail gracefully with an informative message
+if the resource is not available or has changed (and not give a check warning nor error).
+
+Fixed.
+
 ## cryptoTax 0.0.2 submission no 2
 
 > Please omit the redundant "in R" at the end of your title.
