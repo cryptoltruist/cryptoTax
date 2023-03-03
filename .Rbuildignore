@@ -13,7 +13,4 @@
 ^codecov\.yml$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
-^vignettes/ACB.Rmd$
-^vignettes/report.Rmd$
-^vignettes/references.Rmd$
-
+^vignettes

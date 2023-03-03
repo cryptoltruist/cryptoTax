@@ -156,6 +156,20 @@
       9         NA           NA    NA 15.184350  1.687386
       10        NA           NA    NA 17.257224  1.706899
 
+# CDC
+
+    Code
+      formatted.CDC
+    Output
+      data frame with 0 columns and 0 rows
+
+# celsius
+
+    Code
+      formatted.celsius
+    Output
+      data frame with 0 columns and 0 rows
+
 # blockfi
 
     Code

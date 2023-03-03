@@ -92,7 +92,7 @@ test_that("full workflow", {
   
   expect_s3_class(tax.box, "data.frame")
   
-  report.info <- prepare_report(formatted.ACB, list.prices)
+  report.info <- prepare_report(formatted.ACB, list.prices = list.prices)
   
   expect_type(report.info, "list")
   
