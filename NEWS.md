@@ -1,4 +1,5 @@
 # cryptoTax 0.0.3
+
 - Added CRAN requirements
 
 # cryptoTax 0.0.2
