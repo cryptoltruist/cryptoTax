@@ -1,3 +1,10 @@
+## cryptoTax 0.0.3 submission no 2
+
+> which is not your name. Not sure why we did not spot this before, but we
+realy need a full real name here. Same for the LICENSE file.
+
+Fixed.
+
 ## cryptoTax 0.0.3
 
 > Packages which use Internet resources should fail gracefully with an informative message
