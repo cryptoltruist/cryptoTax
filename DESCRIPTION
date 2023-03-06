@@ -4,8 +4,8 @@ Version: 0.0.3
 URL: https://cryptoltruist.github.io/cryptoTax/
 BugReports: https://github.com/cryptoltruist/cryptoTax/issues
 Authors@R: 
-    person(given = "Mr.",
-           family = "Cryptoltruist",
+    person(given = "Steve",
+           family = "Wong",
            role = c("aut", "cre"),
            email = "mr.cryptoltruist@gmail.com")
 Description: Helps calculate crypto taxes in R. First, by allowing 
