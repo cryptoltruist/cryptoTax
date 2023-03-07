@@ -1,3 +1,7 @@
+## cryptoTax 0.0.3 submission no 3
+
+Hotfix: The new CRAN tests revealed that some internet errors were still not failing gracefully in all cases. A more comprehensive solution to have them fail gracefully has now been applied.
+
 ## cryptoTax 0.0.3 submission no 2
 
 > which is not your name. Not sure why we did not spot this before, but we
