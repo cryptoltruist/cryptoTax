@@ -1,3 +1,7 @@
+## cryptoTax 0.0.5
+
+Hotfix: I apologize, having the internet examples fail gracefully is proving more challenging than expected due to the API communication. Hopefully, this last patch does the trick.
+
 ## cryptoTax 0.0.4
 
 Hotfix: The new CRAN tests revealed that some internet errors were still not failing gracefully in all cases. A more comprehensive solution to have them fail gracefully has now been applied.

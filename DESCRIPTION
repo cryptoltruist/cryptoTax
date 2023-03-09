@@ -1,6 +1,6 @@
 Package: cryptoTax
 Title: Report Crypto Taxes (Canada Only)
-Version: 0.0.4
+Version: 0.0.5
 URL: https://cryptoltruist.github.io/cryptoTax/
 BugReports: https://github.com/cryptoltruist/cryptoTax/issues
 Authors@R: 
