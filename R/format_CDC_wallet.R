@@ -92,8 +92,21 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
   # WITHDRAWALS <- WITHDRAWALS %>%
   #  mutate(total.price = 0)
 
+  # Create a "staking" object
+  STAKING <- data %>%
+    filter(.data$description == "cost") %>%
+    mutate(
+      quantity = .data$Sent.Amount,
+      transaction = "sell",
+      description = "staking cost"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+  
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(EARN, WITHDRAWALS) %>%
+  data <- merge_exchanges(EARN, WITHDRAWALS, STAKING) %>%
     mutate(exchange = "CDC.wallet")
 
   # Determine spot rate and value of coins

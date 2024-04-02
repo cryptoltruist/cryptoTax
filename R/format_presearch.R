@@ -15,7 +15,8 @@
 format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   transferred.from <- grep("Transferred from", data$description, value = TRUE)
   staked.to <- unique(grep("Staked to keyword", data$description, value = TRUE))
-  known.transactions <- c("Search Reward", transferred.from, staked.to)
+  removed.from <- unique(grep("Removed from keyword", data$description, value = TRUE))
+  known.transactions <- c("Search Reward", transferred.from, staked.to, removed.from)
   
   # Rename columns
   data <- data %>%
@@ -30,8 +31,10 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   data <- data %>%
     filter(!grepl(
       "Staked to keyword:",
-      .data$description
-    ))
+      .data$description),
+      !grepl(
+        "Removed from keyword:",
+        .data$description))
 
   # Add currency, transaction type
   data <- data %>%

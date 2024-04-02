@@ -1,5 +1,6 @@
 ---
 title: "Full Crypto Tax Report for Tax Year `r tax.year`"
+subtitle: "Timezone: `r report.info$local.timezone`"
 author: "`r person.name`"
 date: "Date: `r format(Sys.time(), '%c')`"
 output: html_document
@@ -12,11 +13,9 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=6.5, fig.height=6.5,
 
 ### Summary
 
-```{r summary}
-
+```{r summary, ft.align="center"}
 report.info$report.summary[-1,] %>% 
   tax_table()
-
 ```
 
 ```{r values, echo=FALSE}
@@ -28,15 +27,13 @@ value <- round(((format_dollars(report.info$report.summary$Amount[6], "numeric")
 
 value2 <- round(last(report.info$report.overview$net) + last(
   report.info$report.overview$unrealized.net), 2)
-
 ```
 
 All time up in percentage (including all unrealized gains and revenues received) is `r paste0(value, "%")`. In absolute dollars, that is `r paste0(value2 + last(report.info$table.revenues$total.revenues))` CAD.
 
 ### Overview
 
-```{r overview}
-
+```{r overview, ft.align="center"}
 # Attempting to add header rows midway of the table
 
 # report.overview2 <- report.overview
@@ -78,37 +75,30 @@ sub <- report.info$report.overview %>%
 # Make table
 sub %>% 
   tax_table(type = 2)
-
 ```
 
 ### Current Value
 
-```{r current value}
-
+```{r current value, ft.align="center"}
 sub2 <- report.info$report.overview %>% 
   select(currency, cost.share, total.cost, rate.today:currency2)
 
 sub2 %>% 
   tax_table(repeat.header = TRUE)
-
 ```
 
 ### Superficial losses
 
-```{r sup loss}
-
+```{r sup loss, ft.align="center"}
 report.info$sup.losses %>%
   tax_table(report.info, type = 3)
-
 ```
 
 ### Revenues
 
-```{r revenues}
-
+```{r revenues, ft.align="center"}
 report.info$table.revenues %>% 
   tax_table(repeat.header = TRUE)
-
 ```
 
 ### Revenue Sources by **Exchanges**
@@ -157,11 +147,9 @@ If your **total acquisition cost** has been greater than **$100,000** at any poi
 
 Here is a summary of what you need to enter on which lines of your income tax:
 
-```{r}
-
+```{r, ft.align="center"}
 report.info$tax.box %>% 
   tax_table
-
 ```
 
 

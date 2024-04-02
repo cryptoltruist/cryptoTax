@@ -29,7 +29,7 @@ format_ACB <- function(data,
   if (any(is.na(data$total.price))) {
     stop("Column 'total.price' cannot have any missing values. Please double check your file.")
   } else if (any(is.na(data$transaction))) {
-    stop("Column 'total.price' cannot have any missing values. Please double check your file.")
+    stop("Column 'transaction' cannot have any missing values. Please double check your file.")
   } else if (any(data$total.price < 0)) {
     stop("Column 'total.price' cannot have any negative values. Please double check your file.")
   } else if (any(data$spot.rate < 0)) {

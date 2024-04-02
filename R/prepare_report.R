@@ -33,6 +33,6 @@ prepare_report <- function(formatted.ACB,
   pie_exchange <- crypto_pie(table.revenues)
   pie_revenue <- crypto_pie(table.revenues, by = "revenue.type")
   report.info <- dplyr::lst(report.overview, report.summary, proceeds, sup.losses, table.revenues, 
-                            tax.box, pie_exchange, pie_revenue)
+                            tax.box, pie_exchange, pie_revenue, local.timezone)
   report.info
 }

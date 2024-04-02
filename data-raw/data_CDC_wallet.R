@@ -39,7 +39,7 @@ data_CDC_wallet <- structure(list(Date = c(
   "Unstake from Validator(abcdefghijklmnopqrstuvwxyz)",
   "Auto Withdraw Reward from ", "Outgoing Transaction to abcdefghijklmnopqrstuvwxyz",
   "Incoming Transaction from abcdefghijklmnopqrstuvwxyz",
-  "Move 10,830.19278519 CRO from Validator(abcdefghijklmnopqrstuvwxyz) to Validator(abcdefghijklmnopqrstuvwxyz)",
+  "Move 530.41289045 CRO from Validator(abcdefghijklmnopqrstuvwxyz) to Validator(abcdefghijklmnopqrstuvwxyz)",
   "Withdraw Reward from abcdefghijklmnopqrstuvwxyz"
 ), TxHash = c(
   "abcdefghijklmnopqrstuvwxyz", "abcdefghijklmnopqrstuvwxyz",
@@ -52,4 +52,3 @@ data_CDC_wallet <- structure(list(Date = c(
 ), class = "data.frame")
 
 usethis::use_data(data_CDC_wallet, overwrite = TRUE)
-

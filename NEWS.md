@@ -1,3 +1,7 @@
+# cryptoTax 0.0.6
+
+- Various improvements to `format_` functions (ACB, CDC_wallet, blockfi, presearch), `prepare_report`
+
 # cryptoTax 0.0.5
 
 - Added CRAN requirements

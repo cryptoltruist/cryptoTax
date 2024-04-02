@@ -14,7 +14,7 @@
 
 format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c(
-    "Withdrawal", "BIA Withdraw", "BIA Deposit", "Interest Payment", 
+    "Withdrawal", "Withdrawal Fee", "BIA Withdraw", "BIA Deposit", "Interest Payment", 
     "Crypto Transfer", "Trade", "Bonus Payment", "Referral Bonus")
   
   # Rename columns
@@ -99,8 +99,20 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       "transaction", "description"
     )
 
+  # Create a "withdrawals" object
+  WITHDRAWALS <- data %>%
+    filter(.data$description == "Withdrawal Fee") %>%
+    mutate(
+      quantity = abs(.data$quantity),
+      transaction = "sell"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description"
+    )
+  
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, EARN, SELL) %>%
+  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
     mutate(exchange = "blockfi")
 
   # Determine spot rate and value of coins
