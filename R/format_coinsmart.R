@@ -213,6 +213,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   # Actually withdrawal fees should be like "selling at zero", so correct total.price
   # WITHDRAWALS <- WITHDRAWALS %>%
   #  mutate(total.price = 0)
+  # We do not agree with the above interpretation anymore
 
   # Merge the "buy" and "sell" objects
   data <- bind_rows(BUY, EARN, SELL, WITHDRAWALS) %>%

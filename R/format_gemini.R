@@ -1,6 +1,7 @@
 #' @title Format Gemini file
 #'
 #' @description Format a .csv transaction history file from Gemini for later ACB processing.
+#' Open the xlsx data file using `readxl::read_excel()`.
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
@@ -19,6 +20,9 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # Remove last summary row
   data <- data %>%
     slice(1:n() - 1)
+  
+  # Force auto-update of variable types
+  data <- type.convert(data, as.is = TRUE)
   
   # Rename columns
   data <- data %>%
@@ -165,6 +169,10 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "Fee", "description", "comment"
     )
+  
+  # Gemini clearing automatically selling BAT is due to Canadian regulations
+  # That Gemini could not hold BAT (among others) anymore: 
+  # https://www.reddit.com/r/Gemini/comments/16n27ay/canadian_regulators_important_changes_to_your/
 
   # Merge the "buy" and "sell" objects
   data <- merge_exchanges(BUY, EARN, EARN2, SELL) %>%

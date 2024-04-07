@@ -19,6 +19,7 @@ A data frame of exchange transactions, formatted for further processing.
 }
 \description{
 Format a .csv transaction history file from Gemini for later ACB processing.
+Open the xlsx data file using \code{readxl::read_excel()}.
 }
 \examples{
 format_gemini(data_gemini)

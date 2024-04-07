@@ -30,7 +30,8 @@ format_CDC <- function(data) {
     "exchange_to_crypto_transfer", "crypto_deposit", "lockup_upgrade",
     "reimbursement_reverted", "mobile_airtime_reward", "crypto_payment",
     "pay_checkout_reward", "gift_card_reward", "crypto_purchase",
-    "referral_gift", "lockup_lock"
+    "referral_gift", "lockup_lock", "reward.loyalty_program.trading_rebate.crypto_wallet",
+    "recurring_buy_order", "admin_wallet_debited"
   )
 
   # Rename columns ####
@@ -112,7 +113,7 @@ format_CDC <- function(data) {
 
   # Create a "credit card purchase" object ####
   CREDIT <- data %>%
-    filter(.data$description == "viban_purchase") %>%
+    filter(.data$description %in% c("viban_purchase", "recurring_buy_order")) %>%
     mutate(
       total.price = abs(.data$total.price),
       quantity = .data$To.Amount,
@@ -143,10 +144,10 @@ format_CDC <- function(data) {
         "card_cashback_reverted",
         "reimbursement_reverted",
         "admin_wallet_credited",
-        "supercharger_reward_to_app_credited"
+        "supercharger_reward_to_app_credited", # Mission Rewards Deposit
+        "reward.loyalty_program.trading_rebate.crypto_wallet"
       )
     ) %>%
-    # Mission Rewards Deposit for last one
     mutate(
       transaction = "revenue",
       revenue.type = replace(
@@ -158,8 +159,10 @@ format_CDC <- function(data) {
           "reimbursement_reverted", # Card cashback
           "mobile_airtime_reward", # Pay cashback (phone top-up)
           "pay_checkout_reward", # Pay cashback (internet purchase)
-          "gift_card_reward"
-        ), # Pay cashback (gift card)
+          "gift_card_reward", # Pay cashback (gift card)
+          "reward.loyalty_program.trading_rebate.crypto_wallet"
+          # Rewards+ Trading Rebate
+        ),
         "rebates"
       ),
       revenue.type = replace(
@@ -197,7 +200,7 @@ format_CDC <- function(data) {
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "revenue.type", "description", "comment", "rate.source"
     )
-
+   
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
   EARN <- EARN %>%
     mutate(
@@ -216,7 +219,8 @@ format_CDC <- function(data) {
     filter(.data$description %in% c(
       "crypto_viban_exchange",
       "card_top_up",
-      "crypto_payment"
+      "crypto_payment",
+      "admin_wallet_debited"
     )) %>%
     mutate(
       quantity = abs(.data$quantity),
@@ -228,7 +232,17 @@ format_CDC <- function(data) {
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment", "rate.source"
     )
-
+  
+  # "Update as of 26 October 23: Please be informed that Crypto.com has 
+  # completed the Efinity (EFI) token swap and Enjin (ENJ) coin migration. 
+  # Existing EFI tokens have been converted to ENJ tokens in a 4:1 (EFI to 
+  # ENJ) ratio according to the EFI balances in eligible users’ Crypto Wallet 
+  # in the Crypto.com App and Spot Wallet in the Crypto.com Exchange at the 
+  # time of the delist."
+  # https://crypto.com/product-news/crypto-com-supports-the-enjin-blockchain-launch
+  # Therefore this transaction admin_wallet_debited represents in a way a
+  # sell at current market price value
+  
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
   SELL <- SELL %>%
     mutate(
@@ -242,7 +256,7 @@ format_CDC <- function(data) {
       )
     )
 
-  # Create a second "sell" object for exchanges ####
+  # Create a second "sell" object for trades / exchanges ####
   SELL2 <- data %>%
     filter(.data$description %in% c("crypto_exchange")) %>%
     mutate(
@@ -274,17 +288,19 @@ format_CDC <- function(data) {
     filter(.data$description == "crypto_withdrawal") %>%
     mutate(
       withdraw.fees = case_when(
+        .data$comment == "Withdraw CRO" ~ 0.001,
+        .data$comment == "Withdraw CRO (CRO)" ~ 0.001,
+        .data$comment == "Withdraw CRO (Crypto.org)" ~ 0.001,
+        .data$comment == "Withdraw CRO (Cronos POS)" ~ 0.001,
+        .data$comment == "Withdraw CRO (Cronos POS (prev. Crypto.org))" ~ 0.001,
+        .data$comment == "Withdraw CRO (Cronos)" ~ 0.2,
         .data$comment == "Withdraw LTC (LTC)" ~ 0.001,
         .data$comment == "Withdraw LTC" ~ 0.001,
-        .data$comment == "Withdraw CRO (CRO)" ~ 0.001,
-        .data$comment == "Withdraw CRO" ~ 0.001,
         .data$comment == "Withdraw ETH (BSC)" ~ 0.0005,
         .data$comment == "Withdraw ETH" ~ 0.005,
+        .data$comment == "Withdraw ADA" ~ 0.5,
+        .data$comment == "Withdraw ADA (Cardano)" ~ 0.5,
         .data$comment == "Withdraw BTC" ~ 0.0004,
-        .data$comment == "Withdraw ADA" ~ 0.8,
-        .data$comment == "Withdraw ADA (Cardano)" ~ 0.8,
-        .data$comment == "Withdraw CRO (Crypto.org)" ~ 0.001,
-        .data$comment == "Withdraw CRO (Cronos)" ~ 0.2,
         .data$comment == "Withdraw USDC (BSC)" ~ 1
       ),
       spot.rate = abs(.data$Native.Amount / .data$quantity),

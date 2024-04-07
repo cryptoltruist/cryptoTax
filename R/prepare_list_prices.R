@@ -28,13 +28,13 @@ prepare_list_prices <- function(coins,
                                 end.date = lubridate::now("UTC"),
                                 currency = "CAD",
                                 force = FALSE) {
-  if (isFALSE(curl::has_internet())) {
-    message("This function requires Internet access.")
-    return(NULL)
-  }
-  
   # List all active coins
   if (!exists("coins.list")) {
+    if (isFALSE(curl::has_internet())) {
+      message("This function requires Internet access.")
+      return(NULL)
+    }
+    
   tryCatch(
     expr = {coins.list <- crypto2::crypto_list(only_active = TRUE)},
     error = function(e) {
@@ -58,6 +58,12 @@ prepare_list_prices <- function(coins,
   }
   
   if (isTRUE(force) || !exists("list.prices")) {
+    
+    if (isFALSE(curl::has_internet())) {
+      message("This function requires Internet access.")
+      return(NULL)
+    }
+    
     # Define coins from our merged data set
 
     if (is.null(coins)) {

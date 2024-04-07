@@ -84,11 +84,24 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
 
   # Create a "withdrawals" object
   WITHDRAWALS <- data %>%
-    filter(.data$description == "out") %>%
+    filter(.data$description == "out" & .data$Destination != "uphold") %>%
     mutate(
       quantity = .data$Fee.Amount,
       transaction = "sell",
       comment = "withdrawal fees"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+  
+  # Create a "brave" Auto-Contribute object
+  BRAVE <- data %>%
+    filter(.data$description == "out" & .data$Destination == "uphold") %>%
+    mutate(
+      quantity = .data$quantity,
+      transaction = "sell",
+      comment = "Brave Auto-Contribute"
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
@@ -100,7 +113,7 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
+  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS, BRAVE) %>%
     mutate(exchange = "uphold")
 
   # Rename transfers as trades for clarity
