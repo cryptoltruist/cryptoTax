@@ -3,13 +3,10 @@ testthat::skip_on_cran()
 options(scipen = 999)
 
 # Prepare list of coins ####
-my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
-list.prices1 <- prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
+my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC",
+              "BUSD", "CEL", "PRE", "ETHW", "BAT")
 
-my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
-list.prices2 <- prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
-
-list.prices <- bind_rows(list.prices1, list.prices2)
+list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")
 
 # Generics ####
 

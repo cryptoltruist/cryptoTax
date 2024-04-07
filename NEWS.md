@@ -1,6 +1,7 @@
 # cryptoTax 0.0.6
 
 - Various improvements to `format_` functions (ACB, CDC_wallet, blockfi, presearch), `prepare_report`
+- `USD2CAD()` now uses a different system to convert USD rates to CAD. `USD2CAD()` used to rely on the [`priceR`](https://github.com/stevecondylios/priceR), which depends on exchangerate.host which now requires an API key with very few limited free API calls. The old `priceR` function is still available, if you have an API key, with `USD2CAD_priceR()`. One alternative is to take the USDC to CAD rate, since USDC is usually pretty closely pegged to the USD. For instance, from 2021 to 2024, the average difference between USD and and USDC is only 0.00003 CAD. Nonetheless, to get an exact rate, the new system compares USD and CAD rates for USDC and calculates the adjusted CAD rate based on this.
 
 # cryptoTax 0.0.5
 

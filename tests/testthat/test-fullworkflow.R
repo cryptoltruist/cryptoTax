@@ -4,13 +4,10 @@ test_that("full workflow", {
   options(scipen = 999)
   
   # Prepare list of coins ####
-  my.coins1 <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC")
-  list.prices1 <- prepare_list_prices(coins = my.coins1, start.date = "2021-01-01")
+  my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC",
+                "BUSD", "CEL", "PRE", "ETHW", "BAT")
   
-  my.coins2 <- c("BUSD", "CEL", "PRE", "ETHW", "BAT")
-  list.prices2 <- prepare_list_prices(coins = my.coins2, start.date = "2021-01-01")
-  
-  list.prices <- bind_rows(list.prices1, list.prices2)
+  list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")
   
   # Generate string list of exchanges ####
   exchanges <- paste0(c(
@@ -68,13 +65,15 @@ test_that("full workflow", {
   expect_s3_class(report.overview, "data.frame")
   
   # Get summary of realized capital gains and losses
-  report.summary <- report_summary(formatted.ACB, today.data = TRUE, tax.year = "all", 
-                                   local.timezone = "America/Toronto",
-                                   list.prices = list.prices)
+  report.summary <- report_summary(formatted.ACB, today.data = TRUE, tax.year = "all",
+                                   list.prices = list.prices, 
+                                   local.timezone = "America/Toronto")
   
   expect_s3_class(report.summary, "data.frame")
   
-  table.revenues <- report_revenues(formatted.ACB, tax.year = "all")
+  table.revenues <- report_revenues(formatted.ACB, 
+                                    tax.year = "all",
+                                    local.timezone = "America/Toronto")
   
   expect_s3_class(table.revenues, "data.frame")
   
@@ -92,7 +91,9 @@ test_that("full workflow", {
   
   expect_s3_class(tax.box, "data.frame")
   
-  report.info <- prepare_report(formatted.ACB, list.prices = list.prices)
+  report.info <- prepare_report(formatted.ACB,
+                                local.timezone = "America/Toronto", 
+                                list.prices = list.prices)
   
   expect_type(report.info, "list")
   

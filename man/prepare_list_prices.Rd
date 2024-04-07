@@ -8,6 +8,7 @@ prepare_list_prices(
   coins,
   start.date,
   end.date = lubridate::now("UTC"),
+  currency = "CAD",
   force = FALSE
 )
 }
@@ -17,6 +18,8 @@ prepare_list_prices(
 \item{start.date}{What date to start reporting prices for.}
 
 \item{end.date}{What date to end reporting prices for.}
+
+\item{currency}{What currency to get the value of the coins in.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

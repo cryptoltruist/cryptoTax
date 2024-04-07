@@ -62,11 +62,10 @@ format_CDC <- function(data) {
     )
 
   # Convert USD value to CAD ####
-  data.tmp <- data %>%
-    cryptoTax::USD2CAD()
+  data.tmp <- cryptoTax::USD2CAD(data)
   
   if (is.null(data.tmp)) {
-    message("Could not fetch exchange rates from the exchange rate API.")
+    message("Could not fetch exchange rates from coinmarketcap.")
     return(NULL)
   }
   

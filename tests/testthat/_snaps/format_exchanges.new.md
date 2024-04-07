@@ -135,6 +135,8 @@
     Code
       suppressMessages(format_CDC(data_CDC))
     Output
+      > Scraping historical crypto data
+      > Processing historical crypto data
                         date currency       quantity total.price     spot.rate
       1  2021-05-03 22:05:50      BTC   0.0007333710    51.25000 69882.7777778
       2  2021-05-07 23:06:50      ETH   0.0205920059    54.21000  2632.5750000

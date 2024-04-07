@@ -4,14 +4,28 @@
 \alias{USD2CAD}
 \title{Convert USD to CAD}
 \usage{
-USD2CAD(data, conversion = "USD", currency = "CAD")
+USD2CAD(
+  data,
+  start.date = "2020-01-01",
+  end.date = lubridate::now("UTC"),
+  conversion = "USD",
+  currency = "CAD",
+  force = FALSE
+)
 }
 \arguments{
 \item{data}{The data}
 
+\item{start.date}{What date to start reporting prices for.}
+
+\item{end.date}{What date to end reporting prices for.}
+
 \item{conversion}{What to convert to}
 
 \item{currency}{What to convert from}
+
+\item{force}{Whether to force recreating \code{list.prices} even though
+it already exists (e.g., if you added new coins or new dates).}
 }
 \value{
 A data frame, with the following columns: date, CAD.rate.

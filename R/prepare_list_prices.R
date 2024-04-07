@@ -4,9 +4,11 @@
 #' @details The [crypto2::crypto_history] API is at times a bit capricious. You might
 #' need to try a few times before it process correctly and without
 #' errors.
+#' 
 #' @param coins Which coins to include in the list.
 #' @param start.date What date to start reporting prices for.
 #' @param end.date What date to end reporting prices for.
+#' @param currency What currency to get the value of the coins in.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame, with the following columns: timestamp, id, slug, 
@@ -24,6 +26,7 @@
 prepare_list_prices <- function(coins,
                                 start.date,
                                 end.date = lubridate::now("UTC"),
+                                currency = "CAD",
                                 force = FALSE) {
   if (isFALSE(curl::has_internet())) {
     message("This function requires Internet access.")
@@ -49,7 +52,7 @@ prepare_list_prices <- function(coins,
     
     # Remove some bad coins from list (which share the same name with NANO or EFI for example)
     coins.list <- coins.list %>%
-      filter(!(.data$slug %in% c("xeno-token", "earnablefi")))
+      filter(!(.data$slug %in% c("xeno-token", "earnablefi", "upsidedowncat")))
     
     coins.list <<- coins.list
   }
@@ -75,44 +78,48 @@ prepare_list_prices <- function(coins,
     # Correct for Nano!!
     my.coins <- gsub("NANO", "XNO", my.coins)
 
-    # Filter old coins object for coins from our merged data set
-    coins.temp <- coins.list %>%
-      filter(.data$symbol %in% my.coins)
-
-    # Dates cannot have hyphens in crypto2::crypto_history!
-    start.date <- start.date %>%
-      as.Date() %>%
-      stringr::str_split("-", simplify = TRUE) %>%
-      paste(collapse = "")
-
-    end.date <- end.date %>%
-      as.Date() %>%
-      stringr::str_split("-", simplify = TRUE) %>%
-      paste(collapse = "")
-
-    tryCatch(
-      expr = {
-        coin_hist <- crypto2::crypto_history(
-          coin_list = coins.temp,
-          start_date = start.date,
-          end_date = end.date,
-          convert = "CAD",
-          sleep = 0, # changed from 60
-          finalWait = FALSE # changed from TRUE
-        )
-      },
-      error = function(e) {
-        message(c("Could not fetch crypto prices from the CoinMarketCap API. ",
-                  "Please try again, perhaps with fewer coins."))
-        return(NULL)},
-      warning = function(w) {
-        return(NULL)
+    coin_hist <- lapply(my.coins, function(x) {
+      # Filter old coins object for coins from our merged data set
+      coins.temp <- coins.list %>%
+        filter(.data$symbol %in% x)
+      
+      # Dates cannot have hyphens in crypto2::crypto_history!
+      start.date <- start.date %>%
+        as.Date() %>%
+        stringr::str_split("-", simplify = TRUE) %>%
+        paste(collapse = "")
+      
+      end.date <- end.date %>%
+        as.Date() %>%
+        stringr::str_split("-", simplify = TRUE) %>%
+        paste(collapse = "")
+      
+      tryCatch(
+        expr = {
+          crypto2::crypto_history(
+            coin_list = coins.temp,
+            start_date = start.date,
+            end_date = end.date,
+            convert = currency,
+            sleep = 0, # changed from 60
+            finalWait = FALSE # changed from TRUE
+          )
+        },
+        error = function(e) {
+          message(c("Could not fetch crypto prices from the CoinMarketCap API. ",
+                    "Please try again, perhaps with fewer coins."))
+          return(NULL)},
+        warning = function(w) {
+          return(NULL)
         })
-
+      })
+    
     if (!exists("coin_hist")) {
       message("'coin_hist' could not fetch correctly. Please try again.")
       return(NULL)
     }
+    
+    coin_hist <- bind_rows(coin_hist)
     
     if (!"symbol" %in% names(coin_hist)) {
       message("'coin_hist' could not fetch correctly. Please try again.")

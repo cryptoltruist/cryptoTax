@@ -2,9 +2,9 @@
 
 S3method(format_detect,data.frame)
 S3method(format_detect,list)
-export()
 export(ACB)
 export(USD2CAD)
+export(USD2CAD_priceR)
 export(check_missing_transactions)
 export(check_new_transactions)
 export(crypto_pie)
