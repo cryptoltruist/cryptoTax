@@ -85,6 +85,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_celsius.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinbase.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinpanda1.html</loc>
   </url>
   <url>
@@ -149,6 +152,9 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_celsius.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinbase.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.html</loc>

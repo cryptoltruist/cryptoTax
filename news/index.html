@@ -60,10 +60,15 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.6" id="cryptotax-006">cryptoTax 0.0.6<a class="anchor" aria-label="anchor" href="#cryptotax-006"></a></h2>
-<ul><li>Various improvements to <code>format_</code> functions (ACB, CDC_wallet, blockfi, presearch), <code>prepare_report</code>
-</li>
-<li>
+<p><strong>Breaking changes:</strong></p>
+<ul><li>
 <code><a href="../reference/USD2CAD.html">USD2CAD()</a></code> now uses a different system to convert USD rates to CAD. <code><a href="../reference/USD2CAD.html">USD2CAD()</a></code> used to rely on the <a href="https://github.com/stevecondylios/priceR" class="external-link"><code>priceR</code></a>, which depends on exchangerate.host which now requires an API key with very few limited free API calls. The old <code>priceR</code> function is still available, if you have an API key, with <code><a href="../reference/USD2CAD_priceR.html">USD2CAD_priceR()</a></code>. One alternative is to take the USDC to CAD rate, since USDC is usually pretty closely pegged to the USD. For instance, from 2021 to 2024, the average difference between USD and and USDC is only 0.00003 CAD. Nonetheless, to get an exact rate, the new system compares USD and CAD rates for USDC and calculates the adjusted CAD rate based on this.</li>
+</ul><p><strong>New Features:</strong></p>
+<ul><li>New function: <code><a href="../reference/format_coinbase.html">format_coinbase()</a></code>
+</li>
+</ul><p><strong>Improvements:</strong></p>
+<ul><li>Various improvements to <code>format_</code> functions (ACB, CDC_wallet, blockfi, presearch) and <code>prepare_report</code>
+</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.5" id="cryptotax-005">cryptoTax 0.0.5<a class="anchor" aria-label="anchor" href="#cryptotax-005"></a></h2><p class="text-muted">CRAN release: 2023-03-12</p>
