@@ -42,7 +42,7 @@ match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.
 
   # Add spot.rate of 1 for TCAD
   all.data <- all.data %>%
-    mutate(spot.rate = ifelse(.data$currency == "TCAD", 1, .data$spot.rate))
+    mutate(spot.rate = ifelse(.data$currency %in% c("TCAD", "CAD"), 1, .data$spot.rate))
 
   # Apply the prepare_list_prices function to all the coins
   if (is.null(list.prices)) {

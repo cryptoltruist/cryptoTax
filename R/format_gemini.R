@@ -21,9 +21,6 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   data <- data %>%
     slice(1:n() - 1)
   
-  # Force auto-update of variable types
-  data <- type.convert(data, as.is = TRUE)
-  
   # Rename columns
   data <- data %>%
     rename(
@@ -181,7 +178,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # Rename Fee column and make it positive.
   data <- data %>%
     rename(fees = "Fee") %>%
-    mutate(fees = .data$fees * -1)
+    mutate(fees = abs(.data$fees))
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
@@ -229,9 +226,10 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
   
-  # Arrange in correct order
+  # Arrange in correct order and remove CAD buys
   data <- data %>% 
-    arrange(date, desc(.data$total.price))
+    arrange(date, desc(.data$total.price)) %>% 
+    filter(currency != "CAD")
   
   # Reorder columns properly
   data <- data %>%
@@ -244,3 +242,4 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # Return result
   data
 }
+
