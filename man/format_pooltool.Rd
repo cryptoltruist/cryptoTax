@@ -4,10 +4,12 @@
 \alias{format_pooltool}
 \title{Format ADA rewards from blockchain CSV}
 \usage{
-format_pooltool(data)
+format_pooltool(data, exchange = "exodus")
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{exchange}{The name of the exchange to indicate in the resulting data frame.}
 }
 \value{
 A data frame of exchange transactions, formatted for further processing.

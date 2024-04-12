@@ -16,7 +16,14 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   transferred.from <- grep("Transferred from", data$description, value = TRUE)
   staked.to <- unique(grep("Staked to keyword", data$description, value = TRUE))
   removed.from <- unique(grep("Removed from keyword", data$description, value = TRUE))
-  known.transactions <- c("Search Reward", transferred.from, staked.to, removed.from)
+  search.against <- unique(grep("Search reward against", data$description, value = TRUE))
+  known.transactions <- c("Search Reward", 
+                          "Base search reward",
+                          "Browser Extension Installation Bonus",
+                          transferred.from, 
+                          staked.to, 
+                          removed.from,
+                          search.against)
   
   # Rename columns
   data <- data %>%
@@ -37,11 +44,17 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
         .data$description))
 
   # Add currency, transaction type
+  rewards.names <- c("Search Reward", 
+                     "Base search reward",
+                     "Browser Extension Installation Bonus",
+                     search.against)
+  
+  # Add currency and transaction type
   data <- data %>%
     mutate(
       currency = "PRE",
       transaction = case_when(
-        .data$description == "Search Reward" ~ "revenue",
+        .data$description %in% rewards.names ~ "revenue",
         grepl(
           "Transferred from Presearch Portal",
           .data$description
@@ -70,7 +83,9 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   }
   
   data <- data %>%
-    mutate(total.price = ifelse(is.na(.data$total.price),
+    mutate(
+      quantity = as.numeric(gsub(",", "", .data$quantity)),
+      total.price = ifelse(is.na(.data$total.price),
       .data$quantity * .data$spot.rate,
       .data$total.price
     ))
