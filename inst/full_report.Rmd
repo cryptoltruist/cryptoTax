@@ -141,7 +141,7 @@ In general, you can expect to pay tax on 50% (**\$`r net.50`**) of your net capi
 
 ### Form T1135
 
-If your **total acquisition cost** has been greater than **$100,000** at any point during `r tax.year` (it is **\$`r total.cost`** at the time of this report), you will need to fill **form T1135** (*Foreign Income Verification Statement*). Form T1135 is [available for download](https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/t1135/t1135-fill-19e.pdf), and more information about it can be found on the [CRA website](https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/information-been-moved/foreign-reporting/questions-answers-about-form-t1135.html). 
+If your **total acquisition cost** has been greater than **$100,000** at any point during `r tax.year` (it is **\$`r total.cost`** at the time of this report), you will need to fill **form T1135** (*Foreign Income Verification Statement*). Form T1135 is [available for download](https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t1135.html), and more information about it can be found on the [CRA website](https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/information-been-moved/foreign-reporting/questions-answers-about-form-t1135.html). 
 
 ### Summary table
 

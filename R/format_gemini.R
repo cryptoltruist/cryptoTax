@@ -229,7 +229,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # Arrange in correct order and remove CAD buys
   data <- data %>% 
     arrange(date, desc(.data$total.price)) %>% 
-    filter(currency != "CAD")
+    filter(.data$currency != "CAD")
   
   # Reorder columns properly
   data <- data %>%

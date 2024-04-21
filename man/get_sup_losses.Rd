@@ -4,7 +4,11 @@
 \alias{get_sup_losses}
 \title{Get superficial loss amounts}
 \usage{
-get_sup_losses(formatted.ACB, tax.year, local.timezone = Sys.timezone())
+get_sup_losses(
+  formatted.ACB,
+  tax.year = "all",
+  local.timezone = Sys.timezone()
+)
 }
 \arguments{
 \item{formatted.ACB}{The dataframe \code{formatted.ACB},}

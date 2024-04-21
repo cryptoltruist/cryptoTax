@@ -6,6 +6,8 @@
 
 **New Features:**
 
+- New function: `fetch_cronos_pos()` (to download data from the CDC DeFi wallet)
+- New function: `format_cronos_pos()` (as a replacement of `format_CDC_wallet()`)
 - New function: `format_coinbase()`
 
 **Improvements:**

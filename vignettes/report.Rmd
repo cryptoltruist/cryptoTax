@@ -94,12 +94,14 @@ The `report.info` object is a list containing all the different info (tables, fi
 names(report.info)
 ```
 
-Finally, to generate the report, we use `print_report()` with the relevant tax year, name of the individual, and the `report.info` object we just created:
+Finally, to generate the report, we use `print_report()` with the relevant information:
 
 ```{r print_report, eval = FALSE}
-print_report(tax.year = "2021", 
+print_report(formatted.ACB,
+             list.prices = list.prices, 
+             tax.year = "2021", 
              name = "Mr. Cryptoltruist", 
-             report.info)
+             local.timezone = "America/Toronto")
 ```
 
 ```{r report prep, echo=FALSE, message=FALSE, warning=FALSE}

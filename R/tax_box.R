@@ -24,7 +24,7 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
   tot.losses <- as.numeric(losses) - sup.losses.total
   total.income.numeric <- dplyr::last(table.revenues$staking) + dplyr::last(table.revenues$interests)
 
-  data.frame(
+  out <- data.frame(
     Description = c(
       "Gains proceeds", # 1
       "Gains ACB", # 2
@@ -36,9 +36,8 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       "Losses", # 8
       "50% of losses", # 9
       "Outlays of losses", # 10
-      "Foreign income", # 11
-      "Foreign gains"
-    ), # 12
+      "Foreign income" # 11
+    ),
     Amount = c(
       proceeds$proceeds[1], # 1
       proceeds$ACB.total[1], # 2
@@ -50,9 +49,8 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       proceeds$proceeds[2] - proceeds$ACB.total[2], # 8
       (proceeds$proceeds[2] - proceeds$ACB.total[2]) / 2, # 9
       0, # 10
-      total.income.numeric, # 11
-      proceeds$proceeds[1] - proceeds$ACB.total[1]
-    ), # 12
+      total.income.numeric # 11
+      ),
     Comment = c(
       "Proceeds of sold coins (gains)", # 1
       "ACB of sold coins (gains)", # 2
@@ -64,9 +62,8 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       "Proceeds - ACB (losses)", # 8
       "Half of losses", # 9
       "Expenses and trading fees (losses). Normally already integrated in the ACB", # 10
-      "Income from crypto interest or staking is considered foreign income", # 11
-      "Capital gains from crypto is considered foreign capital gains"
-    ), # 12
+      "Income from crypto interest or staking is considered foreign income" # 11
+    ),
     Line = c(
       "Schedule 3, line 15199 column 2", # 1
       "Schedule 3, line 15199 column 3", # 2
@@ -78,8 +75,16 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       "Schedule 3, lines 15199 column 5 & 15300", # 8
       "T1, line 12700; Schedule 3, line 15300, 19900", # 9
       "Tax software", # 10
-      "T1, line 12100, T1135", # 11
-      "T1135"
-    ) # 12
+      "T1, line 13000, T1135" # 11
+      )
   )
+  new.row <- data.frame(
+    Description = "Foreign gains (losses)",
+    Amount = out[out$Description == "Gains", "Amount"] +
+      out[out$Description == "Losses", "Amount"],
+    Comment = "Capital gains from crypto is considered foreign capital gains",
+    Line = "T1135"
+    )
+  out <- rbind(out, new.row)
+  out
 }

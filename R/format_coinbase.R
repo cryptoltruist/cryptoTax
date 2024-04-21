@@ -57,7 +57,7 @@ format_coinbase <- function(data) {
       
   # Create a "withdrawals" object
   WITHDRAWALS <- data %>%
-    filter(description == "Send") %>%
+    filter(.data$description == "Send") %>%
     mutate(
       quantity = .data$fees,
       total.price = .data$quantity * .data$spot.rate,

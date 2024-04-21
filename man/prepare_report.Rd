@@ -6,19 +6,19 @@
 \usage{
 prepare_report(
   formatted.ACB,
+  list.prices = NULL,
   tax.year = "all",
-  local.timezone = Sys.timezone(),
-  list.prices = NULL
+  local.timezone = Sys.timezone()
 )
 }
 \arguments{
 \item{formatted.ACB}{The \code{formatted.ACB} object.}
 
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
 \item{tax.year}{The tax year desired.}
 
 \item{local.timezone}{Which time zone to use for the date of the report.}
-
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 }
 \value{
 A list, containing the following objects: report.overview,

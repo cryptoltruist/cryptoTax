@@ -98,10 +98,12 @@ test_that("full workflow", {
   expect_type(report.info, "list")
   
   # Report
-  print_report(tax.year = "2021", 
-               name = "Mr. Cryptoltruist", 
-               report.info)
+  print_report(formatted.ACB, 
+               list.prices = list.prices,
+               local.timezone = "America/Toronto", 
+               tax.year = "2021", 
+               name = "Mr. Cryptoltruist")
   
-  unlink("full_report.html")
+  unlink("full_report_2021.html")
 })
 

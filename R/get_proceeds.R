@@ -15,10 +15,14 @@
 #' @importFrom dplyr mutate %>% filter ungroup summarize relocate bind_rows
 #' @importFrom rlang .data
 
-get_proceeds <- function(formatted.ACB, tax.year, local.timezone = Sys.timezone()) {
+get_proceeds <- function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
   formatted.ACB.year <- formatted.ACB %>%
-    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
-    filter(lubridate::year(.data$datetime.local) == tax.year)
+    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone))
+  if (tax.year != "all") {
+    formatted.ACB.year <- formatted.ACB.year %>%
+      filter(lubridate::year(.data$datetime.local) == tax.year)
+    message("Note: proceeds have been filtered for tax year ", tax.year)
+  }
   only.gains <- formatted.ACB.year %>%
     filter(.data$gains > 0)
   only.gains <- only.gains %>%

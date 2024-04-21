@@ -4,16 +4,30 @@
 \alias{print_report}
 \title{Print full crypto tax report}
 \usage{
-print_report(tax.year, name, report.info)
+print_report(
+  formatted.ACB,
+  list.prices,
+  tax.year = "all",
+  local.timezone = "America/Montreal",
+  name
+)
 }
 \arguments{
+\item{formatted.ACB}{The \code{formatted.ACB} object.}
+
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+
 \item{tax.year}{The tax year desired.}
 
-\item{name}{Name of the individual for the report.}
+\item{local.timezone}{Which time zone to use for the date of the report.}
 
-\item{report.info}{The report info obtained from \code{prepare_report()}.}
+\item{name}{Name of the individual for the report.}
 }
 \value{
+A list, containing the following objects: report.overview,
+report.summary, proceeds, sup.losses, table.revenues, tax.box,
+pie_exchange, pie_revenue.
+
 An HTML page containing a crypto tax report.
 }
 \description{
@@ -24,11 +38,11 @@ Will output a full crypto tax report in HTML format, which can then be printed o
 list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-report.info <- prepare_report(formatted.ACB, 2021, list.prices = list.prices)
-print_report(2021, "Mr. Cryptoltruist", report.info)
+print_report(formatted.ACB, list.prices = list.prices, 
+             tax.year = 2021, name = "Mr. Cryptoltruist")
 }
 \dontshow{
-unlink("full_report.html")
+unlink("full_report_2021.html")
 }
 
 }

@@ -2,19 +2,33 @@
 #'
 #' @description Prepare the list of coins for prices.
 #' @details The [crypto2::crypto_history] API is at times a bit capricious. You might
-#' need to try a few times before it process correctly and without
+#' need to try a few times before it processes correctly and without
 #' errors.
+#' 
+#' Sometimes, `list.prices` (through coinmarketcap) will contain symbols for 
+#' a given coin (e.g., ETH) that is actually shared by multiple coins, thus, 
+#' the necessity of the `remove.coins.slug` argument. In these cases, we can 
+#' look at the slug column of `list.prices` to identify the correct coins. 
+#' ETH for example possesses two slugs: "ethereum" (the main one) and 
+#' "the-infinite-garden" (probably not the one you want). Per default, a 
+#' number of duplicate slugs are excluded, the list of which is accessible in 
+#' the `slugs_to_remove` object. However, you can provide your own list, 
+#' should you wish to.
 #' 
 #' @param coins Which coins to include in the list.
 #' @param start.date What date to start reporting prices for.
 #' @param end.date What date to end reporting prices for.
 #' @param currency What currency to get the value of the coins in.
+#' @param remove.coins.slug Which currencies to filter out, usually when
+#' the `list.prices` object symbol for a given coin is shared by
+#' multiple coins (see details).
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame, with the following columns: timestamp, id, slug, 
 #' name, symbol, ref_cur, open, high, low, close, volume, market_cap, 
 #' time_open, time_close, time_high, time_low, spot.rate2, currency, date2.
 #' @export
+#' @name prepare_list_prices
 #' @examples
 #' my.coins <- c("BTC", "ETH")
 #' my.list.prices <- prepare_list_prices(coins = my.coins, start.date = "2023-01-01")
@@ -27,6 +41,7 @@ prepare_list_prices <- function(coins,
                                 start.date,
                                 end.date = lubridate::now("UTC"),
                                 currency = "CAD",
+                                remove.coins.slug = slugs_to_remove,
                                 force = FALSE) {
   # List all active coins
   if (!exists("coins.list")) {
@@ -52,7 +67,7 @@ prepare_list_prices <- function(coins,
     
     # Remove some bad coins from list (which share the same name with NANO or EFI for example)
     coins.list <- coins.list %>%
-      filter(!(.data$slug %in% c("xeno-token", "earnablefi", "upsidedowncat")))
+      filter(!(.data$slug %in% remove.coins.slug))
     
     coins.list <<- coins.list
   }
@@ -150,3 +165,26 @@ prepare_list_prices <- function(coins,
 
   list.prices
 }
+
+#' @rdname prepare_list_prices
+#' @export
+slugs_to_remove <- c(
+  "xeno-token", 
+  "earnablefi", 
+  "upsidedowncat",
+  "the-infinite-garden",
+  "ada",
+  "pre",
+  "niccagewaluigielmo42069inu",
+  "shibwifhat",
+  "shibainu-on-solana",
+  "shibaqua",
+  "tooly-i-am-king",
+  "doge-on-pulsechain",
+  "doge-satellite-inu",
+  "dogecoin-x",
+  "space-doge",
+  "elon-doge-token",
+  "super-doge",
+  "moon-doge"
+)

@@ -4,7 +4,7 @@
 \alias{get_proceeds}
 \title{Get proceeds of all sold coins}
 \usage{
-get_proceeds(formatted.ACB, tax.year, local.timezone = Sys.timezone())
+get_proceeds(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone())
 }
 \arguments{
 \item{formatted.ACB}{The \code{formatted.ACB} object,}

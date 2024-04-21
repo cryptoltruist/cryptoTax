@@ -27,6 +27,9 @@ export option ("Koinly"). It will output a CSV file with your transactions.
 Note: the site does not use a secure connection: use at your own risks.
 The file is semi-column separated; when using \code{read.csv}, add the \code{sep = ";"}
 argument.
+
+Superseded by \code{\link[=fetch_cronos_pos]{fetch_cronos_pos()}} and \code{\link[=format_cronos_pos]{format_cronos_pos()}} since
+http://crypto.barkisoft.de/ does not provide a valid CSV file anymore.
 }
 \examples{
 format_CDC_wallet(data_CDC_wallet)

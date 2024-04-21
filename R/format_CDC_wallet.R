@@ -9,6 +9,9 @@
 #' Note: the site does not use a secure connection: use at your own risks.
 #' The file is semi-column separated; when using `read.csv`, add the `sep = ";"`
 #' argument.
+#' 
+#' Superseded by [fetch_cronos_pos()] and [format_cronos_pos()] since
+#' http://crypto.barkisoft.de/ does not provide a valid CSV file anymore.
 #'
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.

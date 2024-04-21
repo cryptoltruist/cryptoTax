@@ -13,10 +13,14 @@
 #' @importFrom dplyr mutate %>% filter summarize add_row across
 #' @importFrom rlang .data
 
-get_sup_losses <- function(formatted.ACB, tax.year, local.timezone = Sys.timezone()) {
+get_sup_losses <- function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
   formatted.ACB.year <- formatted.ACB %>%
-    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
-    filter(lubridate::year(.data$datetime.local) == tax.year)
+    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone))
+  if (tax.year != "all") {
+    formatted.ACB.year <- formatted.ACB.year %>%
+      filter(lubridate::year(.data$datetime.local) == tax.year)
+    message("Note: superficial losses have been filtered for tax year ", tax.year)
+  }
   formatted.ACB.year %>%
     summarize(sup.loss = sum(.data$gains.sup, na.rm = TRUE)) %>%
     filter(.data$sup.loss != 0) %>% 
