@@ -124,6 +124,9 @@
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_uphold.html</loc>
   </url>
   <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/fetch_cronos_pos.html</loc>
+  </url>
+  <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.html</loc>
   </url>
   <url>
@@ -158,6 +161,9 @@
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.html</loc>
+  </url>
+  <url>
+    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_cronos_pos.html</loc>
   </url>
   <url>
     <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_detect.html</loc>
