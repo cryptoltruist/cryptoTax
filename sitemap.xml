@@ -1,246 +1,85 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/404.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/TODOS.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/articles/ACB.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/articles/references.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/articles/report.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/ACB.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD_priceR.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/check_missing_transactions.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/cryptoTax-package.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/crypto_pie.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC_exchange_rewards.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC_exchange_trades.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC_wallet.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_adalite.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_adjustedcostbase1.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_binance.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_binance_withdrawals.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_blockfi.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_celsius.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinbase.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinpanda1.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinsmart.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_cryptotaxcalculator1.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_exodus.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_gemini.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_generic1.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_koinly.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_newton.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_pooltool.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_presearch.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_shakepay.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/data_uphold.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/fetch_cronos_pos.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_rewards.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_trades.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_wallet.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_adalite.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance_withdrawals.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_blockfi.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_celsius.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinbase.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_cronos_pos.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_detect.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_dollars.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_gemini.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_generic.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_newton.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_pooltool.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_presearch.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_shakepay.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_suploss.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_latest_transactions.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/listby_coin.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/match_prices.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/print_report.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/report_overview.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/report_revenues.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/report_summary.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/tax_box.html</loc>
-  </url>
-  <url>
-    <loc>https://cryptoltruist.github.io/cryptoTax/reference/tax_table.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/404.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/LICENSE-text.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/LICENSE.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/TODOS.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/articles/ACB.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/articles/index.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/articles/references.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/articles/report.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/authors.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/index.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/news/index.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/ACB.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD_crypto2.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD_priceR.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/check_missing_transactions.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/cryptoTax-package.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/crypto_pie.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC_exchange_rewards.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC_exchange_trades.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC_wallet.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_adalite.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_adjustedcostbase1.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_binance.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_binance_withdrawals.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_blockfi.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_celsius.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinbase.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinpanda1.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_coinsmart.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_cryptotaxcalculator1.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_exodus.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_gemini.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_generic1.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_koinly.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_newton.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_pooltool.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_presearch.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_shakepay.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_uphold.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/fetch_cronos_pos.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_rewards.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_trades.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_wallet.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_adalite.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_binance_withdrawals.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_blockfi.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_celsius.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinbase.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_cronos_pos.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_detect.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_dollars.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_gemini.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_generic.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_newton.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_pooltool.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_presearch.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_shakepay.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_suploss.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/get_latest_transactions.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/index.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/listby_coin.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/match_prices.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/print_report.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/report_overview.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/report_revenues.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/report_summary.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/tax_box.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/tax_table.html</loc></url>
 </urlset>
+
