@@ -16,11 +16,11 @@
 
 format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Credit", "Sell", "Buy", "Debit")
-  
+
   # Remove last summary row
   data <- data %>%
     slice(1:n() - 1)
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -28,12 +28,13 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
       comment = "Specification",
       date = "Date"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description",
-                         description.col = "comment")
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description",
+    description.col = "comment"
+  )
 
   # Add single dates to dataframe
   data <- data %>%
@@ -166,9 +167,9 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "Fee", "description", "comment"
     )
-  
+
   # Gemini clearing automatically selling BAT is due to Canadian regulations
-  # That Gemini could not hold BAT (among others) anymore: 
+  # That Gemini could not hold BAT (among others) anymore:
   # https://www.reddit.com/r/Gemini/comments/16n27ay/canadian_regulators_important_changes_to_your/
 
   # Merge the "buy" and "sell" objects
@@ -187,7 +188,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),
       .data$quantity * .data$spot.rate,
@@ -225,21 +226,20 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
 
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
-  
+
   # Arrange in correct order and remove CAD buys
-  data <- data %>% 
-    arrange(date, desc(.data$total.price)) %>% 
+  data <- data %>%
+    arrange(date, desc(.data$total.price)) %>%
     filter(.data$currency != "CAD")
-  
+
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
-    ) %>% 
+    ) %>%
     as.data.frame()
-  
+
   # Return result
   data
 }
-

@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-"
 )
-options(scipen=999)
+options(scipen = 999)
 ```
 
 <!-- badges: start -->

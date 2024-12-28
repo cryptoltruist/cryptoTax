@@ -31,7 +31,8 @@ format_CDC <- function(data) {
     "reimbursement_reverted", "mobile_airtime_reward", "crypto_payment",
     "pay_checkout_reward", "gift_card_reward", "crypto_purchase",
     "referral_gift", "lockup_lock", "reward.loyalty_program.trading_rebate.crypto_wallet",
-    "recurring_buy_order", "admin_wallet_debited"
+    "recurring_buy_order", "admin_wallet_debited",
+    "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet"
   )
 
   # Rename columns ####
@@ -43,13 +44,14 @@ format_CDC <- function(data) {
       comment = "Transaction.Description",
       date = "Timestamp..UTC."
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description",
-                         description.col = "comment")
-  
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description",
+    description.col = "comment"
+  )
+
   # Add single dates to dataframe ####
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -64,22 +66,24 @@ format_CDC <- function(data) {
 
   # Convert USD value to CAD ####
   data.tmp <- cryptoTax::USD2CAD(data)
-  
+
   if (is.null(data.tmp)) {
     message("Could not fetch exchange rates from coinmarketcap.")
     return(NULL)
   }
-  
-   data <- data.tmp %>%
+
+  data <- data.tmp %>%
     mutate(
       CAD.rate = ifelse(
         .data$Native.Currency == "USD",
         .data$CAD.rate,
-        1),
+        1
+      ),
       rate.source = ifelse(
         .data$Native.Currency == "USD",
         "exchange (USD conversion)",
-        "exchange"),
+        "exchange"
+      ),
       total.price = .data$Native.Amount * .data$CAD.rate
     )
 
@@ -134,6 +138,7 @@ format_CDC <- function(data) {
         "referral_card_cashback",
         "crypto_earn_interest_paid",
         "crypto_earn_extra_interest_paid",
+        "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
         "mco_stake_reward",
         "transfer_cashback",
         "mobile_airtime_reward",
@@ -170,6 +175,7 @@ format_CDC <- function(data) {
         .data$revenue.type %in% c(
           "crypto_earn_interest_paid",
           "crypto_earn_extra_interest_paid",
+          "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
           "mco_stake_reward"
         ),
         "interests"
@@ -200,7 +206,7 @@ format_CDC <- function(data) {
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "revenue.type", "description", "comment", "rate.source"
     )
-   
+
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
   EARN <- EARN %>%
     mutate(
@@ -232,17 +238,17 @@ format_CDC <- function(data) {
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment", "rate.source"
     )
-  
-  # "Update as of 26 October 23: Please be informed that Crypto.com has 
-  # completed the Efinity (EFI) token swap and Enjin (ENJ) coin migration. 
-  # Existing EFI tokens have been converted to ENJ tokens in a 4:1 (EFI to 
-  # ENJ) ratio according to the EFI balances in eligible users’ Crypto Wallet 
-  # in the Crypto.com App and Spot Wallet in the Crypto.com Exchange at the 
+
+  # "Update as of 26 October 23: Please be informed that Crypto.com has
+  # completed the Efinity (EFI) token swap and Enjin (ENJ) coin migration.
+  # Existing EFI tokens have been converted to ENJ tokens in a 4:1 (EFI to
+  # ENJ) ratio according to the EFI balances in eligible users’ Crypto Wallet
+  # in the Crypto.com App and Spot Wallet in the Crypto.com Exchange at the
   # time of the delist."
   # https://crypto.com/product-news/crypto-com-supports-the-enjin-blockchain-launch
   # Therefore this transaction admin_wallet_debited represents in a way a
   # sell at current market price value
-  
+
   # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
   SELL <- SELL %>%
     mutate(
@@ -333,10 +339,10 @@ format_CDC <- function(data) {
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

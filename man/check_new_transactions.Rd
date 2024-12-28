@@ -31,8 +31,9 @@ Check for new transactions for a given exchange
 \examples{
 data <- data_CDC[1:5, ]
 known.transactions <- c("crypto_purchase", "lockup_lock")
-check_new_transactions(data, 
-                       known.transactions = known.transactions,
-                       transactions.col = "Transaction.Kind",
-                       description.col = "Transaction.Description")
+check_new_transactions(data,
+  known.transactions = known.transactions,
+  transactions.col = "Transaction.Kind",
+  description.col = "Transaction.Description"
+)
 }

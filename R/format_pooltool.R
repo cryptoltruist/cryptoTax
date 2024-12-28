@@ -2,7 +2,9 @@
 #'
 #' @description Format a .csv transaction history file from the Cardano PoolTool for later ACB processing. Instructions: Use https://pooltool.io/ click on "rewards data for taxes", search your ADA address, scroll to the bottom of the page, and use the export tool to export all transactions. Make sure to use the "Generic(CSV)" format.
 #' @details This is necessary e.g., if you used the Exodus wallet which does not report
-#' ADA rewards in its transaction history file.
+#' ADA rewards in its transaction history file. The benefit of this tool is that it
+#' provides rewards. However, it does not provide staking costs, which are also
+#' taxable events.
 #' @param data The dataframe
 #' @param exchange The name of the exchange to indicate in the resulting data frame.
 #' @return A data frame of exchange transactions, formatted for further processing.
@@ -14,7 +16,7 @@
 
 format_pooltool <- function(data, exchange = "exodus") {
   # There are no transaction types at all for this file type
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -45,7 +47,7 @@ format_pooltool <- function(data, exchange = "exodus") {
   # Put fees to zero and add exchange
   data <- merge_exchanges(data) %>%
     mutate(exchange = exchange)
-  
+
   # Select and reorder correct columns
   data <- data %>%
     select(
@@ -53,7 +55,7 @@ format_pooltool <- function(data, exchange = "exodus") {
       "spot.rate", "transaction", "description", "comment",
       "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

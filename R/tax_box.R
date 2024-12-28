@@ -5,11 +5,11 @@
 #' @param sup.losses sup.losses
 #' @param table.revenues table.revenues
 #' @param proceeds proceeds
-#' @return A data frame, with the following columns: Description, Amount, 
+#' @return A data frame, with the following columns: Description, Amount,
 #' Comment, Line
 #' @export
 #' @examples
-#' my.list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+#' my.list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)
@@ -17,7 +17,6 @@
 #' table.revenues <- report_revenues(formatted.ACB, 2021)
 #' proceeds <- get_proceeds(formatted.ACB, 2021)
 #' tax_box(report.summary, sup.losses, table.revenues, proceeds)
-
 tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
   losses <- report.summary$Amount[3]
   sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
@@ -50,7 +49,7 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       (proceeds$proceeds[2] - proceeds$ACB.total[2]) / 2, # 9
       0, # 10
       total.income.numeric # 11
-      ),
+    ),
     Comment = c(
       "Proceeds of sold coins (gains)", # 1
       "ACB of sold coins (gains)", # 2
@@ -76,7 +75,7 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       "T1, line 12700; Schedule 3, line 15300, 19900", # 9
       "Tax software", # 10
       "T1, line 13000, T1135" # 11
-      )
+    )
   )
   new.row <- data.frame(
     Description = "Foreign gains (losses)",
@@ -84,7 +83,7 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       out[out$Description == "Losses", "Amount"],
     Comment = "Capital gains from crypto is considered foreign capital gains",
     Line = "T1135"
-    )
+  )
   out <- rbind(out, new.row)
   out
 }

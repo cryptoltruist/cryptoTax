@@ -25,6 +25,8 @@ Downloads transaction data from the Cronos Proof-of-Stake
 chain / the Crypto.com DeFi wallet, through the API.
 }
 \examples{
-fetch_cronos_pos(limit = 10, perform = FALSE,
- "cro1dec64zlzracgz7fs4thzx45q7a48s22d4ll8m6")
+fetch_cronos_pos(
+  limit = 10, perform = FALSE,
+  "cro1dec64zlzracgz7fs4thzx45q7a48s22d4ll8m6"
+)
 }

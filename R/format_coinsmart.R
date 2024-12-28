@@ -14,7 +14,7 @@
 
 format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Withdraw", "Trade", "Quiz", "Deposit", "Referral")
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -22,16 +22,17 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
       description = "TransactionType",
       comment = "ReferenceType",
       date = "TimeStamp"
-    ) %>% 
+    ) %>%
     mutate(comment = trimws(.data$comment))
-    # Have to trim white spaces here because they made a typo
-    # And added a space in "Referral ".
-  
+  # Have to trim white spaces here because they made a typo
+  # And added a space in "Referral ".
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "comment",
-                         description.col = "description")
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "comment",
+    description.col = "description"
+  )
 
   # Add single dates to dataframe
   data <- data %>%
@@ -65,18 +66,18 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
       1,
       NA
     ))
-  
+
   data <- match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
-  
+
   # Add total.price
   data <- data %>%
     rowwise() %>%
@@ -247,10 +248,10 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

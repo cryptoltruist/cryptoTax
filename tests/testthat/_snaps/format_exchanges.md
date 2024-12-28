@@ -48,9 +48,9 @@
       format_generic(data_generic4, list.prices = list.prices)
     Output
                        date currency quantity total.price spot.rate transaction fees
-      1 2021-03-02 10:36:06      BTC 0.001240     74.4584 60047.097         buy 0.72
-      2 2021-03-10 12:49:04      ETH 0.063067    147.7913  2343.401         buy 0.72
-      3 2021-03-15 14:12:08      ETH 0.065048    153.2642  2356.170        sell 1.75
+      1 2021-03-02 10:36:06      BTC 0.001240    76.70861 61861.778         buy 0.72
+      2 2021-03-10 12:49:04      ETH 0.063067   146.15197  2317.408         buy 0.72
+      3 2021-03-15 14:12:08      ETH 0.065048   147.98240  2274.972        sell 1.75
                 exchange   rate.source
       1 generic_exchange coinmarketcap
       2 generic_exchange coinmarketcap
@@ -61,24 +61,22 @@
     Code
       format_shakepay(data_shakepay)
     Output
-                       date currency    quantity total.price spot.rate transaction
-      1 2021-05-07 14:50:41      BTC  0.00103982   53.033350  51002.43         buy
-      2 2021-05-07 21:25:36      CAD 30.00000000   30.000000      1.00     revenue
-      3 2021-05-08 12:12:57      BTC  0.00011000    5.784024  52582.03     revenue
-      4 2021-05-09 12:22:07      BTC  0.00012000    6.034441  50287.01     revenue
-      5 2021-05-21 12:47:14      BTC  0.00013000    7.348590  56527.62     revenue
-      6 2021-06-11 12:03:31      BTC  0.00014000    8.396927  59978.05     revenue
-      7 2021-06-23 12:21:49      BTC  0.00015000    8.714877  58099.18     revenue
-      8 2021-07-10 00:52:19      BTC  0.00052991   31.268480  59007.15        sell
-          description  comment revenue.type exchange rate.source
-      1 purchase/sale purchase         <NA> shakepay    exchange
-      2         other   credit    referrals shakepay    exchange
-      3   shakingsats   credit     airdrops shakepay    exchange
-      4   shakingsats   credit     airdrops shakepay    exchange
-      5   shakingsats   credit     airdrops shakepay    exchange
-      6   shakingsats   credit     airdrops shakepay    exchange
-      7   shakingsats   credit     airdrops shakepay    exchange
-      8 purchase/sale     sale         <NA> shakepay    exchange
+                       date currency   quantity total.price spot.rate transaction
+      1 2021-05-07 14:50:41      BTC 0.00103982   53.069740  51002.43         buy
+      2 2021-05-08 12:12:57      BTC 0.00011000    5.784024  52582.03     revenue
+      3 2021-05-09 12:22:07      BTC 0.00012000    6.034441  50287.01     revenue
+      4 2021-05-21 12:47:14      BTC 0.00013000    7.348590  56527.62     revenue
+      5 2021-06-11 12:03:31      BTC 0.00014000    8.396927  59978.05     revenue
+      6 2021-06-23 12:21:49      BTC 0.00015000    8.852574  59017.16     revenue
+      7 2021-07-10 00:52:19      BTC 0.00052991   31.268470  59007.14        sell
+        description                  comment revenue.type exchange rate.source
+      1         Buy Bought @ $51,002.432 CAD         <NA> shakepay    exchange
+      2      Reward              ShakingSats     airdrops shakepay    exchange
+      3      Reward              ShakingSats     airdrops shakepay    exchange
+      4      Reward              ShakingSats     airdrops shakepay    exchange
+      5      Reward              ShakingSats     airdrops shakepay    exchange
+      6      Reward              ShakingSats     airdrops shakepay    exchange
+      7        Sell  Bought @ $59,007.14 CAD         <NA> shakepay    exchange
 
 # newton
 
@@ -136,24 +134,24 @@
       suppressMessages(format_CDC(data_CDC))
     Output
                         date currency       quantity total.price     spot.rate
-      1  2021-05-03 22:05:50      BTC   0.0007333710    51.25000 69882.7777778
-      2  2021-05-07 23:06:50      ETH   0.0205920059    54.21000  2632.5750000
-      3  2021-05-15 18:07:10      CRO 182.4360090842    53.42000     0.2928150
-      4  2021-05-23 22:09:39      CRO 117.9468230300    30.17272     0.2558163
-      5  2021-05-29 23:10:59      CRO   6.4039544538     1.13000     0.1764535
-      6  2021-06-02 19:11:52      CRO  53.6136687700    10.99000     0.2049850
-      7  2021-06-10 23:12:24      CRO  86.3572366500    16.94000     0.1961619
-      8  2021-06-11 19:13:58      CRO  17.3688994200     9.19000     0.5291066
-      9  2021-06-16 20:14:29      CRO  22.5041772606    11.65000     0.5176817
-      10 2021-06-18 21:15:51      ETH   0.0000137750     0.05000  3629.7640653
-      11 2021-06-19 21:16:30      CRO   8.4526209677     1.25000     0.1478831
-      12 2021-06-27 21:17:50      ETH   0.0007632668     3.12000  4087.6923838
-      13 2021-07-06 22:18:40      CRO   0.3207992131     0.26000     0.8104758
-      14 2021-07-11 20:19:55     ETHW   0.3558067180     3.20000     8.9936469
-      15 2021-07-14 18:20:27      CRO   2.4761904762     1.20000     0.4846154
-      16 2021-07-23 17:21:19      CRO  37.1602562661     6.98000     0.1878351
-      17 2021-07-25 18:22:02      BTC   0.0005320542    35.00000 65782.7775510
-      18 2021-07-28 23:23:04      ETH   0.0099636548    35.00000  3512.7672130
+      1  2021-05-03 22:05:50      BTC   0.0007333710     51.2500 69882.7777778
+      2  2021-05-07 23:06:50      ETH   0.0205920059     54.2100  2632.5750000
+      3  2021-05-15 18:07:10      CRO 182.4360090842     53.4200     0.2928150
+      4  2021-05-23 22:09:39      CRO 117.9468230300     30.1525     0.2556449
+      5  2021-05-29 23:10:59      CRO   6.4039544538      1.1300     0.1764535
+      6  2021-06-02 19:11:52      CRO  53.6136687700     10.9900     0.2049850
+      7  2021-06-10 23:12:24      CRO  86.3572366500     16.9400     0.1961619
+      8  2021-06-11 19:13:58      CRO  17.3688994200      9.1900     0.5291066
+      9  2021-06-16 20:14:29      CRO  22.5041772606     11.6500     0.5176817
+      10 2021-06-18 21:15:51      ETH   0.0000137750      0.0500  3629.7640653
+      11 2021-06-19 21:16:30      CRO   8.4526209677      1.2500     0.1478831
+      12 2021-06-27 21:17:50      ETH   0.0007632668      3.1200  4087.6923838
+      13 2021-07-06 22:18:40      CRO   0.3207992131      0.2600     0.8104758
+      14 2021-07-11 20:19:55     ETHW   0.3558067180      3.2000     8.9936469
+      15 2021-07-14 18:20:27      CRO   2.4761904762      1.2000     0.4846154
+      16 2021-07-23 17:21:19      CRO  37.1602562661      6.9800     0.1878351
+      17 2021-07-25 18:22:02      BTC   0.0005320542     35.0000 65782.7775510
+      18 2021-07-28 23:23:04      ETH   0.0099636548     35.0000  3512.7672130
          transaction                         description                   comment
       1          buy                     crypto_purchase                   Buy BTC
       2          buy                     crypto_purchase                   Buy ETH
@@ -197,19 +195,17 @@
 
     Code
       format_celsius(data_celsius)
-    Message
-      Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
     Output
                        date currency       quantity total.price  spot.rate
-      1 2021-03-03 21:11:00      BTC 0.000707598916  50.5531290  71443.197
-      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1365091   5408.897
-      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7217231   8848.852
-      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5992261 162697.766
-      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5879116  12524.643
-      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6458988  12474.960
-      7 2021-04-08 22:18:00      BTC 0.000733082450  50.4026826  68754.453
-      8 2021-05-06 10:32:00      BTC 0.001409023441  61.4197063  43590.266
-      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4165345   6536.264
+      1 2021-03-03 21:11:00      BTC 0.000707598916  50.5240000  71402.031
+      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1366256   5413.514
+      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7267146   8910.052
+      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5977123 162286.762
+      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5849814  12462.217
+      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6447880  12453.505
+      7 2021-04-08 22:18:00      BTC 0.000733082450  50.3160000  68636.209
+      8 2021-05-06 10:32:00      BTC 0.001409023441  61.0000000  43292.395
+      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4162554   6531.885
         transaction       description revenue.type exchange               rate.source
       1     revenue Promo Code Reward       promos  celsius exchange (USD conversion)
       2     revenue            Reward    interests  celsius exchange (USD conversion)
@@ -227,12 +223,12 @@
       format_adalite(data_adalite, list.prices = list.prices)
     Output
                        date currency  quantity total.price spot.rate transaction
-      1 2021-04-28 16:56:00      ADA 0.3120400   0.4923403  1.577811     revenue
-      2 2021-05-07 16:53:00      ADA 0.3125132   0.5967795  1.909614     revenue
-      3 2021-05-12 16:56:00      ADA 0.2212410   0.4557332  2.059895     revenue
-      4 2021-05-17 17:16:00      ADA 0.4123210   1.1187530  2.713306     revenue
-      5 2021-05-17 21:16:00      ADA 0.1691870   0.4590561  2.713306        sell
-      6 2021-05-17 21:31:00      ADA 0.1912300   0.5188655  2.713306        sell
+      1 2021-04-28 16:56:00      ADA 0.3120400   0.5092906  1.632132     revenue
+      2 2021-05-07 16:53:00      ADA 0.3125132   0.6272258  2.007038     revenue
+      3 2021-05-12 16:56:00      ADA 0.2212410   0.4437400  2.005686     revenue
+      4 2021-05-17 17:16:00      ADA 0.4123210   1.0790423  2.616996     revenue
+      5 2021-05-17 21:16:00      ADA 0.1691870   0.4427617  2.616996        sell
+      6 2021-05-17 21:31:00      ADA 0.1912300   0.5004481  2.616996        sell
            description        comment revenue.type exchange   rate.source
       1 Reward awarded           <NA>      staking  adalite coinmarketcap
       2 Reward awarded           <NA>      staking  adalite coinmarketcap
@@ -247,46 +243,46 @@
       format_binance(data_binance, list.prices = list.prices)
     Output
                         date currency   quantity     total.price   spot.rate
-      1  2021-05-29 17:07:20      LTC 2.53200000  567.6524052192  224.191313
-      2  2021-05-29 17:07:20      ETH 0.19521000  567.6524052192 2907.906384
-      3  2021-05-29 17:07:20      LTC 2.41210000  540.7718667572  224.191313
-      4  2021-05-29 17:07:20      ETH 0.14123140  540.7718667572 3828.977598
-      5  2021-05-29 17:07:20      LTC 1.45120000  325.3464338286  224.191313
-      6  2021-05-29 17:07:20      ETH 0.11240000  325.3464338286 2894.541226
-      7  2021-05-29 17:07:20      LTC 1.42100000  318.5758561676  224.191313
-      8  2021-05-29 17:07:20      ETH 0.10512900  318.5758561676 3030.332793
-      9  2021-05-29 17:07:20      LTC 0.30000000   67.2573939833  224.191313
-      10 2021-05-29 17:07:20      ETH 0.00899120   67.2573939833 7480.357904
-      11 2021-05-29 17:07:20      LTC 0.27000000   60.5316545850  224.191313
-      12 2021-05-29 17:07:20      ETH 0.00612410   60.5316545850 9884.171484
-      13 2021-05-29 17:07:20      LTC 0.00202500    0.4539874094  224.191313
-      14 2021-05-29 17:07:20      LTC 0.00127520    0.2858887627  224.191313
-      15 2021-05-29 17:07:20      LTC 0.00113100    0.2535603753  224.191313
-      16 2021-05-29 17:07:20      LTC 0.00049230    0.1103693835  224.191313
-      17 2021-05-29 17:07:20      LTC 0.00007000    0.0156933919  224.191313
-      18 2021-05-29 17:07:20      LTC 0.00005000    0.0112095657  224.191313
-      19 2021-05-29 18:12:55      ETH 0.44124211 1375.3268554453 3116.943792
-      20 2021-05-29 18:12:55      LTC 1.60000000 1375.3268554453  859.579285
-      21 2021-05-29 18:12:55      ETH 0.42124000 1312.9814028579 3116.943792
-      22 2021-05-29 18:12:55      LTC 1.23000000 1312.9814028579 1067.464555
-      23 2021-05-29 18:12:55      ETH 0.00021470    0.6692078321 3116.943792
-      24 2021-05-29 18:12:55      ETH 0.00009251    0.2883484702 3116.943792
-      25 2021-11-05 04:32:23     BUSD 0.10512330    0.1305651638    1.242019
-      26 2022-11-17 11:54:25     ETHW 0.00012050    0.0006168112    5.118765
-      27 2022-11-27 08:05:35     BUSD 5.77124200    7.7341430743    1.340118
-      28 2022-11-27 08:05:35     USDC 5.77124200    7.7324848808    1.339830
+      1  2021-05-29 17:07:20      LTC 2.53200000  522.0449644988  206.178896
+      2  2021-05-29 17:07:20      ETH 0.19521000  522.0449644988 2674.273677
+      3  2021-05-29 17:07:20      LTC 2.41210000  497.3241148766  206.178896
+      4  2021-05-29 17:07:20      ETH 0.14123140  497.3241148766 3521.342385
+      5  2021-05-29 17:07:20      LTC 1.45120000  299.2068137759  206.178896
+      6  2021-05-29 17:07:20      ETH 0.11240000  299.2068137759 2661.982329
+      7  2021-05-29 17:07:20      LTC 1.42100000  292.9802111188  206.178896
+      8  2021-05-29 17:07:20      ETH 0.10512900  292.9802111188 2786.863864
+      9  2021-05-29 17:07:20      LTC 0.30000000   61.8536687795  206.178896
+      10 2021-05-29 17:07:20      ETH 0.00899120   61.8536687795 6879.356346
+      11 2021-05-29 17:07:20      LTC 0.27000000   55.6683019015  206.178896
+      12 2021-05-29 17:07:20      ETH 0.00612410   55.6683019015 9090.038030
+      13 2021-05-29 17:07:20      LTC 0.00202500    0.4175122643  206.178896
+      14 2021-05-29 17:07:20      LTC 0.00127520    0.2629193281  206.178896
+      15 2021-05-29 17:07:20      LTC 0.00113100    0.2331883313  206.178896
+      16 2021-05-29 17:07:20      LTC 0.00049230    0.1015018705  206.178896
+      17 2021-05-29 17:07:20      LTC 0.00007000    0.0144325227  206.178896
+      18 2021-05-29 17:07:20      LTC 0.00005000    0.0103089448  206.178896
+      19 2021-05-29 18:12:55      ETH 0.44124211 1251.5087700917 2836.331215
+      20 2021-05-29 18:12:55      LTC 1.60000000 1251.5087700917  782.192981
+      21 2021-05-29 18:12:55      ETH 0.42124000 1194.7761611271 2836.331215
+      22 2021-05-29 18:12:55      LTC 1.23000000 1194.7761611271  971.362733
+      23 2021-05-29 18:12:55      ETH 0.00021470    0.6089603119 2836.331215
+      24 2021-05-29 18:12:55      ETH 0.00009251    0.2623890007 2836.331215
+      25 2021-11-05 04:32:23     BUSD 0.10512330    0.1309409989    1.245594
+      26 2022-11-17 11:54:25     ETHW 0.00012050    0.0006093518    5.056861
+      27 2022-11-27 08:05:35     USDC 5.77124200    7.7213724784    1.337905
+      28 2022-11-27 08:05:35     BUSD 5.77124200    7.7212045360    1.337876
          transaction       fees                   description comment revenue.type
-      1          buy 1.66372374                           Buy    Spot         <NA>
+      1          buy 1.53005359                           Buy    Spot         <NA>
       2         sell         NA                           Buy    Spot         <NA>
-      3          buy 1.30299991                           Buy    Spot         <NA>
+      3          buy 1.19831174                           Buy    Spot         <NA>
       4         sell         NA                           Buy    Spot         <NA>
-      5          buy 1.21534111                           Buy    Spot         <NA>
+      5          buy 1.11769579                           Buy    Spot         <NA>
       6         sell         NA                           Buy    Spot         <NA>
-      7          buy 0.70014947                           Buy    Spot         <NA>
+      7          buy 0.64389669                           Buy    Spot         <NA>
       8         sell         NA                           Buy    Spot         <NA>
-      9          buy 0.06725739                           Buy    Spot         <NA>
+      9          buy 0.06185367                           Buy    Spot         <NA>
       10        sell         NA                           Buy    Spot         <NA>
-      11         buy 0.04708018                           Buy    Spot         <NA>
+      11         buy 0.04329757                           Buy    Spot         <NA>
       12        sell         NA                           Buy    Spot         <NA>
       13     revenue         NA             Referral Kickback    Spot      rebates
       14     revenue         NA             Referral Kickback    Spot      rebates
@@ -294,16 +290,16 @@
       16     revenue         NA             Referral Kickback    Spot      rebates
       17     revenue         NA             Referral Kickback    Spot      rebates
       18     revenue         NA             Referral Kickback    Spot      rebates
-      19         buy 6.61765817                          Sell    Spot         <NA>
+      19         buy 6.02188288                          Sell    Spot         <NA>
       20        sell         NA                          Sell    Spot         <NA>
-      21         buy 1.90881638                          Sell    Spot         <NA>
+      21         buy 1.73696924                          Sell    Spot         <NA>
       22        sell         NA                          Sell    Spot         <NA>
       23     revenue         NA             Referral Kickback    Spot      rebates
       24     revenue         NA             Referral Kickback    Spot      rebates
       25     revenue         NA Simple Earn Flexible Interest    Earn    interests
       26     revenue         NA                  Distribution    Spot        forks
-      27         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
-      28        sell         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      27        sell         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      28         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
          exchange               rate.source
       1   binance             coinmarketcap
       2   binance coinmarketcap (buy price)
@@ -340,9 +336,9 @@
       format_binance_withdrawals(data_binance_withdrawals, list.prices = list.prices)
     Output
                        date currency quantity total.price spot.rate transaction
-      1 2021-04-28 17:13:50      LTC 0.001000   0.3145237  314.5237        sell
-      2 2021-04-28 18:15:14      ETH 0.000071   0.2287972 3222.4952        sell
-      3 2021-05-06 19:55:52      ETH 0.000062   0.2575114 4153.4101        sell
+      1 2021-04-28 17:13:50      LTC 0.001000   0.3202293  320.2293        sell
+      2 2021-04-28 18:15:14      ETH 0.000071   0.2373691 3343.2269        sell
+      3 2021-05-06 19:55:52      ETH 0.000062   0.2653380 4279.6449        sell
             description exchange   rate.source
       1 Withdrawal fees  binance coinmarketcap
       2 Withdrawal fees  binance coinmarketcap
@@ -354,16 +350,16 @@
       format_blockfi(data_blockfi, list.prices = list.prices)
     Output
                         date currency     quantity total.price    spot.rate
-      1  2021-05-29 21:43:44      LTC  0.022451200  5.03336401   224.191313
-      2  2021-05-29 21:43:44      BTC  0.000018512  0.82940367 44803.568946
-      3  2021-06-13 21:43:44      BTC  0.000184120  8.15721460 44303.794280
-      4  2021-06-30 21:43:44      BTC  0.000047234  2.05439211 43493.926218
-      5  2021-06-30 21:43:44      LTC  0.010125120  1.76117412   173.941061
-      6  2021-07-29 21:43:44     USDC  0.038241000  0.04801144     1.255497
-      7  2021-08-05 18:34:06      BTC  0.000250000 12.21999371 48879.974846
-      8  2021-08-07 21:43:44      BTC  0.000441230 23.13158646 52425.235044
-      9  2021-10-24 04:29:23     USDC 55.000000000 68.05763407     1.237412
-      10 2021-10-24 04:29:23      LTC  0.165122140 68.05763407   412.165407
+      1  2021-05-29 21:43:44      LTC  0.022451200  4.62896363   206.178896
+      2  2021-05-29 21:43:44      BTC  0.000018512  0.78643467 42482.425898
+      3  2021-06-13 21:43:44      BTC  0.000184120  8.34885284 45344.627640
+      4  2021-06-30 21:43:44      BTC  0.000047234  2.07674837 43967.234920
+      5  2021-06-30 21:43:44      LTC  0.010125120  1.80823545   178.589038
+      6  2021-07-29 21:43:44     USDC  0.038241000  0.04761184     1.245047
+      7  2021-08-05 18:34:06      BTC  0.000250000 12.59292517 50371.700691
+      8  2021-08-07 21:43:44      BTC  0.000441230 24.19544042 54836.344810
+      9  2021-10-24 04:29:23     USDC 55.000000000 68.01411135     1.236620
+      10 2021-10-24 04:29:23      LTC  0.165122140 68.01411135   411.901828
          transaction      description revenue.type exchange               rate.source
       1      revenue Interest Payment    interests  blockfi             coinmarketcap
       2      revenue Interest Payment    interests  blockfi             coinmarketcap
@@ -382,16 +378,16 @@
       format_CDC_exchange_rewards(data_CDC_exchange_rewards, list.prices = list.prices)
     Output
                         date currency   quantity  total.price     spot.rate
-      1  2021-02-19 00:00:00      CRO 1.36512341 0.1916239832     0.1403712
-      2  2021-02-21 00:00:00      CRO 1.36945123 0.2387766094     0.1743593
-      3  2021-04-15 16:04:21      BTC 0.00000023 0.0182398297 79303.6074079
-      4  2021-04-18 00:00:00      CRO 1.36512310 0.4055452239     0.2970759
-      5  2021-05-14 06:02:22      BTC 0.00000035 0.0211411589 60403.3111561
-      6  2021-06-12 15:21:34      BTC 0.00000630 0.2827357248 44878.6864792
-      7  2021-06-27 01:34:00      CRO 0.00100000 0.0001169498     0.1169498
-      8  2021-07-07 00:00:00      CRO 0.01512903 0.0022388014     0.1479805
-      9  2021-07-13 00:00:00      CRO 0.05351230 0.0085128641     0.1590824
-      10 2021-09-07 00:00:00      CRO 0.01521310 0.0037135961     0.2441052
+      1  2021-02-19 00:00:00      CRO 1.36512341 0.2221748898     0.1627508
+      2  2021-02-21 00:00:00      CRO 1.36945123 0.2412313569     0.1761518
+      3  2021-04-15 16:04:21      BTC 0.00000023 0.0182120528 79182.8382268
+      4  2021-04-18 00:00:00      CRO 1.36512310 0.3795803682     0.2780558
+      5  2021-05-14 06:02:22      BTC 0.00000035 0.0210982556 60280.7303238
+      6  2021-06-12 15:21:34      BTC 0.00000630 0.2789325106 44275.0016795
+      7  2021-06-27 01:34:00      CRO 0.00100000 0.0001240084     0.1240084
+      8  2021-07-07 00:00:00      CRO 0.01512903 0.0022880434     0.1512353
+      9  2021-07-13 00:00:00      CRO 0.05351230 0.0084290717     0.1575165
+      10 2021-09-07 00:00:00      CRO 0.01521310 0.0035727817     0.2348490
          transaction description                                          comment
       1      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
       2      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
@@ -421,35 +417,35 @@
       format_CDC_exchange_trades(data_CDC_exchange_trades, list.prices = list.prices)
     Output
                         date currency   quantity total.price    spot.rate transaction
-      1  2021-12-24 15:34:45      CRO 13260.1300  9640.58151    0.7270352         buy
-      2  2021-12-24 15:34:45      ETH     2.0932  9640.58151 4605.6666885        sell
-      3  2021-12-24 15:34:45      CRO  3555.9000  2585.26453    0.7270352         buy
-      4  2021-12-24 15:34:45      ETH     0.5600  2585.26453 4616.5438100        sell
-      5  2021-12-24 15:34:45      CRO  1781.7400  1295.38773    0.7270352         buy
-      6  2021-12-24 15:34:45      ETH     0.2800  1295.38773 4626.3847510        sell
-      7  2021-12-24 15:34:45      CRO    26.8500    19.52090    0.7270352         buy
-      8  2021-12-24 15:34:45      ETH     0.0042    19.52090 4647.8322900        sell
-      9  2021-12-24 15:34:45      CRO    26.6700    19.39003    0.7270352         buy
-      10 2021-12-24 15:34:45      ETH     0.0042    19.39003 4616.6736378        sell
-      11 2021-12-24 15:34:45      CRO    17.7800    12.92669    0.7270352         buy
-      12 2021-12-24 15:34:45      CRO    17.7800    12.92669    0.7270352         buy
-      13 2021-12-24 15:34:45      ETH     0.0028    12.92669 4616.6736378        sell
-      14 2021-12-24 15:34:45      ETH     0.0028    12.92669 4616.6736378        sell
+      1  2021-12-24 15:34:45      CRO 13260.1300 10383.49502    0.7830613         buy
+      2  2021-12-24 15:34:45      ETH     2.0932 10383.49502 4960.5842834        sell
+      3  2021-12-24 15:34:45      CRO  3555.9000  2784.48778    0.7830613         buy
+      4  2021-12-24 15:34:45      ETH     0.5600  2784.48778 4972.2996075        sell
+      5  2021-12-24 15:34:45      CRO  1781.7400  1395.21169    0.7830613         buy
+      6  2021-12-24 15:34:45      ETH     0.2800  1395.21169 4982.8989019        sell
+      7  2021-12-24 15:34:45      CRO    26.8500    21.02520    0.7830613         buy
+      8  2021-12-24 15:34:45      ETH     0.0042    21.02520 5005.9992112        sell
+      9  2021-12-24 15:34:45      CRO    26.6700    20.88425    0.7830613         buy
+      10 2021-12-24 15:34:45      ETH     0.0042    20.88425 4972.4394399        sell
+      11 2021-12-24 15:34:45      CRO    17.7800    13.92283    0.7830613         buy
+      12 2021-12-24 15:34:45      CRO    17.7800    13.92283    0.7830613         buy
+      13 2021-12-24 15:34:45      ETH     0.0028    13.92283 4972.4394399        sell
+      14 2021-12-24 15:34:45      ETH     0.0028    13.92283 4972.4394399        sell
                 fees description comment     exchange               rate.source
       1           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      2  38.56232942        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      2  41.53398371        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       3           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      4  10.34105581        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      4  11.13794862        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       5           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      6   5.18156139        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      6   5.58085805        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       7           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      8   0.07809365        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      8   0.08411163        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       9           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      10  0.07755694        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      10  0.08353356        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       11          NA         BUY ETH_CRO CDC.exchange             coinmarketcap
       12          NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      13  0.05170544        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
-      14  0.05170536        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      13  0.05568992        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      14  0.05568983        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
 
 # CDC wallet
 
@@ -457,13 +453,13 @@
       format_CDC_wallet(data_CDC_wallet, list.prices = list.prices)
     Output
                        date currency quantity   total.price spot.rate transaction
-      1 2021-04-12 18:28:50      CRO 0.512510 0.13769414667 0.2686663     revenue
-      2 2021-04-18 18:28:50      CRO 0.000200 0.00005941519 0.2970759        sell
-      3 2021-04-23 18:51:53      CRO 1.656708 0.38144782996 0.2302445     revenue
-      4 2021-04-25 18:51:53      CRO 0.000200 0.00004224724 0.2112362        sell
-      5 2021-05-21 01:19:01      CRO 0.000200 0.00003001989 0.1500995        sell
-      6 2021-06-25 04:11:53      CRO 0.000200 0.00002430626 0.1215313        sell
-      7 2021-06-26 14:51:02      CRO 6.051235 0.72901820050 0.1204743     revenue
+      1 2021-04-12 18:28:50      CRO 0.512510 0.13598426831 0.2653300     revenue
+      2 2021-04-18 18:28:50      CRO 0.000200 0.00005561116 0.2780558        sell
+      3 2021-04-23 18:51:53      CRO 1.656708 0.36012175964 0.2173720     revenue
+      4 2021-04-25 18:51:53      CRO 0.000200 0.00004177234 0.2088617        sell
+      5 2021-05-21 01:19:01      CRO 0.000200 0.00002992587 0.1496293        sell
+      6 2021-06-25 04:11:53      CRO 0.000200 0.00002406829 0.1203414        sell
+      7 2021-06-26 14:51:02      CRO 6.051235 0.70787479660 0.1169802     revenue
          description
       1       Reward
       2 staking cost
@@ -495,12 +491,12 @@
       format_coinsmart(data_coinsmart, list.prices = list.prices)
     Output
                        date currency  quantity total.price    spot.rate transaction
-      1 2021-04-25 16:11:24      ADA 198.50000 237.9374300     1.198677         buy
-      2 2021-04-28 18:37:15      CAD  15.00000  15.0000000     1.000000     revenue
-      3 2021-05-15 16:42:07      BTC   0.00004   2.4175248 60438.119096     revenue
-      4 2021-06-03 02:04:49      ADA   0.30000   0.6308336     2.102779        sell
+      1 2021-04-25 16:11:24      ADA 198.50000  237.937430     1.198677         buy
+      2 2021-04-28 18:37:15      CAD  15.00000   15.000000     1.000000     revenue
+      3 2021-05-15 16:42:07      BTC   0.00004    2.339839 58495.964189     revenue
+      4 2021-06-03 02:04:49      ADA   0.30000    0.652675     2.175583        sell
              fees description  comment revenue.type  exchange   rate.source
-      1 0.2777396    purchase    Trade         <NA> coinsmart      exchange
+      1 0.2695238    purchase    Trade         <NA> coinsmart      exchange
       2        NA       Other Referral    referrals coinsmart      exchange
       3        NA       Other     Quiz     airdrops coinsmart coinmarketcap
       4        NA         Fee Withdraw         <NA> coinsmart coinmarketcap
@@ -511,10 +507,10 @@
       format_exodus(data_exodus, list.prices = list.prices)
     Output
                        date currency  quantity total.price    spot.rate transaction
-      1 2021-05-25 22:06:11      LTC 0.0014430   0.2843553   197.058392        sell
-      2 2021-05-25 23:08:12      ADA 0.1782410   0.3080132     1.728071        sell
-      3 2021-06-12 12:15:28      BTC 0.0000503   2.2573979 44878.686479        sell
-      4 2021-06-12 22:31:35      ETH 0.0014500   4.2422640  2925.699291        sell
+      1 2021-05-25 22:06:11      LTC 0.0014430   0.3205936   222.171556        sell
+      2 2021-05-25 23:08:12      ADA 0.1782410   0.3337199     1.872296        sell
+      3 2021-06-12 12:15:28      BTC 0.0000503   2.2270326 44275.001680        sell
+      4 2021-06-12 22:31:35      ETH 0.0014500   4.1634192  2871.323554        sell
         description revenue.type exchange   rate.source
       1  withdrawal         <NA>   exodus coinmarketcap
       2  withdrawal         <NA>   exodus coinmarketcap
@@ -527,17 +523,17 @@
       format_presearch(data_presearch, list.prices = list.prices)
     Output
                         date currency quantity total.price  spot.rate transaction
-      1  2021-04-27 17:45:18      PRE     0.13  0.01177119 0.09054761     revenue
-      2  2021-04-27 17:48:00      PRE     0.13  0.01177119 0.09054761     revenue
-      3  2021-04-27 17:48:18      PRE     0.13  0.01177119 0.09054761     revenue
-      4  2021-04-27 17:55:24      PRE     0.13  0.01177119 0.09054761     revenue
-      5  2021-04-27 17:57:29      PRE     0.13  0.01177119 0.09054761     revenue
-      6  2021-04-27 19:00:31      PRE     0.13  0.01177119 0.09054761     revenue
-      7  2021-04-27 19:00:41      PRE     0.13  0.01177119 0.09054761     revenue
-      8  2021-04-27 19:01:57      PRE     0.13  0.01177119 0.09054761     revenue
-      9  2021-04-27 19:08:59      PRE     0.13  0.01177119 0.09054761     revenue
-      10 2021-04-27 19:12:15      PRE     0.13  0.01177119 0.09054761     revenue
-      11 2021-05-07 05:55:33      PRE  1000.00 85.58796651 0.08558797         buy
+      1  2021-04-27 17:45:18      PRE     0.13  0.01209966 0.09307434     revenue
+      2  2021-04-27 17:48:00      PRE     0.13  0.01209966 0.09307434     revenue
+      3  2021-04-27 17:48:18      PRE     0.13  0.01209966 0.09307434     revenue
+      4  2021-04-27 17:55:24      PRE     0.13  0.01209966 0.09307434     revenue
+      5  2021-04-27 17:57:29      PRE     0.13  0.01209966 0.09307434     revenue
+      6  2021-04-27 19:00:31      PRE     0.13  0.01209966 0.09307434     revenue
+      7  2021-04-27 19:00:41      PRE     0.13  0.01209966 0.09307434     revenue
+      8  2021-04-27 19:01:57      PRE     0.13  0.01209966 0.09307434     revenue
+      9  2021-04-27 19:08:59      PRE     0.13  0.01209966 0.09307434     revenue
+      10 2021-04-27 19:12:15      PRE     0.13  0.01209966 0.09307434     revenue
+      11 2021-05-07 05:55:33      PRE  1000.00 78.96908966 0.07896909         buy
                                              description revenue.type  exchange
       1                                    Search Reward     airdrops presearch
       2                                    Search Reward     airdrops presearch
@@ -568,18 +564,18 @@
     Code
       format_gemini(data_gemini, list.prices = list.prices)
     Output
-                        date currency        quantity total.price    spot.rate
-      1  2021-04-09 22:50:55      BTC  0.000966278356  69.5935550 72022.264190
-      2  2021-04-09 22:50:55      LTC  0.246690598398  69.5935550   282.108663
-      3  2021-04-09 22:53:57      BTC  0.000006051912   0.4358724 72022.264190
-      4  2021-04-09 22:53:57      LTC  0.001640820000   0.4358724   265.643013
-      5  2021-04-09 23:20:53      BAT 48.719519585106  76.0791290     1.561574
-      6  2021-04-09 23:20:53      BTC  0.000950730015  76.0791290 80021.801997
-      7  2021-04-10 23:22:04      BTC  0.000285025578  20.8430114 73126.810459
-      8  2021-05-08 16:14:54      BAT  2.833934780210   4.8394522     1.707679
-      9  2021-05-16 12:55:02      BAT  3.085288331282   4.4036766     1.427314
-      10 2021-05-16 13:35:19      BAT  5.007481461482   7.1472506     1.427314
-      11 2021-06-18 01:38:54      BAT  6.834322542857   5.5394574     0.810535
+                        date currency        quantity total.price     spot.rate
+      1  2021-04-09 22:50:55      BTC  0.000966278356  70.6481728 73113.6865846
+      2  2021-04-09 22:50:55      LTC  0.246690598398  70.6481728   286.3837264
+      3  2021-04-09 22:53:57      BTC  0.000006051912   0.4424776 73113.6865846
+      4  2021-04-09 22:53:57      LTC  0.001640820000   0.4424776   269.6685566
+      5  2021-04-09 23:20:53      BAT 48.719519585106  86.3813238     1.7730332
+      6  2021-04-09 23:20:53      BTC  0.000950730015  86.3813238 90857.8906767
+      7  2021-04-10 23:22:04      BTC  0.000285025578  21.1030333 74039.0860637
+      8  2021-05-08 16:14:54      BAT  2.833934780210   4.8662823     1.7171469
+      9  2021-05-16 12:55:02      BAT  3.085288331282   4.2575830     1.3799628
+      10 2021-05-16 13:35:19      BAT  5.007481461482   6.9101380     1.3799628
+      11 2021-06-18 01:38:54      BAT  6.834322542857   5.3946979     0.7893537
          transaction            fees description               comment revenue.type
       1          buy 0.0000023034086      LTCBTC                Market         <NA>
       2         sell              NA      LTCBTC                Market         <NA>
@@ -611,18 +607,18 @@
       format_uphold(data_uphold, list.prices = list.prices)
     Output
                         date currency    quantity total.price   spot.rate transaction
-      1  2021-01-07 02:40:31      BAT  1.59081275   0.4861556   0.3056020     revenue
-      2  2021-02-09 14:26:49      BAT 12.69812163   6.6903206   0.5268748     revenue
-      3  2021-03-06 21:32:36      BAT  0.37591275   0.3274509   0.8710821     revenue
-      4  2021-03-07 21:46:57      LTC  0.24129740  55.5243079 230.1073608         buy
-      5  2021-03-07 21:46:57      BAT 52.59871206  55.5243079   1.0556211        sell
-      6  2021-03-07 21:54:09      LTC  0.00300000   0.6903221 230.1073608        sell
-      7  2021-04-05 12:22:00      BAT  8.52198415  12.4145568   1.4567683     revenue
-      8  2021-04-06 03:41:42      LTC  0.00300000   0.7998591 266.6196913        sell
-      9  2021-04-06 04:47:00      LTC  0.03605981   9.6142560 266.6196913         buy
-      10 2021-04-06 04:47:00      BAT  8.52198415   9.6142560   1.1281711        sell
-      11 2021-05-11 07:12:24      BAT  0.47521985   0.7844845   1.6507824     revenue
-      12 2021-06-09 04:52:23      BAT  0.67207415   0.5583566   0.8307961     revenue
+      1  2021-01-07 02:40:31      BAT  1.59081275   0.5126760   0.3222730     revenue
+      2  2021-02-09 14:26:49      BAT 12.69812163   6.8809223   0.5418851     revenue
+      3  2021-03-06 21:32:36      BAT  0.37591275   0.3207390   0.8532272     revenue
+      4  2021-03-07 21:46:57      LTC  0.24129740  57.1230888 236.7331300         buy
+      5  2021-03-07 21:46:57      BAT 52.59871206  57.1230888   1.0860169        sell
+      6  2021-03-07 21:54:09      LTC  0.00300000   0.7101994 236.7331300        sell
+      7  2021-04-05 12:22:00      BAT  8.52198415  13.1950331   1.5483522     revenue
+      8  2021-04-06 03:41:42      LTC  0.00300000   0.8652138 288.4045856        sell
+      9  2021-04-06 04:47:00      LTC  0.03605981  10.3998152 288.4045856         buy
+      10 2021-04-06 04:47:00      BAT  8.52198415  10.3998152   1.2203514        sell
+      11 2021-05-11 07:12:24      BAT  0.47521985   0.7777259   1.6365602     revenue
+      12 2021-06-09 04:52:23      BAT  0.67207415   0.5577482   0.8298909     revenue
          description         comment revenue.type exchange               rate.source
       1           in            <NA>     airdrops   uphold             coinmarketcap
       2           in            <NA>     airdrops   uphold             coinmarketcap
@@ -644,24 +640,22 @@
     Message
       Exchange detected: shakepay
     Output
-                       date currency    quantity total.price spot.rate transaction
-      1 2021-05-07 14:50:41      BTC  0.00103982   53.033350  51002.43         buy
-      2 2021-05-07 21:25:36      CAD 30.00000000   30.000000      1.00     revenue
-      3 2021-05-08 12:12:57      BTC  0.00011000    5.784024  52582.03     revenue
-      4 2021-05-09 12:22:07      BTC  0.00012000    6.034441  50287.01     revenue
-      5 2021-05-21 12:47:14      BTC  0.00013000    7.348590  56527.62     revenue
-      6 2021-06-11 12:03:31      BTC  0.00014000    8.396927  59978.05     revenue
-      7 2021-06-23 12:21:49      BTC  0.00015000    8.714877  58099.18     revenue
-      8 2021-07-10 00:52:19      BTC  0.00052991   31.268480  59007.15        sell
-          description  comment revenue.type exchange rate.source
-      1 purchase/sale purchase         <NA> shakepay    exchange
-      2         other   credit    referrals shakepay    exchange
-      3   shakingsats   credit     airdrops shakepay    exchange
-      4   shakingsats   credit     airdrops shakepay    exchange
-      5   shakingsats   credit     airdrops shakepay    exchange
-      6   shakingsats   credit     airdrops shakepay    exchange
-      7   shakingsats   credit     airdrops shakepay    exchange
-      8 purchase/sale     sale         <NA> shakepay    exchange
+                       date currency   quantity total.price spot.rate transaction
+      1 2021-05-07 14:50:41      BTC 0.00103982   53.069740  51002.43         buy
+      2 2021-05-08 12:12:57      BTC 0.00011000    5.784024  52582.03     revenue
+      3 2021-05-09 12:22:07      BTC 0.00012000    6.034441  50287.01     revenue
+      4 2021-05-21 12:47:14      BTC 0.00013000    7.348590  56527.62     revenue
+      5 2021-06-11 12:03:31      BTC 0.00014000    8.396927  59978.05     revenue
+      6 2021-06-23 12:21:49      BTC 0.00015000    8.852574  59017.16     revenue
+      7 2021-07-10 00:52:19      BTC 0.00052991   31.268470  59007.14        sell
+        description                  comment revenue.type exchange rate.source
+      1         Buy Bought @ $51,002.432 CAD         <NA> shakepay    exchange
+      2      Reward              ShakingSats     airdrops shakepay    exchange
+      3      Reward              ShakingSats     airdrops shakepay    exchange
+      4      Reward              ShakingSats     airdrops shakepay    exchange
+      5      Reward              ShakingSats     airdrops shakepay    exchange
+      6      Reward              ShakingSats     airdrops shakepay    exchange
+      7        Sell  Bought @ $59,007.14 CAD         <NA> shakepay    exchange
 
 ---
 
@@ -722,28 +716,27 @@
     Code
       format_detect(data_CDC)
     Message
-      Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
       Exchange detected: CDC
     Output
                         date currency       quantity total.price     spot.rate
-      1  2021-05-03 22:05:50      BTC   0.0007333710    51.25000 69882.7777778
-      2  2021-05-07 23:06:50      ETH   0.0205920059    54.21000  2632.5750000
-      3  2021-05-15 18:07:10      CRO 182.4360090842    53.42000     0.2928150
-      4  2021-05-23 22:09:39      CRO 117.9468230300    30.17272     0.2558163
-      5  2021-05-29 23:10:59      CRO   6.4039544538     1.13000     0.1764535
-      6  2021-06-02 19:11:52      CRO  53.6136687700    10.99000     0.2049850
-      7  2021-06-10 23:12:24      CRO  86.3572366500    16.94000     0.1961619
-      8  2021-06-11 19:13:58      CRO  17.3688994200     9.19000     0.5291066
-      9  2021-06-16 20:14:29      CRO  22.5041772606    11.65000     0.5176817
-      10 2021-06-18 21:15:51      ETH   0.0000137750     0.05000  3629.7640653
-      11 2021-06-19 21:16:30      CRO   8.4526209677     1.25000     0.1478831
-      12 2021-06-27 21:17:50      ETH   0.0007632668     3.12000  4087.6923838
-      13 2021-07-06 22:18:40      CRO   0.3207992131     0.26000     0.8104758
-      14 2021-07-11 20:19:55     ETHW   0.3558067180     3.20000     8.9936469
-      15 2021-07-14 18:20:27      CRO   2.4761904762     1.20000     0.4846154
-      16 2021-07-23 17:21:19      CRO  37.1602562661     6.98000     0.1878351
-      17 2021-07-25 18:22:02      BTC   0.0005320542    35.00000 65782.7775510
-      18 2021-07-28 23:23:04      ETH   0.0099636548    35.00000  3512.7672130
+      1  2021-05-03 22:05:50      BTC   0.0007333710     51.2500 69882.7777778
+      2  2021-05-07 23:06:50      ETH   0.0205920059     54.2100  2632.5750000
+      3  2021-05-15 18:07:10      CRO 182.4360090842     53.4200     0.2928150
+      4  2021-05-23 22:09:39      CRO 117.9468230300     30.1525     0.2556449
+      5  2021-05-29 23:10:59      CRO   6.4039544538      1.1300     0.1764535
+      6  2021-06-02 19:11:52      CRO  53.6136687700     10.9900     0.2049850
+      7  2021-06-10 23:12:24      CRO  86.3572366500     16.9400     0.1961619
+      8  2021-06-11 19:13:58      CRO  17.3688994200      9.1900     0.5291066
+      9  2021-06-16 20:14:29      CRO  22.5041772606     11.6500     0.5176817
+      10 2021-06-18 21:15:51      ETH   0.0000137750      0.0500  3629.7640653
+      11 2021-06-19 21:16:30      CRO   8.4526209677      1.2500     0.1478831
+      12 2021-06-27 21:17:50      ETH   0.0007632668      3.1200  4087.6923838
+      13 2021-07-06 22:18:40      CRO   0.3207992131      0.2600     0.8104758
+      14 2021-07-11 20:19:55     ETHW   0.3558067180      3.2000     8.9936469
+      15 2021-07-14 18:20:27      CRO   2.4761904762      1.2000     0.4846154
+      16 2021-07-23 17:21:19      CRO  37.1602562661      6.9800     0.1878351
+      17 2021-07-25 18:22:02      BTC   0.0005320542     35.0000 65782.7775510
+      18 2021-07-28 23:23:04      ETH   0.0099636548     35.0000  3512.7672130
          transaction                         description                   comment
       1          buy                     crypto_purchase                   Buy BTC
       2          buy                     crypto_purchase                   Buy ETH
@@ -788,19 +781,18 @@
     Code
       format_detect(data_celsius)
     Message
-      Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
       Exchange detected: celsius
     Output
                        date currency       quantity total.price  spot.rate
-      1 2021-03-03 21:11:00      BTC 0.000707598916  50.5531290  71443.197
-      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1365091   5408.897
-      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7217231   8848.852
-      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5992261 162697.766
-      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5879116  12524.643
-      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6458988  12474.960
-      7 2021-04-08 22:18:00      BTC 0.000733082450  50.4026826  68754.453
-      8 2021-05-06 10:32:00      BTC 0.001409023441  61.4197063  43590.266
-      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4165345   6536.264
+      1 2021-03-03 21:11:00      BTC 0.000707598916  50.5240000  71402.031
+      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1366256   5413.514
+      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7267146   8910.052
+      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5977123 162286.762
+      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5849814  12462.217
+      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6447880  12453.505
+      7 2021-04-08 22:18:00      BTC 0.000733082450  50.3160000  68636.209
+      8 2021-05-06 10:32:00      BTC 0.001409023441  61.0000000  43292.395
+      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4162554   6531.885
         transaction       description revenue.type exchange               rate.source
       1     revenue Promo Code Reward       promos  celsius exchange (USD conversion)
       2     revenue            Reward    interests  celsius exchange (USD conversion)
@@ -820,12 +812,12 @@
       Exchange detected: adalite
     Output
                        date currency  quantity total.price spot.rate transaction
-      1 2021-04-28 16:56:00      ADA 0.3120400   0.4923403  1.577811     revenue
-      2 2021-05-07 16:53:00      ADA 0.3125132   0.5967795  1.909614     revenue
-      3 2021-05-12 16:56:00      ADA 0.2212410   0.4557332  2.059895     revenue
-      4 2021-05-17 17:16:00      ADA 0.4123210   1.1187530  2.713306     revenue
-      5 2021-05-17 21:16:00      ADA 0.1691870   0.4590561  2.713306        sell
-      6 2021-05-17 21:31:00      ADA 0.1912300   0.5188655  2.713306        sell
+      1 2021-04-28 16:56:00      ADA 0.3120400   0.5092906  1.632132     revenue
+      2 2021-05-07 16:53:00      ADA 0.3125132   0.6272258  2.007038     revenue
+      3 2021-05-12 16:56:00      ADA 0.2212410   0.4437400  2.005686     revenue
+      4 2021-05-17 17:16:00      ADA 0.4123210   1.0790423  2.616996     revenue
+      5 2021-05-17 21:16:00      ADA 0.1691870   0.4427617  2.616996        sell
+      6 2021-05-17 21:31:00      ADA 0.1912300   0.5004481  2.616996        sell
            description        comment revenue.type exchange   rate.source
       1 Reward awarded           <NA>      staking  adalite coinmarketcap
       2 Reward awarded           <NA>      staking  adalite coinmarketcap
@@ -842,46 +834,46 @@
       Exchange detected: binance
     Output
                         date currency   quantity     total.price   spot.rate
-      1  2021-05-29 17:07:20      LTC 2.53200000  567.6524052192  224.191313
-      2  2021-05-29 17:07:20      ETH 0.19521000  567.6524052192 2907.906384
-      3  2021-05-29 17:07:20      LTC 2.41210000  540.7718667572  224.191313
-      4  2021-05-29 17:07:20      ETH 0.14123140  540.7718667572 3828.977598
-      5  2021-05-29 17:07:20      LTC 1.45120000  325.3464338286  224.191313
-      6  2021-05-29 17:07:20      ETH 0.11240000  325.3464338286 2894.541226
-      7  2021-05-29 17:07:20      LTC 1.42100000  318.5758561676  224.191313
-      8  2021-05-29 17:07:20      ETH 0.10512900  318.5758561676 3030.332793
-      9  2021-05-29 17:07:20      LTC 0.30000000   67.2573939833  224.191313
-      10 2021-05-29 17:07:20      ETH 0.00899120   67.2573939833 7480.357904
-      11 2021-05-29 17:07:20      LTC 0.27000000   60.5316545850  224.191313
-      12 2021-05-29 17:07:20      ETH 0.00612410   60.5316545850 9884.171484
-      13 2021-05-29 17:07:20      LTC 0.00202500    0.4539874094  224.191313
-      14 2021-05-29 17:07:20      LTC 0.00127520    0.2858887627  224.191313
-      15 2021-05-29 17:07:20      LTC 0.00113100    0.2535603753  224.191313
-      16 2021-05-29 17:07:20      LTC 0.00049230    0.1103693835  224.191313
-      17 2021-05-29 17:07:20      LTC 0.00007000    0.0156933919  224.191313
-      18 2021-05-29 17:07:20      LTC 0.00005000    0.0112095657  224.191313
-      19 2021-05-29 18:12:55      ETH 0.44124211 1375.3268554453 3116.943792
-      20 2021-05-29 18:12:55      LTC 1.60000000 1375.3268554453  859.579285
-      21 2021-05-29 18:12:55      ETH 0.42124000 1312.9814028579 3116.943792
-      22 2021-05-29 18:12:55      LTC 1.23000000 1312.9814028579 1067.464555
-      23 2021-05-29 18:12:55      ETH 0.00021470    0.6692078321 3116.943792
-      24 2021-05-29 18:12:55      ETH 0.00009251    0.2883484702 3116.943792
-      25 2021-11-05 04:32:23     BUSD 0.10512330    0.1305651638    1.242019
-      26 2022-11-17 11:54:25     ETHW 0.00012050    0.0006168112    5.118765
-      27 2022-11-27 08:05:35     BUSD 5.77124200    7.7341430743    1.340118
-      28 2022-11-27 08:05:35     USDC 5.77124200    7.7324848808    1.339830
+      1  2021-05-29 17:07:20      LTC 2.53200000  522.0449644988  206.178896
+      2  2021-05-29 17:07:20      ETH 0.19521000  522.0449644988 2674.273677
+      3  2021-05-29 17:07:20      LTC 2.41210000  497.3241148766  206.178896
+      4  2021-05-29 17:07:20      ETH 0.14123140  497.3241148766 3521.342385
+      5  2021-05-29 17:07:20      LTC 1.45120000  299.2068137759  206.178896
+      6  2021-05-29 17:07:20      ETH 0.11240000  299.2068137759 2661.982329
+      7  2021-05-29 17:07:20      LTC 1.42100000  292.9802111188  206.178896
+      8  2021-05-29 17:07:20      ETH 0.10512900  292.9802111188 2786.863864
+      9  2021-05-29 17:07:20      LTC 0.30000000   61.8536687795  206.178896
+      10 2021-05-29 17:07:20      ETH 0.00899120   61.8536687795 6879.356346
+      11 2021-05-29 17:07:20      LTC 0.27000000   55.6683019015  206.178896
+      12 2021-05-29 17:07:20      ETH 0.00612410   55.6683019015 9090.038030
+      13 2021-05-29 17:07:20      LTC 0.00202500    0.4175122643  206.178896
+      14 2021-05-29 17:07:20      LTC 0.00127520    0.2629193281  206.178896
+      15 2021-05-29 17:07:20      LTC 0.00113100    0.2331883313  206.178896
+      16 2021-05-29 17:07:20      LTC 0.00049230    0.1015018705  206.178896
+      17 2021-05-29 17:07:20      LTC 0.00007000    0.0144325227  206.178896
+      18 2021-05-29 17:07:20      LTC 0.00005000    0.0103089448  206.178896
+      19 2021-05-29 18:12:55      ETH 0.44124211 1251.5087700917 2836.331215
+      20 2021-05-29 18:12:55      LTC 1.60000000 1251.5087700917  782.192981
+      21 2021-05-29 18:12:55      ETH 0.42124000 1194.7761611271 2836.331215
+      22 2021-05-29 18:12:55      LTC 1.23000000 1194.7761611271  971.362733
+      23 2021-05-29 18:12:55      ETH 0.00021470    0.6089603119 2836.331215
+      24 2021-05-29 18:12:55      ETH 0.00009251    0.2623890007 2836.331215
+      25 2021-11-05 04:32:23     BUSD 0.10512330    0.1309409989    1.245594
+      26 2022-11-17 11:54:25     ETHW 0.00012050    0.0006093518    5.056861
+      27 2022-11-27 08:05:35     USDC 5.77124200    7.7213724784    1.337905
+      28 2022-11-27 08:05:35     BUSD 5.77124200    7.7212045360    1.337876
          transaction       fees                   description comment revenue.type
-      1          buy 1.66372374                           Buy    Spot         <NA>
+      1          buy 1.53005359                           Buy    Spot         <NA>
       2         sell         NA                           Buy    Spot         <NA>
-      3          buy 1.30299991                           Buy    Spot         <NA>
+      3          buy 1.19831174                           Buy    Spot         <NA>
       4         sell         NA                           Buy    Spot         <NA>
-      5          buy 1.21534111                           Buy    Spot         <NA>
+      5          buy 1.11769579                           Buy    Spot         <NA>
       6         sell         NA                           Buy    Spot         <NA>
-      7          buy 0.70014947                           Buy    Spot         <NA>
+      7          buy 0.64389669                           Buy    Spot         <NA>
       8         sell         NA                           Buy    Spot         <NA>
-      9          buy 0.06725739                           Buy    Spot         <NA>
+      9          buy 0.06185367                           Buy    Spot         <NA>
       10        sell         NA                           Buy    Spot         <NA>
-      11         buy 0.04708018                           Buy    Spot         <NA>
+      11         buy 0.04329757                           Buy    Spot         <NA>
       12        sell         NA                           Buy    Spot         <NA>
       13     revenue         NA             Referral Kickback    Spot      rebates
       14     revenue         NA             Referral Kickback    Spot      rebates
@@ -889,16 +881,16 @@
       16     revenue         NA             Referral Kickback    Spot      rebates
       17     revenue         NA             Referral Kickback    Spot      rebates
       18     revenue         NA             Referral Kickback    Spot      rebates
-      19         buy 6.61765817                          Sell    Spot         <NA>
+      19         buy 6.02188288                          Sell    Spot         <NA>
       20        sell         NA                          Sell    Spot         <NA>
-      21         buy 1.90881638                          Sell    Spot         <NA>
+      21         buy 1.73696924                          Sell    Spot         <NA>
       22        sell         NA                          Sell    Spot         <NA>
       23     revenue         NA             Referral Kickback    Spot      rebates
       24     revenue         NA             Referral Kickback    Spot      rebates
       25     revenue         NA Simple Earn Flexible Interest    Earn    interests
       26     revenue         NA                  Distribution    Spot        forks
-      27         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
-      28        sell         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      27        sell         NA   Stablecoins Auto-Conversion    Spot         <NA>
+      28         buy         NA   Stablecoins Auto-Conversion    Spot         <NA>
          exchange               rate.source
       1   binance             coinmarketcap
       2   binance coinmarketcap (buy price)
@@ -937,9 +929,9 @@
       Exchange detected: binance_withdrawals
     Output
                        date currency quantity total.price spot.rate transaction
-      1 2021-04-28 17:13:50      LTC 0.001000   0.3145237  314.5237        sell
-      2 2021-04-28 18:15:14      ETH 0.000071   0.2287972 3222.4952        sell
-      3 2021-05-06 19:55:52      ETH 0.000062   0.2575114 4153.4101        sell
+      1 2021-04-28 17:13:50      LTC 0.001000   0.3202293  320.2293        sell
+      2 2021-04-28 18:15:14      ETH 0.000071   0.2373691 3343.2269        sell
+      3 2021-05-06 19:55:52      ETH 0.000062   0.2653380 4279.6449        sell
             description exchange   rate.source
       1 Withdrawal fees  binance coinmarketcap
       2 Withdrawal fees  binance coinmarketcap
@@ -953,16 +945,16 @@
       Exchange detected: blockfi
     Output
                         date currency     quantity total.price    spot.rate
-      1  2021-05-29 21:43:44      LTC  0.022451200  5.03336401   224.191313
-      2  2021-05-29 21:43:44      BTC  0.000018512  0.82940367 44803.568946
-      3  2021-06-13 21:43:44      BTC  0.000184120  8.15721460 44303.794280
-      4  2021-06-30 21:43:44      BTC  0.000047234  2.05439211 43493.926218
-      5  2021-06-30 21:43:44      LTC  0.010125120  1.76117412   173.941061
-      6  2021-07-29 21:43:44     USDC  0.038241000  0.04801144     1.255497
-      7  2021-08-05 18:34:06      BTC  0.000250000 12.21999371 48879.974846
-      8  2021-08-07 21:43:44      BTC  0.000441230 23.13158646 52425.235044
-      9  2021-10-24 04:29:23     USDC 55.000000000 68.05763407     1.237412
-      10 2021-10-24 04:29:23      LTC  0.165122140 68.05763407   412.165407
+      1  2021-05-29 21:43:44      LTC  0.022451200  4.62896363   206.178896
+      2  2021-05-29 21:43:44      BTC  0.000018512  0.78643467 42482.425898
+      3  2021-06-13 21:43:44      BTC  0.000184120  8.34885284 45344.627640
+      4  2021-06-30 21:43:44      BTC  0.000047234  2.07674837 43967.234920
+      5  2021-06-30 21:43:44      LTC  0.010125120  1.80823545   178.589038
+      6  2021-07-29 21:43:44     USDC  0.038241000  0.04761184     1.245047
+      7  2021-08-05 18:34:06      BTC  0.000250000 12.59292517 50371.700691
+      8  2021-08-07 21:43:44      BTC  0.000441230 24.19544042 54836.344810
+      9  2021-10-24 04:29:23     USDC 55.000000000 68.01411135     1.236620
+      10 2021-10-24 04:29:23      LTC  0.165122140 68.01411135   411.901828
          transaction      description revenue.type exchange               rate.source
       1      revenue Interest Payment    interests  blockfi             coinmarketcap
       2      revenue Interest Payment    interests  blockfi             coinmarketcap
@@ -983,16 +975,16 @@
       Exchange detected: CDC_exchange_rewards
     Output
                         date currency   quantity  total.price     spot.rate
-      1  2021-02-19 00:00:00      CRO 1.36512341 0.1916239832     0.1403712
-      2  2021-02-21 00:00:00      CRO 1.36945123 0.2387766094     0.1743593
-      3  2021-04-15 16:04:21      BTC 0.00000023 0.0182398297 79303.6074079
-      4  2021-04-18 00:00:00      CRO 1.36512310 0.4055452239     0.2970759
-      5  2021-05-14 06:02:22      BTC 0.00000035 0.0211411589 60403.3111561
-      6  2021-06-12 15:21:34      BTC 0.00000630 0.2827357248 44878.6864792
-      7  2021-06-27 01:34:00      CRO 0.00100000 0.0001169498     0.1169498
-      8  2021-07-07 00:00:00      CRO 0.01512903 0.0022388014     0.1479805
-      9  2021-07-13 00:00:00      CRO 0.05351230 0.0085128641     0.1590824
-      10 2021-09-07 00:00:00      CRO 0.01521310 0.0037135961     0.2441052
+      1  2021-02-19 00:00:00      CRO 1.36512341 0.2221748898     0.1627508
+      2  2021-02-21 00:00:00      CRO 1.36945123 0.2412313569     0.1761518
+      3  2021-04-15 16:04:21      BTC 0.00000023 0.0182120528 79182.8382268
+      4  2021-04-18 00:00:00      CRO 1.36512310 0.3795803682     0.2780558
+      5  2021-05-14 06:02:22      BTC 0.00000035 0.0210982556 60280.7303238
+      6  2021-06-12 15:21:34      BTC 0.00000630 0.2789325106 44275.0016795
+      7  2021-06-27 01:34:00      CRO 0.00100000 0.0001240084     0.1240084
+      8  2021-07-07 00:00:00      CRO 0.01512903 0.0022880434     0.1512353
+      9  2021-07-13 00:00:00      CRO 0.05351230 0.0084290717     0.1575165
+      10 2021-09-07 00:00:00      CRO 0.01521310 0.0035727817     0.2348490
          transaction description                                          comment
       1      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
       2      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
@@ -1024,35 +1016,35 @@
       Exchange detected: CDC_exchange_trades
     Output
                         date currency   quantity total.price    spot.rate transaction
-      1  2021-12-24 15:34:45      CRO 13260.1300  9640.58151    0.7270352         buy
-      2  2021-12-24 15:34:45      ETH     2.0932  9640.58151 4605.6666885        sell
-      3  2021-12-24 15:34:45      CRO  3555.9000  2585.26453    0.7270352         buy
-      4  2021-12-24 15:34:45      ETH     0.5600  2585.26453 4616.5438100        sell
-      5  2021-12-24 15:34:45      CRO  1781.7400  1295.38773    0.7270352         buy
-      6  2021-12-24 15:34:45      ETH     0.2800  1295.38773 4626.3847510        sell
-      7  2021-12-24 15:34:45      CRO    26.8500    19.52090    0.7270352         buy
-      8  2021-12-24 15:34:45      ETH     0.0042    19.52090 4647.8322900        sell
-      9  2021-12-24 15:34:45      CRO    26.6700    19.39003    0.7270352         buy
-      10 2021-12-24 15:34:45      ETH     0.0042    19.39003 4616.6736378        sell
-      11 2021-12-24 15:34:45      CRO    17.7800    12.92669    0.7270352         buy
-      12 2021-12-24 15:34:45      CRO    17.7800    12.92669    0.7270352         buy
-      13 2021-12-24 15:34:45      ETH     0.0028    12.92669 4616.6736378        sell
-      14 2021-12-24 15:34:45      ETH     0.0028    12.92669 4616.6736378        sell
+      1  2021-12-24 15:34:45      CRO 13260.1300 10383.49502    0.7830613         buy
+      2  2021-12-24 15:34:45      ETH     2.0932 10383.49502 4960.5842834        sell
+      3  2021-12-24 15:34:45      CRO  3555.9000  2784.48778    0.7830613         buy
+      4  2021-12-24 15:34:45      ETH     0.5600  2784.48778 4972.2996075        sell
+      5  2021-12-24 15:34:45      CRO  1781.7400  1395.21169    0.7830613         buy
+      6  2021-12-24 15:34:45      ETH     0.2800  1395.21169 4982.8989019        sell
+      7  2021-12-24 15:34:45      CRO    26.8500    21.02520    0.7830613         buy
+      8  2021-12-24 15:34:45      ETH     0.0042    21.02520 5005.9992112        sell
+      9  2021-12-24 15:34:45      CRO    26.6700    20.88425    0.7830613         buy
+      10 2021-12-24 15:34:45      ETH     0.0042    20.88425 4972.4394399        sell
+      11 2021-12-24 15:34:45      CRO    17.7800    13.92283    0.7830613         buy
+      12 2021-12-24 15:34:45      CRO    17.7800    13.92283    0.7830613         buy
+      13 2021-12-24 15:34:45      ETH     0.0028    13.92283 4972.4394399        sell
+      14 2021-12-24 15:34:45      ETH     0.0028    13.92283 4972.4394399        sell
                 fees description comment     exchange               rate.source
       1           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      2  38.56232942        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      2  41.53398371        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       3           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      4  10.34105581        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      4  11.13794862        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       5           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      6   5.18156139        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      6   5.58085805        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       7           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      8   0.07809365        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      8   0.08411163        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       9           NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      10  0.07755694        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      10  0.08353356        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
       11          NA         BUY ETH_CRO CDC.exchange             coinmarketcap
       12          NA         BUY ETH_CRO CDC.exchange             coinmarketcap
-      13  0.05170544        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
-      14  0.05170536        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      13  0.05568992        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
+      14  0.05568983        SELL ETH_CRO CDC.exchange coinmarketcap (buy price)
 
 ---
 
@@ -1062,13 +1054,13 @@
       Exchange detected: CDC_wallet
     Output
                        date currency quantity   total.price spot.rate transaction
-      1 2021-04-12 18:28:50      CRO 0.512510 0.13769414667 0.2686663     revenue
-      2 2021-04-18 18:28:50      CRO 0.000200 0.00005941519 0.2970759        sell
-      3 2021-04-23 18:51:53      CRO 1.656708 0.38144782996 0.2302445     revenue
-      4 2021-04-25 18:51:53      CRO 0.000200 0.00004224724 0.2112362        sell
-      5 2021-05-21 01:19:01      CRO 0.000200 0.00003001989 0.1500995        sell
-      6 2021-06-25 04:11:53      CRO 0.000200 0.00002430626 0.1215313        sell
-      7 2021-06-26 14:51:02      CRO 6.051235 0.72901820050 0.1204743     revenue
+      1 2021-04-12 18:28:50      CRO 0.512510 0.13598426831 0.2653300     revenue
+      2 2021-04-18 18:28:50      CRO 0.000200 0.00005561116 0.2780558        sell
+      3 2021-04-23 18:51:53      CRO 1.656708 0.36012175964 0.2173720     revenue
+      4 2021-04-25 18:51:53      CRO 0.000200 0.00004177234 0.2088617        sell
+      5 2021-05-21 01:19:01      CRO 0.000200 0.00002992587 0.1496293        sell
+      6 2021-06-25 04:11:53      CRO 0.000200 0.00002406829 0.1203414        sell
+      7 2021-06-26 14:51:02      CRO 6.051235 0.70787479660 0.1169802     revenue
          description
       1       Reward
       2 staking cost
@@ -1102,12 +1094,12 @@
       Exchange detected: coinsmart
     Output
                        date currency  quantity total.price    spot.rate transaction
-      1 2021-04-25 16:11:24      ADA 198.50000 237.9374300     1.198677         buy
-      2 2021-04-28 18:37:15      CAD  15.00000  15.0000000     1.000000     revenue
-      3 2021-05-15 16:42:07      BTC   0.00004   2.4175248 60438.119096     revenue
-      4 2021-06-03 02:04:49      ADA   0.30000   0.6308336     2.102779        sell
+      1 2021-04-25 16:11:24      ADA 198.50000  237.937430     1.198677         buy
+      2 2021-04-28 18:37:15      CAD  15.00000   15.000000     1.000000     revenue
+      3 2021-05-15 16:42:07      BTC   0.00004    2.339839 58495.964189     revenue
+      4 2021-06-03 02:04:49      ADA   0.30000    0.652675     2.175583        sell
              fees description  comment revenue.type  exchange   rate.source
-      1 0.2777396    purchase    Trade         <NA> coinsmart      exchange
+      1 0.2695238    purchase    Trade         <NA> coinsmart      exchange
       2        NA       Other Referral    referrals coinsmart      exchange
       3        NA       Other     Quiz     airdrops coinsmart coinmarketcap
       4        NA         Fee Withdraw         <NA> coinsmart coinmarketcap
@@ -1120,10 +1112,10 @@
       Exchange detected: exodus
     Output
                        date currency  quantity total.price    spot.rate transaction
-      1 2021-05-25 22:06:11      LTC 0.0014430   0.2843553   197.058392        sell
-      2 2021-05-25 23:08:12      ADA 0.1782410   0.3080132     1.728071        sell
-      3 2021-06-12 12:15:28      BTC 0.0000503   2.2573979 44878.686479        sell
-      4 2021-06-12 22:31:35      ETH 0.0014500   4.2422640  2925.699291        sell
+      1 2021-05-25 22:06:11      LTC 0.0014430   0.3205936   222.171556        sell
+      2 2021-05-25 23:08:12      ADA 0.1782410   0.3337199     1.872296        sell
+      3 2021-06-12 12:15:28      BTC 0.0000503   2.2270326 44275.001680        sell
+      4 2021-06-12 22:31:35      ETH 0.0014500   4.1634192  2871.323554        sell
         description revenue.type exchange   rate.source
       1  withdrawal         <NA>   exodus coinmarketcap
       2  withdrawal         <NA>   exodus coinmarketcap
@@ -1138,17 +1130,17 @@
       Exchange detected: presearch
     Output
                         date currency quantity total.price  spot.rate transaction
-      1  2021-04-27 17:45:18      PRE     0.13  0.01177119 0.09054761     revenue
-      2  2021-04-27 17:48:00      PRE     0.13  0.01177119 0.09054761     revenue
-      3  2021-04-27 17:48:18      PRE     0.13  0.01177119 0.09054761     revenue
-      4  2021-04-27 17:55:24      PRE     0.13  0.01177119 0.09054761     revenue
-      5  2021-04-27 17:57:29      PRE     0.13  0.01177119 0.09054761     revenue
-      6  2021-04-27 19:00:31      PRE     0.13  0.01177119 0.09054761     revenue
-      7  2021-04-27 19:00:41      PRE     0.13  0.01177119 0.09054761     revenue
-      8  2021-04-27 19:01:57      PRE     0.13  0.01177119 0.09054761     revenue
-      9  2021-04-27 19:08:59      PRE     0.13  0.01177119 0.09054761     revenue
-      10 2021-04-27 19:12:15      PRE     0.13  0.01177119 0.09054761     revenue
-      11 2021-05-07 05:55:33      PRE  1000.00 85.58796651 0.08558797         buy
+      1  2021-04-27 17:45:18      PRE     0.13  0.01209966 0.09307434     revenue
+      2  2021-04-27 17:48:00      PRE     0.13  0.01209966 0.09307434     revenue
+      3  2021-04-27 17:48:18      PRE     0.13  0.01209966 0.09307434     revenue
+      4  2021-04-27 17:55:24      PRE     0.13  0.01209966 0.09307434     revenue
+      5  2021-04-27 17:57:29      PRE     0.13  0.01209966 0.09307434     revenue
+      6  2021-04-27 19:00:31      PRE     0.13  0.01209966 0.09307434     revenue
+      7  2021-04-27 19:00:41      PRE     0.13  0.01209966 0.09307434     revenue
+      8  2021-04-27 19:01:57      PRE     0.13  0.01209966 0.09307434     revenue
+      9  2021-04-27 19:08:59      PRE     0.13  0.01209966 0.09307434     revenue
+      10 2021-04-27 19:12:15      PRE     0.13  0.01209966 0.09307434     revenue
+      11 2021-05-07 05:55:33      PRE  1000.00 78.96908966 0.07896909         buy
                                              description revenue.type  exchange
       1                                    Search Reward     airdrops presearch
       2                                    Search Reward     airdrops presearch
@@ -1181,18 +1173,18 @@
     Message
       Exchange detected: gemini
     Output
-                        date currency        quantity total.price    spot.rate
-      1  2021-04-09 22:50:55      BTC  0.000966278356  69.5935550 72022.264190
-      2  2021-04-09 22:50:55      LTC  0.246690598398  69.5935550   282.108663
-      3  2021-04-09 22:53:57      BTC  0.000006051912   0.4358724 72022.264190
-      4  2021-04-09 22:53:57      LTC  0.001640820000   0.4358724   265.643013
-      5  2021-04-09 23:20:53      BAT 48.719519585106  76.0791290     1.561574
-      6  2021-04-09 23:20:53      BTC  0.000950730015  76.0791290 80021.801997
-      7  2021-04-10 23:22:04      BTC  0.000285025578  20.8430114 73126.810459
-      8  2021-05-08 16:14:54      BAT  2.833934780210   4.8394522     1.707679
-      9  2021-05-16 12:55:02      BAT  3.085288331282   4.4036766     1.427314
-      10 2021-05-16 13:35:19      BAT  5.007481461482   7.1472506     1.427314
-      11 2021-06-18 01:38:54      BAT  6.834322542857   5.5394574     0.810535
+                        date currency        quantity total.price     spot.rate
+      1  2021-04-09 22:50:55      BTC  0.000966278356  70.6481728 73113.6865846
+      2  2021-04-09 22:50:55      LTC  0.246690598398  70.6481728   286.3837264
+      3  2021-04-09 22:53:57      BTC  0.000006051912   0.4424776 73113.6865846
+      4  2021-04-09 22:53:57      LTC  0.001640820000   0.4424776   269.6685566
+      5  2021-04-09 23:20:53      BAT 48.719519585106  86.3813238     1.7730332
+      6  2021-04-09 23:20:53      BTC  0.000950730015  86.3813238 90857.8906767
+      7  2021-04-10 23:22:04      BTC  0.000285025578  21.1030333 74039.0860637
+      8  2021-05-08 16:14:54      BAT  2.833934780210   4.8662823     1.7171469
+      9  2021-05-16 12:55:02      BAT  3.085288331282   4.2575830     1.3799628
+      10 2021-05-16 13:35:19      BAT  5.007481461482   6.9101380     1.3799628
+      11 2021-06-18 01:38:54      BAT  6.834322542857   5.3946979     0.7893537
          transaction            fees description               comment revenue.type
       1          buy 0.0000023034086      LTCBTC                Market         <NA>
       2         sell              NA      LTCBTC                Market         <NA>
@@ -1226,18 +1218,18 @@
       Exchange detected: uphold
     Output
                         date currency    quantity total.price   spot.rate transaction
-      1  2021-01-07 02:40:31      BAT  1.59081275   0.4861556   0.3056020     revenue
-      2  2021-02-09 14:26:49      BAT 12.69812163   6.6903206   0.5268748     revenue
-      3  2021-03-06 21:32:36      BAT  0.37591275   0.3274509   0.8710821     revenue
-      4  2021-03-07 21:46:57      LTC  0.24129740  55.5243079 230.1073608         buy
-      5  2021-03-07 21:46:57      BAT 52.59871206  55.5243079   1.0556211        sell
-      6  2021-03-07 21:54:09      LTC  0.00300000   0.6903221 230.1073608        sell
-      7  2021-04-05 12:22:00      BAT  8.52198415  12.4145568   1.4567683     revenue
-      8  2021-04-06 03:41:42      LTC  0.00300000   0.7998591 266.6196913        sell
-      9  2021-04-06 04:47:00      LTC  0.03605981   9.6142560 266.6196913         buy
-      10 2021-04-06 04:47:00      BAT  8.52198415   9.6142560   1.1281711        sell
-      11 2021-05-11 07:12:24      BAT  0.47521985   0.7844845   1.6507824     revenue
-      12 2021-06-09 04:52:23      BAT  0.67207415   0.5583566   0.8307961     revenue
+      1  2021-01-07 02:40:31      BAT  1.59081275   0.5126760   0.3222730     revenue
+      2  2021-02-09 14:26:49      BAT 12.69812163   6.8809223   0.5418851     revenue
+      3  2021-03-06 21:32:36      BAT  0.37591275   0.3207390   0.8532272     revenue
+      4  2021-03-07 21:46:57      LTC  0.24129740  57.1230888 236.7331300         buy
+      5  2021-03-07 21:46:57      BAT 52.59871206  57.1230888   1.0860169        sell
+      6  2021-03-07 21:54:09      LTC  0.00300000   0.7101994 236.7331300        sell
+      7  2021-04-05 12:22:00      BAT  8.52198415  13.1950331   1.5483522     revenue
+      8  2021-04-06 03:41:42      LTC  0.00300000   0.8652138 288.4045856        sell
+      9  2021-04-06 04:47:00      LTC  0.03605981  10.3998152 288.4045856         buy
+      10 2021-04-06 04:47:00      BAT  8.52198415  10.3998152   1.2203514        sell
+      11 2021-05-11 07:12:24      BAT  0.47521985   0.7777259   1.6365602     revenue
+      12 2021-06-09 04:52:23      BAT  0.67207415   0.5577482   0.8298909     revenue
          description         comment revenue.type exchange               rate.source
       1           in            <NA>     airdrops   uphold             coinmarketcap
       2           in            <NA>     airdrops   uphold             coinmarketcap
@@ -1266,45 +1258,43 @@
       2  2021-04-04 22:53:46      CAD 25.00000000   25.0000000     1.000000
       3  2021-04-04 22:55:55      ETH  2.71987120 3423.8221510  1258.817752
       4  2021-04-21 19:57:26      BTC  0.00343000  153.1241354 44642.605073
-      5  2021-04-28 16:56:00      ADA  0.31204000    0.4923403     1.577811
-      6  2021-05-07 14:50:41      BTC  0.00103982   53.0333500 51002.433113
-      7  2021-05-07 16:53:00      ADA  0.31251320    0.5967795     1.909614
-      8  2021-05-07 21:25:36      CAD 30.00000000   30.0000000     1.000000
-      9  2021-05-08 12:12:57      BTC  0.00011000    5.7840236 52582.032400
-      10 2021-05-09 12:22:07      BTC  0.00012000    6.0344409 50287.007900
-      11 2021-05-12 16:56:00      ADA  0.22124100    0.4557332     2.059895
-      12 2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.317500
-      13 2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.389386
-      14 2021-05-17 17:16:00      ADA  0.41232100    1.1187530     2.713306
-      15 2021-05-17 21:16:00      ADA  0.16918700    0.4590561     2.713306
-      16 2021-05-17 21:31:00      ADA  0.19123000    0.5188655     2.713306
-      17 2021-05-21 12:47:14      BTC  0.00013000    7.3485904 56527.618800
-      18 2021-06-11 12:03:31      BTC  0.00014000    8.3969267 59978.047700
-      19 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.000000
-      20 2021-06-23 12:21:49      BTC  0.00015000    8.7148765 58099.177000
-      21 2021-07-10 00:52:19      BTC  0.00052991   31.2684800 59007.152158
-         transaction      description        comment revenue.type exchange
-      1          buy            TRADE           <NA>         <NA>   newton
-      2      revenue Referral Program           <NA>    referrals   newton
-      3          buy            TRADE           <NA>         <NA>   newton
-      4          buy            TRADE           <NA>         <NA>   newton
-      5      revenue   Reward awarded           <NA>      staking  adalite
-      6          buy    purchase/sale       purchase         <NA> shakepay
-      7      revenue   Reward awarded           <NA>      staking  adalite
-      8      revenue            other         credit    referrals shakepay
-      9      revenue      shakingsats         credit     airdrops shakepay
-      10     revenue      shakingsats         credit     airdrops shakepay
-      11     revenue   Reward awarded           <NA>      staking  adalite
-      12         buy            TRADE           <NA>         <NA>   newton
-      13        sell            TRADE           <NA>         <NA>   newton
-      14     revenue   Reward awarded           <NA>      staking  adalite
-      15        sell             Sent Withdrawal Fee         <NA>  adalite
-      16        sell             Sent Withdrawal Fee         <NA>  adalite
-      17     revenue      shakingsats         credit     airdrops shakepay
-      18     revenue      shakingsats         credit     airdrops shakepay
-      19     revenue Referral Program           <NA>    referrals   newton
-      20     revenue      shakingsats         credit     airdrops shakepay
-      21        sell    purchase/sale           sale         <NA> shakepay
+      5  2021-04-28 16:56:00      ADA  0.31204000    0.5092906     1.632132
+      6  2021-05-07 14:50:41      BTC  0.00103982   53.0697400 51002.431800
+      7  2021-05-07 16:53:00      ADA  0.31251320    0.6272258     2.007038
+      8  2021-05-08 12:12:57      BTC  0.00011000    5.7840236 52582.032400
+      9  2021-05-09 12:22:07      BTC  0.00012000    6.0344409 50287.007900
+      10 2021-05-12 16:56:00      ADA  0.22124100    0.4437400     2.005686
+      11 2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.317500
+      12 2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.389386
+      13 2021-05-17 17:16:00      ADA  0.41232100    1.0790423     2.616996
+      14 2021-05-17 21:16:00      ADA  0.16918700    0.4427617     2.616996
+      15 2021-05-17 21:31:00      ADA  0.19123000    0.5004481     2.616996
+      16 2021-05-21 12:47:14      BTC  0.00013000    7.3485904 56527.618800
+      17 2021-06-11 12:03:31      BTC  0.00014000    8.3969267 59978.047700
+      18 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.000000
+      19 2021-06-23 12:21:49      BTC  0.00015000    8.8525743 59017.162100
+      20 2021-07-10 00:52:19      BTC  0.00052991   31.2684700 59007.144100
+         transaction      description                  comment revenue.type exchange
+      1          buy            TRADE                     <NA>         <NA>   newton
+      2      revenue Referral Program                     <NA>    referrals   newton
+      3          buy            TRADE                     <NA>         <NA>   newton
+      4          buy            TRADE                     <NA>         <NA>   newton
+      5      revenue   Reward awarded                     <NA>      staking  adalite
+      6          buy              Buy Bought @ $51,002.432 CAD         <NA> shakepay
+      7      revenue   Reward awarded                     <NA>      staking  adalite
+      8      revenue           Reward              ShakingSats     airdrops shakepay
+      9      revenue           Reward              ShakingSats     airdrops shakepay
+      10     revenue   Reward awarded                     <NA>      staking  adalite
+      11         buy            TRADE                     <NA>         <NA>   newton
+      12        sell            TRADE                     <NA>         <NA>   newton
+      13     revenue   Reward awarded                     <NA>      staking  adalite
+      14        sell             Sent           Withdrawal Fee         <NA>  adalite
+      15        sell             Sent           Withdrawal Fee         <NA>  adalite
+      16     revenue           Reward              ShakingSats     airdrops shakepay
+      17     revenue           Reward              ShakingSats     airdrops shakepay
+      18     revenue Referral Program                     <NA>    referrals   newton
+      19     revenue           Reward              ShakingSats     airdrops shakepay
+      20        sell             Sell  Bought @ $59,007.14 CAD         <NA> shakepay
            rate.source
       1       exchange
       2       exchange
@@ -1315,16 +1305,15 @@
       7  coinmarketcap
       8       exchange
       9       exchange
-      10      exchange
-      11 coinmarketcap
+      10 coinmarketcap
+      11      exchange
       12      exchange
-      13      exchange
+      13 coinmarketcap
       14 coinmarketcap
       15 coinmarketcap
-      16 coinmarketcap
+      16      exchange
       17      exchange
       18      exchange
       19      exchange
       20      exchange
-      21      exchange
 

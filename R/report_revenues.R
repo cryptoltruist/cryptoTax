@@ -4,8 +4,8 @@
 #' @param formatted.ACB The formatted ACB data.
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
-#' @return A data frame, with the following columns: exchange, date.last, 
-#' total.revenues, airdrops, referrals, staking, promos, interests, rebates, 
+#' @return A data frame, with the following columns: exchange, date.last,
+#' total.revenues, airdrops, referrals, staking, promos, interests, rebates,
 #' rewards, forks, mining, currency.
 #' @export
 #' @examples
@@ -111,7 +111,9 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
       date.last = max(table$date.last),
       summarize(., across(tidyselect::where(is.numeric), \(x) sum(x, na.rm = TRUE)))
     ) %>%
-    mutate(currency = "CAD",
-           across(tidyselect::where(is.numeric), \(x) round(x, 2)))
+    mutate(
+      currency = "CAD",
+      across(tidyselect::where(is.numeric), \(x) round(x, 2))
+    )
   table
 }

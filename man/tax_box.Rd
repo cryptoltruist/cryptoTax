@@ -23,7 +23,7 @@ Comment, Line
 Output a simple table with all the relevant tax information and tax form line numbers.
 }
 \examples{
-my.list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+my.list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)

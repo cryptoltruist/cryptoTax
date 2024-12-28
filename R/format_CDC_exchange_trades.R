@@ -23,6 +23,13 @@
 #' messing with the headers. Thus, when reading the file with
 #' `read.csv()`, add the argument `skip = 3`. You will then be able to
 #' read the file normally.
+#' 
+#' Update 2024: the unzipped correct file is now named "OEX_TRADE.csv" instead
+#' of "SPOT_TRADE.csv".
+#' 
+#' Also note that the USD bundle ("USD_Stable_Coin") is treated as USDC for 
+#' our purposes since it can be withdrawn as USDC and it is easier to 
+#' calculate prices with CoinMarketCap and later capital gains and so on.
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
@@ -36,7 +43,7 @@
 
 format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("SELL", "BUY")
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -45,11 +52,12 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
       comment = "Symbol",
       date = "Time..UTC."
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
 
   # Add single dates to dataframe
   data <- data %>%
@@ -63,33 +71,51 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
       pair.currency2 = gsub(".*_", "", .data$comment)
     )
 
+  # Replace USD by USDC...
+  data <- data %>% 
+    mutate(
+      pair.currency2 = case_when(
+        .data$Fee.Currency == "USD_Stable_Coin" & pair.currency2 == "USD" ~ "USDC",
+        .default = .data$Fee.Currency),
+      Fee.Currency = case_match(
+        .data$Fee.Currency,
+        "USD_Stable_Coin" ~ "USDC",
+        .default = .data$Fee.Currency
+        )
+      )
+  
   # Determine if fees were paid in a third currency or not
   data <- data %>%
     mutate(
+      Fee.Currency.temp = .data$Fee.Currency,
+      Fee.Currency = ifelse(
+        .data$Fee.Currency == "USD_Stable_Coin", "USD", .data$Fee.Currency),
       third.currency =
         case_when(
           description == "BUY" ~ .data$Fee.Currency != .data$pair.currency1,
           description == "SELL" ~ .data$Fee.Currency != .data$pair.currency2
-        )
-    )
+        ),
+      # Fee.Currency = .data$Fee.Currency.temp
+      ) %>% 
+    select(-"Fee.Currency.temp")
 
   # Determine spot rate and value of fees
   data.fees <- data %>%
     mutate(currency = .data$Fee.Currency)
 
   data.fees <- cryptoTax::match_prices(data.fees, list.prices = list.prices, force = force)
-  
+
   if (is.null(data.fees)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
 
   data$fees <- data.fees$Fee * data.fees$spot.rate
-  
+
   # Create a "buy" object
   BUY <- data %>%
     filter(.data$description == "BUY") %>%
@@ -167,7 +193,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
@@ -181,57 +207,59 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
 
   # CORRECT SPOT RATE FOR COIN TO COIN TRANSACTIONS [for sales]
   # Replace total.price first, then in a second step spot.rate
-  
+
   coin.prices <- data %>%
     filter(.data$transaction %in% c("buy")) %>%
     mutate(transaction = "sell")
-  
+
   # Recreate the SELL object because we need the calculated total prices
   SELL <- data %>%
-    filter(.data$transaction %in% c("sell"),
-           !grepl("Trading fee paid with", .data$description))
-  
+    filter(
+      .data$transaction %in% c("sell"),
+      !grepl("Trading fee paid with", .data$description)
+    )
+
   # These are the prices I want to replace
   SELL[which(SELL$date %in% coin.prices$date), "total.price"]
-  
+
   # These are the correct prices
   coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
-  
+
   # Let's replace them
   SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
     coin.prices$date %in% SELL$date
   ), "total.price"]
-  
+
   # Now let's recalculate spot.rate
   SELL <- SELL %>%
     mutate(spot.rate = .data$total.price / .data$quantity)
-  
+
   # Let's also replace the rate.source for these transactions
   SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
-  
+
   # Temporarily remove trading fees
   trading.fees <- data %>%
     filter(grepl("Trading fee paid with", .data$description))
-  
+
   data <- data %>%
     filter(!grepl("Trading fee paid with", .data$description))
-  
+
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
-  
+
   # Arrange in correct order
-  data <- data %>% 
+  data <- data %>%
     bind_rows(trading.fees) %>%
-    mutate(exchange = "CDC.exchange") %>% 
+    mutate(exchange = "CDC.exchange") %>%
     arrange(date, desc(.data$total.price), .data$transaction)
-  
+
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "description", "comment", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

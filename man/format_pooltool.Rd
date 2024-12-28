@@ -19,7 +19,9 @@ Format a .csv transaction history file from the Cardano PoolTool for later ACB p
 }
 \details{
 This is necessary e.g., if you used the Exodus wallet which does not report
-ADA rewards in its transaction history file.
+ADA rewards in its transaction history file. The benefit of this tool is that it
+provides rewards. However, it does not provide staking costs, which are also
+taxable events.
 }
 \examples{
 format_pooltool(data_pooltool)

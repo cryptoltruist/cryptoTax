@@ -3,7 +3,8 @@
 #' @description Matches prices obtained through the `prepare_list_prices()`
 #' function with the transaction data frame.
 #' @param data The dataframe
-#' @param my.coins Your coins to match
+#' @param slug Your coins to match. You must use the long name, the "slug",
+#' not the ticker, see [prepare_list_prices()] for more details.
 #' @param start.date What date to start reporting prices for.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
@@ -17,12 +18,16 @@
 #' @importFrom utils timestamp
 #' @importFrom rlang .data
 
-match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.prices = NULL, force = FALSE) {
+match_prices <- function(data,
+                         slug = NULL,
+                         start.date = "2021-01-01",
+                         list.prices = NULL,
+                         force = FALSE) {
   if (isFALSE(curl::has_internet())) {
     message("This function requires Internet access.")
     return(NULL)
   }
-  
+
   all.data <- data
 
   # Create an empty spot.rate if missing else the function won't work
@@ -46,21 +51,28 @@ match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.
 
   # Apply the prepare_list_prices function to all the coins
   if (is.null(list.prices)) {
-    if (is.null(my.coins)) {
-      my.coins <- unique(data$currency)
+    if (is.null(slug)) {
+      # Add slugs...
+      all.data <- add_popular_slugs(all.data)
+      slug <- unique(all.data$slug)
     }
-    
+
     if (is.null(start.date)) {
       start.date <- min(data$date)
     }
     
-    list.prices <- prepare_list_prices(coins = my.coins, start.date = start.date, force = force)
-    
+    if (all(unique(slug) == "USD")) {
+      message("Slug cannot be only USD for 'prepare_list_prices()'")
+      return(NULL)
+    }
+
+    list.prices <- prepare_list_prices(slug = slug, start.date = start.date, force = force)
+
     if (is.null(list.prices)) {
       message("Could not reach the CoinMarketCap API at this time")
       return(NULL)
     }
-    
+
     list.prices <<- list.prices
   }
 
@@ -87,4 +99,3 @@ match_prices <- function(data, my.coins = NULL, start.date = "2021-01-01", list.
     select(-c("date2", "spot.rate2"))
   new.data
 }
-

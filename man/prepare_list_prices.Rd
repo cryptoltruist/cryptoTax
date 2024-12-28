@@ -3,38 +3,47 @@
 \docType{data}
 \name{prepare_list_prices}
 \alias{prepare_list_prices}
-\alias{slugs_to_remove}
+\alias{add_popular_slugs}
+\alias{popular_slugs}
 \title{Prepare the list of coins for prices}
 \format{
-An object of class \code{character} of length 18.
+An object of class \code{data.frame} with 31 rows and 2 columns.
 }
 \usage{
 prepare_list_prices(
-  coins,
+  slug,
   start.date,
   end.date = lubridate::now("UTC"),
-  currency = "CAD",
-  remove.coins.slug = slugs_to_remove,
   force = FALSE
 )
 
-slugs_to_remove
+add_popular_slugs(data, slug_dictionary = popular_slugs)
+
+popular_slugs
 }
 \arguments{
-\item{coins}{Which coins to include in the list.}
+\item{slug}{Which coins to include in the list. However, because of too
+many duplicated symbols, you must use the unique "slug" name of the coin.
+You can obtain the correct slug using
+\code{\link[crypto2:crypto_list]{crypto2::crypto_list()}} and then filtering for your
+symbol.}
 
 \item{start.date}{What date to start reporting prices for.}
 
-\item{end.date}{What date to end reporting prices for.}
-
-\item{currency}{What currency to get the value of the coins in.}
-
-\item{remove.coins.slug}{Which currencies to filter out, usually when
+\item{end.date}{What date to end reporting prices for.
 the \code{list.prices} object symbol for a given coin is shared by
 multiple coins (see details).}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
+
+\item{data}{The data to which to convert the coin symbol / ticker to the
+"slug" (full name of the coin).}
+
+\item{slug_dictionary}{A table of equivalency between the coin symbol /
+ticker and its slug. By default uses the provided \code{popular_slugs} object
+with the most popular coins. This is to avoid all the duplicated coin
+tickers that are returned with \code{\link[crypto2:crypto_list]{crypto2::crypto_list()}}.}
 }
 \value{
 A data frame, with the following columns: timestamp, id, slug,
@@ -60,8 +69,8 @@ the \code{slugs_to_remove} object. However, you can provide your own list,
 should you wish to.
 }
 \examples{
-my.coins <- c("BTC", "ETH")
-my.list.prices <- prepare_list_prices(coins = my.coins, start.date = "2023-01-01")
+my.coins <- c("bitcoin", "ethereum")
+my.list.prices <- prepare_list_prices(slug = my.coins, start.date = "2023-01-01")
 head(my.list.prices)
 }
 \keyword{datasets}

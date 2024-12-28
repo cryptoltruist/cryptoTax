@@ -14,9 +14,10 @@
 
 format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c(
-    "Withdrawal", "Withdrawal Fee", "BIA Withdraw", "BIA Deposit", "Interest Payment", 
-    "Crypto Transfer", "Trade", "Bonus Payment", "Referral Bonus")
-  
+    "Withdrawal", "Withdrawal Fee", "BIA Withdraw", "BIA Deposit", "Interest Payment",
+    "Crypto Transfer", "Trade", "Bonus Payment", "Referral Bonus"
+  )
+
   # Rename columns
   data <- data %>%
     rename(
@@ -25,12 +26,13 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       description = "Transaction.Type",
       date = "Confirmed.At"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
-  
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -110,19 +112,19 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "description"
     )
-  
+
   # Merge the "buy" and "sell" objects
   data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
     mutate(exchange = "blockfi")
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
@@ -132,50 +134,50 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       .data$quantity * .data$spot.rate,
       .data$total.price
     ))
-  
+
   # CORRECT SPOT RATE FOR COIN TO COIN TRANSACTIONS [for sales]
   # Replace total.price first, then in a second step spot.rate
-  
+
   coin.prices <- data %>%
     filter(.data$transaction %in% c("buy")) %>%
     mutate(transaction = "sell")
-  
+
   # Recreate the SELL object because we need the calculated total prices
   SELL <- data %>%
     filter(.data$transaction %in% c("sell"))
-  
+
   # These are the prices I want to replace
   SELL[which(SELL$date %in% coin.prices$date), "total.price"]
-  
+
   # These are the correct prices
   coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
-  
+
   # Let's replace them
   SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
     coin.prices$date %in% SELL$date
   ), "total.price"]
-  
+
   # Now let's recalculate spot.rate
   SELL <- SELL %>%
     mutate(spot.rate = .data$total.price / .data$quantity)
-  
+
   # Let's also replace the rate.source for these transactions
   SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
-  
+
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
-  
+
   # Arrange in correct order
-  data <- data %>% 
+  data <- data %>%
     arrange(date, desc(.data$total.price))
-  
+
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

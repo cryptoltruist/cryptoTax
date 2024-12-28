@@ -13,7 +13,7 @@
 #'   \item{fees}{any transaction fees}
 #'   ...
 #' }
-#' @references 
+#' @references
 #' - https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/
 #' - https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/
 "data_adjustedcostbase1"

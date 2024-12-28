@@ -9,7 +9,7 @@
 #' Note: the site does not use a secure connection: use at your own risks.
 #' The file is semi-column separated; when using `read.csv`, add the `sep = ";"`
 #' argument.
-#' 
+#'
 #' Superseded by [fetch_cronos_pos()] and [format_cronos_pos()] since
 #' http://crypto.barkisoft.de/ does not provide a valid CSV file anymore.
 #'
@@ -26,7 +26,7 @@
 
 format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("", "cost", "Reward")
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -36,11 +36,12 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
       comment = "Description",
       date = "Date"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
 
   # Add single dates to dataframe
   data <- data %>%
@@ -107,19 +108,19 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "description", "comment"
     )
-  
+
   # Merge the "buy" and "sell" objects
   data <- merge_exchanges(EARN, WITHDRAWALS, STAKING) %>%
     mutate(exchange = "CDC.wallet")
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
@@ -129,14 +130,14 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
       .data$quantity * .data$spot.rate,
       .data$total.price
     ))
-  
+
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

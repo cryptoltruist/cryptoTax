@@ -4,18 +4,37 @@
 \alias{format_shakepay}
 \title{Format Shakepay file}
 \usage{
-format_shakepay(data)
+format_shakepay(data, referral)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{referral}{Feature to include referral rewards manually (e.g.,
+as a list with dates and credit amounts) since Shakepay stopped including
+these in their transaction history files.}
 }
 \value{
 A data frame of exchange transactions, formatted for further processing.
 }
 \description{
 Format a .csv transaction history file from Shakepay for later ACB processing.
+
+In 2024, the Shakepay transaction history file has changed. Shakepay now
+provides two files: \code{crypto_transactions_summary.csv} and
+\code{cash_transactions_summary.csv}. The new correct file with all transactions
+is the first one, \code{crypto_transactions_summary.csv}.
+
+Furthermore, this file does not report referral rewards anymore, which
+need to be added manually or through the \code{referral} argument (using a
+list if multiple referrals).
 }
 \examples{
 formatted.shakepay <- format_shakepay(data_shakepay)
-formatted.shakepay
+head(formatted.shakepay)
+formatted.shakepay <- format_shakepay(data_shakepay,
+ referral = list(
+  Date = c("2021-05-07 21:25:36",
+           "2021-05-17 21:25:36"),
+  Credit = c(30, 10)))
+head(formatted.shakepay)
 }

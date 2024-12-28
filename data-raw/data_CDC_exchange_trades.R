@@ -36,4 +36,3 @@ data_CDC_exchange_trades <- structure(list(
 ), row.names = c(NA, -7L), class = "data.frame")
 
 usethis::use_data(data_CDC_exchange_trades, overwrite = TRUE)
-

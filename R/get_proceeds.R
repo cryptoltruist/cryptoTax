@@ -1,11 +1,11 @@
 #' @title Get proceeds of all sold coins
 #'
-#' @description Get proceeds of sold coins, ACB of sold coins, and resulting 
+#' @description Get proceeds of sold coins, ACB of sold coins, and resulting
 #' difference between the two, capital gains.
 #' @param formatted.ACB The `formatted.ACB` object,
 #' @param tax.year which year
 #' @param local.timezone which time zone
-#' @return A data frame, with the following columns: type, proceeds, ACB.total, 
+#' @return A data frame, with the following columns: type, proceeds, ACB.total,
 #' gains.
 #' @export
 #' @examples

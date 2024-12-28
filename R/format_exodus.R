@@ -16,7 +16,7 @@
 
 format_exodus <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("deposit", "withdrawal")
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -25,11 +25,12 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
       description = "TYPE",
       date = "DATE"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
 
   # Add single dates to dataframe
   data <- data %>%
@@ -103,7 +104,7 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),
       .data$quantity * .data$spot.rate,
@@ -113,10 +114,10 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

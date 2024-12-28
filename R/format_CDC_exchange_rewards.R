@@ -19,7 +19,7 @@
 #' Note that this code does not include the initial referral reward in CRO
 #' for signup or on the Crypto.com exchange. It must be added manually.
 #'
-#' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS, ONLY REWARDS AND WITHDRAWALS!
+#' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS AND WITHDRAWALS!
 #'
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
@@ -35,7 +35,7 @@
 format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("", "Reward", "referral_gift")
   # "referral_gift" is for our manual correction
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -45,13 +45,14 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
       comment = "Description",
       date = "Date"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description",
-                         description.col = "comment")
-  
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description",
+    description.col = "comment"
+  )
+
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -117,12 +118,12 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
@@ -132,11 +133,11 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
       .data$quantity * .data$spot.rate,
       .data$total.price
     ))
-  
+
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
 

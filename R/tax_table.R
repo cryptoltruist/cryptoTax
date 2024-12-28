@@ -4,9 +4,9 @@
 #' @param table The table to format
 #' @param repeat.header Logical, whether to repeat headers at the bottom.
 #' @param type Type of table, one of 1 (default), 2, or 3.
-#' @return A flextable object, with certain formatting features. 
+#' @return A flextable object, with certain formatting features.
 #' @export
-#' @examples 
+#' @examples
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' x <- get_sup_losses(formatted.ACB, 2021)
@@ -50,7 +50,7 @@ tax_table <- function(table, repeat.header = FALSE, type = 1) {
       flextable::bold(i = nrow(table))
     if (nrow(table) > 1) {
       flex.table <- flextable::hline(flex.table, i = nrow(table) - 1)
-      }
+    }
   }
   flex.table
 }

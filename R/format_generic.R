@@ -64,7 +64,7 @@ format_generic <- function(data,
                            comment = "comment",
                            revenue.type = "revenue.type",
                            exchange = "exchange",
-                           timezone = "UTC", 
+                           timezone = "UTC",
                            force = FALSE,
                            list.prices = NULL) {
   names(data) <- tolower(names(data))

@@ -13,6 +13,7 @@ CRA's
 CRO
 Cardano
 Codecov
+CoinMarketCap
 CoinPanda
 CoinSmart
 CoinTracker
@@ -33,6 +34,7 @@ LTC
 LUNC
 MetricsCPA
 NANO
+OEX
 POS
 PoolTool
 Pooltool
@@ -82,6 +84,7 @@ http
 https
 io
 koinly
+md
 otions
 pooltool
 presearch
@@ -93,9 +96,9 @@ reportable
 rmd
 sats
 shakepay
-shakestats
 shakingsats
 signup
+sstoeckl
 stevecondylios
 subselect
 substracted

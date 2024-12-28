@@ -9,7 +9,7 @@
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A summary data frame, containing at least the following columns:
-#' date.last, currency, total.quantity, cost.share, total.cost, gains, 
+#' date.last, currency, total.quantity, cost.share, total.cost, gains,
 #' losses, net, currency.
 #' @export
 #' @examples
@@ -85,7 +85,7 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
     if (is.null(list.prices)) {
       stop("`list.prices` is NULL. It must be provided.")
     }
-    
+
     rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
 
     rates <- rates %>%
@@ -159,7 +159,8 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
         date.last = max(full$date.last),
         currency = "Total",
         currency2 = "Total",
-        summarize(., across(c("total.cost":"net"),
+        summarize(., across(
+          c("total.cost":"net"),
           \(x) sum(x, na.rm = TRUE)
         ))
       )

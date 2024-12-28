@@ -12,7 +12,17 @@ format_presearch(data, list.prices = NULL, force = FALSE)
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
-it already exists (e.g., if you added new coins or new dates).}
+it already exists (e.g., if you added new coins or new dates).
+
+The way to download this file is to go to
+\url{https://account.presearch.com/tokens/pre-wallet} and click on the
+orange "Export to CSV" button at the bottom right of the screen.
+
+As of 2024-12-27, it seems like this file does not include search rewards
+anymore. One explanation is found on a
+\href{https://www.reddit.com/r/Presearch/comments/urqf34/comment/i8zj98s/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button}{Reddit post}:
+"you have to keep in mind that the tokens are considered the user's only
+when they hit the claim button."}
 }
 \value{
 A data frame of exchange transactions, formatted for further processing.

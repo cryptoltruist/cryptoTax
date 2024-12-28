@@ -24,7 +24,7 @@
 
 format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) {
   # There are no transaction types at all for this file type
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -44,12 +44,12 @@ format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) 
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
@@ -83,10 +83,10 @@ format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) 
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", 
+      "date", "currency", "quantity", "total.price", "spot.rate",
       "transaction", "description", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

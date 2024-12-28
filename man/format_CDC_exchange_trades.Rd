@@ -43,6 +43,13 @@ three disclaimer character lines at the top of the file, which is
 messing with the headers. Thus, when reading the file with
 \code{read.csv()}, add the argument \code{skip = 3}. You will then be able to
 read the file normally.
+
+Update 2024: the unzipped correct file is now named "OEX_TRADE.csv" instead
+of "SPOT_TRADE.csv".
+
+Also note that the USD bundle ("USD_Stable_Coin") is treated as USDC for
+our purposes since it can be withdrawn as USDC and it is easier to
+calculate prices with CoinMarketCap and later capital gains and so on.
 }
 \examples{
 format_CDC_exchange_trades(data_CDC_exchange_trades)

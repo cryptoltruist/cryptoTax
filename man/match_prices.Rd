@@ -6,7 +6,7 @@
 \usage{
 match_prices(
   data,
-  my.coins = NULL,
+  slug = NULL,
   start.date = "2021-01-01",
   list.prices = NULL,
   force = FALSE
@@ -15,7 +15,8 @@ match_prices(
 \arguments{
 \item{data}{The dataframe}
 
-\item{my.coins}{Your coins to match}
+\item{slug}{Your coins to match. You must use the long name, the "slug",
+not the ticker, see \code{\link[=prepare_list_prices]{prepare_list_prices()}} for more details.}
 
 \item{start.date}{What date to start reporting prices for.}
 

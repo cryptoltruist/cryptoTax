@@ -31,29 +31,43 @@ test_that("Example #5 - ACB", {
 })
 
 test_that("Example #6 - CryptoTaxCalculator", {
-  expect_snapshot(ACB(data_cryptotaxcalculator1, transaction = "trade", 
-                      spot.rate = "price", sup.loss = FALSE))
-  expect_snapshot(ACB(data_cryptotaxcalculator1, transaction = "trade", 
-                      spot.rate = "price"))
+  expect_snapshot(ACB(data_cryptotaxcalculator1,
+    transaction = "trade",
+    spot.rate = "price", sup.loss = FALSE
+  ))
+  expect_snapshot(ACB(data_cryptotaxcalculator1,
+    transaction = "trade",
+    spot.rate = "price"
+  ))
 })
 
 test_that("Example #7 - CryptoTaxCalculator", {
-  expect_snapshot(ACB(data_cryptotaxcalculator2, transaction = "trade", 
-                      spot.rate = "price", sup.loss = FALSE))
-  expect_snapshot(ACB(data_cryptotaxcalculator2, transaction = "trade", 
-                      spot.rate = "price"))
+  expect_snapshot(ACB(data_cryptotaxcalculator2,
+    transaction = "trade",
+    spot.rate = "price", sup.loss = FALSE
+  ))
+  expect_snapshot(ACB(data_cryptotaxcalculator2,
+    transaction = "trade",
+    spot.rate = "price"
+  ))
 })
 
 test_that("Example #8 - Coinpanda", {
-  expect_snapshot(ACB(data_coinpanda1, transaction = "type", quantity = "amount",
-                      total.price = "price", sup.loss = FALSE))
+  expect_snapshot(ACB(data_coinpanda1,
+    transaction = "type", quantity = "amount",
+    total.price = "price", sup.loss = FALSE
+  ))
 })
 
 test_that("Example #9 - Coinpanda", {
-  expect_snapshot(ACB(data_coinpanda2, transaction = "type", quantity = "amount",
-                      total.price = "price", sup.loss = FALSE))
-  expect_snapshot(ACB(data_coinpanda2, transaction = "type", quantity = "amount", 
-                      total.price = "price"))
+  expect_snapshot(ACB(data_coinpanda2,
+    transaction = "type", quantity = "amount",
+    total.price = "price", sup.loss = FALSE
+  ))
+  expect_snapshot(ACB(data_coinpanda2,
+    transaction = "type", quantity = "amount",
+    total.price = "price"
+  ))
 })
 
 test_that("Example #10 - Koinly", {

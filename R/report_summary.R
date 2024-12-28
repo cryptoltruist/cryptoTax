@@ -102,7 +102,7 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
     if (is.null(list.prices)) {
       stop("`list.prices` is NULL. It must be provided.")
     }
-    
+
     rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
 
     rates <- rates %>%

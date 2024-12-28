@@ -3,8 +3,13 @@ testthat::skip_on_cran()
 options(scipen = 999)
 
 # Prepare list of coins ####
-my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC",
-              "BUSD", "CEL", "PRE", "ETHW", "BAT")
+my.coins <- c(
+  "bitcoin", "ethereum", "cardano", "cronos", "litecoin", 
+  "usd-coin", "binance-usd", "celsius", "presearch", 
+  "ethereum-pow", "basic-attention-token"
+)
+
+USD2CAD.table <- cur2CAD_table()
 
 list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")
 
@@ -25,7 +30,8 @@ test_that("generic2 - different names", {
       transaction = "Type",
       fees = "Fee",
       exchange = "Platform"
-    ))
+    )
+  )
 })
 
 test_that("generic3 - calculate total.price", {
@@ -129,8 +135,9 @@ test_that("format_detect single", {
 })
 
 test_that("format_detect list", {
-  expect_snapshot(format_detect(list(data_shakepay, data_newton, data_adalite), 
-                                list.prices = list.prices))
+  expect_snapshot(format_detect(list(data_shakepay, data_newton, data_adalite),
+    list.prices = list.prices
+  ))
 })
 
 # Add test: timezone!

@@ -14,7 +14,7 @@
 
 format_uphold <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("in", "out", "transfer")
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -23,11 +23,12 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
       description = "Type",
       date = "Date"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
 
   # Add single dates to dataframe
   data <- data %>%
@@ -94,7 +95,7 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "description", "comment"
     )
-  
+
   # Create a "brave" Auto-Contribute object
   BRAVE <- data %>%
     filter(.data$description == "out" & .data$Destination == "uphold") %>%
@@ -125,12 +126,12 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
 
   # Determine spot rate and value of coins
   data <- match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),
       .data$quantity * .data$spot.rate,
@@ -168,18 +169,18 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
 
   # Replace these transactions in the main dataframe
   data[which(data$transaction == "sell"), ] <- SELL
-  
+
   # Arrange in correct order
-  data <- data %>% 
+  data <- data %>%
     arrange(date, desc(.data$total.price))
-  
+
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

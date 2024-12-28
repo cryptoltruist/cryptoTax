@@ -1,6 +1,6 @@
 #' @title Format Adalite wallet file
 #'
-#' @description Format a .csv transaction history file from the Adalite 
+#' @description Format a .csv transaction history file from the Adalite
 #' wallet for later ACB processing.
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
@@ -16,7 +16,7 @@
 
 format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Reward awarded", "Received", "Sent")
-  
+
   # Rename columns
   data <- data %>%
     rename(
@@ -27,10 +27,11 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
     )
 
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
-  
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::mdy_hm(.data$date))
@@ -78,16 +79,16 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
 
   # Determine spot rate and value of coins
   data <- match_prices(data, list.prices = list.prices, force = force)
-  
+
   if (is.null(data)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
-  
+
   data <- data %>%
     mutate(total.price = ifelse(is.na(.data$total.price),
       .data$quantity * .data$spot.rate,
@@ -103,10 +104,10 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

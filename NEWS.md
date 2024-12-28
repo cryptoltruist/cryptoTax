@@ -1,3 +1,16 @@
+# cryptoTax 0.0.7
+
+From the `crypto2` package update:
+> fiat_list() has been modified and no longer delivers all available currencies and precious metals (therefore only USD and Bitcoin are available any more).
+
+Therefore, the `USD2CAD()` function now relies on the rates from the Bank of Canada, which only provides data for business days. On days which data is not available, the last known value is used instead. The `prepare_list_prices()` function has also been updated accordingly.
+
+Also, because of too many duplicated symbols, `prepare_list_prices()` now requires using the unique "slug" name of the coin. You can obtain the correct slug using `crypto2::crypto_list(only_active = TRUE)` and then filtering for your symbol.
+
+Updated functions due to changes in exchanges transaction history files:
+- `format_CDC_exchange_trades()`
+- `format_shakepay()`
+
 # cryptoTax 0.0.6
 
 **Breaking changes:**

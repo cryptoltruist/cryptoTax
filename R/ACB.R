@@ -11,10 +11,10 @@
 #' @param as.revenue Name of as.revenue column
 #' @param sup.loss Logical, whether to calculate superficial losses
 #' @param cl Number of cores to use for parallel processing.
-#' @param verbose Logical: if `FALSE`, does not print progress bar or 
+#' @param verbose Logical: if `FALSE`, does not print progress bar or
 #' warnings to console.
-#' @return A data frame, with the following columns: date, transaction, 
-#' quantity, price, fees, total.price, total.quantity, ACB, ACB.share, 
+#' @return A data frame, with the following columns: date, transaction,
+#' quantity, price, fees, total.price, total.quantity, ACB, ACB.share,
 #' gains
 #' @export
 #' @examples
@@ -134,7 +134,6 @@ ACB <- function(data,
   }
 
   for (i in seq_len(nrow(data))) {
-    
     if (isTRUE(verbose)) {
       # Update progress bar
       pb$tick()

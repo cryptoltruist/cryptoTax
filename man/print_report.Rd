@@ -35,11 +35,13 @@ Will output a full crypto tax report in HTML format, which can then be printed o
 }
 \examples{
 \donttest{
-list.prices <- prepare_list_prices(coins = "BTC", start.date = "2021-01-01")
+list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-print_report(formatted.ACB, list.prices = list.prices, 
-             tax.year = 2021, name = "Mr. Cryptoltruist")
+print_report(formatted.ACB,
+  list.prices = list.prices,
+  tax.year = 2021, name = "Mr. Cryptoltruist"
+)
 }
 \dontshow{
 unlink("full_report_2021.html")

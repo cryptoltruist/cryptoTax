@@ -25,8 +25,10 @@ Use \code{\link[=fetch_cronos_pos]{fetch_cronos_pos()}} to first download the da
 }
 \examples{
 \donttest{
-data <- fetch_cronos_pos(limit = 30,
- "cro1juv4wda4ty2tas8dwh7jc2ea73ewhtc26eyxwt")
+data <- fetch_cronos_pos(
+  limit = 30,
+  "cro1juv4wda4ty2tas8dwh7jc2ea73ewhtc26eyxwt"
+)
 format_cronos_pos(data)
 }
 }

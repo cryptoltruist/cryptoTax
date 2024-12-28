@@ -10,8 +10,8 @@ data_blockfi <- structure(list(Cryptocurrency = c(
   0.000047234, 0.00018412, 0.000018512, 0.0224512, 1.22412, 0.0204212
 ), Transaction.Type = c(
   "BIA Deposit", "BIA Withdraw", "Trade", "Trade", "Bonus Payment", "Withdrawal Fee",
-  "Withdrawal", "Crypto Transfer", "Interest Payment", "Interest Payment", 
-  "Interest Payment", "Referral Bonus", "Interest Payment", "Interest Payment", 
+  "Withdrawal", "Crypto Transfer", "Interest Payment", "Interest Payment",
+  "Interest Payment", "Referral Bonus", "Interest Payment", "Interest Payment",
   "Crypto Transfer", "Crypto Transfer"
 ), Confirmed.At = c(
   "2022-04-02 23:04:42", "2022-03-21 15:27:52", "2021-10-24 04:29:23", "2021-10-24 04:29:23",

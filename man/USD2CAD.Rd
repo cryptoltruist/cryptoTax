@@ -2,27 +2,17 @@
 % Please edit documentation in R/USD2CAD.R
 \name{USD2CAD}
 \alias{USD2CAD}
-\title{Convert USD to CAD}
+\alias{cur2CAD_table}
+\title{Convert USD to CAD (Bank of Canada rates)}
 \usage{
-USD2CAD(
-  data,
-  start.date = "2020-01-01",
-  end.date = lubridate::now("UTC"),
-  conversion = "USD",
-  currency = "CAD",
-  force = FALSE
-)
+USD2CAD(data, conversion = "USD", force = FALSE)
+
+cur2CAD_table()
 }
 \arguments{
 \item{data}{The data}
 
-\item{start.date}{What date to start reporting prices for.}
-
-\item{end.date}{What date to end reporting prices for.}
-
 \item{conversion}{What to convert to}
-
-\item{currency}{What to convert from}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
@@ -32,8 +22,14 @@ A data frame, with the following columns: date, CAD.rate.
 }
 \description{
 This function allows you to convert USD to CAD.
+The data is extracted from the CSV available for download at
+\url{https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/}
+The Bank of Canada only provides data for business days. On days which
+data is not available, the last known value is used instead.
 }
 \examples{
 formatted.dates <- format_shakepay(data_shakepay)[1]
 USD2CAD(formatted.dates)
+x <- cur2CAD_table()
+head(x)
 }

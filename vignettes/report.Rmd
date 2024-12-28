@@ -26,17 +26,29 @@ First, you want to fetch the price information for all your coins.
 ```{r list.prices_prep, include=FALSE, message=FALSE, echo=FALSE}
 library(cryptoTax)
 
-my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", "BUSD", "CEL", "PRE", "ETHW", "BAT")
-list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
+my.coins <- c(
+    "bitcoin", "ethereum", "cardano", "cronos", "litecoin", 
+    "usd-coin", "binance-usd", "celsius", "presearch", 
+    "ethereum-pow", "basic-attention-token"
+  )
 
+USD2CAD.table <- cur2CAD_table()
+
+list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")
 ```
 
 ```{r list.prices, eval=FALSE}
 library(cryptoTax)
 
-my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC", "BUSD", "CEL", "PRE", "ETHW", "BAT")
-list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
+my.coins <- c(
+    "bitcoin", "ethereum", "cardano", "cronos", "litecoin", 
+    "usd-coin", "binance-usd", "celsius", "presearch", 
+    "ethereum-pow", "basic-attention-token"
+  )
 
+USD2CAD.table <- cur2CAD_table()
+
+list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")
 ```
 
 # Formatting your data
@@ -45,10 +57,11 @@ Below we use a shortcut for this vignette to format all exchanges quickly with `
 
 ```{r format exchanges, message=FALSE}
 exchanges <- list(
-  data_adalite, data_binance, data_binance_withdrawals, data_blockfi, data_CDC, 
+  data_adalite, data_binance, data_binance_withdrawals, data_blockfi, data_CDC,
   data_CDC_exchange_rewards, data_CDC_exchange_trades, data_CDC_wallet, data_celsius,
   data_coinsmart, data_exodus, data_gemini, data_newton, data_pooltool, data_presearch,
-  data_shakepay, data_uphold)
+  data_shakepay, data_uphold
+)
 
 formatted.data <- format_detect(exchanges)
 ```
@@ -57,7 +70,7 @@ formatted.data <- format_detect(exchanges)
 
 Next, we can begin processing that data. We start by formatting the [Adjusted Cost Base (ACB)](https://cryptoltruist.github.io/cryptoTax/articles/ACB.html) of each transaction. The `formatted.ACB` is going to be our core object with which we will be working for all future steps.
 
-```{r format_ACB}
+```{r format_ACB, warning=F}
 formatted.ACB <- format_ACB(formatted.data)
 ```
 
@@ -82,10 +95,11 @@ At this stage, it is possible to list transactions by coin, if you have few tran
 Next, we need to calculate a few extra bits of information for the final report. Fortunately, the `prepare_report()` function makes this easy for us.
 
 ```{r prepare_report, message=FALSE}
-report.info <- prepare_report(formatted.ACB, 
-                              tax.year = 2021, 
-                              local.timezone = "America/Toronto",
-                              list.prices = list.prices)
+report.info <- prepare_report(formatted.ACB,
+  tax.year = 2021,
+  local.timezone = "America/Toronto",
+  list.prices = list.prices
+)
 ```
 
 The `report.info` object is a list containing all the different info (tables, figures) necessary for the final report. They can be accessed individually too:
@@ -98,10 +112,11 @@ Finally, to generate the report, we use `print_report()` with the relevant infor
 
 ```{r print_report, eval = FALSE}
 print_report(formatted.ACB,
-             list.prices = list.prices, 
-             tax.year = "2021", 
-             name = "Mr. Cryptoltruist", 
-             local.timezone = "America/Toronto")
+  list.prices = list.prices,
+  tax.year = "2021",
+  name = "Mr. Cryptoltruist",
+  local.timezone = "America/Toronto"
+)
 ```
 
 ```{r report prep, echo=FALSE, message=FALSE, warning=FALSE}
@@ -129,7 +144,6 @@ if (tax.year == "all") {
 } else {
   tax.year <- tax.year
 }
-
 ```
 
 ---
@@ -141,5 +155,4 @@ if (tax.year == "all") {
 Date: `r format(Sys.time(), '%c')`
 
 ```{r print_report child, child = system.file("full_report.Rmd", package = "cryptoTax")}
-
 ```

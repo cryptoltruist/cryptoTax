@@ -42,8 +42,8 @@ format_ACB <- function(data,
     cat(paste0(
       "Process started at ", start_time,
       ". Please be patient as the transactions process.\n"
-    ))  
-    
+    ))
+
     cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
   }
 
@@ -55,7 +55,7 @@ format_ACB <- function(data,
     group_by(.data$currency, .drop = FALSE) %>%
     group_modify(~ ACB(
       .x,
-      total.price = "total.price", 
+      total.price = "total.price",
       as.revenue = as.revenue,
       sup.loss = sup.loss,
       verbose = verbose
@@ -75,13 +75,13 @@ format_ACB <- function(data,
   # Benchmarks
   end_time <- Sys.time()
   total_time <- difftime(end_time, start_time, units = "min")
-  
+
   if (isTRUE(verbose)) {
     cat(paste0(
       "Process ended at ", end_time, ". Total time elapsed: ",
       round(total_time, 2), " minutes\n"
     ))
   }
-  
+
   capital.gains
 }

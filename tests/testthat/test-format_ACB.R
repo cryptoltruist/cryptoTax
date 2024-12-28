@@ -3,8 +3,13 @@ testthat::skip_on_cran()
 options(scipen = 999)
 
 # Prepare list of coins ####
-my.coins <- c("BTC", "ETH", "ADA", "CRO", "LTC", "USDC",
-              "BUSD", "CEL", "PRE", "ETHW", "BAT")
+my.coins <- c(
+  "bitcoin", "ethereum", "cardano", "cronos", "litecoin", 
+  "usd-coin", "binance-usd", "celsius", "presearch", 
+  "ethereum-pow", "basic-attention-token"
+)
+
+USD2CAD.table <- cur2CAD_table()
 
 list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")
 
@@ -84,17 +89,19 @@ test_that("uphold", {
 
 test_that("gemini", {
   x <- format_gemini(data_gemini, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale. 
-  x <- x %>% 
-    dplyr::add_row(date = lubridate::as_datetime("2021-04-08 22:22:22"),
-                   currency = "LTC",
-                   quantity = 1,
-                   total.price = 286,
-                   spot.rate = 286,
-                   transaction = "buy",
-                   description = "fake transaction for format_ACB",
-                   exchange = "gemini",
-                   rate.source = "fake") %>% 
+  # Add row to fix error: The first transaction for this currency cannot be a sale.
+  x <- x %>%
+    dplyr::add_row(
+      date = lubridate::as_datetime("2021-04-08 22:22:22"),
+      currency = "LTC",
+      quantity = 1,
+      total.price = 286,
+      spot.rate = 286,
+      transaction = "buy",
+      description = "fake transaction for format_ACB",
+      exchange = "gemini",
+      rate.source = "fake"
+    ) %>%
     merge_exchanges()
   formatted.gemini <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.gemini)
@@ -102,13 +109,15 @@ test_that("gemini", {
 
 test_that("exodus", {
   x <- format_exodus(data_exodus, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale. 
-  df <- x %>% 
-    dplyr::mutate(date = date - months(1), 
-                  quantity = quantity * 2,
-                  total.price = total.price * 2,
-                  transaction = "buy",
-                  description = "fake transaction for format_ACB")
+  # Add row to fix error: The first transaction for this currency cannot be a sale.
+  df <- x %>%
+    dplyr::mutate(
+      date = date - months(1),
+      quantity = quantity * 2,
+      total.price = total.price * 2,
+      transaction = "buy",
+      description = "fake transaction for format_ACB"
+    )
   x <- merge_exchanges(x, df)
   formatted.exodus <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.exodus)
@@ -116,40 +125,46 @@ test_that("exodus", {
 
 test_that("binance", {
   x <- format_binance(data_binance, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale. 
-  x <- x %>% 
-    dplyr::add_row(date = lubridate::as_datetime("2021-03-08 22:22:22"),
-                   currency = "ETH",
-                   quantity = 1,
-                   total.price = 3098.137539,
-                   spot.rate = 3098.137539,
-                   transaction = "buy",
-                   description = "fake transaction for format_ACB",
-                   exchange = "binance",
-                   rate.source = "fake") %>%
-    dplyr::add_row(date = lubridate::as_datetime("2021-03-08 22:22:22"),
-                   currency = "USDC",
-                   quantity = 5.77124200,
-                   total.price = 7.736523,
-                   spot.rate = 1.340530,
-                   transaction = "buy",
-                   description = "fake transaction for format_ACB",
-                   exchange = "binance",
-                   rate.source = "fake") %>% 
+  # Add row to fix error: The first transaction for this currency cannot be a sale.
+  x <- x %>%
+    dplyr::add_row(
+      date = lubridate::as_datetime("2021-03-08 22:22:22"),
+      currency = "ETH",
+      quantity = 1,
+      total.price = 3098.137539,
+      spot.rate = 3098.137539,
+      transaction = "buy",
+      description = "fake transaction for format_ACB",
+      exchange = "binance",
+      rate.source = "fake"
+    ) %>%
+    dplyr::add_row(
+      date = lubridate::as_datetime("2021-03-08 22:22:22"),
+      currency = "USDC",
+      quantity = 5.77124200,
+      total.price = 7.736523,
+      spot.rate = 1.340530,
+      transaction = "buy",
+      description = "fake transaction for format_ACB",
+      exchange = "binance",
+      rate.source = "fake"
+    ) %>%
     merge_exchanges()
-    formatted.binance <- as.data.frame(format_ACB(x, verbose = FALSE))
+  formatted.binance <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.binance)
 })
 
 test_that("binance withdrawals", {
   x <- format_binance_withdrawals(data_binance_withdrawals, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale. 
-  df <- x %>% 
-    dplyr::mutate(date = date - months(1), 
-                  quantity = quantity * 2,
-                  total.price = total.price * 2,
-                  transaction = "buy",
-                  description = "fake transaction for format_ACB")
+  # Add row to fix error: The first transaction for this currency cannot be a sale.
+  df <- x %>%
+    dplyr::mutate(
+      date = date - months(1),
+      quantity = quantity * 2,
+      total.price = total.price * 2,
+      transaction = "buy",
+      description = "fake transaction for format_ACB"
+    )
   x <- merge_exchanges(x, df)
   formatted.binance.withdrawals <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.binance.withdrawals)
@@ -157,17 +172,19 @@ test_that("binance withdrawals", {
 
 test_that("CDC exchange trades", {
   x <- format_CDC_exchange_trades(data_CDC_exchange_trades, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale. 
-  x <- x %>% 
-    dplyr::add_row(date = lubridate::as_datetime("2021-03-08 22:22:22"),
-                   currency = "ETH",
-                   quantity = 1,
-                   total.price = 3098.137539,
-                   spot.rate = 3098.137539,
-                   transaction = "buy",
-                   description = "fake transaction for format_ACB",
-                   exchange = "CDC.exchange",
-                   rate.source = "fake") %>% 
+  # Add row to fix error: The first transaction for this currency cannot be a sale.
+  x <- x %>%
+    dplyr::add_row(
+      date = lubridate::as_datetime("2021-03-08 22:22:22"),
+      currency = "ETH",
+      quantity = 1,
+      total.price = 3098.137539,
+      spot.rate = 3098.137539,
+      transaction = "buy",
+      description = "fake transaction for format_ACB",
+      exchange = "CDC.exchange",
+      rate.source = "fake"
+    ) %>%
     merge_exchanges()
   formatted.CDC.exchange.trades <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.CDC.exchange.trades)

@@ -26,4 +26,3 @@ data_binance_withdrawals <- structure(list(
 ))
 
 usethis::use_data(data_binance_withdrawals, overwrite = TRUE)
-

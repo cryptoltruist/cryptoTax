@@ -23,9 +23,11 @@ get_sup_losses <- function(formatted.ACB, tax.year = "all", local.timezone = Sys
   }
   formatted.ACB.year %>%
     summarize(sup.loss = sum(.data$gains.sup, na.rm = TRUE)) %>%
-    filter(.data$sup.loss != 0) %>% 
-    add_row(currency = "Total",
-            summarize(., across("sup.loss", sum))) %>%
+    filter(.data$sup.loss != 0) %>%
+    add_row(
+      currency = "Total",
+      summarize(., across("sup.loss", sum))
+    ) %>%
     as.data.frame() %>%
     mutate(sup.loss = round(.data$sup.loss, 2))
 }

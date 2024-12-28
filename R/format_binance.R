@@ -26,9 +26,10 @@
 
 format_binance <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c(
-    "Deposit", "Withdraw", "Buy", "Fee", "Referral Kickback", "Sell", 
-    "Simple Earn Flexible Interest", "Distribution", "Stablecoins Auto-Conversion")
-  
+    "Deposit", "Withdraw", "Buy", "Fee", "Referral Kickback", "Sell",
+    "Simple Earn Flexible Interest", "Distribution", "Stablecoins Auto-Conversion"
+  )
+
   # Rename columns
   data <- data %>%
     rename(
@@ -38,12 +39,13 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
       description = "Operation",
       comment = "Account"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
-  
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date))
@@ -78,11 +80,11 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
-  
+
   if (any(is.na(data$spot.rate))) {
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
-  
+
   data <- data %>%
     mutate(
       total.price = ifelse(is.na(.data$total.price),
@@ -97,27 +99,27 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
   # Extract fees
   FEES <- data %>%
     filter(.data$description == "Fee")
-  
+
   BUY <- data %>%
     filter(.data$transaction == "buy")
-  
+
   # "Stablecoins Auto-Conversion"
   CONVERSIONS.BUY <- BUY %>%
     filter(.data$description == "Stablecoins Auto-Conversion")
-  
+
   BUY <- BUY %>%
     filter(.data$description != "Stablecoins Auto-Conversion") %>%
     mutate(fees = FEES$total.price)
-  
+
   # Sells
   SELL <- data %>%
     filter(.data$transaction == "sell") %>%
     filter(.data$description != "Fee")
-  
+
   # "Stablecoins Auto-Conversion"
   CONVERSIONS.SELL <- SELL %>%
     filter(.data$description == "Stablecoins Auto-Conversion")
-  
+
   SELL <- SELL %>%
     filter(.data$description != "Stablecoins Auto-Conversion") %>%
     mutate(
@@ -125,12 +127,12 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
       spot.rate = .data$total.price / .data$quantity,
       rate.source = "coinmarketcap (buy price)"
     )
-  
+
   # Process revenues
   EARN <- data %>%
     filter(grepl("Interest", .data$description) |
-             grepl("Referral", .data$description) |
-             grepl("Distribution", .data$description)) %>%
+      grepl("Referral", .data$description) |
+      grepl("Distribution", .data$description)) %>%
     mutate(
       transaction = "revenue",
       revenue.type = case_when(
@@ -139,13 +141,13 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
         grepl("Distribution", .data$description) ~ "forks"
       )
     )
-  
+
   # Merge the "buy" and "sell" objects
   data <- bind_rows(BUY, SELL, EARN, CONVERSIONS.BUY, CONVERSIONS.SELL) %>%
     mutate(exchange = "binance") %>%
     arrange(date, desc(.data$total.price), .data$transaction) %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
     )
 

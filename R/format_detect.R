@@ -16,17 +16,16 @@
 #' @importFrom rlang .data
 
 #' @export
-format_detect <- function (data, ...) {
+format_detect <- function(data, ...) {
   UseMethod("format_detect", data)
 }
 
 #' @rdname format_detect
 #' @export
 format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
-  
   # Extract data col names
   data.names <- toString(names(data))
-  
+
   # Generate string list of exchanges
   exchanges <- paste0(c(
     "adalite",
@@ -45,19 +44,20 @@ format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ..
     "pooltool",
     "presearch",
     "shakepay",
-    "uphold"))
-  
+    "uphold"
+  ))
+
   data_exchanges <- paste0("data_", exchanges)
-  
+
   # Extract col names of all exchanges
   exchanges.cols <- lapply(data_exchanges, function(x) {
     toString(names(eval(parse(text = x))))
-  }) %>% 
+  }) %>%
     stats::setNames(exchanges)
-  
+
   # Generate logical condition to identify right exchange
   condition <- names(which(data.names == exchanges.cols))
-  
+
   if (all(condition == c("CDC_exchange_rewards", "CDC_wallet"))) {
     if (any(unlist(lapply(c("Supercharger", "Interest", "APR", "Rebate"), grepl, data$Description)))) {
       condition <- "CDC_exchange_rewards"
@@ -65,36 +65,71 @@ format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ..
       condition <- "CDC_wallet"
     }
   } else if (length(condition) == 0) {
-    stop("Could not identify the correct exchange automatically. ",
-         "Please use the appropriate function or 'format_generic()'.")
+    stop(
+      "Could not identify the correct exchange automatically. ",
+      "Please use the appropriate function or 'format_generic()'."
+    )
   } else if (length(condition) > 1) {
     stop("Matches multiple exchange names. Please report this bug so it can be fixed.")
   }
-  
+
   # Apply right function
-  formatted.data <- switch(
-    condition,
-    shakepay = {format_shakepay(data)},
-    newton = {format_newton(data)},
-    pooltool = {format_pooltool(data)},
-    CDC = {format_CDC(data)},
-    celsius = {format_celsius(data)},
-    adalite = {format_adalite(data, list.prices = list.prices, force = force)},
-    binance = {format_binance(data, list.prices = list.prices, force = force)},
-    binance_withdrawals = {format_binance_withdrawals(data, list.prices = list.prices, force = force)},
-    blockfi = {format_blockfi(data, list.prices = list.prices, force = force)},
-    CDC_exchange_rewards = {format_CDC_exchange_rewards(data, list.prices = list.prices, force = force)},
-    CDC_exchange_trades = {format_CDC_exchange_trades(data, list.prices = list.prices, force = force)},
-    CDC_wallet = {format_CDC_wallet(data, list.prices = list.prices, force = force)},
-    coinsmart = {format_coinsmart(data, list.prices = list.prices, force = force)},
-    exodus = {format_exodus(data, list.prices = list.prices, force = force)},
-    gemini = {format_gemini(data, list.prices = list.prices, force = force)},
-    presearch = {format_presearch(data, list.prices = list.prices, force = force)},
-    uphold = {format_uphold(data, list.prices = list.prices, force = force)},
+  formatted.data <- switch(condition,
+    shakepay = {
+      format_shakepay(data)
+    },
+    newton = {
+      format_newton(data)
+    },
+    pooltool = {
+      format_pooltool(data)
+    },
+    CDC = {
+      format_CDC(data)
+    },
+    celsius = {
+      format_celsius(data)
+    },
+    adalite = {
+      format_adalite(data, list.prices = list.prices, force = force)
+    },
+    binance = {
+      format_binance(data, list.prices = list.prices, force = force)
+    },
+    binance_withdrawals = {
+      format_binance_withdrawals(data, list.prices = list.prices, force = force)
+    },
+    blockfi = {
+      format_blockfi(data, list.prices = list.prices, force = force)
+    },
+    CDC_exchange_rewards = {
+      format_CDC_exchange_rewards(data, list.prices = list.prices, force = force)
+    },
+    CDC_exchange_trades = {
+      format_CDC_exchange_trades(data, list.prices = list.prices, force = force)
+    },
+    CDC_wallet = {
+      format_CDC_wallet(data, list.prices = list.prices, force = force)
+    },
+    coinsmart = {
+      format_coinsmart(data, list.prices = list.prices, force = force)
+    },
+    exodus = {
+      format_exodus(data, list.prices = list.prices, force = force)
+    },
+    gemini = {
+      format_gemini(data, list.prices = list.prices, force = force)
+    },
+    presearch = {
+      format_presearch(data, list.prices = list.prices, force = force)
+    },
+    uphold = {
+      format_uphold(data, list.prices = list.prices, force = force)
+    },
   )
-  
+
   message("Exchange detected: ", condition)
-  
+
   formatted.data
 }
 

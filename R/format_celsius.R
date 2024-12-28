@@ -11,9 +11,10 @@
 
 format_celsius <- function(data) {
   known.transactions <- c(
-    "Reward", "Transfer", "Withdrawal", "Promo Code Reward", 
-    "Referrer Award", "Referred Award")
-  
+    "Reward", "Transfer", "Withdrawal", "Promo Code Reward",
+    "Referrer Award", "Referred Award"
+  )
+
   # Rename columns
   data <- data %>%
     rename(
@@ -22,12 +23,13 @@ format_celsius <- function(data) {
       description = "Transaction.type",
       date = "Date.and.time"
     )
-  
+
   # Check if there's any new transactions
-  check_new_transactions(data, 
-                         known.transactions = known.transactions,
-                         transactions.col = "description")
-  
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
   # Add single dates to dataframe
   data <- data %>%
     mutate(date = lubridate::mdy_hm(.data$date))
@@ -36,12 +38,12 @@ format_celsius <- function(data) {
   # Convert USD value to CAD
   data.tmp <- data %>%
     cryptoTax::USD2CAD()
-  
+
   if (is.null(data.tmp)) {
     message("Could not fetch exchange rates from the exchange rate API.")
     return(NULL)
   }
-  
+
   data <- data.tmp %>%
     mutate(total.price = .data$USD.Value * .data$CAD.rate)
 
@@ -84,10 +86,10 @@ format_celsius <- function(data) {
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction", 
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
-  
+
   # Return result
   data
 }

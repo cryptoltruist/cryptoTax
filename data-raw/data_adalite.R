@@ -43,4 +43,3 @@ data_adalite <- structure(list(
 ), row.names = c(6L, 8L, 1L, 2L, 3L, 4L, 5L, 7L, 9L, 10L), class = "data.frame")
 
 usethis::use_data(data_adalite, overwrite = TRUE)
-
