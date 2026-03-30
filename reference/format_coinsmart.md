@@ -1,0 +1,51 @@
+# Format CoinSmart file
+
+Format a .csv transaction history file from CoinSmart for later ACB
+processing.
+
+## Usage
+
+``` r
+format_coinsmart(data, list.prices = NULL, force = FALSE)
+```
+
+## Arguments
+
+- data:
+
+  The dataframe
+
+- list.prices:
+
+  A `list.prices` object from which to fetch coin prices.
+
+- force:
+
+  Whether to force recreating `list.prices` even though it already
+  exists (e.g., if you added new coins or new dates).
+
+## Value
+
+A data frame of exchange transactions, formatted for further processing.
+
+## Examples
+
+``` r
+format_coinsmart(data_coinsmart)
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#>                  date currency  quantity total.price    spot.rate transaction
+#> 1 2021-04-25 16:11:24      ADA 198.50000  237.937430     1.198677         buy
+#> 2 2021-04-28 18:37:15      CAD  15.00000   15.000000     1.000000     revenue
+#> 3 2021-05-15 16:42:07      BTC   0.00004    2.339839 58495.964189     revenue
+#> 4 2021-06-03 02:04:49      ADA   0.30000    0.652675     2.175583        sell
+#>        fees fees.quantity fees.currency description  comment revenue.type
+#> 1 0.2695238         0.197           ADA    purchase    Trade         <NA>
+#> 2        NA            NA          <NA>       Other Referral    referrals
+#> 3        NA            NA          <NA>       Other     Quiz     airdrops
+#> 4        NA            NA          <NA>         Fee Withdraw         <NA>
+#>    exchange   rate.source
+#> 1 coinsmart      exchange
+#> 2 coinsmart      exchange
+#> 3 coinsmart coinmarketcap
+#> 4 coinsmart coinmarketcap
+```
