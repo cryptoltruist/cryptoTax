@@ -22,8 +22,9 @@ match_prices <- function(data,
                          slug = NULL,
                          start.date = "2021-01-01",
                          list.prices = NULL,
-                         force = FALSE) {
-  if (isFALSE(curl::has_internet())) {
+                         force = FALSE,
+                         verbose = TRUE) {
+  if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
     message("This function requires Internet access.")
     return(NULL)
   }
@@ -50,32 +51,13 @@ match_prices <- function(data,
     mutate(spot.rate = ifelse(.data$currency %in% c("TCAD", "CAD"), 1, .data$spot.rate))
 
   # Apply the prepare_list_prices function to all the coins
-  if (is.null(list.prices)) {
-    if (is.null(slug)) {
-      # Add slugs...
-      all.data <- add_popular_slugs(all.data)
-      slug <- unique(all.data$slug)
-    }
-
-    if (is.null(start.date)) {
-      start.date <- min(data$date)
-    }
-    
-    if (all(unique(slug) == "USD")) {
-      message("Slug cannot be only USD for 'prepare_list_prices()'")
-      return(NULL)
-    }
-
-    list.prices <- prepare_list_prices(slug = slug, start.date = start.date, force = force)
-
-    if (is.null(list.prices)) {
-      message("Could not reach the CoinMarketCap API at this time")
-      return(NULL)
-    }
-
-    list.prices <<- list.prices
-  }
-
+  list.prices <- prepare_list_prices_slugs(
+    all.data,
+    list.prices = list.prices,
+    slug = slug,
+    start.date = start.date,
+    verbose = verbose)
+  
   # Get date in proper format for matching and merge data
   new.data <- all.data %>%
     mutate(date2 = lubridate::as_date(.data$date)) %>%
@@ -95,6 +77,7 @@ match_prices <- function(data,
       # total.price = ifelse(is.na(total.price),
       #                      quantity * spot.rate,
       #                      total.price)
+      # We don't calculate total.price here because we now do it later
     ) %>%
     select(-c("date2", "spot.rate2"))
   new.data

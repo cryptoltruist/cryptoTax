@@ -21,6 +21,10 @@
 #'
 #' WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS AND WITHDRAWALS!
 #'
+#' Update 2025: it seems that the CDC exchange now allows downloading all
+#' transactions (up to 180 days / ~ six months) including trades and all
+#' rewards. However, transactions before November 1st, 2022, can only be
+#' accessed through the Archive section. For this, see [format_CDC_exchange].
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though

@@ -10,6 +10,8 @@ report_summary(
   tax.year = "all",
   local.timezone = Sys.timezone(),
   list.prices = NULL,
+  slug = NULL,
+  start.date = NULL,
   force = FALSE
 )
 }

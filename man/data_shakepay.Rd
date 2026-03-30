@@ -12,12 +12,14 @@ A data frame with 8 rows and 11 variables:
 \item{Asset.Debited}{currency debited}
 \item{Amount.Credited}{amount credited}
 \item{Asset.Credited}{currency credited}
+\item{Market.Value}{market value}
+\item{Market.Value.Currency}{market value currency}
 \item{Book.Cost}{value of transaction (CAD)}
 \item{Book.Cost.Currency}{currency of Book.Cost (CAD)}
 \item{Type}{transaction type}
-\item{Description}{Buy, Sell, Send, or Reward}
-\item{Mid.Market.Rate}{market rate}
 \item{Spot.Rate}{transaction spot rate on Shakepay}
+\item{Buy...Sell.Rate}{Buy / sell rate}
+\item{Description}{Buy, Sell, Send, or Reward}
 }
 }
 \source{

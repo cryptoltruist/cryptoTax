@@ -17,11 +17,18 @@
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report_overview(formatted.ACB, today.data = FALSE)
 #' @importFrom dplyr %>% filter mutate group_by summarize slice_tail bind_rows
-#' arrange add_row across full_join last
+#' arrange add_row across full_join last n
 
-report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
-                            local.timezone = Sys.timezone(), list.prices = NULL, force = FALSE) {
-  if (isTRUE(today.data) && isFALSE(curl::has_internet())) {
+report_overview <- function(formatted.ACB, 
+                            today.data = TRUE, 
+                            tax.year = "all",
+                            local.timezone = Sys.timezone(),
+                            list.prices = NULL,
+                            slug = NULL,
+                            start.date = NULL,
+                            force = FALSE,
+                            verbose = TRUE) {
+  if (isTRUE(today.data) && isFALSE(curl::has_internet()) && isTRUE(verbose)) {
     message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
     today.data <- FALSE
   }
@@ -36,7 +43,9 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
       mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
       filter(lubridate::year(.data$datetime.local) == tax.year)
 
-    message("gains, losses, and net have been filtered for tax year ", tax.year)
+    if (isTRUE(verbose)) {
+      message("gains, losses, and net have been filtered for tax year ", tax.year)  
+    }
   }
 
   if (tax.year == "all") {
@@ -65,13 +74,31 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
 
   if (today.data == TRUE) {
     # Make warning for GB, NFTs, etc.
-    if (any(ACB.list$currency %in% "GB")) {
+    if (any(ACB.list$currency %in% "GB") && isTRUE(verbose)) {
       warning("1. GB transactions are excluded from today's data because it is not listed on CoinMarketCap.")
     }
-    if (any(grepl("NFT", ACB.list$currency))) {
+    if (any(grepl("NFT", ACB.list$currency)) && isTRUE(verbose)) {
       warning("2. NFTs are excluded from today's data because NFTs are not listed individually on CoinMarketCap.")
     }
 
+    list.prices <- prepare_list_prices_slugs(
+      formatted.ACB,
+      list.prices = list.prices,
+      slug = slug,
+      start.date = start.date,
+      verbose = verbose)
+    
+    # if (is.null(list.prices)) {
+    #   my.coins <- formatted.ACB %>% 
+    #     select(currency) %>% 
+    #     unique %>% 
+    #     unlist()
+    #   my.coins <- popular_slugs %>% 
+    #     filter(currency == my.coins) %>% 
+    #     select(slug)
+    #   list.prices <- prepare_list_prices(my.coins, start.date = lubridate::today())
+    # }
+    
     rates <- ACB.list %>%
       filter(
         .data$currency != "GB",
@@ -79,14 +106,17 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
       ) %>%
       mutate(
         date.temp = .data$date,
-        date = last(list.prices$timestamp)
+        date = last(list.prices$date2)
       )
 
-    if (is.null(list.prices)) {
-      stop("`list.prices` is NULL. It must be provided.")
+    rates <- cryptoTax::match_prices(rates, 
+                                     list.prices = list.prices, 
+                                     force = force, 
+                                     verbose = verbose)
+    
+    if (isTRUE(verbose)) {
+      message("Date of current prices: ", last(list.prices$date2))
     }
-
-    rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
 
     rates <- rates %>%
       mutate(
@@ -118,7 +148,7 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
         cost.share = "ACB.share"
       ) %>%
       group_by(.data$currency) %>%
-      arrange(desc(.data$total.cost), desc(.data$cost.share), desc(.data$total.quantity)) %>%
+      # arrange(desc(.data$total.cost), desc(.data$cost.share), desc(.data$total.quantity)) %>%
       mutate(across("cost.share":"unrealized.gains", \(x) round(x, 2))) %>%
       as.data.frame(full)
 
@@ -148,7 +178,6 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
         cost.share = "ACB.share"
       ) %>%
       group_by(.data$currency) %>%
-      arrange(desc(.data$total.cost), desc(.data$cost.share), desc(.data$total.quantity)) %>%
       mutate(across("cost.share":"net", \(x) round(x, 2)),
         currency2 = .data$currency
       ) %>%
@@ -166,5 +195,19 @@ report_overview <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
       )
   }
 
-  full
+  last.col <- last(full)
+  
+  full <- full %>% 
+    slice(1:(n() - 1)) %>% 
+    mutate(cost.gains = .data$total.cost + .data$gains) %>% 
+    arrange(desc(.data$cost.gains),
+            desc(.data$gains),
+            # desc(.data$net),
+            desc(.data$total.cost),
+            desc(.data$cost.share),
+            desc(.data$losses),
+            desc(.data$total.quantity)) %>% 
+    select(-"cost.gains")
+  
+  bind_rows(full, last.col)
 }

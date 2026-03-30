@@ -59,7 +59,8 @@ format_coinbase <- function(data) {
     filter(grepl("from Celsius Network LLC", .data$comment)) %>%
     mutate(
       transaction = "revenue",
-      revenue.type = "bankruptcy distribution"
+      description = "bankruptcy distribution",
+      revenue.type = "interest"
     )
 
   # Create a "withdrawals" object
@@ -74,14 +75,14 @@ format_coinbase <- function(data) {
 
   # Merge the "buy" and "sell" objects
   data <- merge_exchanges(BUY, SELL, EARN, WITHDRAWALS) %>%
-    mutate(exchange = "Coinbase", rate.source = "exchange") %>%
+    mutate(exchange = "coinbase", rate.source = "exchange") %>%
     arrange(date, desc(.data$transaction))
 
   # Reorder columns properly
   data <- data %>%
     select(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "comment", "revenue.type", "exchange", "rate.source"
+      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
     )
 
   # Return result

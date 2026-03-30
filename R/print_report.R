@@ -39,8 +39,11 @@ print_report <- function(formatted.ACB,
     local.timezone = local.timezone
   )
   person.name <- paste("Name:", name)
-  total.income.numeric <- dplyr::last(report.info$table.revenues$staking) +
-    dplyr::last(report.info$table.revenues$interests)
+  total.income.numeric <- sum(
+    dplyr::last(report.info$table.revenues$staking),
+    dplyr::last(report.info$table.revenues$interests),
+    na.rm = TRUE
+  )
   total.income <- format_dollars(total.income.numeric)
   total.cost <- report.info$report.summary$Amount[5]
   gains <- report.info$report.summary$Amount[2]
@@ -68,3 +71,5 @@ print_report <- function(formatted.ACB,
     rstudioapi::viewer(out.name)
   }
 }
+
+

@@ -4,6 +4,7 @@
 \name{prepare_list_prices}
 \alias{prepare_list_prices}
 \alias{add_popular_slugs}
+\alias{prepare_list_prices_slugs}
 \alias{popular_slugs}
 \title{Prepare the list of coins for prices}
 \format{
@@ -14,10 +15,19 @@ prepare_list_prices(
   slug,
   start.date,
   end.date = lubridate::now("UTC"),
-  force = FALSE
+  force = FALSE,
+  verbose = TRUE
 )
 
 add_popular_slugs(data, slug_dictionary = popular_slugs)
+
+prepare_list_prices_slugs(
+  data,
+  list.prices = NULL,
+  slug = NULL,
+  start.date = NULL,
+  verbose = TRUE
+)
 
 popular_slugs
 }

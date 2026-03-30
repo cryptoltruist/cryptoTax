@@ -14,22 +14,27 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=6.5, fig.height=6.5,
 ### Summary
 
 ```{r summary, ft.align="center"}
-report.info$report.summary[-1,] %>% 
-  tax_table()
+x <- report.info$report.summary[-1,]
+
+tax_table(x)
+
+if ("value.today" %in% x$Type) {
+  warning("Date of value.today: ", last(list.prices$date2))  
+}
 ```
 
-```{r values, echo=FALSE}
+```{r values, echo=FALSE, eval=FALSE}
 # ((value.today + net.numeric + revenues) / sum(ACB.list$ACB) - 1) * 100
 value <- round(((format_dollars(report.info$report.summary$Amount[6], "numeric") + 
           last(report.info$report.overview$net) + 
-          last(report.info$table.revenues$total.revenues)) / 
+          last(report.info$table.revenues$total)) / 
          last(report.info$report.overview$total.cost) - 1) * 100, 2)
 
 value2 <- round(last(report.info$report.overview$net) + last(
   report.info$report.overview$unrealized.net), 2)
 ```
 
-All time up in percentage (including all unrealized gains and revenues received) is `r paste0(value, "%")`. In absolute dollars, that is `r paste0(value2 + last(report.info$table.revenues$total.revenues))` CAD.
+<!-- All time up in percentage (including all unrealized gains and revenues received) is `r #paste0(value, "%")`. In absolute dollars, that is `r #paste0(value2 + last(report.info$table.revenues$total))` CAD. -->
 
 ### Overview
 
@@ -80,11 +85,22 @@ sub %>%
 ### Current Value
 
 ```{r current value, ft.align="center"}
+sub2 <- report.info$report.overview
+last.col <- last(sub2)
+
 sub2 <- report.info$report.overview %>% 
+  slice(1:(n() - 1)) %>% 
+  arrange(desc(.data$value.today), 
+          desc(.data$unrealized.net)) %>% 
+  bind_rows(last.col) %>% 
   select(currency, cost.share, total.cost, rate.today:currency2)
 
 sub2 %>% 
   tax_table(repeat.header = TRUE)
+
+if ("value.today" %in% names(sub2)) {
+  warning("Date of value.today: ", last(list.prices$date2))  
+}
 ```
 
 ### Superficial losses
@@ -94,10 +110,13 @@ report.info$sup.losses %>%
   tax_table(report.info, type = 3)
 ```
 
-### Revenues
+### Revenues (CAD)
 
 ```{r revenues, ft.align="center"}
 report.info$table.revenues %>% 
+  mutate(date.last = lubridate::date(.data$date.last)) %>% 
+  select(-"currency") %>% 
+  rename("total" = "total.revenues") %>% 
   tax_table(repeat.header = TRUE)
 ```
 

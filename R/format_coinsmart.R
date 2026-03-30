@@ -125,7 +125,10 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   FEES.BUY <- data %>%
     filter(.data$description == "Fee" &
       comment == "Trade") %>%
-    transmute(fees = .data$total.price)
+    mutate(fees = .data$total.price, 
+           fees.quantity = .data$Debit,
+           fees.currency = .data$currency) %>% 
+    select(fees, fees.quantity, fees.currency)
 
   # Merge fees to our BUY object
   BUY <- cbind(BUY, FEES.BUY)
@@ -248,8 +251,9 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   # Reorder columns properly
   data <- data %>%
     select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
+      "date", "currency", "quantity", "total.price", "spot.rate", 
+      "transaction", "fees", "fees.quantity", "fees.currency", 
+      "description", "comment", "revenue.type", "exchange", "rate.source"
     )
 
   # Return result

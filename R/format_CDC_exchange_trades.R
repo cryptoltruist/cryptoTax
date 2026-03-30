@@ -23,13 +23,14 @@
 #' messing with the headers. Thus, when reading the file with
 #' `read.csv()`, add the argument `skip = 3`. You will then be able to
 #' read the file normally.
-#' 
+#'
 #' Update 2024: the unzipped correct file is now named "OEX_TRADE.csv" instead
 #' of "SPOT_TRADE.csv".
-#' 
-#' Also note that the USD bundle ("USD_Stable_Coin") is treated as USDC for 
-#' our purposes since it can be withdrawn as USDC and it is easier to 
+#'
+#' Also note that the USD bundle ("USD_Stable_Coin") is treated as USDC for
+#' our purposes since it can be withdrawn as USDC and it is easier to
 #' calculate prices with CoinMarketCap and later capital gains and so on.
+#'
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
@@ -50,7 +51,9 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
       quantity = "Trade.Amount",
       description = "Side",
       comment = "Symbol",
-      date = "Time..UTC."
+      date = "Time..UTC.",
+      fees.quantity = "Fee",
+      fees.currency = "Fee.Currency"
     )
 
   # Check if there's any new transactions
@@ -72,36 +75,38 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
     )
 
   # Replace USD by USDC...
-  data <- data %>% 
+  data <- data %>%
     mutate(
       pair.currency2 = case_when(
-        .data$Fee.Currency == "USD_Stable_Coin" & pair.currency2 == "USD" ~ "USDC",
-        .default = .data$Fee.Currency),
-      Fee.Currency = case_match(
-        .data$Fee.Currency,
+        .data$fees.currency == "USD_Stable_Coin" & pair.currency2 == "USD" ~ "USDC",
+        .default = .data$pair.currency2
+      ),
+      fees.currency = case_match(
+        .data$fees.currency,
         "USD_Stable_Coin" ~ "USDC",
-        .default = .data$Fee.Currency
-        )
+        .default = .data$fees.currency
       )
-  
+    )
+
   # Determine if fees were paid in a third currency or not
   data <- data %>%
     mutate(
-      Fee.Currency.temp = .data$Fee.Currency,
-      Fee.Currency = ifelse(
-        .data$Fee.Currency == "USD_Stable_Coin", "USD", .data$Fee.Currency),
+      fees.currency.temp = .data$fees.currency,
+      fees.currency = ifelse(
+        .data$fees.currency == "USD_Stable_Coin", "USD", .data$fees.currency
+      ),
       third.currency =
         case_when(
-          description == "BUY" ~ .data$Fee.Currency != .data$pair.currency1,
-          description == "SELL" ~ .data$Fee.Currency != .data$pair.currency2
+          description == "BUY" ~ .data$fees.currency != .data$pair.currency1,
+          description == "SELL" ~ .data$fees.currency != .data$pair.currency2
         ),
-      # Fee.Currency = .data$Fee.Currency.temp
-      ) %>% 
-    select(-"Fee.Currency.temp")
+      # fees.currency = .data$fees.currency.temp
+    ) %>%
+    select(-"fees.currency.temp")
 
   # Determine spot rate and value of fees
   data.fees <- data %>%
-    mutate(currency = .data$Fee.Currency)
+    mutate(currency = .data$fees.currency)
 
   data.fees <- cryptoTax::match_prices(data.fees, list.prices = list.prices, force = force)
 
@@ -114,7 +119,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
     warning("Could not calculate spot rate. Use `force = TRUE`.")
   }
 
-  data$fees <- data.fees$Fee * data.fees$spot.rate
+  data$fees <- data.fees$fees.quantity * data.fees$spot.rate
 
   # Create a "buy" object
   BUY <- data %>%
@@ -125,7 +130,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "description", "comment", "fees"
+      "description", "comment", "fees", "fees.quantity", "fees.currency"
     )
 
   # Create a second "buy" object for sell trades
@@ -151,7 +156,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "description", "comment", "fees"
+      "description", "comment"
     )
 
   # Create a second "sell" object
@@ -165,7 +170,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "description", "comment"
+      "description", "comment", "fees", "fees.quantity", "fees.currency"
     )
 
   # Create a third "sell" object for third currencies...
@@ -173,8 +178,8 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
     filter(.data$third.currency == TRUE) %>%
     mutate(
       transaction = "sell",
-      currency = .data$Fee.Currency,
-      quantity = .data$Fee,
+      currency = .data$fees.currency,
+      quantity = .data$fees.quantity,
       total.price = .data$fees,
       description = "Trading fee paid with CRO"
     ) %>%
@@ -257,7 +262,8 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   data <- data %>%
     select(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "description", "comment", "exchange", "rate.source"
+      "fees", "fees.quantity", "fees.currency", "description", "comment", 
+      "exchange", "rate.source"
     )
 
   # Return result

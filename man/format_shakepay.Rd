@@ -32,9 +32,13 @@ list if multiple referrals).
 formatted.shakepay <- format_shakepay(data_shakepay)
 head(formatted.shakepay)
 formatted.shakepay <- format_shakepay(data_shakepay,
- referral = list(
-  Date = c("2021-05-07 21:25:36",
-           "2021-05-17 21:25:36"),
-  Credit = c(30, 10)))
+  referral = list(
+    Date = c(
+      "2021-05-07 21:25:36",
+      "2021-05-17 21:25:36"
+    ),
+    Credit = c(30, 10)
+  )
+)
 head(formatted.shakepay)
 }

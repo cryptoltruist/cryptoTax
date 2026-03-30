@@ -38,6 +38,11 @@ Note that this code does not include the initial referral reward in CRO
 for signup or on the Crypto.com exchange. It must be added manually.
 
 WARNING: DOES NOT DOWNLOAD TRADES, ONLY REWARDS AND WITHDRAWALS!
+
+Update 2025: it seems that the CDC exchange now allows downloading all
+transactions (up to 180 days / ~ six months) including trades and all
+rewards. However, transactions before November 1st, 2022, can only be
+accessed through the Archive section. For this, see \link{format_CDC_exchange}.
 }
 \examples{
 format_CDC_exchange_rewards(data_CDC_exchange_rewards)

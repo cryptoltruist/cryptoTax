@@ -15,15 +15,28 @@
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report_summary(formatted.ACB, today.data = FALSE)
-#' @importFrom dplyr %>% filter mutate group_by ungroup select summarize slice_tail arrange add_row rename
+#' @importFrom dplyr %>% filter mutate group_by ungroup select summarize 
+#' slice_tail arrange add_row rename
 #' @importFrom rlang .data
 
-report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
-                           local.timezone = Sys.timezone(), list.prices = NULL, force = FALSE) {
+report_summary <- function(formatted.ACB, 
+                           today.data = TRUE, 
+                           tax.year = "all",
+                           local.timezone = Sys.timezone(), 
+                           list.prices = NULL, 
+                           slug = NULL,
+                           start.date = NULL,
+                           force = FALSE) {
   if (today.data == TRUE & curl::has_internet() == FALSE) {
     message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
     today.data <- FALSE
   }
+  
+  list.prices <- prepare_list_prices_slugs(
+    formatted.ACB,
+    list.prices = list.prices,
+    slug = slug,
+    start.date = start.date)
 
   # Remove CAD
   formatted.ACB <- formatted.ACB %>%
@@ -56,7 +69,7 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
     select("gains") %>%
     summarize(gains = sum(.data$gains))
 
-  gains <- formatC(unlist(gains), format = "f", big.mark = ",", digits = 2)
+  gains <- formatC_2(gains)
 
   # Total losses
   losses <- formatted.ACB.year %>%
@@ -65,17 +78,24 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
     select("gains") %>%
     summarize(losses = sum(.data$gains))
 
-  losses <- formatC(unlist(losses), format = "f", big.mark = ",", digits = 2)
+  losses <- formatC_2(losses)
 
   # Get total capital gains (ACB.gains)
   net <- sum(formatted.ACB.year$gains, na.rm = TRUE)
   net.numeric <- net
 
-  net <- formatC(net, format = "f", big.mark = ",", digits = 2)
+  net <- formatC_2(net)
 
   # total cost separately to accommodate today.data argument.
-  total.cost <- formatC(sum(ACB.list$ACB), format = "f", big.mark = ",", digits = 2)
-
+  total.cost <- formatC_2(sum(ACB.list$ACB))
+  
+  # Revenues
+  revenue <- formatted.ACB.year %>%
+    filter(.data$transaction == "revenue") %>%
+    ungroup() %>%
+    select("value") %>%
+    summarize(revenue = sum(.data$value))
+  
   if (today.data == TRUE) {
     # Make warning for GB, NFTs, etc.
     if (any(ACB.list$currency %in% "GB")) {
@@ -88,7 +108,24 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
         "2. NFTs are excluded from today's data because NFTs are not listed individually on CoinMarketCap."
       )
     }
-
+    
+    list.prices <- prepare_list_prices_slugs(
+      formatted.ACB,
+      list.prices = list.prices,
+      slug = slug,
+      start.date = start.date)
+    
+    # if (is.null(list.prices)) {
+    #   my.coins <- formatted.ACB %>% 
+    #     select(currency) %>% 
+    #     unique %>% 
+    #     unlist()
+    #   my.coins <- popular_slugs %>% 
+    #     filter(currency == my.coins) %>% 
+    #     select(slug)
+    #   list.prices <- prepare_list_prices(my.coins, start.date = lubridate::today())
+    # }
+    
     rates <- ACB.list %>%
       filter(
         .data$currency != "GB",
@@ -96,14 +133,12 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
       ) %>%
       mutate(
         date.temp = .data$date,
-        date = last(list.prices$timestamp)
+        date = last(list.prices$date2)
       )
-
-    if (is.null(list.prices)) {
-      stop("`list.prices` is NULL. It must be provided.")
-    }
-
+    
     rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
+    
+    message("Date of current prices: ", last(list.prices$date2))
 
     rates <- rates %>%
       mutate(
@@ -129,27 +164,33 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
     unrealized.net <- sum(rates$unrealized.net, na.rm = TRUE)
     value.today <- sum(rates$value.today)
     percentage.up <- (value.today / sum(ACB.list$ACB) - 1) * 100
-    all.time.up <- ((value.today + net.numeric) / sum(ACB.list$ACB) - 1) * 100
+    all.time.up.CAD <- value.today + net.numeric
+    all.time.up <- (all.time.up.CAD / sum(ACB.list$ACB) - 1) * 100
+    all.time.up.revenue.CAD <- all.time.up.CAD + revenue
+    all.time.up.revenue <- (all.time.up.revenue.CAD / sum(ACB.list$ACB) - 1) * 100
 
-    unrealized.gains <- formatC(unlist(unrealized.gains), format = "f", big.mark = ",", digits = 2)
-    unrealized.losses <- formatC(unlist(unrealized.losses), format = "f", big.mark = ",", digits = 2)
-    unrealized.net <- formatC(unlist(unrealized.net), format = "f", big.mark = ",", digits = 2)
-    value.today <- formatC(unlist(value.today), format = "f", big.mark = ",", digits = 2)
-    percentage.up <- paste0(formatC(unlist(percentage.up), format = "f", big.mark = ",", digits = 2), "%")
-    all.time.up <- paste0(formatC(unlist(all.time.up), format = "f", big.mark = ",", digits = 2), "%")
+    unrealized.gains <- formatC_2(unrealized.gains)
+    unrealized.losses <- formatC_2(unrealized.losses)
+    unrealized.net <- formatC_2(unrealized.net)
+    value.today <- formatC_2(value.today)
+    percentage.up <- paste0(formatC_2(percentage.up), "%")
+    all.time.up <- paste0(formatC_2(all.time.up), "%")
+    revenue <- formatC_2(revenue)
+    all.time.up.revenue <- paste0(formatC_2(all.time.up.revenue), "%")
 
     # Get all nicely
     temp <- t(data.frame(
       gains, losses, net, total.cost,
       value.today, unrealized.gains,
       unrealized.losses, unrealized.net,
-      percentage.up, all.time.up
+      percentage.up, all.time.up, revenue,
+      all.time.up.revenue
     ))
   }
 
   if (today.data == FALSE) {
     # Get all nicely
-    temp <- t(data.frame(gains, losses, net, total.cost))
+    temp <- t(data.frame(gains, losses, net, total.cost, revenue))
   }
 
   results <- temp %>%
@@ -165,3 +206,6 @@ report_summary <- function(formatted.ACB, today.data = TRUE, tax.year = "all",
 
   results
 }
+
+formatC_2 <- function(x) {formatC(unlist(unlist(x)), format = "f", big.mark = ",", digits = 2)}
+

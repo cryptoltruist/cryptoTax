@@ -43,10 +43,11 @@
 prepare_list_prices <- function(slug,
                                 start.date,
                                 end.date = lubridate::now("UTC"),
-                                force = FALSE) {
+                                force = FALSE,
+                                verbose = TRUE) {
   # List all active coins
   if (!exists("coins.list")) {
-    if (isFALSE(curl::has_internet())) {
+    if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
       message("This function requires Internet access.")
       return(NULL)
     }
@@ -64,7 +65,7 @@ prepare_list_prices <- function(slug,
       }
     )
 
-    if (!exists("coins.list")) {
+    if (!exists("coins.list") && isTRUE(verbose)) {
       message("Could not reach the CoinMarketCap API at this time")
       return(NULL)
     }
@@ -72,8 +73,8 @@ prepare_list_prices <- function(slug,
     coins.list <<- coins.list
   }
 
-  if (isTRUE(force) || !exists("list.prices")) {
-    if (isFALSE(curl::has_internet())) {
+  if (isTRUE(force) || !exists("list.prices") || is.null(list.prices)) {
+    if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
       message("This function requires Internet access.")
       return(NULL)
     }
@@ -135,14 +136,14 @@ prepare_list_prices <- function(slug,
       }
     )
 
-    if (!exists("coin_hist")) {
+    if (!exists("coin_hist") && isTRUE(verbose)) {
       message("'coin_hist' could not fetch correctly. Please try again.")
       return(NULL)
     }
 
     # coin_hist <- bind_rows(coin_hist)
 
-    if (!"symbol" %in% names(coin_hist)) {
+    if (!"symbol" %in% names(coin_hist) && isTRUE(verbose)) {
       message("'coin_hist' could not fetch correctly. Please try again.")
       return(NULL)
     }
@@ -155,34 +156,36 @@ prepare_list_prices <- function(slug,
       mutate(spot.rate_USD = mean(c(.data$open, .data$close))) %>%
       ungroup() %>%
       USD2CAD()
-    
+
     # Add USD as currency to go around some problems of the CDC exchange
-    USD_prices <- list.prices %>% 
-      select("date", "CAD.rate") %>% 
+    USD_prices <- list.prices %>%
+      select("date", "CAD.rate") %>%
       distinct()
-    
+
     USD_df <- data.frame(
       slug = "usdollar",
       name = "US Dollar",
       symbol = "USD",
       spot.rate_USD = 1,
-      date = unique(list.prices$date)) %>% 
+      date = unique(list.prices$date)
+    ) %>%
       left_join(USD_prices, by = "date")
-    
-    list.prices <- list.prices %>% 
-      bind_rows(USD_df) %>% 
+
+    list.prices <- list.prices %>%
+      bind_rows(USD_df) %>%
       mutate(
         spot.rate2 = .data$spot.rate_USD * .data$CAD.rate,
         currency = .data$symbol,
         date2 = date
       ) %>%
       select(-date)
-    
   } else {
-    message(
-      "Object 'list.prices' already exists. Reusing 'list.prices'. ",
-      "To force a fresh download, use argument 'force = TRUE'."
-    )
+    if (isTRUE(verbose)) {
+      message(
+        "Object 'list.prices' already exists. Reusing 'list.prices'. ",
+        "To force a fresh download, use argument 'force = TRUE'."
+      )  
+    }
   }
 
   list.prices
@@ -190,7 +193,7 @@ prepare_list_prices <- function(slug,
 
 #' @rdname prepare_list_prices
 #' @name add_popular_slugs
-#' @param data The data to which to convert the coin symbol / ticker to the 
+#' @param data The data to which to convert the coin symbol / ticker to the
 #' "slug" (full name of the coin).
 #' @param slug_dictionary A table of equivalency between the coin symbol /
 #' ticker and its slug. By default uses the provided `popular_slugs` object
@@ -200,6 +203,40 @@ prepare_list_prices <- function(slug,
 add_popular_slugs <- function(data, slug_dictionary = popular_slugs) {
   left_join(data, slug_dictionary, by = "currency") %>%
     relocate("slug", .after = "currency")
+}
+
+#' @rdname prepare_list_prices
+#' @name prepare_list_prices_slugs
+#' @export
+prepare_list_prices_slugs <- function(data, 
+                                      list.prices = NULL, 
+                                      slug = NULL,
+                                      start.date = NULL,
+                                      verbose = TRUE) {
+  if (is.null(list.prices)) {
+    if (is.null(slug)) {
+      # Add slugs...
+      data <- add_popular_slugs(data)
+      slug <- unique(data$slug)
+    }
+    if (is.null(start.date)) {
+      start.date <- min(data$date)
+    }
+    if (all(unique(slug) == "USD") && isTRUE(verbose)) {
+      message("Slug cannot be only USD for 'prepare_list_prices()'")
+      return(NULL)
+    }
+    list.prices <- prepare_list_prices(slug = slug, 
+                                       start.date = start.date, 
+                                       force = force,
+                                       verbose = verbose)
+    if (is.null(list.prices) && isTRUE(verbose)) {
+      message("Could not reach the CoinMarketCap API at this time")
+      return(NULL)
+    }
+    list.prices <<- list.prices
+  }
+  list.prices
 }
 
 #' @rdname prepare_list_prices

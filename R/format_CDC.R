@@ -176,7 +176,8 @@ format_CDC <- function(data) {
           "crypto_earn_interest_paid",
           "crypto_earn_extra_interest_paid",
           "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
-          "mco_stake_reward"
+          "mco_stake_reward",
+          "supercharger_reward_to_app_credited"
         ),
         "interests"
       ),

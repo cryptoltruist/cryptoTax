@@ -4,8 +4,8 @@ options(scipen = 999)
 
 # Prepare list of coins ####
 my.coins <- c(
-  "bitcoin", "ethereum", "cardano", "cronos", "litecoin", 
-  "usd-coin", "binance-usd", "celsius", "presearch", 
+  "bitcoin", "ethereum", "cardano", "cronos", "litecoin",
+  "usd-coin", "binance-usd", "celsius", "presearch",
   "ethereum-pow", "basic-attention-token"
 )
 

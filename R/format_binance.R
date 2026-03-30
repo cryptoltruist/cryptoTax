@@ -98,7 +98,10 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
   # total.price of buys should overwrite that of sells)
   # Extract fees
   FEES <- data %>%
-    filter(.data$description == "Fee")
+    filter(.data$description == "Fee") %>% 
+    mutate(fees = .data$total.price,
+           fees.quantity = .data$quantity,
+           fees.currency = currency)
 
   BUY <- data %>%
     filter(.data$transaction == "buy")
@@ -109,7 +112,9 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
 
   BUY <- BUY %>%
     filter(.data$description != "Stablecoins Auto-Conversion") %>%
-    mutate(fees = FEES$total.price)
+    mutate(fees = FEES$fees,
+           fees.quantity = FEES$fees.quantity,
+           fees.currency = FEES$fees.currency)
 
   # Sells
   SELL <- data %>%
@@ -148,7 +153,8 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
     arrange(date, desc(.data$total.price), .data$transaction) %>%
     select(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
+      "fees", "fees.quantity", "fees.currency", "description", "comment", 
+      "revenue.type", "exchange", "rate.source"
     )
 
   # Return result

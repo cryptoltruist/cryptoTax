@@ -69,6 +69,14 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
       names_from = "Type",
       values_from = "value"
     )
+  
+  fee <- cryptoTax::match_prices(fee, list.prices = list.prices, force = force)
+  
+  # Rename Fee column and make it positive.
+  fee <- fee %>%
+    mutate(fees.quantity = abs(.data$Fee), 
+           fees = .data$fees.quantity * .data$spot.rate,
+           fees.currency = currency)
 
   balance <- data %>%
     select("date", "description":"comment", contains("Balance")) %>%
@@ -118,7 +126,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "Fee", "description", "comment"
+      "fees", "fees.quantity", "fees.currency", "description", "comment"
     )
 
   # Create a "earn" object
@@ -165,7 +173,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "Fee", "description", "comment"
+      "fees", "fees.quantity", "fees.currency", "description", "comment"
     )
 
   # Gemini clearing automatically selling BAT is due to Canadian regulations
@@ -175,11 +183,6 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # Merge the "buy" and "sell" objects
   data <- merge_exchanges(BUY, EARN, EARN2, SELL) %>%
     mutate(exchange = "gemini")
-
-  # Rename Fee column and make it positive.
-  data <- data %>%
-    rename(fees = "Fee") %>%
-    mutate(fees = abs(.data$fees))
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
@@ -236,7 +239,8 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   data <- data %>%
     select(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
+      "fees", "fees.quantity", "fees.currency", "description", "comment", 
+      "revenue.type", "exchange", "rate.source"
     ) %>%
     as.data.frame()
 

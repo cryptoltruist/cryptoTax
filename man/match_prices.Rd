@@ -9,7 +9,8 @@ match_prices(
   slug = NULL,
   start.date = "2021-01-01",
   list.prices = NULL,
-  force = FALSE
+  force = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{

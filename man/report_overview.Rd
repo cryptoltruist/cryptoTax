@@ -10,7 +10,10 @@ report_overview(
   tax.year = "all",
   local.timezone = Sys.timezone(),
   list.prices = NULL,
-  force = FALSE
+  slug = NULL,
+  start.date = NULL,
+  force = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{

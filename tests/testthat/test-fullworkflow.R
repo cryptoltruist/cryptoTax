@@ -5,11 +5,11 @@ test_that("full workflow", {
 
   # Prepare list of coins ####
   my.coins <- c(
-    "bitcoin", "ethereum", "cardano", "cronos", "litecoin", 
-    "usd-coin", "binance-usd", "celsius", "presearch", 
+    "bitcoin", "ethereum", "cardano", "cronos", "litecoin",
+    "usd-coin", "binance-usd", "celsius", "presearch",
     "ethereum-pow", "basic-attention-token"
   )
-  
+
   USD2CAD.table <- cur2CAD_table()
 
   list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")

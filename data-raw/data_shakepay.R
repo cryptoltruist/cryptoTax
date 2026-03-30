@@ -9,16 +9,19 @@ data_shakepay <- structure(
       NA, 0.00051991, NA, NA, NA, NA, NA, 0.00052991
     ),
     Asset.Debited = c("", "BTC", "", "", "", "", "", "BTC"),
-    Amount.Credited = c(0.00103982, NA, 0.00011, 0.00012, 0.00013, 0.00014, 0.00015, NA),
+    Amount.Credited = c(0.00103982, NA, 0.000011, 0.000012, 0.000013, 0.000014, 0.000015, NA),
     Asset.Credited = c("BTC", "", "BTC", "BTC", "BTC", "BTC", "BTC", ""),
+    Market.Value = c(53.03, 0.35, 0.58, 0.60, 0.73, 0.84, 0.89, 31.27),
+    Market.Value.Currency = rep("CAD", 8),
     Book.Cost = c(53.06974, NA, NA, NA, NA, NA, NA, 31.26847),
     Book.Cost.Currency = rep("CAD", 8),
     Type = c("Buy", "Send", "Reward", "Reward", "Reward", "Reward", "Reward", "Sell"),
+    Spot.Rate = c(51037.4327, 51052.3351, 52582.0324, 50287.0079, 56527.6188, 59978.0477, 59017.1621, 59017.1922),
+    Buy...Sell.Rate = c(51002.4318, NA, NA, NA, NA, NA, NA, 59007.1441),
     Description = c(
-      "Bought @ $51,002.432 CAD", "Bitcoin address abcdefghijklmnopqrstuvwxyz", "ShakingSats", "ShakingSats", "ShakingSats", "ShakingSats", "ShakingSats", "Bought @ $59,007.14 CAD"
-    ),
-    Mid.Market.Rate = c(51037.4327, 51052.3351, 52582.0324, 50287.0079, 56527.6188, 59978.0477, 59017.1621, 59017.1922),
-    Spot.Rate = c(51002.4318, NA, NA, NA, NA, NA, NA, 59007.1441)),
+      "Bought @ CA$51,002.43", "Bitcoin address abcdefghijklmnopqrstuvwxyz", "ShakingSats", "ShakingSats", "ShakingSats", "ShakingSats", "ShakingSats", "Bought @ CA$59,007.14"
+    )
+  ),
   row.names = c(
     NA,
     -8L

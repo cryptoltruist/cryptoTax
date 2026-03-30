@@ -56,20 +56,29 @@ tax_table <- function(table, repeat.header = FALSE, type = 1) {
 }
 
 repeat_header <- function(table) {
+  body_rows <- nrow(table$body$dataset)
+
   # Add footer with column names
   table <- table %>%
     flextable::add_footer_row(
       values = table$col_keys,
       colwidths = rep(1, length(table$col_keys))
     ) %>%
-    flextable::bold(i = nrow(table$body$dataset)) %>%
     flextable::bold(part = "header") %>%
     flextable::bold(part = "footer") %>%
-    flextable::hline(i = nrow(table$body$dataset) - 1) %>%
     flextable::hline(part = "footer") %>%
     flextable::fontsize(part = "all", size = 12) %>%
     flextable::font(part = "all", fontname = "Times New Roman") %>%
     flextable::align(align = "center", part = "all")
+
+  if (body_rows > 0) {
+    table <- flextable::bold(table, i = body_rows)
+  }
+
+  if (body_rows > 1) {
+    table <- flextable::hline(table, i = body_rows - 1)
+  }
+
   table
 }
 
@@ -80,3 +89,5 @@ decimalplaces <- function(x) {
     0
   )
 }
+
+
