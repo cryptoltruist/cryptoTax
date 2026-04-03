@@ -54,6 +54,56 @@
   get("list.prices", inherits = TRUE)
 }
 
+.format_prepare_price_date <- function(x) {
+  x %>%
+    as.Date() %>%
+    stringr::str_split("-", simplify = TRUE) %>%
+    paste(collapse = "")
+}
+
+.build_list_prices_from_history <- function(coin_hist, USD2CAD.table = NULL) {
+  resolved_list_prices <- coin_hist %>%
+    mutate(date = lubridate::as_date(.data$timestamp)) %>%
+    rowwise() %>%
+    mutate(spot.rate_USD = mean(c(.data$open, .data$close))) %>%
+    ungroup() %>%
+    USD2CAD(USD2CAD.table = USD2CAD.table)
+
+  if (is.null(resolved_list_prices)) {
+    return(NULL)
+  }
+
+  USD_prices <- resolved_list_prices %>%
+    select("date", "CAD.rate") %>%
+    distinct()
+
+  USD_df <- data.frame(
+    slug = "usdollar",
+    name = "US Dollar",
+    symbol = "USD",
+    spot.rate_USD = 1,
+    date = unique(resolved_list_prices$date)
+  ) %>%
+    left_join(USD_prices, by = "date")
+
+  resolved_list_prices %>%
+    bind_rows(USD_df) %>%
+    mutate(
+      spot.rate2 = .data$spot.rate_USD * .data$CAD.rate,
+      currency = .data$symbol,
+      date2 = .data$date
+    ) %>%
+    select(-"date")
+}
+
+.maybe_cache_list_prices <- function(list.prices, cache = TRUE) {
+  if (isTRUE(cache) && !is.null(list.prices)) {
+    list.prices <<- list.prices
+  }
+
+  list.prices
+}
+
 #' Prepare the list of coins for prices
 #'
 #' The [crypto2::crypto_history] API is at times a bit capricious. You might
@@ -142,15 +192,8 @@ prepare_list_prices <- function(slug,
       return(NULL)
     }
 
-    start.date <- start.date %>%
-      as.Date() %>%
-      stringr::str_split("-", simplify = TRUE) %>%
-      paste(collapse = "")
-
-    end.date <- end.date %>%
-      as.Date() %>%
-      stringr::str_split("-", simplify = TRUE) %>%
-      paste(collapse = "")
+    start.date <- .format_prepare_price_date(start.date)
+    end.date <- .format_prepare_price_date(end.date)
 
     coins.temp <- coins.list %>%
       filter(.data$slug %in% my.coins)
@@ -181,8 +224,6 @@ prepare_list_prices <- function(slug,
       message("'coin_hist' could not fetch correctly. Please try again.")
       return(NULL)
     }
-
-    coin_hist <<- coin_hist
   }
 
   if (!"symbol" %in% names(coin_hist) && isTRUE(verbose)) {
@@ -190,44 +231,15 @@ prepare_list_prices <- function(slug,
     return(NULL)
   }
 
-  resolved_list_prices <- coin_hist %>%
-    mutate(date = lubridate::as_date(.data$timestamp)) %>%
-    rowwise() %>%
-    mutate(spot.rate_USD = mean(c(.data$open, .data$close))) %>%
-    ungroup() %>%
-    USD2CAD(USD2CAD.table = USD2CAD.table)
+  resolved_list_prices <- .build_list_prices_from_history(
+    coin_hist = coin_hist,
+    USD2CAD.table = USD2CAD.table
+  )
 
-  if (is.null(resolved_list_prices)) {
-    return(NULL)
-  }
-
-  USD_prices <- resolved_list_prices %>%
-    select("date", "CAD.rate") %>%
-    distinct()
-
-  USD_df <- data.frame(
-    slug = "usdollar",
-    name = "US Dollar",
-    symbol = "USD",
-    spot.rate_USD = 1,
-    date = unique(resolved_list_prices$date)
-  ) %>%
-    left_join(USD_prices, by = "date")
-
-  resolved_list_prices <- resolved_list_prices %>%
-    bind_rows(USD_df) %>%
-    mutate(
-      spot.rate2 = .data$spot.rate_USD * .data$CAD.rate,
-      currency = .data$symbol,
-      date2 = date
-    ) %>%
-    select(-date)
-
-  if (!explicit_list_prices) {
-    list.prices <<- resolved_list_prices
-  }
-
-  resolved_list_prices
+  .maybe_cache_list_prices(
+    list.prices = resolved_list_prices,
+    cache = !explicit_list_prices
+  )
 }
 
 #' @rdname prepare_list_prices
@@ -263,36 +275,35 @@ prepare_list_prices_slugs <- function(data,
                                       coins.list = NULL,
                                       coin_hist = NULL,
                                       USD2CAD.table = NULL) {
-  resolved_list_prices <- list.prices
+  if (!is.null(list.prices)) {
+    return(list.prices)
+  }
 
-  if (is.null(resolved_list_prices)) {
-    if (is.null(slug)) {
-      data <- add_popular_slugs(data)
-      slug <- unique(data$slug)
-    }
-    if (is.null(start.date)) {
-      start.date <- min(data$date)
-    }
-    if (all(unique(slug) == "USD") && isTRUE(verbose)) {
-      message("Slug cannot be only USD for 'prepare_list_prices()'")
-      return(NULL)
-    }
-    resolved_list_prices <- prepare_list_prices(
-      slug = slug,
-      start.date = start.date,
-      force = force,
-      verbose = verbose,
-      list.prices = list.prices,
-      coins.list = coins.list,
-      coin_hist = coin_hist,
-      USD2CAD.table = USD2CAD.table
-    )
-    if (is.null(resolved_list_prices) && isTRUE(verbose)) {
-      message("Could not reach the CoinMarketCap API at this time")
-      return(NULL)
-    }
+  if (is.null(slug)) {
+    data <- add_popular_slugs(data)
+    slug <- unique(data$slug)
+  }
+  if (is.null(start.date)) {
+    start.date <- min(data$date)
+  }
+  if (all(unique(slug) == "USD") && isTRUE(verbose)) {
+    message("Slug cannot be only USD for 'prepare_list_prices()'")
+    return(NULL)
+  }
 
-    list.prices <<- resolved_list_prices
+  resolved_list_prices <- prepare_list_prices(
+    slug = slug,
+    start.date = start.date,
+    force = force,
+    verbose = verbose,
+    list.prices = list.prices,
+    coins.list = coins.list,
+    coin_hist = coin_hist,
+    USD2CAD.table = USD2CAD.table
+  )
+  if (is.null(resolved_list_prices) && isTRUE(verbose)) {
+    message("Could not reach the CoinMarketCap API at this time")
+    return(NULL)
   }
 
   resolved_list_prices
@@ -317,3 +328,5 @@ popular_slugs <- data.frame(
     "SHIB", "DOGE", "ENJ", "USD", "CAD"
   )
 )
+
+

@@ -15,6 +15,32 @@
   get("USD2CAD.table", inherits = TRUE)
 }
 
+.cache_usd2cad_table <- function(USD2CAD.table) {
+  if (!is.null(USD2CAD.table)) {
+    USD2CAD.table <<- USD2CAD.table
+  }
+
+  USD2CAD.table
+}
+
+.join_usd2cad_rates <- function(data, USD2CAD.table, by_col = "date", restore_datetime = TRUE) {
+  data <- data %>%
+    mutate(
+      date2 = .data$date,
+      date = as.Date(.data$date)
+    )
+
+  data <- inner_join(data, USD2CAD.table, by = by_col)
+
+  if (isTRUE(restore_datetime)) {
+    data <- data %>%
+      mutate(date = .data$date2)
+  }
+
+  data %>%
+    select(-"date2")
+}
+
 #' @title Convert USD to CAD (Bank of Canada rates)
 #'
 #' @description This function allows you to convert USD to CAD.
@@ -48,20 +74,11 @@ USD2CAD <- function(data,
     return(NULL)
   }
 
-  # Combine datasets
-  data <- data %>%
-    mutate(
-      date2 = .data$date,
-      date = as.Date(.data$date)
-    )
-
   USD2CAD.table_short <- USD2CAD.table %>%
     mutate(CAD.rate = .data[[conversion]]) %>%
     select("date", "CAD.rate")
 
-  inner_join(data, USD2CAD.table_short, by = "date") %>%
-    mutate(date = .data$date2) %>%
-    select(-"date2")
+  .join_usd2cad_rates(data, USD2CAD.table_short)
 }
 
 #' @rdname USD2CAD
@@ -200,7 +217,7 @@ USD2CAD_crypto2 <- function(data,
         diff = .data$spot.rate2_CAD - .data$CAD.rate
       )
 
-    USD2CAD.table <<- USD2CAD.table
+    USD2CAD.table <- .cache_usd2cad_table(USD2CAD.table)
   } else {
     message(
       "Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. ",
@@ -208,17 +225,15 @@ USD2CAD_crypto2 <- function(data,
     )
   }
 
-  data <- data %>%
-    mutate(
-      date2 = as.Date(.data$date)
-    )
-
   USD2CAD.table_short <- USD2CAD.table %>%
     select("date2", "CAD.rate")
 
-  data <- inner_join(data, USD2CAD.table_short, by = "date2") %>%
-    select(-"date2")
-  data
+  .join_usd2cad_rates(
+    data = data,
+    USD2CAD.table = USD2CAD.table_short,
+    by_col = "date2",
+    restore_datetime = FALSE
+  )
 }
 
 #' @title Convert USD to CAD (using `priceR`)
@@ -268,16 +283,9 @@ USD2CAD_priceR <- function(data, conversion = "USD", currency = "CAD") {
 
     USD2CAD.table <- mutate(USD2CAD.table, date = as.Date(.data$date))
     names(USD2CAD.table)[2] <- "CAD.rate"
-    USD2CAD.table <<- USD2CAD.table
+    USD2CAD.table <- .cache_usd2cad_table(USD2CAD.table)
   }
 
-  data <- data %>%
-    mutate(
-      date2 = .data$date,
-      date = as.Date(.data$date)
-    )
-
-  inner_join(data, USD2CAD.table, by = "date") %>%
-    mutate(date = .data$date2) %>%
-    select(-"date2")
+  .join_usd2cad_rates(data, USD2CAD.table)
 }
+

@@ -66,3 +66,40 @@ test_that("match_prices works offline with an explicit list.prices table", {
   expect_equal(result$spot.rate, c(123.45, 1))
   expect_equal(result$rate.source, c("coinmarketcap", "exchange"))
 })
+
+test_that("prepare_list_prices_slugs returns explicit list.prices unchanged", {
+  explicit_list_prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 123.45,
+    date2 = as.Date("2021-01-01")
+  )
+
+  input <- data.frame(
+    date = as.POSIXct("2021-01-01 10:00:00", tz = "UTC"),
+    currency = "BTC"
+  )
+
+  result <- prepare_list_prices_slugs(input, list.prices = explicit_list_prices)
+
+  expect_identical(result, explicit_list_prices)
+})
+
+test_that("prepare_list_prices returns explicit list.prices unchanged even when forced", {
+  explicit_list_prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 999.99,
+    date2 = as.Date("2021-01-01")
+  )
+
+  result <- prepare_list_prices(
+    slug = "bitcoin",
+    start.date = "2021-01-01",
+    force = TRUE,
+    verbose = FALSE,
+    list.prices = explicit_list_prices
+  )
+
+  expect_identical(result, explicit_list_prices)
+})
+
+

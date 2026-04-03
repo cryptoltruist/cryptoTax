@@ -1,4 +1,4 @@
-# cryptoTax 0.0.9
+# cryptoTax 0.1.0
 
 **Improvements:**
 
@@ -7,6 +7,7 @@
 - Improved offline behavior for reporting, examples, tests, and vignettes when live pricing data is unavailable.
 - Expanded deterministic test coverage around `USD2CAD()`, price preparation, reporting, exchange formatting, and the full workflow.
 - Refreshed test snapshots so the main integration paths now run against a deterministic offline pricing baseline.
+- Continued the internal pricing and FX cleanup by centralizing `list.prices` and `USD2CAD.table` preparation paths while preserving compatibility.
 - Cleaned `R CMD check` issues, updated package metadata, and now declare `R (>= 4.1.0)` explicitly.
 
 # cryptoTax 0.0.7
@@ -108,6 +109,8 @@ Updated functions due to changes in exchanges transaction history files:
 # cryptoTax 0.0.1
 
 New package
+
+
 
 
 
