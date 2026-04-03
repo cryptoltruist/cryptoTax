@@ -9,7 +9,7 @@
 #' Comment, Line
 #' @export
 #' @examples
-#' my.list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
+#' my.list.prices <- list_prices_example
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)

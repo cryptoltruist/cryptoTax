@@ -48,7 +48,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
 
   # Rearrange on chronological order
   data <- data %>%
-    arrange(date)
+    arrange(.data$date)
 
   # Specify whether it's a buy or sell
   data <- data %>%
@@ -124,11 +124,11 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   # Isolate trading fees
   FEES.BUY <- data %>%
     filter(.data$description == "Fee" &
-      comment == "Trade") %>%
+      .data$comment == "Trade") %>%
     mutate(fees = .data$total.price, 
            fees.quantity = .data$Debit,
            fees.currency = .data$currency) %>% 
-    select(fees, fees.quantity, fees.currency)
+    select("fees", "fees.quantity", "fees.currency")
 
   # Merge fees to our BUY object
   BUY <- cbind(BUY, FEES.BUY)
@@ -203,7 +203,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   # Create a "withdrawals" object
   WITHDRAWALS <- data %>%
     filter(.data$description == "Fee" &
-      comment == "Withdraw") %>%
+      .data$comment == "Withdraw") %>%
     mutate(
       quantity = .data$Debit,
       total.price = .data$quantity * .data$spot.rate,
@@ -222,7 +222,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   # Merge the "buy" and "sell" objects
   data <- bind_rows(BUY, EARN, SELL, WITHDRAWALS) %>%
     mutate(exchange = "coinsmart") %>%
-    arrange(date, desc(.data$total.price))
+    arrange(.data$date, desc(.data$total.price))
 
   # Add trade info in comments
 

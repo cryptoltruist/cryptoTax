@@ -15,7 +15,7 @@
 #' [Reddit post](<https://www.reddit.com/r/Presearch/comments/urqf34/comment/i8zj98s/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button>):
 #' "you have to keep in mind that the tokens are considered the user's only
 #' when they hit the claim button." From a tax perspective, it makes sense that
-#' airdrops and rewards are only taxable once they become unde rthe user's
+#' airdrops and rewards are only taxable once they become under the user's
 #' control. With Presearch, they are not under the user's control until
 #' the minimum withdrawal amount (1000) is reached. Therefore, moving forward,
 #' we will use this new strategy.
@@ -49,7 +49,7 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   # Rename columns
   data <- data %>%
     rename(quantity = "amount") %>%
-    mutate(quantity = as.numeric(gsub(",", "", quantity, fixed = TRUE)))
+    mutate(quantity = as.numeric(gsub(",", "", .data$quantity, fixed = TRUE)))
 
   # Check if there's any new transactions
   check_new_transactions(data,
@@ -59,7 +59,7 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
 
   # Remove irrelevant rows
   data <- data %>%
-    filter(!description %in% c(
+    filter(!.data$description %in% c(
       staked.to, removed.from, "Increased search staking",
       "Removed from search staking"
     ))

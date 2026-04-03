@@ -13,18 +13,19 @@
 #' @export
 #' @examples
 #' \donttest{
-#' list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
+#' list.prices <- list_prices_example
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-#' print_report(formatted.ACB,
-#'   list.prices = list.prices,
-#'   tax.year = 2021, name = "Mr. Cryptoltruist"
-#' )
+#' if (!is.null(list.prices) && !is.null(list.prices$date2)) {
+#'   print_report(formatted.ACB,
+#'     list.prices = list.prices,
+#'     tax.year = 2021, name = "Mr. Cryptoltruist"
+#'   )
+#' }
 #' }
 #' \dontshow{
-#' unlink("full_report_2021.html")
+#' if (file.exists("full_report_2021.html")) unlink("full_report_2021.html")
 #' }
-#'
 print_report <- function(formatted.ACB,
                          list.prices,
                          tax.year = "all",

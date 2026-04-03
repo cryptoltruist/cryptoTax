@@ -29,9 +29,11 @@ pie_exchange, pie_revenue.
 Prepare all required information for a full crypto tax report.
 }
 \examples{
-list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
+list.prices <- list_prices_example
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-x <- prepare_report(formatted.ACB, list.prices = list.prices)
-x$proceeds
+if (!is.null(list.prices)) {
+  x <- prepare_report(formatted.ACB, list.prices = list.prices)
+  x$proceeds
+}
 }

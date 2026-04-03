@@ -72,11 +72,16 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   
   fee <- cryptoTax::match_prices(fee, list.prices = list.prices, force = force)
   
+  if (is.null(fee)) {
+    message("Could not reach the CoinMarketCap API at this time")
+    return(NULL)
+  }
+
   # Rename Fee column and make it positive.
   fee <- fee %>%
     mutate(fees.quantity = abs(.data$Fee), 
            fees = .data$fees.quantity * .data$spot.rate,
-           fees.currency = currency)
+           fees.currency = .data$currency)
 
   balance <- data %>%
     select("date", "description":"comment", contains("Balance")) %>%

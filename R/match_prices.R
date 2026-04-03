@@ -9,6 +9,12 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @param verbose Logical; whether to print progress messages.
+#' @param coins.list Optional explicit output from [crypto2::crypto_list()].
+#' @param coin_hist Optional explicit historical price data to transform into
+#' a `list.prices` object.
+#' @param USD2CAD.table Optional explicit USD/CAD rate table to use when
+#' converting USD-denominated history to CAD.
 #' @return A data frame, with the following added columns: spot.rate.
 #' @export
 #' @examples
@@ -23,47 +29,55 @@ match_prices <- function(data,
                          start.date = "2021-01-01",
                          list.prices = NULL,
                          force = FALSE,
-                         verbose = TRUE) {
-  if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
+                         verbose = TRUE,
+                         coins.list = NULL,
+                         coin_hist = NULL,
+                         USD2CAD.table = NULL) {
+  if (is.null(list.prices) && is.null(coin_hist) && isFALSE(curl::has_internet()) && isTRUE(verbose)) {
     message("This function requires Internet access.")
     return(NULL)
   }
 
   all.data <- data
 
-  # Create an empty spot.rate if missing else the function won't work
   if (!("spot.rate" %in% names(all.data))) {
     all.data$spot.rate <- NA
   }
 
-  # Same for total.price
   if (!("total.price" %in% names(all.data))) {
     all.data$total.price <- NA
   }
 
-  # Same for rate.source
   if (!("rate.source" %in% names(all.data))) {
     all.data$rate.source <- NA
   }
 
-  # Add spot.rate of 1 for TCAD
   all.data <- all.data %>%
     mutate(spot.rate = ifelse(.data$currency %in% c("TCAD", "CAD"), 1, .data$spot.rate))
 
-  # Apply the prepare_list_prices function to all the coins
   list.prices <- prepare_list_prices_slugs(
     all.data,
     list.prices = list.prices,
     slug = slug,
     start.date = start.date,
-    verbose = verbose)
-  
-  # Get date in proper format for matching and merge data
+    force = force,
+    verbose = verbose,
+    coins.list = coins.list,
+    coin_hist = coin_hist,
+    USD2CAD.table = USD2CAD.table
+  )
+
+  if (is.null(list.prices)) {
+    if (isTRUE(verbose)) {
+      message("Could not reach the CoinMarketCap API at this time")
+    }
+    return(NULL)
+  }
+
   new.data <- all.data %>%
     mutate(date2 = lubridate::as_date(.data$date)) %>%
     left_join(list.prices[c("currency", "spot.rate2", "date2")], by = c("date2", "currency"))
 
-  # Add source of spot.rate and total.price
   new.data <- new.data %>%
     mutate(
       rate.source = ifelse(is.na(.data$spot.rate),
@@ -73,12 +87,9 @@ match_prices <- function(data,
           .data$rate.source
         )
       ),
-      spot.rate = ifelse(is.na(.data$spot.rate), .data$spot.rate2, .data$spot.rate),
-      # total.price = ifelse(is.na(total.price),
-      #                      quantity * spot.rate,
-      #                      total.price)
-      # We don't calculate total.price here because we now do it later
+      spot.rate = ifelse(is.na(.data$spot.rate), .data$spot.rate2, .data$spot.rate)
     ) %>%
     select(-c("date2", "spot.rate2"))
   new.data
 }
+

@@ -29,8 +29,9 @@
 #' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
+#' \dontrun{
 #' format_CDC_exchange(data_CDC_exchange_trades)
-#' # Still have to create data_CDC_exchange_trades dataset...
+#' }
 #' @importFrom dplyr %>% rename mutate case_when filter select arrange bind_rows
 #' mutate_at row_number
 #' @importFrom rlang .data
@@ -67,7 +68,7 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
   data <- data %>%
     mutate(
       currency = ifelse(.data$currency == "USD_Stable_Coin", "USDC", .data$currency),
-      quantity = abs(quantity)
+      quantity = abs(.data$quantity)
     )
 
   # Create a "buy" object
@@ -77,8 +78,8 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
       transaction = "buy",
       currency = .data$currency
     ) %>%
-    arrange(Trade.ID, date) %>%
-    group_by(Trade.ID) %>%
+    arrange(.data$Trade.ID, .data$date) %>%
+    group_by(.data$Trade.ID) %>%
     mutate(row = row_number()) %>%
     ungroup() %>%
     select(
@@ -105,8 +106,8 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
       transaction = "fees",
       currency = .data$currency
     ) %>%
-    arrange(Trade.ID, date) %>%
-    group_by(Trade.ID) %>%
+    arrange(.data$Trade.ID, .data$date) %>%
+    group_by(.data$Trade.ID) %>%
     mutate(row = row_number()) %>%
     ungroup() %>%
     select(
@@ -207,20 +208,20 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
   data <- data %>%
     bind_rows(trading.fees) %>%
     mutate(exchange = "CDC.exchange") %>%
-    arrange(date, desc(.data$total.price), .data$transaction)
+    arrange(.data$date, desc(.data$total.price), .data$transaction)
 
   # Add fees to BUY
   fees.temp <- data %>%
-    filter(description == "TRADE_FEE") %>%
-    select(Trade.ID, row, fees = total.price, 
-           fees.quantity = quantity, fees.currency = currency)
+    filter(.data$description == "TRADE_FEE") %>%
+    select("Trade.ID", "row", fees = "total.price", 
+           fees.quantity = "quantity", fees.currency = "currency")
 
   data <- data %>%
-    filter(description != "TRADE_FEE")
+    filter(.data$description != "TRADE_FEE")
 
   data <- fees.temp %>%
     right_join(data, by = c("Trade.ID", "row")) %>%
-    arrange(date, desc(.data$total.price), .data$transaction)
+    arrange(.data$date, desc(.data$total.price), .data$transaction)
 
   # Reorder columns properly
   data <- data %>%
@@ -233,3 +234,4 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
   # Return result
   data
 }
+

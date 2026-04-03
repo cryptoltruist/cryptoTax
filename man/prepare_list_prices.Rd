@@ -16,7 +16,11 @@ prepare_list_prices(
   start.date,
   end.date = lubridate::now("UTC"),
   force = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  list.prices = NULL,
+  coins.list = NULL,
+  coin_hist = NULL,
+  USD2CAD.table = NULL
 )
 
 add_popular_slugs(data, slug_dictionary = popular_slugs)
@@ -26,7 +30,11 @@ prepare_list_prices_slugs(
   list.prices = NULL,
   slug = NULL,
   start.date = NULL,
-  verbose = TRUE
+  force = FALSE,
+  verbose = TRUE,
+  coins.list = NULL,
+  coin_hist = NULL,
+  USD2CAD.table = NULL
 )
 
 popular_slugs
@@ -34,18 +42,28 @@ popular_slugs
 \arguments{
 \item{slug}{Which coins to include in the list. However, because of too
 many duplicated symbols, you must use the unique "slug" name of the coin.
-You can obtain the correct slug using
-\code{\link[crypto2:crypto_list]{crypto2::crypto_list()}} and then filtering for your
-symbol.}
+You can obtain the correct slug using \code{\link[crypto2:crypto_list]{crypto2::crypto_list()}} and then
+filtering for your symbol.}
 
 \item{start.date}{What date to start reporting prices for.}
 
-\item{end.date}{What date to end reporting prices for.
-the \code{list.prices} object symbol for a given coin is shared by
-multiple coins (see details).}
+\item{end.date}{What date to end reporting prices for.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
+
+\item{verbose}{Logical; whether to print progress messages.}
+
+\item{list.prices}{Optional explicit \code{list.prices} object to reuse instead
+of relying on a cached session object.}
+
+\item{coins.list}{Optional explicit output from \code{\link[crypto2:crypto_list]{crypto2::crypto_list()}}.}
+
+\item{coin_hist}{Optional explicit historical price data to transform into
+a \code{list.prices} object.}
+
+\item{USD2CAD.table}{Optional explicit USD/CAD rate table to use when
+converting USD-denominated history to CAD.}
 
 \item{data}{The data to which to convert the coin symbol / ticker to the
 "slug" (full name of the coin).}
@@ -61,13 +79,11 @@ name, symbol, ref_cur, open, high, low, close, volume, market_cap,
 time_open, time_close, time_high, time_low, spot.rate2, currency, date2.
 }
 \description{
-Prepare the list of coins for prices.
-}
-\details{
 The \link[crypto2:crypto_history]{crypto2::crypto_history} API is at times a bit capricious. You might
 need to try a few times before it processes correctly and without
 errors.
-
+}
+\details{
 Sometimes, \code{list.prices} (through coinmarketcap) will contain symbols for
 a given coin (e.g., ETH) that is actually shared by multiple coins, thus,
 the necessity of the \code{remove.coins.slug} argument. In these cases, we can

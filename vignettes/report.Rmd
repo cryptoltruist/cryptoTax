@@ -35,6 +35,9 @@ my.coins <- c(
 USD2CAD.table <- cur2CAD_table()
 
 list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")
+if (is.null(list.prices)) {
+  knitr::knit_exit()
+}
 ```
 
 ```{r list.prices, eval=FALSE}
@@ -48,7 +51,7 @@ my.coins <- c(
 
 USD2CAD.table <- cur2CAD_table()
 
-list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")
+list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")`r`nif (is.null(list.prices)) {`r`n  knitr::knit_exit()`r`n}
 ```
 
 # Formatting your data
@@ -63,7 +66,7 @@ exchanges <- list(
   data_shakepay, data_uphold
 )
 
-formatted.data <- format_detect(exchanges)
+formatted.data <- format_detect(exchanges, list.prices = list.prices)
 ```
 
 # Adjusted Cost Base

@@ -2,16 +2,7 @@ testthat::skip_on_cran()
 
 options(scipen = 999)
 
-# Prepare list of coins ####
-my.coins <- c(
-  "bitcoin", "ethereum", "cardano", "cronos", "litecoin",
-  "usd-coin", "binance-usd", "celsius", "presearch",
-  "ethereum-pow", "basic-attention-token"
-)
-
-USD2CAD.table <- cur2CAD_table()
-
-list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")
+list.prices <- list_prices_example
 
 # Tests start here ####
 
@@ -189,3 +180,4 @@ test_that("CDC exchange trades", {
   formatted.CDC.exchange.trades <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.CDC.exchange.trades)
 })
+

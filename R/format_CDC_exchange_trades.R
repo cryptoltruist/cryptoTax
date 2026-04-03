@@ -78,13 +78,11 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   data <- data %>%
     mutate(
       pair.currency2 = case_when(
-        .data$fees.currency == "USD_Stable_Coin" & pair.currency2 == "USD" ~ "USDC",
+        .data$fees.currency == "USD_Stable_Coin" & .data$pair.currency2 == "USD" ~ "USDC",
         .default = .data$pair.currency2
       ),
-      fees.currency = case_match(
-        .data$fees.currency,
-        "USD_Stable_Coin" ~ "USDC",
-        .default = .data$fees.currency
+      fees.currency = ifelse(
+        .data$fees.currency == "USD_Stable_Coin", "USDC", .data$fees.currency
       )
     )
 

@@ -10,7 +10,10 @@ match_prices(
   start.date = "2021-01-01",
   list.prices = NULL,
   force = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  coins.list = NULL,
+  coin_hist = NULL,
+  USD2CAD.table = NULL
 )
 }
 \arguments{
@@ -25,6 +28,16 @@ not the ticker, see \code{\link[=prepare_list_prices]{prepare_list_prices()}} fo
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
+
+\item{verbose}{Logical; whether to print progress messages.}
+
+\item{coins.list}{Optional explicit output from \code{\link[crypto2:crypto_list]{crypto2::crypto_list()}}.}
+
+\item{coin_hist}{Optional explicit historical price data to transform into
+a \code{list.prices} object.}
+
+\item{USD2CAD.table}{Optional explicit USD/CAD rate table to use when
+converting USD-denominated history to CAD.}
 }
 \value{
 A data frame, with the following added columns: spot.rate.

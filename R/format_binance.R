@@ -64,7 +64,7 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
         .data$description %in% c(
           "Buy", "Sell", "Fee", "Stablecoins Auto-Conversion"
         ) &
-          quantity > 0 ~ "buy",
+          .data$quantity > 0 ~ "buy",
         .data$description %in% c(
           "Buy", "Sell", "Fee", "Stablecoins Auto-Conversion"
         ) &
@@ -101,7 +101,7 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
     filter(.data$description == "Fee") %>% 
     mutate(fees = .data$total.price,
            fees.quantity = .data$quantity,
-           fees.currency = currency)
+           fees.currency = .data$currency)
 
   BUY <- data %>%
     filter(.data$transaction == "buy")

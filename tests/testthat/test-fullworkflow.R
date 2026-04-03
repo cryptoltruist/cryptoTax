@@ -1,20 +1,11 @@
-test_that("full workflow", {
-  testthat::skip_on_cran()
+ test_that("full workflow", {
+   testthat::skip_on_cran()
 
-  options(scipen = 999)
+   options(scipen = 999)
 
-  # Prepare list of coins ####
-  my.coins <- c(
-    "bitcoin", "ethereum", "cardano", "cronos", "litecoin",
-    "usd-coin", "binance-usd", "celsius", "presearch",
-    "ethereum-pow", "basic-attention-token"
-  )
+   list.prices <- list_prices_example
 
-  USD2CAD.table <- cur2CAD_table()
-
-  list.prices <- prepare_list_prices(my.coins, start.date = "2021-01-01")
-
-  # Generate string list of exchanges ####
+   # Generate string list of exchanges ####
   exchanges <- paste0(c(
     "adalite",
     "binance",
@@ -119,3 +110,4 @@ test_that("full workflow", {
 
   unlink("full_report_2021.html")
 })
+

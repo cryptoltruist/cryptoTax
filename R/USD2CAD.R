@@ -1,3 +1,20 @@
+.resolve_usd2cad_table <- function(force = FALSE, USD2CAD.table = NULL) {
+  if (!is.null(USD2CAD.table)) {
+    return(USD2CAD.table)
+  }
+
+  if (isTRUE(force) || !exists("USD2CAD.table")) {
+    return(cur2CAD_table())
+  }
+
+  message(
+    "Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. ",
+    "To force a fresh download, use argument 'force = TRUE'."
+  )
+
+  get("USD2CAD.table", inherits = TRUE)
+}
+
 #' @title Convert USD to CAD (Bank of Canada rates)
 #'
 #' @description This function allows you to convert USD to CAD.
@@ -9,6 +26,8 @@
 #' @param conversion What to convert to
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @param USD2CAD.table Optional explicit exchange-rate table to use instead
+#' of relying on a cached session object.
 #' @return A data frame, with the following columns: date, CAD.rate.
 #' @export
 #' @examples
@@ -16,17 +35,17 @@
 #' USD2CAD(formatted.dates)
 #' @importFrom dplyr %>% filter pull inner_join mutate right_join rename_with
 #' @importFrom rlang .data
-
 USD2CAD <- function(data,
                     conversion = "USD",
-                    force = FALSE) {
-  if (isTRUE(force) || !exists("USD2CAD.table")) {
-    USD2CAD.table <- cur2CAD_table()
-  } else {
-    message(
-      "Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. ",
-      "To force a fresh download, use argument 'force = TRUE'."
-    )
+                    force = FALSE,
+                    USD2CAD.table = NULL) {
+  USD2CAD.table <- .resolve_usd2cad_table(
+    force = force,
+    USD2CAD.table = USD2CAD.table
+  )
+
+  if (is.null(USD2CAD.table)) {
+    return(NULL)
   }
 
   # Combine datasets

@@ -26,6 +26,10 @@ report_summary(
 
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
 
+\item{slug}{Optional explicit slug vector used when preparing prices.}
+
+\item{start.date}{Optional explicit start date used when preparing prices.}
+
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
 }

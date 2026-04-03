@@ -43,6 +43,7 @@ our purposes since it can be withdrawn as USDC and it is easier to
 calculate prices with CoinMarketCap and later capital gains and so on.
 }
 \examples{
+\dontrun{
 format_CDC_exchange(data_CDC_exchange_trades)
-# Still have to create data_CDC_exchange_trades dataset...
+}
 }

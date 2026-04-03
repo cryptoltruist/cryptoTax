@@ -6,6 +6,8 @@
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param slug Optional explicit slug vector used when preparing prices.
+#' @param start.date Optional explicit start date used when preparing prices.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A summary data frame, containing at least the following columns:
@@ -15,30 +17,23 @@
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report_summary(formatted.ACB, today.data = FALSE)
-#' @importFrom dplyr %>% filter mutate group_by ungroup select summarize 
+#' @importFrom dplyr %>% filter mutate group_by ungroup select summarize
 #' slice_tail arrange add_row rename
 #' @importFrom rlang .data
 
-report_summary <- function(formatted.ACB, 
-                           today.data = TRUE, 
+report_summary <- function(formatted.ACB,
+                           today.data = TRUE,
                            tax.year = "all",
-                           local.timezone = Sys.timezone(), 
-                           list.prices = NULL, 
+                           local.timezone = Sys.timezone(),
+                           list.prices = NULL,
                            slug = NULL,
                            start.date = NULL,
                            force = FALSE) {
-  if (today.data == TRUE & curl::has_internet() == FALSE) {
+  if (isTRUE(today.data) && is.null(list.prices) && isFALSE(curl::has_internet())) {
     message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
     today.data <- FALSE
   }
-  
-  list.prices <- prepare_list_prices_slugs(
-    formatted.ACB,
-    list.prices = list.prices,
-    slug = slug,
-    start.date = start.date)
 
-  # Remove CAD
   formatted.ACB <- formatted.ACB %>%
     filter(.data$currency != "CAD")
 
@@ -48,7 +43,6 @@ report_summary <- function(formatted.ACB,
     slice_tail() %>%
     select("date", "currency", "total.quantity", "ACB.share", "ACB")
 
-  # Filter for year, if necessary!
   if (tax.year != "all") {
     formatted.ACB.year <- formatted.ACB %>%
       mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
@@ -62,7 +56,6 @@ report_summary <- function(formatted.ACB,
     formatted.ACB.year <- formatted.ACB
   }
 
-  # Total gains
   gains <- formatted.ACB.year %>%
     filter(.data$gains > 0) %>%
     ungroup() %>%
@@ -71,7 +64,6 @@ report_summary <- function(formatted.ACB,
 
   gains <- formatC_2(gains)
 
-  # Total losses
   losses <- formatted.ACB.year %>%
     filter(.data$gains < 0) %>%
     ungroup() %>%
@@ -80,24 +72,34 @@ report_summary <- function(formatted.ACB,
 
   losses <- formatC_2(losses)
 
-  # Get total capital gains (ACB.gains)
   net <- sum(formatted.ACB.year$gains, na.rm = TRUE)
   net.numeric <- net
-
   net <- formatC_2(net)
 
-  # total cost separately to accommodate today.data argument.
   total.cost <- formatC_2(sum(ACB.list$ACB))
-  
-  # Revenues
+
   revenue <- formatted.ACB.year %>%
     filter(.data$transaction == "revenue") %>%
     ungroup() %>%
     select("value") %>%
     summarize(revenue = sum(.data$value))
-  
-  if (today.data == TRUE) {
-    # Make warning for GB, NFTs, etc.
+
+  if (isTRUE(today.data) && is.null(list.prices)) {
+    list.prices <- prepare_list_prices_slugs(
+      formatted.ACB,
+      list.prices = list.prices,
+      slug = slug,
+      start.date = start.date,
+      force = force
+    )
+  }
+
+  if (isTRUE(today.data) && (is.null(list.prices) || is.null(list.prices$date2))) {
+    message("Could not reach pricing data at this time. The today.data argument has been set to `FALSE` automatically.")
+    today.data <- FALSE
+  }
+
+  if (isTRUE(today.data)) {
     if (any(ACB.list$currency %in% "GB")) {
       message(
         "1. GB transactions are excluded from today's data because it is not listed on CoinMarketCap."
@@ -108,24 +110,17 @@ report_summary <- function(formatted.ACB,
         "2. NFTs are excluded from today's data because NFTs are not listed individually on CoinMarketCap."
       )
     }
-    
-    list.prices <- prepare_list_prices_slugs(
-      formatted.ACB,
-      list.prices = list.prices,
-      slug = slug,
-      start.date = start.date)
-    
-    # if (is.null(list.prices)) {
-    #   my.coins <- formatted.ACB %>% 
-    #     select(currency) %>% 
-    #     unique %>% 
-    #     unlist()
-    #   my.coins <- popular_slugs %>% 
-    #     filter(currency == my.coins) %>% 
-    #     select(slug)
-    #   list.prices <- prepare_list_prices(my.coins, start.date = lubridate::today())
-    # }
-    
+
+    if (is.null(list.prices)) {
+      list.prices <- prepare_list_prices_slugs(
+        formatted.ACB,
+        list.prices = list.prices,
+        slug = slug,
+        start.date = start.date,
+        force = force
+      )
+    }
+
     rates <- ACB.list %>%
       filter(
         .data$currency != "GB",
@@ -135,9 +130,9 @@ report_summary <- function(formatted.ACB,
         date.temp = .data$date,
         date = last(list.prices$date2)
       )
-    
+
     rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
-    
+
     message("Date of current prices: ", last(list.prices$date2))
 
     rates <- rates %>%
@@ -178,7 +173,6 @@ report_summary <- function(formatted.ACB,
     revenue <- formatC_2(revenue)
     all.time.up.revenue <- paste0(formatC_2(all.time.up.revenue), "%")
 
-    # Get all nicely
     temp <- t(data.frame(
       gains, losses, net, total.cost,
       value.today, unrealized.gains,
@@ -188,8 +182,7 @@ report_summary <- function(formatted.ACB,
     ))
   }
 
-  if (today.data == FALSE) {
-    # Get all nicely
+  if (isFALSE(today.data)) {
     temp <- t(data.frame(gains, losses, net, total.cost, revenue))
   }
 

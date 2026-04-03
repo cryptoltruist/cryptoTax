@@ -5,7 +5,7 @@
 \alias{cur2CAD_table}
 \title{Convert USD to CAD (Bank of Canada rates)}
 \usage{
-USD2CAD(data, conversion = "USD", force = FALSE)
+USD2CAD(data, conversion = "USD", force = FALSE, USD2CAD.table = NULL)
 
 cur2CAD_table()
 }
@@ -16,6 +16,9 @@ cur2CAD_table()
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
+
+\item{USD2CAD.table}{Optional explicit exchange-rate table to use instead
+of relying on a cached session object.}
 }
 \value{
 A data frame, with the following columns: date, CAD.rate.

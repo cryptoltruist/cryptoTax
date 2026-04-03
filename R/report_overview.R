@@ -6,8 +6,12 @@
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param slug Optional explicit slug vector used when preparing prices.
+#' @param start.date Optional explicit start date used when preparing prices.
+#' @param verbose Logical; whether to print progress messages.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @param verbose Logical; whether to print progress messages.
 #' @return A summary data frame, containing at least the following columns:
 #' date.last, currency, total.quantity, cost.share, total.cost, gains,
 #' losses, net, currency.
@@ -71,6 +75,22 @@ report_overview <- function(formatted.ACB,
     filter(date == max(.data$date)) %>%
     slice_tail() %>%
     select("date", "currency", "total.quantity", "ACB.share", "ACB")
+
+  if (isTRUE(today.data) && is.null(list.prices)) {
+    list.prices <- prepare_list_prices_slugs(
+      formatted.ACB,
+      list.prices = list.prices,
+      slug = slug,
+      start.date = start.date,
+      verbose = verbose)
+  }
+
+  if (isTRUE(today.data) && (is.null(list.prices) || is.null(list.prices$date2))) {
+    if (isTRUE(verbose)) {
+      message("Could not reach pricing data at this time. The today.data argument has been set to `FALSE` automatically.")
+    }
+    today.data <- FALSE
+  }
 
   if (today.data == TRUE) {
     # Make warning for GB, NFTs, etc.
@@ -211,3 +231,4 @@ report_overview <- function(formatted.ACB,
   
   bind_rows(full, last.col)
 }
+
