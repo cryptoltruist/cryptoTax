@@ -199,6 +199,11 @@
 - [`get_sup_losses()`](https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.md)
   : Get superficial loss amounts
 
+- [`list_prices_example`](https://cryptoltruist.github.io/cryptoTax/reference/list_prices_example.md)
+  :
+
+  Offline example `list.prices` fixture
+
 - [`listby_coin()`](https://cryptoltruist.github.io/cryptoTax/reference/listby_coin.md)
   : List transactions by coin
 

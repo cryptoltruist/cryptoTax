@@ -39,6 +39,14 @@ report_summary(
 
   A `list.prices` object from which to fetch coin prices.
 
+- slug:
+
+  Optional explicit slug vector used when preparing prices.
+
+- start.date:
+
+  Optional explicit start date used when preparing prices.
+
 - force:
 
   Whether to force recreating `list.prices` even though it already
@@ -55,7 +63,6 @@ Amount, currency.
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_summary(formatted.ACB, today.data = FALSE)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 #>         Type   Amount currency
 #> 1   tax.year      all      CAD
 #> 2      gains     5.81      CAD

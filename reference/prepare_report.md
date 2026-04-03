@@ -40,14 +40,15 @@ pie_exchange, pie_revenue.
 ## Examples
 
 ``` r
-list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+list.prices <- list_prices_example
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-x <- prepare_report(formatted.ACB, list.prices = list.prices)
-#> Date of current prices: 2026-03-29
-#> Date of current prices: 2026-03-29
-x$proceeds
+if (!is.null(list.prices)) {
+  x <- prepare_report(formatted.ACB, list.prices = list.prices)
+  x$proceeds
+}
+#> Date of current prices: 2023-12-31
+#> Date of current prices: 2023-12-31
 #>     type proceeds ACB.total    gains
 #> 1  Gains 31.26847  25.45409 5.814382
 #> 2 Losses  0.00000   0.00000 0.000000

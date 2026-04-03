@@ -9,7 +9,7 @@ is not available, the last known value is used instead.
 ## Usage
 
 ``` r
-USD2CAD(data, conversion = "USD", force = FALSE)
+USD2CAD(data, conversion = "USD", force = FALSE, USD2CAD.table = NULL)
 
 cur2CAD_table()
 ```
@@ -29,6 +29,11 @@ cur2CAD_table()
   Whether to force recreating `list.prices` even though it already
   exists (e.g., if you added new coins or new dates).
 
+- USD2CAD.table:
+
+  Optional explicit exchange-rate table to use instead of relying on a
+  cached session object.
+
 ## Value
 
 A data frame, with the following columns: date, CAD.rate.
@@ -38,14 +43,8 @@ A data frame, with the following columns: date, CAD.rate.
 ``` r
 formatted.dates <- format_shakepay(data_shakepay)[1]
 USD2CAD(formatted.dates)
-#>                  date CAD.rate
-#> 1 2021-05-07 14:50:41   1.2156
-#> 2 2021-05-08 12:12:57   1.2156
-#> 3 2021-05-09 12:22:07   1.2156
-#> 4 2021-05-21 12:47:14   1.2061
-#> 5 2021-06-11 12:03:31   1.2148
-#> 6 2021-06-23 12:21:49   1.2287
-#> 7 2021-07-10 00:52:19   1.2476
+#> Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
+#> NULL
 x <- cur2CAD_table()
 head(x)
 #>         date    AUD    BRL    CNY    EUR    HKD     INR     IDR     JPY    MYR

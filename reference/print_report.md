@@ -49,18 +49,19 @@ An HTML page containing a crypto tax report.
 
 ``` r
 # \donttest{
-list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+list.prices <- list_prices_example
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-print_report(formatted.ACB,
-  list.prices = list.prices,
-  tax.year = 2021, name = "Mr. Cryptoltruist"
-)
+if (!is.null(list.prices) && !is.null(list.prices$date2)) {
+  print_report(formatted.ACB,
+    list.prices = list.prices,
+    tax.year = 2021, name = "Mr. Cryptoltruist"
+  )
+}
 #> gains, losses, and net have been filtered for tax year 2021
-#> Date of current prices: 2026-03-29
+#> Date of current prices: 2023-12-31
 #> gains, losses, and net have been filtered for tax year 2021 (time zone = America/Montreal)
-#> Date of current prices: 2026-03-29
+#> Date of current prices: 2023-12-31
 #> Note: proceeds have been filtered for tax year 2021
 #> Note: superficial losses have been filtered for tax year 2021
 #> Note: revenues have been filtered for tax year 2021
@@ -89,7 +90,7 @@ print_report(formatted.ACB,
 #> 20/21 [unnamed-chunk-1]
 #> 21/21                  
 #> output file: full_report.knit.md
-#> /opt/hostedtoolcache/pandoc/3.1.11/x64/pandoc +RTS -K512m -RTS full_report.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/runner/work/cryptoTax/cryptoTax/docs/reference/full_report_2021.html --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /home/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/RtmpTOhL1z/rmarkdown-str1d3814231a81.html 
+#> /opt/hostedtoolcache/pandoc/3.1.11/x64/pandoc +RTS -K512m -RTS full_report.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/runner/work/cryptoTax/cryptoTax/docs/reference/full_report_2021.html --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /home/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/RtmpKHWu3p/rmarkdown-str1c6035f64e0f.html 
 #> 
 #> Output created: full_report_2021.html
 # }

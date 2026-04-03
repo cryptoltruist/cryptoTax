@@ -1,6 +1,9 @@
 # Prepare the list of coins for prices
 
-Prepare the list of coins for prices.
+The
+[crypto2::crypto_history](https://www.sebastianstoeckl.com/crypto2/reference/crypto_history.html)
+API is at times a bit capricious. You might need to try a few times
+before it processes correctly and without errors.
 
 ## Usage
 
@@ -10,7 +13,11 @@ prepare_list_prices(
   start.date,
   end.date = lubridate::now("UTC"),
   force = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  list.prices = NULL,
+  coins.list = NULL,
+  coin_hist = NULL,
+  USD2CAD.table = NULL
 )
 
 add_popular_slugs(data, slug_dictionary = popular_slugs)
@@ -20,7 +27,11 @@ prepare_list_prices_slugs(
   list.prices = NULL,
   slug = NULL,
   start.date = NULL,
-  verbose = TRUE
+  force = FALSE,
+  verbose = TRUE,
+  coins.list = NULL,
+  coin_hist = NULL,
+  USD2CAD.table = NULL
 )
 
 popular_slugs
@@ -46,13 +57,36 @@ An object of class `data.frame` with 31 rows and 2 columns.
 
 - end.date:
 
-  What date to end reporting prices for. the `list.prices` object symbol
-  for a given coin is shared by multiple coins (see details).
+  What date to end reporting prices for.
 
 - force:
 
   Whether to force recreating `list.prices` even though it already
   exists (e.g., if you added new coins or new dates).
+
+- verbose:
+
+  Logical; whether to print progress messages.
+
+- list.prices:
+
+  Optional explicit `list.prices` object to reuse instead of relying on
+  a cached session object.
+
+- coins.list:
+
+  Optional explicit output from
+  [`crypto2::crypto_list()`](https://www.sebastianstoeckl.com/crypto2/reference/crypto_list.html).
+
+- coin_hist:
+
+  Optional explicit historical price data to transform into a
+  `list.prices` object.
+
+- USD2CAD.table:
+
+  Optional explicit USD/CAD rate table to use when converting
+  USD-denominated history to CAD.
 
 - data:
 
@@ -75,11 +109,6 @@ time_close, time_high, time_low, spot.rate2, currency, date2.
 
 ## Details
 
-The
-[crypto2::crypto_history](https://www.sebastianstoeckl.com/crypto2/reference/crypto_history.html)
-API is at times a bit capricious. You might need to try a few times
-before it processes correctly and without errors.
-
 Sometimes, `list.prices` (through coinmarketcap) will contain symbols
 for a given coin (e.g., ETH) that is actually shared by multiple coins,
 thus, the necessity of the `remove.coins.slug` argument. In these cases,
@@ -95,20 +124,6 @@ your own list, should you wish to.
 ``` r
 my.coins <- c("bitcoin", "ethereum")
 my.list.prices <- prepare_list_prices(slug = my.coins, start.date = "2023-01-01")
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 head(my.list.prices)
-#> # A tibble: 6 × 23
-#>      id slug    name    symbol timestamp           ref_cur_id ref_cur_name
-#>   <int> <chr>   <chr>   <chr>  <dttm>              <chr>      <chr>       
-#> 1     1 bitcoin Bitcoin BTC    2021-01-01 23:59:59 2781       USD         
-#> 2     1 bitcoin Bitcoin BTC    2021-01-02 23:59:59 2781       USD         
-#> 3     1 bitcoin Bitcoin BTC    2021-01-03 23:59:59 2781       USD         
-#> 4     1 bitcoin Bitcoin BTC    2021-01-04 23:59:59 2781       USD         
-#> 5     1 bitcoin Bitcoin BTC    2021-01-05 23:59:59 2781       USD         
-#> 6     1 bitcoin Bitcoin BTC    2021-01-06 23:59:59 2781       USD         
-#> # ℹ 16 more variables: time_open <dttm>, time_close <dttm>, time_high <dttm>,
-#> #   time_low <dttm>, open <dbl>, high <dbl>, low <dbl>, close <dbl>,
-#> #   volume <dbl>, market_cap <dbl>, circulating_supply <dbl>,
-#> #   spot.rate_USD <dbl>, CAD.rate <dbl>, spot.rate2 <dbl>, currency <chr>,
-#> #   date2 <date>
+#> NULL
 ```

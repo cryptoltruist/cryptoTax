@@ -35,12 +35,11 @@ Line
 ## Examples
 
 ``` r
-my.list.prices <- prepare_list_prices(slug = "bitcoin", start.date = "2021-01-01")
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+my.list.prices <- list_prices_example
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)
-#> Date of current prices: 2026-03-29
+#> Date of current prices: 2023-12-31
 sup.losses <- get_sup_losses(formatted.ACB, 2021)
 #> Note: superficial losses have been filtered for tax year 2021
 table.revenues <- report_revenues(formatted.ACB, 2021)

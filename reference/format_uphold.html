@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,33 +71,10 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_uphold</span><span class="op">(</span><span class="va">data_uphold</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency    quantity total.price   spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-01-07 02:40:31      BAT  1.59081275   0.5126760   0.3222730     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-02-09 14:26:49      BAT 12.69812163   6.8809223   0.5418851     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-03-06 21:32:36      BAT  0.37591275   0.3207390   0.8532272     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-03-07 21:46:57      LTC  0.24129740  57.1230888 236.7331300         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-03-07 21:46:57      BAT 52.59871206  57.1230888   1.0860169        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-03-07 21:54:09      LTC  0.00300000   0.7101994 236.7331300        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-04-05 12:22:00      BAT  8.52198415  13.1950331   1.5483522     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-04-06 03:41:42      LTC  0.00300000   0.8652138 288.4045856        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-04-06 04:47:00      LTC  0.03605981  10.3998152 288.4045856         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-04-06 04:47:00      BAT  8.52198415  10.3998152   1.2203514        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-05-11 07:12:24      BAT  0.47521985   0.7777259   1.6365602     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-06-09 04:52:23      BAT  0.67207415   0.5577482   0.8298909     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    description         comment revenue.type exchange               rate.source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        trade         BAT-LTC         &lt;NA&gt;   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        trade         BAT-LTC         &lt;NA&gt;   uphold coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          out withdrawal fees         &lt;NA&gt;   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          out withdrawal fees         &lt;NA&gt;   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        trade         BAT-LTC         &lt;NA&gt;   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       trade         BAT-LTC         &lt;NA&gt;   uphold coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11          in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12          in            &lt;NA&gt;     airdrops   uphold             coinmarketcap</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

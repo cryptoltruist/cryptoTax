@@ -41,10 +41,22 @@ report_overview(
 
   A `list.prices` object from which to fetch coin prices.
 
+- slug:
+
+  Optional explicit slug vector used when preparing prices.
+
+- start.date:
+
+  Optional explicit start date used when preparing prices.
+
 - force:
 
   Whether to force recreating `list.prices` even though it already
   exists (e.g., if you added new coins or new dates).
+
+- verbose:
+
+  Logical; whether to print progress messages.
 
 ## Value
 

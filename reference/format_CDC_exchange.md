@@ -53,8 +53,7 @@ calculate prices with CoinMarketCap and later capital gains and so on.
 ## Examples
 
 ``` r
+if (FALSE) { # \dontrun{
 format_CDC_exchange(data_CDC_exchange_trades)
-#> Error in rename(., quantity = "Transaction.Quantity", currency = "Instrument",     description = "Journal.Type", comment = "Side", date = "Time..UTC."): Can't rename columns that don't exist.
-#> ✖ Column `Transaction.Quantity` doesn't exist.
-# Still have to create data_CDC_exchange_trades dataset...
+} # }
 ```

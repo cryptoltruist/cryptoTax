@@ -9,7 +9,7 @@ ACB processing."><meta property="og:image" content="https://cryptoltruist.github
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,94 +86,10 @@ your time frame.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">format_binance</span><span class="op">(</span><span class="va">data_binance</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency   quantity  total.price   spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-05-29 17:07:20      LTC 2.53200000 5.220450e+02  206.178896         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-05-29 17:07:20      ETH 0.19521000 5.220450e+02 2674.273677        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-05-29 17:07:20      LTC 2.41210000 4.973241e+02  206.178896         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-05-29 17:07:20      ETH 0.14123140 4.973241e+02 3521.342385        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-29 17:07:20      LTC 1.45120000 2.992068e+02  206.178896         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-05-29 17:07:20      ETH 0.11240000 2.992068e+02 2661.982329        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-05-29 17:07:20      LTC 1.42100000 2.929802e+02  206.178896         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-29 17:07:20      ETH 0.10512900 2.929802e+02 2786.863864        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-05-29 17:07:20      LTC 0.30000000 6.185367e+01  206.178896         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-05-29 17:07:20      ETH 0.00899120 6.185367e+01 6879.356346        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-05-29 17:07:20      LTC 0.27000000 5.566830e+01  206.178896         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-05-29 17:07:20      ETH 0.00612410 5.566830e+01 9090.038030        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 2021-05-29 17:07:20      LTC 0.00202500 4.175123e-01  206.178896     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 2021-05-29 17:07:20      LTC 0.00127520 2.629193e-01  206.178896     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 2021-05-29 17:07:20      LTC 0.00113100 2.331883e-01  206.178896     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 2021-05-29 17:07:20      LTC 0.00049230 1.015019e-01  206.178896     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 2021-05-29 17:07:20      LTC 0.00007000 1.443252e-02  206.178896     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 2021-05-29 17:07:20      LTC 0.00005000 1.030894e-02  206.178896     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 2021-05-29 18:12:55      ETH 0.44124211 1.251509e+03 2836.331215         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 2021-05-29 18:12:55      LTC 1.60000000 1.251509e+03  782.192981        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 2021-05-29 18:12:55      ETH 0.42124000 1.194776e+03 2836.331215         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 2021-05-29 18:12:55      LTC 1.23000000 1.194776e+03  971.362733        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 2021-05-29 18:12:55      ETH 0.00021470 6.089603e-01 2836.331215     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 2021-05-29 18:12:55      ETH 0.00009251 2.623890e-01 2836.331215     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25 2021-11-05 04:32:23     BUSD 0.10512330 1.309410e-01    1.245594     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26 2022-11-17 11:54:25     ETHW 0.00012050 6.093518e-04    5.056861     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27 2022-11-27 08:05:35     USDC 5.77124200 7.721372e+00    1.337905        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28 2022-11-27 08:05:35     BUSD 5.77124200 7.721205e+00    1.337876         buy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          fees fees.quantity fees.currency                   description comment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1.53005359   0.007421000           LTC                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          NA            NA          &lt;NA&gt;                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.19831174   0.005812000           LTC                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          NA            NA          &lt;NA&gt;                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.11769579   0.005421000           LTC                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          NA            NA          &lt;NA&gt;                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.64389669   0.003123000           LTC                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          NA            NA          &lt;NA&gt;                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.06185367   0.000300000           LTC                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         NA            NA          &lt;NA&gt;                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0.04329757   0.000210000           LTC                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         NA            NA          &lt;NA&gt;                           Buy    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 6.02188288   0.002123124           ETH                          Sell    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20         NA            NA          &lt;NA&gt;                          Sell    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 1.73696924   0.000612400           ETH                          Sell    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22         NA            NA          &lt;NA&gt;                          Sell    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24         NA            NA          &lt;NA&gt;             Referral Kickback    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25         NA            NA          &lt;NA&gt; Simple Earn Flexible Interest    Earn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26         NA            NA          &lt;NA&gt;                  Distribution    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27         NA            NA          &lt;NA&gt;   Stablecoins Auto-Conversion    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28         NA            NA          &lt;NA&gt;   Stablecoins Auto-Conversion    Spot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type exchange               rate.source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11         &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19         &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20         &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21         &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22         &lt;NA&gt;  binance coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24      rebates  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    interests  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26        forks  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27         &lt;NA&gt;  binance             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28         &lt;NA&gt;  binance             coinmarketcap</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

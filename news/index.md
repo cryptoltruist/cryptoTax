@@ -1,5 +1,24 @@
 # Changelog
 
+## cryptoTax 0.0.9
+
+**Improvements:**
+
+- Hardened pricing and FX handling so key workflows can accept explicit
+  pricing inputs instead of relying only on hidden session state.
+- Added a built-in offline `list.prices` fixture dataset for examples,
+  reporting, and tests.
+- Improved offline behavior for reporting, examples, tests, and
+  vignettes when live pricing data is unavailable.
+- Expanded deterministic test coverage around
+  [`USD2CAD()`](https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.md),
+  price preparation, reporting, exchange formatting, and the full
+  workflow.
+- Refreshed test snapshots so the main integration paths now run against
+  a deterministic offline pricing baseline.
+- Cleaned `R CMD check` issues, updated package metadata, and now
+  declare `R (>= 4.1.0)` explicitly.
+
 ## cryptoTax 0.0.7
 
 From the `crypto2` package update: \> fiat_list() has been modified and
