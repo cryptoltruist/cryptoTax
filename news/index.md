@@ -1,6 +1,6 @@
 # Changelog
 
-## cryptoTax 0.0.9
+## cryptoTax 0.1.0
 
 **Improvements:**
 
@@ -16,6 +16,9 @@
   workflow.
 - Refreshed test snapshots so the main integration paths now run against
   a deterministic offline pricing baseline.
+- Continued the internal pricing and FX cleanup by centralizing
+  `list.prices` and `USD2CAD.table` preparation paths while preserving
+  compatibility.
 - Cleaned `R CMD check` issues, updated package metadata, and now
   declare `R (>= 4.1.0)` explicitly.
 

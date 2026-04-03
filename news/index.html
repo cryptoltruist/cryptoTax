@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,13 +37,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.9" id="cryptotax-009">cryptoTax 0.0.9<a class="anchor" aria-label="anchor" href="#cryptotax-009"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="cryptotax-010">cryptoTax 0.1.0<a class="anchor" aria-label="anchor" href="#cryptotax-010"></a></h2>
 <p><strong>Improvements:</strong></p>
 <ul><li>Hardened pricing and FX handling so key workflows can accept explicit pricing inputs instead of relying only on hidden session state.</li>
 <li>Added a built-in offline <code>list.prices</code> fixture dataset for examples, reporting, and tests.</li>
 <li>Improved offline behavior for reporting, examples, tests, and vignettes when live pricing data is unavailable.</li>
 <li>Expanded deterministic test coverage around <code><a href="../reference/USD2CAD.html">USD2CAD()</a></code>, price preparation, reporting, exchange formatting, and the full workflow.</li>
 <li>Refreshed test snapshots so the main integration paths now run against a deterministic offline pricing baseline.</li>
+<li>Continued the internal pricing and FX cleanup by centralizing <code>list.prices</code> and <code>USD2CAD.table</code> preparation paths while preserving compatibility.</li>
 <li>Cleaned <code>R CMD check</code> issues, updated package metadata, and now declare <code>R (&gt;= 4.1.0)</code> explicitly.</li>
 </ul></div>
     <div class="section level2">
