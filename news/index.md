@@ -1,5 +1,19 @@
 # Changelog
 
+## cryptoTax 0.1.0.1
+
+**Improvements:**
+
+- Continued the internal maintenance cleanup of
+  [`match_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/match_prices.md),
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md),
+  and
+  [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md)
+  to make core pricing, formatter dispatch, and cost-base code easier to
+  maintain without changing package behavior.
+- Kept the package fully green after the refactor batch, including
+  `R CMD check` and the built-package test suite.
+
 ## cryptoTax 0.1.0
 
 **Improvements:**
