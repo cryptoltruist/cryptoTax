@@ -34,47 +34,15 @@ format_coinbase <- function(data) {
 
   # Reverse sign of fees
   data$fees <- abs(data$fees)
-
-  # Create a "sell" object
-  # For consistency with other functions, the fee is on the buy not the sell
-  SELL <- data %>%
-    filter(.data$description == "Convert") %>%
-    mutate(
-      transaction = "sell",
-      fees = 0
-    )
-
-  # Create a "buy" object
-  BUY <- data %>%
-    filter(.data$description == "Convert") %>%
-    mutate(
-      transaction = "buy",
-      currency = stringr::word(comment, -1),
-      quantity = as.numeric(stringr::word(comment, -2)),
-      spot.rate = .data$total.price / .data$quantity
-    )
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(grepl("from Celsius Network LLC", .data$comment)) %>%
-    mutate(
-      transaction = "revenue",
-      description = "bankruptcy distribution",
-      revenue.type = "interest"
-    )
-
-  # Create a "withdrawals" object
-  WITHDRAWALS <- data %>%
-    filter(.data$description == "Send") %>%
-    mutate(
-      quantity = .data$fees,
-      total.price = .data$quantity * .data$spot.rate,
-      transaction = "sell",
-      fees = 0
-    )
+  outputs <- .format_coinbase_outputs(data)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, SELL, EARN, WITHDRAWALS) %>%
+  data <- merge_exchanges(
+    outputs$buy,
+    outputs$sell,
+    outputs$earn,
+    outputs$withdrawals
+  ) %>%
     mutate(exchange = "coinbase", rate.source = "exchange") %>%
     arrange(date, desc(.data$transaction))
 
@@ -87,4 +55,55 @@ format_coinbase <- function(data) {
 
   # Return result
   data
+}
+
+.format_coinbase_sell <- function(data) {
+  # For consistency with other functions, the fee is on the buy not the sell
+  data %>%
+    filter(.data$description == "Convert") %>%
+    mutate(
+      transaction = "sell",
+      fees = 0
+    )
+}
+
+.format_coinbase_buy <- function(data) {
+  data %>%
+    filter(.data$description == "Convert") %>%
+    mutate(
+      transaction = "buy",
+      currency = stringr::word(.data$comment, -1),
+      quantity = as.numeric(stringr::word(.data$comment, -2)),
+      spot.rate = .data$total.price / .data$quantity
+    )
+}
+
+.format_coinbase_earn <- function(data) {
+  data %>%
+    filter(grepl("from Celsius Network LLC", .data$comment)) %>%
+    mutate(
+      transaction = "revenue",
+      description = "bankruptcy distribution",
+      revenue.type = "interest"
+    )
+}
+
+.format_coinbase_withdrawals <- function(data) {
+  data %>%
+    filter(.data$description == "Send") %>%
+    mutate(
+      quantity = .data$fees,
+      total.price = .data$quantity * .data$spot.rate,
+      transaction = "sell",
+      fees = 0
+    )
+}
+
+.format_coinbase_outputs <- function(data) {
+  list(
+    buy = .format_coinbase_buy(data),
+    sell = .format_coinbase_sell(data),
+    earn = .format_coinbase_earn(data),
+    withdrawals = .format_coinbase_withdrawals(data)
+  )
 }

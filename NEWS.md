@@ -1,16 +1,20 @@
+# cryptoTax 0.1.0.6
+
+**Improvements:**
+
+- Continued the formatter cleanup across `format_CDC_exchange()` and `format_coinbase()` to make additional exchange-formatting paths easier to read and maintain without changing user-facing behavior.
+
 # cryptoTax 0.1.0.5
 
 **Improvements:**
 
 - Continued the formatter cleanup across `format_uphold()`, `format_blockfi()`, and `format_CDC_exchange_rewards()` to make medium-size exchange-formatting paths easier to maintain without changing user-facing behavior.
-- Kept the package fully green through the formatter refactor batch, including `devtools::check(document = TRUE)`.
 
 # cryptoTax 0.1.0.4
 
 **Improvements:**
 
 - Continued the formatter cleanup across `format_gemini()`, `format_CDC_exchange_trades()`, and `format_CDC()` to make larger exchange-formatting paths easier to read and maintain without changing user-facing behavior.
-- Kept the package fully green through the CDC and Gemini refactor batch, including `devtools::check(document = TRUE)`.
 
 # cryptoTax 0.1.0.3
 
@@ -18,7 +22,6 @@
 
 - Continued the formatter cleanup across `format_generic()`, `format_shakepay()`, `format_binance()`, and `format_coinsmart()` to make exchange formatting workflows easier to follow and maintain without changing user-facing behavior.
 - Continued the reporting-output cleanup by simplifying the internal structure of `tax_box()` and `tax_table()`.
-- Kept the package fully green through the formatter and tax-output refactor batch, including `devtools::check(document = TRUE)`.
 
 # cryptoTax 0.1.0.2
 
@@ -26,14 +29,12 @@
 
 - Continued a broader reporting-stack cleanup across `format_ACB()`, `report_overview()`, `report_summary()`, `report_revenues()`, `prepare_report()`, and `print_report()` to make report generation and summary logic easier to maintain without changing user-facing behavior.
 - Simplified workflow and exchange-format tests by introducing a shared example-data helper and removing brittle `eval(parse())` test paths.
-- Kept the package fully green through the reporting refactor batch, including `devtools::check(document = TRUE)`.
 
 # cryptoTax 0.1.0.1
 
 **Improvements:**
 
 - Continued the internal maintenance cleanup of `match_prices()`, `format_detect()`, and `ACB()` to make core pricing, formatter dispatch, and cost-base code easier to maintain without changing package behavior.
-- Kept the package fully green after the refactor batch, including `R CMD check` and the built-package test suite.
 
 # cryptoTax 0.1.0
 
