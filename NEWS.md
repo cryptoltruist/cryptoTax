@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.4
+
+**Improvements:**
+
+- Continued the formatter cleanup across `format_gemini()`, `format_CDC_exchange_trades()`, and `format_CDC()` to make larger exchange-formatting paths easier to read and maintain without changing user-facing behavior.
+- Kept the package fully green through the CDC and Gemini refactor batch, including `devtools::check(document = TRUE)`.
+
 # cryptoTax 0.1.0.3
 
 **Improvements:**

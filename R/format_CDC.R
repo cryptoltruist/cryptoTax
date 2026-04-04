@@ -35,34 +35,7 @@ format_CDC <- function(data) {
     "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet"
   )
 
-  # Rename columns ####
-  data <- data %>%
-    rename(
-      quantity = "Amount",
-      currency = "Currency",
-      description = "Transaction.Kind",
-      comment = "Transaction.Description",
-      date = "Timestamp..UTC."
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description",
-    description.col = "comment"
-  )
-
-  # Add single dates to dataframe ####
-  data <- data %>%
-    mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
-
-  # Correct LUNA to LUNC balance conversions
-  data <- data %>%
-    mutate(
-      currency = ifelse(.data$currency == "LUNA", "LUNC", .data$currency),
-      currency = ifelse(.data$currency == "LUNA2", "LUNA", .data$currency)
-    )
+  data <- .format_cdc_prepare_input(data, known.transactions)
 
   # Convert USD value to CAD ####
   data.tmp <- cryptoTax::USD2CAD(data)
@@ -87,8 +60,82 @@ format_CDC <- function(data) {
       total.price = .data$Native.Amount * .data$CAD.rate
     )
 
-  # Create a "buy" object ####
-  BUY <- data %>%
+  outputs <- .format_cdc_outputs(data)
+
+  # "Update as of 26 October 23: Please be informed that Crypto.com has
+  # completed the Efinity (EFI) token swap and Enjin (ENJ) coin migration.
+  # Existing EFI tokens have been converted to ENJ tokens in a 4:1 (EFI to
+  # ENJ) ratio according to the EFI balances in eligible users’ Crypto Wallet
+  # in the Crypto.com App and Spot Wallet in the Crypto.com Exchange at the
+  # time of the delist."
+  # https://crypto.com/product-news/crypto-com-supports-the-enjin-blockchain-launch
+  # Therefore this transaction admin_wallet_debited represents in a way a
+  # sell at current market price value
+
+  # Actually withdrawal fees should be like "selling at zero", so correct total.price
+  # WITHDRAWALS <- WITHDRAWALS %>%
+  #  mutate(total.price = 0)
+
+  # Merge the "buy" and "sell" objects ####
+  data <- merge_exchanges(
+    outputs$buy,
+    outputs$buy2,
+    outputs$credit,
+    outputs$earn,
+    outputs$sell,
+    outputs$sell2,
+    outputs$withdrawals
+  ) %>%
+    mutate(exchange = "CDC")
+
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
+
+  # Return result
+  data
+}
+
+.format_cdc_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      quantity = "Amount",
+      currency = "Currency",
+      description = "Transaction.Kind",
+      comment = "Transaction.Description",
+      date = "Timestamp..UTC."
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description",
+    description.col = "comment"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::as_datetime(.data$date),
+      currency = ifelse(.data$currency == "LUNA", "LUNC", .data$currency),
+      currency = ifelse(.data$currency == "LUNA2", "LUNA", .data$currency)
+    )
+}
+
+.format_cdc_tcad_rates <- function(data) {
+  data %>%
+    mutate(
+      spot.rate = ifelse(.data$currency == "TCAD", 1, .data$spot.rate),
+      total.price = ifelse(.data$currency == "TCAD",
+        .data$spot.rate * .data$quantity,
+        .data$total.price
+      )
+    )
+}
+
+.format_cdc_buy <- function(data) {
+  data %>%
     filter(.data$description == "crypto_purchase") %>%
     mutate(
       transaction = "buy",
@@ -99,9 +146,10 @@ format_CDC <- function(data) {
       "transaction", "description", "comment", "rate.source"
     ) %>%
     filter(.data$currency != "CAD")
+}
 
-  # Create a second "buy" object ####
-  BUY2 <- data %>%
+.format_cdc_buy2 <- function(data) {
+  data %>%
     filter(.data$description == "crypto_exchange") %>%
     mutate(
       currency = .data$To.Currency,
@@ -114,9 +162,10 @@ format_CDC <- function(data) {
       "transaction", "description", "comment", "rate.source"
     ) %>%
     filter(.data$currency != "CAD")
+}
 
-  # Create a "credit card purchase" object ####
-  CREDIT <- data %>%
+.format_cdc_credit <- function(data) {
+  data %>%
     filter(.data$description %in% c("viban_purchase", "recurring_buy_order")) %>%
     mutate(
       total.price = abs(.data$total.price),
@@ -129,9 +178,10 @@ format_CDC <- function(data) {
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment", "rate.source"
     )
+}
 
-  # Create a "EARN" object ####
-  EARN <- data %>%
+.format_cdc_earn <- function(data) {
+  data %>%
     filter(
       .data$description %in% c(
         "reimbursement",
@@ -165,8 +215,7 @@ format_CDC <- function(data) {
           "mobile_airtime_reward", # Pay cashback (phone top-up)
           "pay_checkout_reward", # Pay cashback (internet purchase)
           "gift_card_reward", # Pay cashback (gift card)
-          "reward.loyalty_program.trading_rebate.crypto_wallet"
-          # Rewards+ Trading Rebate
+          "reward.loyalty_program.trading_rebate.crypto_wallet" # Rewards+ Trading Rebate
         ),
         "rebates"
       ),
@@ -185,9 +234,8 @@ format_CDC <- function(data) {
         .data$revenue.type,
         .data$revenue.type %in% c(
           "transfer_cashback",
-          "rewards_platform_deposit_credited"
+          "rewards_platform_deposit_credited" # Mission Rewards Deposit
         ),
-        # Mission Rewards Deposit for last one
         "rewards"
       ),
       revenue.type = replace(
@@ -206,23 +254,12 @@ format_CDC <- function(data) {
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "revenue.type", "description", "comment", "rate.source"
-    )
+    ) %>%
+    .format_cdc_tcad_rates()
+}
 
-  # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
-  EARN <- EARN %>%
-    mutate(
-      spot.rate = ifelse(.data$currency == "TCAD",
-        1,
-        .data$spot.rate
-      ),
-      total.price = ifelse(.data$currency == "TCAD",
-        .data$spot.rate * .data$quantity,
-        .data$total.price
-      )
-    )
-
-  # Create a "sell" object ####
-  SELL <- data %>%
+.format_cdc_sell <- function(data) {
+  data %>%
     filter(.data$description %in% c(
       "crypto_viban_exchange",
       "card_top_up",
@@ -238,33 +275,12 @@ format_CDC <- function(data) {
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment", "rate.source"
-    )
+    ) %>%
+    .format_cdc_tcad_rates()
+}
 
-  # "Update as of 26 October 23: Please be informed that Crypto.com has
-  # completed the Efinity (EFI) token swap and Enjin (ENJ) coin migration.
-  # Existing EFI tokens have been converted to ENJ tokens in a 4:1 (EFI to
-  # ENJ) ratio according to the EFI balances in eligible users’ Crypto Wallet
-  # in the Crypto.com App and Spot Wallet in the Crypto.com Exchange at the
-  # time of the delist."
-  # https://crypto.com/product-news/crypto-com-supports-the-enjin-blockchain-launch
-  # Therefore this transaction admin_wallet_debited represents in a way a
-  # sell at current market price value
-
-  # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
-  SELL <- SELL %>%
-    mutate(
-      spot.rate = ifelse(.data$currency == "TCAD",
-        1,
-        .data$spot.rate
-      ),
-      total.price = ifelse(.data$currency == "TCAD",
-        .data$spot.rate * .data$quantity,
-        .data$total.price
-      )
-    )
-
-  # Create a second "sell" object for trades / exchanges ####
-  SELL2 <- data %>%
+.format_cdc_sell2 <- function(data) {
+  data %>%
     filter(.data$description %in% c("crypto_exchange")) %>%
     mutate(
       quantity = abs(.data$quantity),
@@ -275,23 +291,12 @@ format_CDC <- function(data) {
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment", "rate.source"
-    )
+    ) %>%
+    .format_cdc_tcad_rates()
+}
 
-  # Correct EARN object for TCAD! Spot.rate = 1, and correct price accordingly...
-  SELL2 <- SELL2 %>%
-    mutate(
-      spot.rate = ifelse(.data$currency == "TCAD",
-        1,
-        .data$spot.rate
-      ),
-      total.price = ifelse(.data$currency == "TCAD",
-        .data$spot.rate * .data$quantity,
-        .data$total.price
-      )
-    )
-
-  # Create a "withdrawals" object ####
-  WITHDRAWALS <- data %>%
+.format_cdc_withdrawals <- function(data) {
+  withdrawals <- data %>%
     filter(.data$description == "crypto_withdrawal") %>%
     mutate(
       withdraw.fees = case_when(
@@ -320,30 +325,26 @@ format_CDC <- function(data) {
       "transaction", "description", "comment", "rate.source"
     )
 
-  if (any(is.na(WITHDRAWALS$quantity))) {
-    WITHDRAWALS.na <- unique(WITHDRAWALS[is.na(WITHDRAWALS$quantity), "currency"])
-    WITHDRAWALS.na <- paste(WITHDRAWALS.na, collapse = ", ")
+  if (any(is.na(withdrawals$quantity))) {
+    withdrawals.na <- unique(withdrawals[is.na(withdrawals$quantity), "currency"])
+    withdrawals.na <- paste(withdrawals.na, collapse = ", ")
     warning(
       "Some withdrawal fees could not be detected automatically. ",
-      "You will have to make manual corrections for: ", WITHDRAWALS.na
+      "You will have to make manual corrections for: ", withdrawals.na
     )
   }
 
-  # Actually withdrawal fees should be like "selling at zero", so correct total.price
-  # WITHDRAWALS <- WITHDRAWALS %>%
-  #  mutate(total.price = 0)
+  withdrawals
+}
 
-  # Merge the "buy" and "sell" objects ####
-  data <- merge_exchanges(BUY, BUY2, CREDIT, EARN, SELL, SELL2, WITHDRAWALS) %>%
-    mutate(exchange = "CDC")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+.format_cdc_outputs <- function(data) {
+  list(
+    buy = .format_cdc_buy(data),
+    buy2 = .format_cdc_buy2(data),
+    credit = .format_cdc_credit(data),
+    earn = .format_cdc_earn(data),
+    sell = .format_cdc_sell(data),
+    sell2 = .format_cdc_sell2(data),
+    withdrawals = .format_cdc_withdrawals(data)
+  )
 }

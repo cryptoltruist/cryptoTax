@@ -17,29 +17,7 @@
 format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Credit", "Sell", "Buy", "Debit")
 
-  # Remove last summary row
-  data <- data %>%
-    slice(1:n() - 1)
-
-  # Rename columns
-  data <- data %>%
-    rename(
-      description = "Type",
-      comment = "Specification",
-      date = "Date"
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description",
-    description.col = "comment"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
+  data <- .format_gemini_prepare_input(data, known.transactions)
 
   # Pivot from wide to long
   amount <- data %>%
@@ -70,8 +48,8 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
       values_from = "value"
     )
   
-  fee <- cryptoTax::match_prices(fee, list.prices = list.prices, force = force)
-  
+  fee <- .format_gemini_fee_prices(fee, list.prices = list.prices, force = force)
+
   if (is.null(fee)) {
     message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
@@ -115,78 +93,14 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- full2 %>%
     rename(quantity = "Amount")
-
-  # Create a "buy" object
-  BUY <- data %>%
-    filter(
-      .data$description %in% c(
-        "Buy",
-        "Sell"
-      ),
-      .data$quantity > 0
-    ) %>%
-    mutate(
-      transaction = "buy",
-      description = .data$Symbol
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment"
-    )
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(.data$comment %in% c("Administrative Credit")) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = replace(
-        .data$comment,
-        .data$comment %in% c("Administrative Credit"),
-        "referrals"
-      )
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "revenue.type", "description", "comment"
-    )
-
-  # Create a second "earn" object
-  EARN2 <- data %>%
-    filter(.data$comment == "Deposit" & .data$currency == "BAT") %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = "airdrops"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "revenue.type", "description", "comment"
-    )
-
-  # Create a "sell" object
-  SELL <- data %>%
-    filter(
-      .data$description %in% c(
-        "Buy",
-        "Sell"
-      ),
-      .data$quantity < 0
-    ) %>%
-    mutate(
-      transaction = "sell",
-      description = .data$Symbol,
-      quantity = abs(.data$quantity)
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment"
-    )
+  outputs <- .format_gemini_outputs(data)
 
   # Gemini clearing automatically selling BAT is due to Canadian regulations
   # That Gemini could not hold BAT (among others) anymore:
   # https://www.reddit.com/r/Gemini/comments/16n27ay/canadian_regulators_important_changes_to_your/
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, EARN, EARN2, SELL) %>%
+  data <- merge_exchanges(outputs$buy, outputs$earn, outputs$earn2, outputs$sell) %>%
     mutate(exchange = "gemini")
 
   # Determine spot rate and value of coins
@@ -203,37 +117,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
       .data$total.price
     ))
 
-  # CORRECT SPOT RATE FOR COIN TO COIN TRANSACTIONS [for sales]
-  # Replace total.price first, then in a second step spot.rate
-
-  coin.prices <- data %>%
-    filter(.data$transaction %in% c("buy")) %>%
-    mutate(transaction = "sell")
-
-  # Recreate the SELL object because we need the calculated total prices
-  SELL <- data %>%
-    filter(.data$transaction %in% c("sell"))
-
-  # These are the prices I want to replace
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"]
-
-  # These are the correct prices
-  coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
-
-  # Let's replace them
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
-    coin.prices$date %in% SELL$date
-  ), "total.price"]
-
-  # Now let's recalculate spot.rate
-  SELL <- SELL %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-
-  # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
-
-  # Replace these transactions in the main dataframe
-  data[which(data$transaction == "sell"), ] <- SELL
+  data <- .format_gemini_apply_sell_prices(data)
 
   # Arrange in correct order and remove CAD buys
   data <- data %>%
@@ -250,5 +134,132 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
     as.data.frame()
 
   # Return result
+  data
+}
+
+.format_gemini_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    slice(1:n() - 1) %>%
+    rename(
+      description = "Type",
+      comment = "Specification",
+      date = "Date"
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description",
+    description.col = "comment"
+  )
+
+  data %>%
+    mutate(date = lubridate::as_datetime(.data$date))
+}
+
+.format_gemini_fee_prices <- function(fee, list.prices, force) {
+  fee <- cryptoTax::match_prices(fee, list.prices = list.prices, force = force)
+  if (is.null(fee)) {
+    return(NULL)
+  }
+
+  fee %>%
+    mutate(
+      fees.quantity = abs(.data$Fee),
+      fees = .data$fees.quantity * .data$spot.rate,
+      fees.currency = .data$currency
+    )
+}
+
+.format_gemini_buy <- function(data) {
+  data %>%
+    filter(
+      .data$description %in% c("Buy", "Sell"),
+      .data$quantity > 0
+    ) %>%
+    mutate(
+      transaction = "buy",
+      description = .data$Symbol
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "fees", "fees.quantity", "fees.currency", "description", "comment"
+    )
+}
+
+.format_gemini_earn <- function(data) {
+  data %>%
+    filter(.data$comment %in% c("Administrative Credit")) %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = replace(
+        .data$comment,
+        .data$comment %in% c("Administrative Credit"),
+        "referrals"
+      )
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "revenue.type", "description", "comment"
+    )
+}
+
+.format_gemini_earn2 <- function(data) {
+  data %>%
+    filter(.data$comment == "Deposit" & .data$currency == "BAT") %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = "airdrops"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "revenue.type", "description", "comment"
+    )
+}
+
+.format_gemini_sell <- function(data) {
+  data %>%
+    filter(
+      .data$description %in% c("Buy", "Sell"),
+      .data$quantity < 0
+    ) %>%
+    mutate(
+      transaction = "sell",
+      description = .data$Symbol,
+      quantity = abs(.data$quantity)
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "fees", "fees.quantity", "fees.currency", "description", "comment"
+    )
+}
+
+.format_gemini_outputs <- function(data) {
+  list(
+    buy = .format_gemini_buy(data),
+    earn = .format_gemini_earn(data),
+    earn2 = .format_gemini_earn2(data),
+    sell = .format_gemini_sell(data)
+  )
+}
+
+.format_gemini_apply_sell_prices <- function(data) {
+  coin.prices <- data %>%
+    filter(.data$transaction %in% c("buy")) %>%
+    mutate(transaction = "sell")
+  sell <- data %>%
+    filter(.data$transaction %in% c("sell"))
+
+  match_index <- which(sell$date %in% coin.prices$date)
+  if (!length(match_index)) {
+    return(data)
+  }
+
+  sell[match_index, "total.price"] <- coin.prices[which(
+    coin.prices$date %in% sell$date
+  ), "total.price"]
+  sell <- sell %>%
+    mutate(spot.rate = .data$total.price / .data$quantity)
+  sell[match_index, "rate.source"] <- "coinmarketcap (buy price)"
+  data[which(data$transaction == "sell"), ] <- sell
   data
 }

@@ -45,68 +45,14 @@
 format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("SELL", "BUY")
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "Trade.Amount",
-      description = "Side",
-      comment = "Symbol",
-      date = "Time..UTC.",
-      fees.quantity = "Fee",
-      fees.currency = "Fee.Currency"
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
-
-  # Separate trade transactions
-  data <- data %>%
-    mutate(
-      pair.currency1 = gsub("_.*", "", .data$comment),
-      pair.currency2 = gsub(".*_", "", .data$comment)
-    )
-
-  # Replace USD by USDC...
-  data <- data %>%
-    mutate(
-      pair.currency2 = case_when(
-        .data$fees.currency == "USD_Stable_Coin" & .data$pair.currency2 == "USD" ~ "USDC",
-        .default = .data$pair.currency2
-      ),
-      fees.currency = ifelse(
-        .data$fees.currency == "USD_Stable_Coin", "USDC", .data$fees.currency
-      )
-    )
-
-  # Determine if fees were paid in a third currency or not
-  data <- data %>%
-    mutate(
-      fees.currency.temp = .data$fees.currency,
-      fees.currency = ifelse(
-        .data$fees.currency == "USD_Stable_Coin", "USD", .data$fees.currency
-      ),
-      third.currency =
-        case_when(
-          description == "BUY" ~ .data$fees.currency != .data$pair.currency1,
-          description == "SELL" ~ .data$fees.currency != .data$pair.currency2
-        ),
-      # fees.currency = .data$fees.currency.temp
-    ) %>%
-    select(-"fees.currency.temp")
+  data <- .format_cdc_exchange_trades_prepare_input(data, known.transactions)
 
   # Determine spot rate and value of fees
-  data.fees <- data %>%
-    mutate(currency = .data$fees.currency)
-
-  data.fees <- cryptoTax::match_prices(data.fees, list.prices = list.prices, force = force)
+  data.fees <- .format_cdc_exchange_trades_fee_prices(
+    data,
+    list.prices = list.prices,
+    force = force
+  )
 
   if (is.null(data.fees)) {
     message("Could not reach the CoinMarketCap API at this time")
@@ -119,80 +65,16 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
 
   data$fees <- data.fees$fees.quantity * data.fees$spot.rate
 
-  # Create a "buy" object
-  BUY <- data %>%
-    filter(.data$description == "BUY") %>%
-    mutate(
-      transaction = "buy",
-      currency = .data$pair.currency1
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment", "fees", "fees.quantity", "fees.currency"
-    )
-
-  # Create a second "buy" object for sell trades
-  BUY2 <- data %>%
-    filter(.data$description == "BUY") %>%
-    mutate(
-      transaction = "sell",
-      currency = .data$pair.currency2,
-      quantity = .data$Volume.of.Business,
-      description = "SELL"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment"
-    )
-
-  # Create a "sell" object
-  SELL <- data %>%
-    filter(.data$description == "SELL") %>%
-    mutate(
-      transaction = "sell",
-      currency = .data$pair.currency1
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment"
-    )
-
-  # Create a second "sell" object
-  SELL2 <- data %>%
-    filter(.data$description == "SELL") %>%
-    mutate(
-      transaction = "buy",
-      currency = .data$pair.currency2,
-      quantity = .data$Volume.of.Business,
-      description = "BUY"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment", "fees", "fees.quantity", "fees.currency"
-    )
-
-  # Create a third "sell" object for third currencies...
-  SELL3 <- data %>%
-    filter(.data$third.currency == TRUE) %>%
-    mutate(
-      transaction = "sell",
-      currency = .data$fees.currency,
-      quantity = .data$fees.quantity,
-      total.price = .data$fees,
-      description = "Trading fee paid with CRO"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "total.price", "transaction",
-      "description", "comment"
-    )
-
-  SELL3 <- data.fees %>%
-    filter(.data$third.currency == TRUE) %>%
-    select("spot.rate", "rate.source") %>%
-    cbind(SELL3)
+  outputs <- .format_cdc_exchange_trades_outputs(data, data.fees)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, BUY2, SELL, SELL2, SELL3)
+  data <- merge_exchanges(
+    outputs$buy,
+    outputs$buy2,
+    outputs$sell,
+    outputs$sell2,
+    outputs$sell3
+  )
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
@@ -208,51 +90,10 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
       .data$total.price
     ))
 
-  # CORRECT SPOT RATE FOR COIN TO COIN TRANSACTIONS [for sales]
-  # Replace total.price first, then in a second step spot.rate
-
-  coin.prices <- data %>%
-    filter(.data$transaction %in% c("buy")) %>%
-    mutate(transaction = "sell")
-
-  # Recreate the SELL object because we need the calculated total prices
-  SELL <- data %>%
-    filter(
-      .data$transaction %in% c("sell"),
-      !grepl("Trading fee paid with", .data$description)
-    )
-
-  # These are the prices I want to replace
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"]
-
-  # These are the correct prices
-  coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
-
-  # Let's replace them
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
-    coin.prices$date %in% SELL$date
-  ), "total.price"]
-
-  # Now let's recalculate spot.rate
-  SELL <- SELL %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-
-  # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
-
-  # Temporarily remove trading fees
-  trading.fees <- data %>%
-    filter(grepl("Trading fee paid with", .data$description))
-
-  data <- data %>%
-    filter(!grepl("Trading fee paid with", .data$description))
-
-  # Replace these transactions in the main dataframe
-  data[which(data$transaction == "sell"), ] <- SELL
+  data <- .format_cdc_exchange_trades_apply_sell_prices(data)
 
   # Arrange in correct order
   data <- data %>%
-    bind_rows(trading.fees) %>%
     mutate(exchange = "CDC.exchange") %>%
     arrange(date, desc(.data$total.price), .data$transaction)
 
@@ -266,4 +107,167 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
 
   # Return result
   data
+}
+
+.format_cdc_exchange_trades_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      quantity = "Trade.Amount",
+      description = "Side",
+      comment = "Symbol",
+      date = "Time..UTC.",
+      fees.quantity = "Fee",
+      fees.currency = "Fee.Currency"
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::as_datetime(.data$date),
+      pair.currency1 = gsub("_.*", "", .data$comment),
+      pair.currency2 = gsub(".*_", "", .data$comment),
+      pair.currency2 = dplyr::case_when(
+        .data$fees.currency == "USD_Stable_Coin" & .data$pair.currency2 == "USD" ~ "USDC",
+        .default = .data$pair.currency2
+      ),
+      fees.currency = ifelse(
+        .data$fees.currency == "USD_Stable_Coin", "USDC", .data$fees.currency
+      ),
+      fees.currency.temp = .data$fees.currency,
+      fees.currency = ifelse(
+        .data$fees.currency == "USD_Stable_Coin", "USD", .data$fees.currency
+      ),
+      third.currency = dplyr::case_when(
+        .data$description == "BUY" ~ .data$fees.currency != .data$pair.currency1,
+        .data$description == "SELL" ~ .data$fees.currency != .data$pair.currency2
+      )
+    ) %>%
+    select(-"fees.currency.temp")
+}
+
+.format_cdc_exchange_trades_fee_prices <- function(data, list.prices, force) {
+  data %>%
+    mutate(currency = .data$fees.currency) %>%
+    cryptoTax::match_prices(list.prices = list.prices, force = force)
+}
+
+.format_cdc_exchange_trades_buy <- function(data) {
+  data %>%
+    filter(.data$description == "BUY") %>%
+    mutate(
+      transaction = "buy",
+      currency = .data$pair.currency1
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment", "fees", "fees.quantity", "fees.currency"
+    )
+}
+
+.format_cdc_exchange_trades_buy2 <- function(data) {
+  data %>%
+    filter(.data$description == "BUY") %>%
+    mutate(
+      transaction = "sell",
+      currency = .data$pair.currency2,
+      quantity = .data$Volume.of.Business,
+      description = "SELL"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+}
+
+.format_cdc_exchange_trades_sell <- function(data) {
+  data %>%
+    filter(.data$description == "SELL") %>%
+    mutate(
+      transaction = "sell",
+      currency = .data$pair.currency1
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+}
+
+.format_cdc_exchange_trades_sell2 <- function(data) {
+  data %>%
+    filter(.data$description == "SELL") %>%
+    mutate(
+      transaction = "buy",
+      currency = .data$pair.currency2,
+      quantity = .data$Volume.of.Business,
+      description = "BUY"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment", "fees", "fees.quantity", "fees.currency"
+    )
+}
+
+.format_cdc_exchange_trades_sell3 <- function(data, data.fees) {
+  sell3 <- data %>%
+    filter(.data$third.currency == TRUE) %>%
+    mutate(
+      transaction = "sell",
+      currency = .data$fees.currency,
+      quantity = .data$fees.quantity,
+      total.price = .data$fees,
+      description = "Trading fee paid with CRO"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price", "transaction",
+      "description", "comment"
+    )
+
+  data.fees %>%
+    filter(.data$third.currency == TRUE) %>%
+    select("spot.rate", "rate.source") %>%
+    cbind(sell3)
+}
+
+.format_cdc_exchange_trades_outputs <- function(data, data.fees) {
+  list(
+    buy = .format_cdc_exchange_trades_buy(data),
+    buy2 = .format_cdc_exchange_trades_buy2(data),
+    sell = .format_cdc_exchange_trades_sell(data),
+    sell2 = .format_cdc_exchange_trades_sell2(data),
+    sell3 = .format_cdc_exchange_trades_sell3(data, data.fees)
+  )
+}
+
+.format_cdc_exchange_trades_apply_sell_prices <- function(data) {
+  coin.prices <- data %>%
+    filter(.data$transaction %in% c("buy")) %>%
+    mutate(transaction = "sell")
+  sell <- data %>%
+    filter(
+      .data$transaction %in% c("sell"),
+      !grepl("Trading fee paid with", .data$description)
+    )
+
+  match_index <- which(sell$date %in% coin.prices$date)
+  if (!length(match_index)) {
+    return(data)
+  }
+
+  sell[match_index, "total.price"] <- coin.prices[which(
+    coin.prices$date %in% sell$date
+  ), "total.price"]
+  sell <- sell %>%
+    mutate(spot.rate = .data$total.price / .data$quantity)
+  sell[match_index, "rate.source"] <- "coinmarketcap (buy price)"
+
+  trading.fees <- data %>%
+    filter(grepl("Trading fee paid with", .data$description))
+  data <- data %>%
+    filter(!grepl("Trading fee paid with", .data$description))
+  data[which(data$transaction == "sell"), ] <- sell
+  bind_rows(data, trading.fees)
 }
