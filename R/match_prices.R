@@ -1,3 +1,41 @@
+.ensure_match_price_columns <- function(data) {
+  if (!("spot.rate" %in% names(data))) {
+    data$spot.rate <- NA
+  }
+
+  if (!("total.price" %in% names(data))) {
+    data$total.price <- NA
+  }
+
+  if (!("rate.source" %in% names(data))) {
+    data$rate.source <- NA
+  }
+
+  data %>%
+    mutate(spot.rate = ifelse(.data$currency %in% c("TCAD", "CAD"), 1, .data$spot.rate))
+}
+
+.join_match_prices <- function(data, list.prices) {
+  data %>%
+    mutate(date2 = lubridate::as_date(.data$date)) %>%
+    left_join(list.prices[c("currency", "spot.rate2", "date2")], by = c("date2", "currency"))
+}
+
+.finalize_match_prices <- function(data) {
+  data %>%
+    mutate(
+      rate.source = ifelse(is.na(.data$spot.rate),
+        "coinmarketcap",
+        ifelse(is.na(.data$rate.source),
+          "exchange",
+          .data$rate.source
+        )
+      ),
+      spot.rate = ifelse(is.na(.data$spot.rate), .data$spot.rate2, .data$spot.rate)
+    ) %>%
+    select(-c("date2", "spot.rate2"))
+}
+
 #' @title Get Fair Market Value (FMV) of transactions
 #'
 #' @description Matches prices obtained through the `prepare_list_prices()`
@@ -23,7 +61,6 @@
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows left_join arrange
 #' @importFrom utils timestamp
 #' @importFrom rlang .data
-
 match_prices <- function(data,
                          slug = NULL,
                          start.date = "2021-01-01",
@@ -38,22 +75,7 @@ match_prices <- function(data,
     return(NULL)
   }
 
-  all.data <- data
-
-  if (!("spot.rate" %in% names(all.data))) {
-    all.data$spot.rate <- NA
-  }
-
-  if (!("total.price" %in% names(all.data))) {
-    all.data$total.price <- NA
-  }
-
-  if (!("rate.source" %in% names(all.data))) {
-    all.data$rate.source <- NA
-  }
-
-  all.data <- all.data %>%
-    mutate(spot.rate = ifelse(.data$currency %in% c("TCAD", "CAD"), 1, .data$spot.rate))
+  all.data <- .ensure_match_price_columns(data)
 
   list.prices <- prepare_list_prices_slugs(
     all.data,
@@ -74,22 +96,6 @@ match_prices <- function(data,
     return(NULL)
   }
 
-  new.data <- all.data %>%
-    mutate(date2 = lubridate::as_date(.data$date)) %>%
-    left_join(list.prices[c("currency", "spot.rate2", "date2")], by = c("date2", "currency"))
-
-  new.data <- new.data %>%
-    mutate(
-      rate.source = ifelse(is.na(.data$spot.rate),
-        "coinmarketcap",
-        ifelse(is.na(.data$rate.source),
-          "exchange",
-          .data$rate.source
-        )
-      ),
-      spot.rate = ifelse(is.na(.data$spot.rate), .data$spot.rate2, .data$spot.rate)
-    ) %>%
-    select(-c("date2", "spot.rate2"))
-  new.data
+  new.data <- .join_match_prices(all.data, list.prices)
+  .finalize_match_prices(new.data)
 }
-

@@ -20,112 +20,125 @@ format_detect <- function(data, ...) {
   UseMethod("format_detect", data)
 }
 
-#' @rdname format_detect
-#' @export
-format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
-  # Extract data col names
-  data.names <- toString(names(data))
+.format_detect_registry <- function() {
+  data.frame(
+    exchange = c(
+      "adalite",
+      "binance",
+      "binance_withdrawals",
+      "blockfi",
+      "CDC",
+      "CDC_exchange_rewards",
+      "CDC_exchange_trades",
+      "CDC_wallet",
+      "celsius",
+      "coinsmart",
+      "exodus",
+      "gemini",
+      "newton",
+      "pooltool",
+      "presearch",
+      "shakepay",
+      "uphold"
+    ),
+    formatter = c(
+      "format_adalite",
+      "format_binance",
+      "format_binance_withdrawals",
+      "format_blockfi",
+      "format_CDC",
+      "format_CDC_exchange_rewards",
+      "format_CDC_exchange_trades",
+      "format_CDC_wallet",
+      "format_celsius",
+      "format_coinsmart",
+      "format_exodus",
+      "format_gemini",
+      "format_newton",
+      "format_pooltool",
+      "format_presearch",
+      "format_shakepay",
+      "format_uphold"
+    ),
+    uses_prices = c(
+      TRUE,
+      TRUE,
+      TRUE,
+      TRUE,
+      FALSE,
+      TRUE,
+      TRUE,
+      TRUE,
+      FALSE,
+      TRUE,
+      TRUE,
+      TRUE,
+      FALSE,
+      FALSE,
+      TRUE,
+      FALSE,
+      TRUE
+    ),
+    stringsAsFactors = FALSE
+  )
+}
 
-  # Generate string list of exchanges
-  exchanges <- paste0(c(
-    "adalite",
-    "binance",
-    "binance_withdrawals",
-    "blockfi",
-    "CDC",
-    "CDC_exchange_rewards",
-    "CDC_exchange_trades",
-    "CDC_wallet",
-    "celsius",
-    "coinsmart",
-    "exodus",
-    "gemini",
-    "newton",
-    "pooltool",
-    "presearch",
-    "shakepay",
-    "uphold"
-  ))
+.format_detect_example_names <- function(exchange) {
+  ns <- asNamespace(utils::packageName())
+  toString(names(get(paste0("data_", exchange), envir = ns)))
+}
 
-  data_exchanges <- paste0("data_", exchanges)
-
-  # Extract col names of all exchanges
-  exchanges.cols <- lapply(data_exchanges, function(x) {
-    toString(names(eval(parse(text = x))))
-  }) %>%
-    stats::setNames(exchanges)
-
-  # Generate logical condition to identify right exchange
-  condition <- names(which(data.names == exchanges.cols))
-
-  if (all(condition == c("CDC_exchange_rewards", "CDC_wallet"))) {
+.resolve_format_detect_condition <- function(condition, data) {
+  if (identical(condition, c("CDC_exchange_rewards", "CDC_wallet"))) {
     if (any(unlist(lapply(c("Supercharger", "Interest", "APR", "Rebate"), grepl, data$Description)))) {
-      condition <- "CDC_exchange_rewards"
-    } else if (any(unlist(lapply(c("Validator", "Auto Withdraw"), grepl, data$Description)))) {
-      condition <- "CDC_wallet"
+      return("CDC_exchange_rewards")
     }
-  } else if (length(condition) == 0) {
+
+    if (any(unlist(lapply(c("Validator", "Auto Withdraw"), grepl, data$Description)))) {
+      return("CDC_wallet")
+    }
+  }
+
+  if (length(condition) == 0) {
     stop(
       "Could not identify the correct exchange automatically. ",
       "Please use the appropriate function or 'format_generic()'."
     )
-  } else if (length(condition) > 1) {
+  }
+
+  if (length(condition) > 1) {
     stop("Matches multiple exchange names. Please report this bug so it can be fixed.")
   }
 
-  # Apply right function
-  formatted.data <- switch(condition,
-    shakepay = {
-      format_shakepay(data)
-    },
-    newton = {
-      format_newton(data)
-    },
-    pooltool = {
-      format_pooltool(data)
-    },
-    CDC = {
-      format_CDC(data)
-    },
-    celsius = {
-      format_celsius(data)
-    },
-    adalite = {
-      format_adalite(data, list.prices = list.prices, force = force)
-    },
-    binance = {
-      format_binance(data, list.prices = list.prices, force = force)
-    },
-    binance_withdrawals = {
-      format_binance_withdrawals(data, list.prices = list.prices, force = force)
-    },
-    blockfi = {
-      format_blockfi(data, list.prices = list.prices, force = force)
-    },
-    CDC_exchange_rewards = {
-      format_CDC_exchange_rewards(data, list.prices = list.prices, force = force)
-    },
-    CDC_exchange_trades = {
-      format_CDC_exchange_trades(data, list.prices = list.prices, force = force)
-    },
-    CDC_wallet = {
-      format_CDC_wallet(data, list.prices = list.prices, force = force)
-    },
-    coinsmart = {
-      format_coinsmart(data, list.prices = list.prices, force = force)
-    },
-    exodus = {
-      format_exodus(data, list.prices = list.prices, force = force)
-    },
-    gemini = {
-      format_gemini(data, list.prices = list.prices, force = force)
-    },
-    presearch = {
-      format_presearch(data, list.prices = list.prices, force = force)
-    },
-    uphold = {
-      format_uphold(data, list.prices = list.prices, force = force)
-    },
+  condition
+}
+
+.run_format_detect_formatter <- function(exchange, data, list.prices = NULL, force = FALSE) {
+  registry <- .format_detect_registry()
+  row <- registry[registry$exchange == exchange, , drop = FALSE]
+  formatter <- get(row$formatter, mode = "function")
+
+  if (isTRUE(row$uses_prices)) {
+    return(formatter(data, list.prices = list.prices, force = force))
+  }
+
+  formatter(data)
+}
+
+#' @rdname format_detect
+#' @export
+format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
+  data.names <- toString(names(data))
+  registry <- .format_detect_registry()
+  exchanges.cols <- vapply(registry$exchange, .format_detect_example_names, character(1))
+  condition <- registry$exchange[data.names == exchanges.cols]
+  condition <- .resolve_format_detect_condition(condition, data)
+
+  formatted.data <- .run_format_detect_formatter(
+    exchange = condition,
+    data = data,
+    list.prices = list.prices,
+    force = force
   )
 
   message("Exchange detected: ", condition)

@@ -1,3 +1,33 @@
+.is_acb_add_transaction <- function(transaction) {
+  transaction %in% c("buy", "revenue", "rebates")
+}
+
+.acb_currency_label <- function(data) {
+  if ("currency2" %in% names(data)) {
+    return(data$currency2[1])
+  }
+
+  if ("currency" %in% names(data)) {
+    return(data$currency[1])
+  }
+
+  ""
+}
+
+.correct_zero_quantity_acb <- function(data, i) {
+  data[i, "ACB"] <- ifelse(data[i, "total.quantity"] == 0,
+    0,
+    data[i, "ACB"]
+  )
+
+  data[i, "ACB.share"] <- ifelse(data[i, "total.quantity"] == 0,
+    0,
+    data[i, "ACB.share"]
+  )
+
+  data
+}
+
 #' @title Calculate capital gains from realized gain transactions
 #'
 #' @description Calculate realized and unrealized capital gains/losses
@@ -107,13 +137,7 @@ ACB <- function(data,
   }
 
   # Setup progress bar
-  if ("currency2" %in% names(data)) {
-    currency <- data$currency2[1]
-  } else if ("currency" %in% names(data)) {
-    currency <- data$currency[1]
-  } else {
-    currency <- ""
-  }
+  currency <- .acb_currency_label(data)
 
   pb <- progress::progress_bar$new(
     format = paste(
@@ -139,6 +163,10 @@ ACB <- function(data,
       pb$tick()
     }
 
+    current_transaction <- data[[transaction]][i]
+    is_add_transaction <- .is_acb_add_transaction(current_transaction)
+    is_sell_transaction <- identical(current_transaction, "sell")
+
     # Loop ####
 
     # First row: add first quantity
@@ -147,36 +175,30 @@ ACB <- function(data,
     }
 
     # First row: calculate ACB for added quantities
-    if (i == 1 && (data[i, transaction] == "buy" ||
-      data[i, transaction] == "revenue" ||
-      data[i, transaction] == "rebates")) {
+    if (i == 1 && is_add_transaction) {
       data[i, "ACB"] <- data[i, total.price] + data[i, fees]
     }
 
     # After first row: add new quantities
-    if (i > 1 && (data[i, transaction] == "buy" ||
-      data[i, transaction] == "revenue" ||
-      data[i, transaction] == "rebates")) {
+    if (i > 1 && is_add_transaction) {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] +
         data[i, quantity]
     }
 
     # After first row: calculate ACB for added quantities
-    if (i > 1 && (data[i, transaction] == "buy" ||
-      data[i, transaction] == "revenue" ||
-      data[i, transaction] == "rebates")) {
+    if (i > 1 && is_add_transaction) {
       data[i, "ACB"] <- data[i - 1, "ACB"] +
         data[i, total.price] + data[i, fees]
     }
 
     # After first row: remove new quantities
-    if (i > 1 && data[i, transaction] == "sell") {
+    if (i > 1 && is_sell_transaction) {
       data[i, "total.quantity"] <- data[i - 1, "total.quantity"] - data[i, quantity]
     }
     # Remove fees from total quantity too??
 
     # After first row: calculate ACB for removed quantities
-    if (i > 1 && data[i, transaction] == "sell") {
+    if (i > 1 && is_sell_transaction) {
       data[i, "ACB"] <- data[i - 1, "ACB"] *
         ((data[i - 1, "total.quantity"] - data[i, quantity]) /
           data[i - 1, "total.quantity"])
@@ -189,7 +211,7 @@ ACB <- function(data,
     )
 
     # After first row: calculate capital gains and losses
-    if (i > 1 && data[i, transaction] == "sell") {
+    if (i > 1 && is_sell_transaction) {
       data[i, "gains"] <- data[i, total.price] - data[i, fees] -
         data[i - 1, "ACB.share"] * data[i, quantity]
     }
@@ -211,7 +233,7 @@ ACB <- function(data,
       }
 
       # After first row: calculate superficial capital gains and losses
-      if (i > 1 && data[i, transaction] == "sell" && isTRUE(data[[i, "sup.loss"]])) {
+      if (i > 1 && is_sell_transaction && isTRUE(data[[i, "sup.loss"]])) {
         data[i, "gains.sup"] <- data[i, "gains"] * (min(
           data[i, "quantity.60days"],
           data[i, "sup.loss.quantity"],
@@ -235,15 +257,13 @@ ACB <- function(data,
       }
 
       # After first row: recalculate ACB for added quantities MINUS sup loss
-      if (i > 1 && (data[i, transaction] == "buy" ||
-        data[i, transaction] == "revenue" ||
-        data[i, transaction] == "rebates")) {
+      if (i > 1 && is_add_transaction) {
         data[i, "ACB"] <- data[i - 1, "ACB"] +
           data[i, total.price] + data[i, fees] - data[i - 1, "gains.sup"]
       }
 
       # After first row: calculate ACB for removed quantities MINUS sup loss
-      if (i > 1 && data[i, transaction] == "sell") {
+      if (i > 1 && is_sell_transaction) {
         data[i, "ACB"] <- data[i - 1, "ACB"] *
           ((data[i - 1, "total.quantity"] - data[i, quantity]) /
             data[i - 1, "total.quantity"]) - data[i, "gains.sup"]
@@ -255,17 +275,7 @@ ACB <- function(data,
         0
       )
 
-      # Correct ACB to 0 if quantity is zero!
-      data[i, "ACB"] <- ifelse(data[i, "total.quantity"] == 0,
-        0,
-        data[i, "ACB"]
-      )
-
-      # Correct ACB.share to 0 if quantity is zero!
-      data[i, "ACB.share"] <- ifelse(data[i, "total.quantity"] == 0,
-        0,
-        data[i, "ACB.share"]
-      )
+      data <- .correct_zero_quantity_acb(data, i)
     }
   }
 
