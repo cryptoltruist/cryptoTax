@@ -1,5 +1,24 @@
 # Changelog
 
+## cryptoTax 0.1.0.2
+
+**Improvements:**
+
+- Continued a broader reporting-stack cleanup across
+  [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md),
+  [`report_overview()`](https://cryptoltruist.github.io/cryptoTax/reference/report_overview.md),
+  [`report_summary()`](https://cryptoltruist.github.io/cryptoTax/reference/report_summary.md),
+  [`report_revenues()`](https://cryptoltruist.github.io/cryptoTax/reference/report_revenues.md),
+  [`prepare_report()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.md),
+  and
+  [`print_report()`](https://cryptoltruist.github.io/cryptoTax/reference/print_report.md)
+  to make report generation and summary logic easier to maintain without
+  changing user-facing behavior.
+- Simplified workflow and exchange-format tests by introducing a shared
+  example-data helper and removing brittle `eval(parse())` test paths.
+- Kept the package fully green through the reporting refactor batch,
+  including `devtools::check(document = TRUE)`.
+
 ## cryptoTax 0.1.0.1
 
 **Improvements:**
