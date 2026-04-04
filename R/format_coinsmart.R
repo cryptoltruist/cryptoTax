@@ -15,57 +15,7 @@
 format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Withdraw", "Trade", "Quiz", "Deposit", "Referral")
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      currency = "Product",
-      description = "TransactionType",
-      comment = "ReferenceType",
-      date = "TimeStamp"
-    ) %>%
-    mutate(comment = trimws(.data$comment))
-  # Have to trim white spaces here because they made a typo
-  # And added a space in "Referral ".
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "comment",
-    description.col = "description"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(
-      date = lubridate::as_datetime(.data$date, tz = "Etc/GMT+6"),
-      date = lubridate::with_tz(.data$date, tz = "UTC")
-    )
-  # 2022-01-15 agent sending the file confirmed CST so I have adjusted the code above
-
-  # We actually need to do a little trick here for later processing of the dates
-  data <- data %>%
-    mutate(date = trunc(.data$date))
-
-  # Rearrange on chronological order
-  data <- data %>%
-    arrange(.data$date)
-
-  # Specify whether it's a buy or sell
-  data <- data %>%
-    mutate(description = ifelse(.data$Credit > 0 & .data$description == "Trade",
-      "purchase",
-      ifelse(.data$Debit > 0 & .data$description == "Trade",
-        "sale",
-        .data$description
-      )
-    ))
-
-  # Determine spot rate and value of coins
-  data <- data %>%
-    mutate(spot.rate = ifelse(.data$currency == "CAD",
-      1,
-      NA
-    ))
+  data <- .format_coinsmart_prepare_input(data, known.transactions)
 
   data <- match_prices(data, list.prices = list.prices, force = force)
 
@@ -104,22 +54,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
       transaction = "sell"
     ) %>%
     filter(.data$currency == "CAD")
-
-  # These are the prices I want to replace
-  BUY[which(BUY$date %in% CAD.prices$date), "total.price"]
-
-  # These are the correct prices
-  CAD.prices$total.price
-
-  # Let's replace them
-  BUY[which(BUY$date %in% CAD.prices$date), "total.price"] <- CAD.prices$total.price
-
-  # Now let's recalculate spot.rate
-  BUY <- BUY %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-
-  # Let's also replace the rate.source for these transactions
-  BUY[which(BUY$date %in% CAD.prices$date), "rate.source"] <- "exchange"
+  BUY <- .coinsmart_apply_trade_prices(BUY, CAD.prices, "exchange")
 
   # Isolate trading fees
   FEES.BUY <- data %>%
@@ -181,24 +116,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
       quantity = .data$Debit,
       transaction = "sell"
     )
-
-  # These are the prices I want to replace
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"]
-
-  # These are the correct prices
-  coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
-
-  # Let's replace them
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
-    coin.prices$date %in% SELL$date
-  ), "total.price"]
-
-  # Now let's recalculate spot.rate
-  SELL <- SELL %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-
-  # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
+  SELL <- .coinsmart_apply_trade_prices(SELL, coin.prices, "coinmarketcap (buy price)")
 
   # Create a "withdrawals" object
   WITHDRAWALS <- data %>%
@@ -224,29 +142,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
     mutate(exchange = "coinsmart") %>%
     arrange(.data$date, desc(.data$total.price))
 
-  # Add trade info in comments
-
-  # Find duplicate indexes
-  index.duplicate2 <- data %>%
-    select(date) %>%
-    duplicated() %>%
-    which()
-
-  # Find indexes before duplicates
-  index.duplicate1 <- index.duplicate2 - 1
-
-  # Combine them in a matrix
-  double.index <- cbind(index.duplicate1, index.duplicate2)
-
-  # Get the respective currency names
-  string1 <- data[double.index[, 1], "currency"]
-  string2 <- data[double.index[, 2], "currency"]
-
-  # Define the right string
-  good.string <- rep(paste0("Trade (", string1, "-", string2, ")"), each = 2)
-
-  # Replace values
-  data[sort(as.vector(double.index)), "comment"] <- good.string
+  data <- .coinsmart_trade_comments(data)
 
   # Reorder columns properly
   data <- data %>%
@@ -257,5 +153,75 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
     )
 
   # Return result
+  data
+}
+
+.format_coinsmart_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      currency = "Product",
+      description = "TransactionType",
+      comment = "ReferenceType",
+      date = "TimeStamp"
+    ) %>%
+    mutate(comment = trimws(.data$comment))
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "comment",
+    description.col = "description"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::as_datetime(.data$date, tz = "Etc/GMT+6"),
+      date = lubridate::with_tz(.data$date, tz = "UTC"),
+      date = trunc(.data$date),
+      description = ifelse(.data$Credit > 0 & .data$description == "Trade",
+        "purchase",
+        ifelse(.data$Debit > 0 & .data$description == "Trade",
+          "sale",
+          .data$description
+        )
+      ),
+      spot.rate = ifelse(.data$currency == "CAD", 1, NA)
+    ) %>%
+    arrange(.data$date)
+}
+
+.coinsmart_apply_trade_prices <- function(data, reference_prices, rate_source_value) {
+  if (!nrow(reference_prices)) {
+    return(data)
+  }
+
+  match_index <- which(data$date %in% reference_prices$date)
+  if (!length(match_index)) {
+    return(data)
+  }
+
+  matched_prices <- reference_prices[which(reference_prices$date %in% data$date), "total.price"]
+  data[match_index, "total.price"] <- matched_prices
+  data <- data %>%
+    mutate(spot.rate = .data$total.price / .data$quantity)
+  data[match_index, "rate.source"] <- rate_source_value
+  data
+}
+
+.coinsmart_trade_comments <- function(data) {
+  index.duplicate2 <- data %>%
+    select("date") %>%
+    duplicated() %>%
+    which()
+
+  if (!length(index.duplicate2)) {
+    return(data)
+  }
+
+  index.duplicate1 <- index.duplicate2 - 1
+  double.index <- cbind(index.duplicate1, index.duplicate2)
+  string1 <- data[double.index[, 1], "currency"]
+  string2 <- data[double.index[, 2], "currency"]
+  good.string <- rep(paste0("Trade (", string1, "-", string2, ")"), each = 2)
+  data[sort(as.vector(double.index)), "comment"] <- good.string
   data
 }

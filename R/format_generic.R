@@ -67,59 +67,33 @@ format_generic <- function(data,
                            timezone = "UTC",
                            force = FALSE,
                            list.prices = NULL) {
-  names(data) <- tolower(names(data))
-
-  any_lower <- function(x) {
-    any_of(tolower(x))
-  }
-
-  # Rename columns
-  data <- data %>%
-    rename(
-      date = any_lower(date),
-      currency = any_lower(currency),
-      quantity = any_lower(quantity),
-      total.price = any_lower(total.price),
-      spot.rate = any_lower(spot.rate),
-      transaction = any_lower(transaction),
-      fees = any_lower(fees),
-      description = any_lower(description),
-      comment = any_lower(comment),
-      revenue.type = any_lower(revenue.type),
-      exchange = any_lower(exchange),
-      timezone = any_lower(timezone)
-    )
+  data <- .format_generic_standardize_columns(
+    data = data,
+    date = date,
+    currency = currency,
+    quantity = quantity,
+    total.price = total.price,
+    spot.rate = spot.rate,
+    transaction = transaction,
+    fees = fees,
+    description = description,
+    comment = comment,
+    revenue.type = revenue.type,
+    exchange = exchange,
+    timezone = timezone
+  )
 
   # Add proper dates to dataframe
   data <- data %>%
     mutate(date = lubridate::as_datetime(.data$date, tz = timezone))
 
-  # Add total price
-  if (!"total.price" %in% names(data) && "spot.rate" %in% names(data)) {
-    data <- data %>%
-      mutate(total.price = .data$spot.rate * .data$quantity)
-  }
-
-  # Add spot rate
-  if (!"spot.rate" %in% names(data) && "total.price" %in% names(data)) {
-    data <- data %>%
-      mutate(
-        spot.rate = .data$total.price / .data$quantity,
-        rate.source = "exchange"
-      )
-  } else if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
-    "currency" %in% names(data)) {
-    data <- match_prices(data, list.prices = list.prices, force = force)
-    if (is.null(data)) {
-      message("Could not reach the CoinMarketCap API at this time")
-      return(NULL)
-    }
-    if (any(is.na(data$spot.rate))) {
-      warning("Could not calculate spot rate. Use `force = TRUE`.")
-    }
-  } else if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
-    !"currency" %in% names(data)) {
-    stop("Cannot calculate 'total.price' without 'spot.rate' or 'currency' columns!")
+  data <- .format_generic_resolve_prices(
+    data = data,
+    list.prices = list.prices,
+    force = force
+  )
+  if (is.null(data)) {
+    return(NULL)
   }
 
   data <- data %>%
@@ -136,5 +110,76 @@ format_generic <- function(data,
     )))
 
   # Return result
+  data
+}
+
+.format_generic_standardize_columns <- function(data,
+                                                date,
+                                                currency,
+                                                quantity,
+                                                total.price,
+                                                spot.rate,
+                                                transaction,
+                                                fees,
+                                                description,
+                                                comment,
+                                                revenue.type,
+                                                exchange,
+                                                timezone) {
+  names(data) <- tolower(names(data))
+
+  any_lower <- function(x) {
+    any_of(tolower(x))
+  }
+
+  data %>%
+    rename(
+      date = any_lower(date),
+      currency = any_lower(currency),
+      quantity = any_lower(quantity),
+      total.price = any_lower(total.price),
+      spot.rate = any_lower(spot.rate),
+      transaction = any_lower(transaction),
+      fees = any_lower(fees),
+      description = any_lower(description),
+      comment = any_lower(comment),
+      revenue.type = any_lower(revenue.type),
+      exchange = any_lower(exchange),
+      timezone = any_lower(timezone)
+    )
+}
+
+.format_generic_resolve_prices <- function(data, list.prices, force) {
+  if (!"total.price" %in% names(data) && "spot.rate" %in% names(data)) {
+    return(data %>%
+      mutate(total.price = .data$spot.rate * .data$quantity))
+  }
+
+  if (!"spot.rate" %in% names(data) && "total.price" %in% names(data)) {
+    return(data %>%
+      mutate(
+        spot.rate = .data$total.price / .data$quantity,
+        rate.source = "exchange"
+      ))
+  }
+
+  if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
+    "currency" %in% names(data)) {
+    data <- match_prices(data, list.prices = list.prices, force = force)
+    if (is.null(data)) {
+      message("Could not reach the CoinMarketCap API at this time")
+      return(NULL)
+    }
+    if (any(is.na(data$spot.rate))) {
+      warning("Could not calculate spot rate. Use `force = TRUE`.")
+    }
+    return(data)
+  }
+
+  if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
+    !"currency" %in% names(data)) {
+    stop("Cannot calculate 'total.price' without 'spot.rate' or 'currency' columns!")
+  }
+
   data
 }

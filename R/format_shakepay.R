@@ -39,19 +39,7 @@ format_shakepay <- function(data, referral) {
     # "shakingsats", "fiat funding", "purchase/sale", "other", "crypto cashout"
   )
 
-  if (!missing(referral)) {
-    data <- data %>%
-      add_row(
-        Date = referral$Date,
-        Amount.Credited = referral$Credit,
-        Type = "Reward",
-        Description = "Referral reward",
-        Asset.Credited = "CAD",
-        Book.Cost = .data$Amount.Credited,
-        Book.Cost.Currency = .data$Asset.Credited,
-        Spot.Rate = 1
-      )
-  }
+  data <- .format_shakepay_add_referral(data, referral)
 
   # Rename columns
   data <- data %>%
@@ -109,7 +97,7 @@ format_shakepay <- function(data, referral) {
 
   # Create a "REFERRAL" object
   REFERRAL <- data %>%
-    filter(comment == "Referral reward") %>%
+    filter(.data$comment == "Referral reward") %>%
     rename(
       quantity = "Amount.Credited",
       currency = "Asset.Credited",
@@ -140,23 +128,38 @@ format_shakepay <- function(data, referral) {
       "spot.rate", "transaction", "description", "comment"
     )
 
-  # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, SHAKES, REFERRAL, SELL) %>%
+  .format_shakepay_finalize(BUY, SHAKES, REFERRAL, SELL)
+}
+
+.format_shakepay_add_referral <- function(data, referral) {
+  if (missing(referral)) {
+    return(data)
+  }
+
+  data %>%
+    add_row(
+      Date = referral$Date,
+      Amount.Credited = referral$Credit,
+      Type = "Reward",
+      Description = "Referral reward",
+      Asset.Credited = "CAD",
+      Book.Cost = referral$Credit,
+      Book.Cost.Currency = "CAD",
+      Spot.Rate = 1
+    )
+}
+
+.format_shakepay_finalize <- function(buy, shakes, referral, sell) {
+  bind_rows(buy, shakes, referral, sell) %>%
     mutate(
       exchange = "shakepay",
       rate.source = "exchange"
     ) %>%
-    arrange(date)
-
-  # Reorder columns properly
-  data <- data %>%
+    arrange(.data$date) %>%
     select(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
 }
 
 # Old function before 2024 change

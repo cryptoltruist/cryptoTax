@@ -1,3 +1,30 @@
+.tax_box_metrics <- function(report.summary, sup.losses, table.revenues, proceeds) {
+  losses <- report.summary$Amount[3]
+  sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
+  total.income.numeric <- dplyr::last(table.revenues$staking) +
+    dplyr::last(table.revenues$interests)
+
+  gains.proceeds <- proceeds$proceeds[1]
+  gains.acb <- proceeds$ACB.total[1]
+  losses.proceeds <- proceeds$proceeds[2]
+  losses.acb <- proceeds$ACB.total[2]
+
+  list(
+    gains.proceeds = gains.proceeds,
+    gains.acb = gains.acb,
+    gains.amount = gains.proceeds - gains.acb,
+    gains.taxable = (gains.proceeds - gains.acb) / 2,
+    losses.proceeds = losses.proceeds,
+    losses.acb = losses.acb,
+    losses.amount = losses.proceeds - losses.acb,
+    losses.taxable = (losses.proceeds - losses.acb) / 2,
+    total.income.numeric = total.income.numeric,
+    foreign.gains.losses = (gains.proceeds - gains.acb) + (losses.proceeds - losses.acb),
+    sup.losses.total = sup.losses.total,
+    total.losses = as.numeric(losses) - sup.losses.total
+  )
+}
+
 #' @title Get a simple table of relevant tax information
 #'
 #' @description Output a simple table with all the relevant tax information and tax form line numbers.
@@ -18,10 +45,7 @@
 #' proceeds <- get_proceeds(formatted.ACB, 2021)
 #' tax_box(report.summary, sup.losses, table.revenues, proceeds)
 tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
-  losses <- report.summary$Amount[3]
-  sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
-  tot.losses <- as.numeric(losses) - sup.losses.total
-  total.income.numeric <- dplyr::last(table.revenues$staking) + dplyr::last(table.revenues$interests)
+  metrics <- .tax_box_metrics(report.summary, sup.losses, table.revenues, proceeds)
 
   out <- data.frame(
     Description = c(
@@ -38,17 +62,17 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
       "Foreign income" # 11
     ),
     Amount = c(
-      proceeds$proceeds[1], # 1
-      proceeds$ACB.total[1], # 2
-      proceeds$proceeds[1] - proceeds$ACB.total[1], # 3
-      (proceeds$proceeds[1] - proceeds$ACB.total[1]) / 2, # 4
+      metrics$gains.proceeds, # 1
+      metrics$gains.acb, # 2
+      metrics$gains.amount, # 3
+      metrics$gains.taxable, # 4
       0, # 5
-      proceeds$proceeds[2], # 6
-      proceeds$ACB.total[2], # 7
-      proceeds$proceeds[2] - proceeds$ACB.total[2], # 8
-      (proceeds$proceeds[2] - proceeds$ACB.total[2]) / 2, # 9
+      metrics$losses.proceeds, # 6
+      metrics$losses.acb, # 7
+      metrics$losses.amount, # 8
+      metrics$losses.taxable, # 9
       0, # 10
-      total.income.numeric # 11
+      metrics$total.income.numeric # 11
     ),
     Comment = c(
       "Proceeds of sold coins (gains)", # 1
@@ -79,8 +103,7 @@ tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
   )
   new.row <- data.frame(
     Description = "Foreign gains (losses)",
-    Amount = out[out$Description == "Gains", "Amount"] +
-      out[out$Description == "Losses", "Amount"],
+    Amount = metrics$foreign.gains.losses,
     Comment = "Capital gains from crypto is considered foreign capital gains",
     Line = "T1135"
   )

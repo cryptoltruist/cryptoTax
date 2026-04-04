@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.3
+
+**Improvements:**
+
+- Continued the formatter cleanup across `format_generic()`, `format_shakepay()`, `format_binance()`, and `format_coinsmart()` to make exchange formatting workflows easier to follow and maintain without changing user-facing behavior.
+- Continued the reporting-output cleanup by simplifying the internal structure of `tax_box()` and `tax_table()`.
+- Kept the package fully green through the formatter and tax-output refactor batch, including `devtools::check(document = TRUE)`.
+
 # cryptoTax 0.1.0.2
 
 **Improvements:**

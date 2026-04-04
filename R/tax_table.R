@@ -30,28 +30,39 @@ tax_table <- function(table, repeat.header = FALSE, type = 1) {
   }
 
   if (type == 2) {
-    # Count number of decimals and get index
-    small.index <- which(decimalplaces(table$total.quantity) == 0)
-    exactly.one <- which(table$total.quantity == 1)
-
-    flex.table <- flex.table %>%
-      flextable::colformat_double(j = "total.quantity", digits = 7) %>%
-      flextable::colformat_double(
-        i = small.index,
-        j = "total.quantity", digits = 2
-      ) %>%
-      flextable::colformat_double(
-        i = exactly.one,
-        j = "total.quantity", digits = 0
-      )
+    flex.table <- .tax_table_type2(flex.table, table)
   } else if (type == 3) {
-    flex.table <- flex.table %>%
-      flextable::bold(part = "header") %>%
-      flextable::bold(i = nrow(table))
-    if (nrow(table) > 1) {
-      flex.table <- flextable::hline(flex.table, i = nrow(table) - 1)
-    }
+    flex.table <- .tax_table_type3(flex.table, table)
   }
+  flex.table
+}
+
+.tax_table_type2 <- function(flex.table, table) {
+  # Count number of decimals and get index
+  small.index <- which(decimalplaces(table$total.quantity) == 0)
+  exactly.one <- which(table$total.quantity == 1)
+
+  flex.table %>%
+    flextable::colformat_double(j = "total.quantity", digits = 7) %>%
+    flextable::colformat_double(
+      i = small.index,
+      j = "total.quantity", digits = 2
+    ) %>%
+    flextable::colformat_double(
+      i = exactly.one,
+      j = "total.quantity", digits = 0
+    )
+}
+
+.tax_table_type3 <- function(flex.table, table) {
+  flex.table <- flex.table %>%
+    flextable::bold(part = "header") %>%
+    flextable::bold(i = nrow(table))
+
+  if (nrow(table) > 1) {
+    flex.table <- flextable::hline(flex.table, i = nrow(table) - 1)
+  }
+
   flex.table
 }
 
