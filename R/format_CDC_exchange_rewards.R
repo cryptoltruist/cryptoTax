@@ -40,84 +40,11 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
   known.transactions <- c("", "Reward", "referral_gift")
   # "referral_gift" is for our manual correction
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "Received.Amount",
-      currency = "Received.Currency",
-      description = "Label",
-      comment = "Description",
-      date = "Date"
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description",
-    description.col = "comment"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
-
-  # Add description to withdrawals
-  data <- data %>%
-    mutate(
-      description = ifelse(grepl("Withdrawal", .data$comment),
-        "Withdrawal",
-        .data$description
-      ),
-      currency = ifelse(grepl("Withdrawal", .data$comment),
-        .data$Sent.Currency,
-        .data$currency
-      )
-    )
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(.data$description %in% c(
-      "Reward",
-      "referral_gift"
-    )) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = replace(
-        .data$description,
-        .data$description %in% c("Reward"),
-        "interests"
-      ),
-      revenue.type = replace(
-        .data$revenue.type,
-        .data$revenue.type %in% c("referral_gift"),
-        "referrals"
-      ),
-      revenue.type = replace(
-        .data$revenue.type,
-        grepl("Rebate", .data$comment),
-        "rebates"
-      )
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "revenue.type", "description", "comment"
-    )
-
-  # Create a "withdrawals" object
-  WITHDRAWALS <- data %>%
-    filter(.data$description == "Withdrawal") %>%
-    mutate(
-      quantity = .data$Fee.Amount,
-      transaction = "sell"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description"
-    )
+  data <- .format_cdc_exchange_rewards_prepare_input(data, known.transactions)
+  outputs <- .format_cdc_exchange_rewards_outputs(data)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(EARN, WITHDRAWALS) %>%
+  data <- merge_exchanges(outputs$earn, outputs$withdrawals) %>%
     mutate(exchange = "CDC.exchange")
 
   # Determine spot rate and value of coins
@@ -147,4 +74,81 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
 
   # Return result
   data
+}
+
+.format_cdc_exchange_rewards_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      quantity = "Received.Amount",
+      currency = "Received.Currency",
+      description = "Label",
+      comment = "Description",
+      date = "Date"
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description",
+    description.col = "comment"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::as_datetime(.data$date),
+      description = ifelse(grepl("Withdrawal", .data$comment),
+        "Withdrawal",
+        .data$description
+      ),
+      currency = ifelse(grepl("Withdrawal", .data$comment),
+        .data$Sent.Currency,
+        .data$currency
+      )
+    )
+}
+
+.format_cdc_exchange_rewards_earn <- function(data) {
+  data %>%
+    filter(.data$description %in% c("Reward", "referral_gift")) %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = replace(
+        .data$description,
+        .data$description %in% c("Reward"),
+        "interests"
+      ),
+      revenue.type = replace(
+        .data$revenue.type,
+        .data$revenue.type %in% c("referral_gift"),
+        "referrals"
+      ),
+      revenue.type = replace(
+        .data$revenue.type,
+        grepl("Rebate", .data$comment),
+        "rebates"
+      )
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "revenue.type", "description", "comment"
+    )
+}
+
+.format_cdc_exchange_rewards_withdrawals <- function(data) {
+  data %>%
+    filter(.data$description == "Withdrawal") %>%
+    mutate(
+      quantity = .data$Fee.Amount,
+      transaction = "sell"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description"
+    )
+}
+
+.format_cdc_exchange_rewards_outputs <- function(data) {
+  list(
+    earn = .format_cdc_exchange_rewards_earn(data),
+    withdrawals = .format_cdc_exchange_rewards_withdrawals(data)
+  )
 }

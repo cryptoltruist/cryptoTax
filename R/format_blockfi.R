@@ -18,7 +18,54 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
     "Crypto Transfer", "Trade", "Bonus Payment", "Referral Bonus"
   )
 
-  # Rename columns
+  data <- .format_blockfi_prepare_input(data, known.transactions)
+  outputs <- .format_blockfi_outputs(data)
+
+  # Merge the "buy" and "sell" objects
+  data <- merge_exchanges(
+    outputs$buy,
+    outputs$earn,
+    outputs$sell,
+    outputs$withdrawals
+  ) %>%
+    mutate(exchange = "blockfi")
+
+  # Determine spot rate and value of coins
+  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
+
+  if (is.null(data)) {
+    message("Could not reach the CoinMarketCap API at this time")
+    return(NULL)
+  }
+
+  if (any(is.na(data$spot.rate))) {
+    warning("Could not calculate spot rate. Use `force = TRUE`.")
+  }
+
+  data <- data %>%
+    mutate(total.price = ifelse(is.na(.data$total.price),
+      .data$quantity * .data$spot.rate,
+      .data$total.price
+    ))
+
+  data <- .format_blockfi_apply_sell_prices(data)
+
+  # Arrange in correct order
+  data <- data %>%
+    arrange(date, desc(.data$total.price))
+
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+
+  # Return result
+  data
+}
+
+.format_blockfi_prepare_input <- function(data, known.transactions) {
   data <- data %>%
     rename(
       quantity = "Amount",
@@ -27,24 +74,19 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       date = "Confirmed.At"
     )
 
-  # Check if there's any new transactions
   check_new_transactions(data,
     known.transactions = known.transactions,
     transactions.col = "description"
   )
 
-  # Add single dates to dataframe
-  data <- data %>%
+  data %>%
     mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
+}
 
-  # Create a "buy" object
-  BUY <- data %>%
+.format_blockfi_buy <- function(data) {
+  data %>%
     filter(
-      .data$description %in% c(
-        "purchase_TEMP",
-        "Trade"
-      ),
+      .data$description %in% c("purchase_TEMP", "Trade"),
       .data$quantity > 0
     ) %>%
     mutate(transaction = "buy") %>%
@@ -52,9 +94,10 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency",
       "transaction", "description"
     )
+}
 
-  # Create a "earn" object
-  EARN <- data %>%
+.format_blockfi_earn <- function(data) {
+  data %>%
     filter(.data$description %in% c(
       "Interest Payment",
       "Referral Bonus",
@@ -82,14 +125,12 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "revenue.type", "description"
     )
+}
 
-  # Create a "sell" object
-  SELL <- data %>%
+.format_blockfi_sell <- function(data) {
+  data %>%
     filter(
-      .data$description %in% c(
-        "sell_TEMP",
-        "Trade"
-      ),
+      .data$description %in% c("sell_TEMP", "Trade"),
       .data$quantity < 0
     ) %>%
     mutate(
@@ -100,9 +141,10 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency",
       "transaction", "description"
     )
+}
 
-  # Create a "withdrawals" object
-  WITHDRAWALS <- data %>%
+.format_blockfi_withdrawals <- function(data) {
+  data %>%
     filter(.data$description == "Withdrawal Fee") %>%
     mutate(
       quantity = abs(.data$quantity),
@@ -112,72 +154,35 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
       "date", "quantity", "currency", "transaction",
       "description"
     )
+}
 
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, EARN, SELL, WITHDRAWALS) %>%
-    mutate(exchange = "blockfi")
+.format_blockfi_outputs <- function(data) {
+  list(
+    buy = .format_blockfi_buy(data),
+    earn = .format_blockfi_earn(data),
+    sell = .format_blockfi_sell(data),
+    withdrawals = .format_blockfi_withdrawals(data)
+  )
+}
 
-  # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-
-  if (is.null(data)) {
-    message("Could not reach the CoinMarketCap API at this time")
-    return(NULL)
-  }
-
-  if (any(is.na(data$spot.rate))) {
-    warning("Could not calculate spot rate. Use `force = TRUE`.")
-  }
-
-  data <- data %>%
-    mutate(total.price = ifelse(is.na(.data$total.price),
-      .data$quantity * .data$spot.rate,
-      .data$total.price
-    ))
-
-  # CORRECT SPOT RATE FOR COIN TO COIN TRANSACTIONS [for sales]
-  # Replace total.price first, then in a second step spot.rate
-
+.format_blockfi_apply_sell_prices <- function(data) {
   coin.prices <- data %>%
     filter(.data$transaction %in% c("buy")) %>%
     mutate(transaction = "sell")
-
-  # Recreate the SELL object because we need the calculated total prices
-  SELL <- data %>%
+  sell <- data %>%
     filter(.data$transaction %in% c("sell"))
 
-  # These are the prices I want to replace
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"]
+  match_index <- which(sell$date %in% coin.prices$date)
+  if (!length(match_index)) {
+    return(data)
+  }
 
-  # These are the correct prices
-  coin.prices[which(coin.prices$date %in% SELL$date), "total.price"]
-
-  # Let's replace them
-  SELL[which(SELL$date %in% coin.prices$date), "total.price"] <- coin.prices[which(
-    coin.prices$date %in% SELL$date
+  sell[match_index, "total.price"] <- coin.prices[which(
+    coin.prices$date %in% sell$date
   ), "total.price"]
-
-  # Now let's recalculate spot.rate
-  SELL <- SELL %>%
+  sell <- sell %>%
     mutate(spot.rate = .data$total.price / .data$quantity)
-
-  # Let's also replace the rate.source for these transactions
-  SELL[which(SELL$date %in% coin.prices$date), "rate.source"] <- "coinmarketcap (buy price)"
-
-  # Replace these transactions in the main dataframe
-  data[which(data$transaction == "sell"), ] <- SELL
-
-  # Arrange in correct order
-  data <- data %>%
-    arrange(date, desc(.data$total.price))
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
+  sell[match_index, "rate.source"] <- "coinmarketcap (buy price)"
+  data[which(data$transaction == "sell"), ] <- sell
   data
 }
