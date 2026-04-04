@@ -1,5 +1,19 @@
 # Changelog
 
+## cryptoTax 0.1.0.5
+
+**Improvements:**
+
+- Continued the formatter cleanup across
+  [`format_uphold()`](https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.md),
+  [`format_blockfi()`](https://cryptoltruist.github.io/cryptoTax/reference/format_blockfi.md),
+  and
+  [`format_CDC_exchange_rewards()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_rewards.md)
+  to make medium-size exchange-formatting paths easier to maintain
+  without changing user-facing behavior.
+- Kept the package fully green through the formatter refactor batch,
+  including `devtools::check(document = TRUE)`.
+
 ## cryptoTax 0.1.0.4
 
 **Improvements:**
