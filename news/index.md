@@ -1,5 +1,25 @@
 # Changelog
 
+## cryptoTax 0.1.0.3
+
+**Improvements:**
+
+- Continued the formatter cleanup across
+  [`format_generic()`](https://cryptoltruist.github.io/cryptoTax/reference/format_generic.md),
+  [`format_shakepay()`](https://cryptoltruist.github.io/cryptoTax/reference/format_shakepay.md),
+  [`format_binance()`](https://cryptoltruist.github.io/cryptoTax/reference/format_binance.md),
+  and
+  [`format_coinsmart()`](https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.md)
+  to make exchange formatting workflows easier to follow and maintain
+  without changing user-facing behavior.
+- Continued the reporting-output cleanup by simplifying the internal
+  structure of
+  [`tax_box()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_box.md)
+  and
+  [`tax_table()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_table.md).
+- Kept the package fully green through the formatter and tax-output
+  refactor batch, including `devtools::check(document = TRUE)`.
+
 ## cryptoTax 0.1.0.2
 
 **Improvements:**
