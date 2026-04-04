@@ -1,5 +1,16 @@
 # Changelog
 
+## cryptoTax 0.1.0.6
+
+**Improvements:**
+
+- Continued the formatter cleanup across
+  [`format_CDC_exchange()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange.md)
+  and
+  [`format_coinbase()`](https://cryptoltruist.github.io/cryptoTax/reference/format_coinbase.md)
+  to make additional exchange-formatting paths easier to read and
+  maintain without changing user-facing behavior.
+
 ## cryptoTax 0.1.0.5
 
 **Improvements:**
@@ -11,8 +22,6 @@
   [`format_CDC_exchange_rewards()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_rewards.md)
   to make medium-size exchange-formatting paths easier to maintain
   without changing user-facing behavior.
-- Kept the package fully green through the formatter refactor batch,
-  including `devtools::check(document = TRUE)`.
 
 ## cryptoTax 0.1.0.4
 
@@ -25,8 +34,6 @@
   [`format_CDC()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.md)
   to make larger exchange-formatting paths easier to read and maintain
   without changing user-facing behavior.
-- Kept the package fully green through the CDC and Gemini refactor
-  batch, including `devtools::check(document = TRUE)`.
 
 ## cryptoTax 0.1.0.3
 
@@ -45,8 +52,6 @@
   [`tax_box()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_box.md)
   and
   [`tax_table()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_table.md).
-- Kept the package fully green through the formatter and tax-output
-  refactor batch, including `devtools::check(document = TRUE)`.
 
 ## cryptoTax 0.1.0.2
 
@@ -64,8 +69,6 @@
   changing user-facing behavior.
 - Simplified workflow and exchange-format tests by introducing a shared
   example-data helper and removing brittle `eval(parse())` test paths.
-- Kept the package fully green through the reporting refactor batch,
-  including `devtools::check(document = TRUE)`.
 
 ## cryptoTax 0.1.0.1
 
@@ -78,8 +81,6 @@
   [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md)
   to make core pricing, formatter dispatch, and cost-base code easier to
   maintain without changing package behavior.
-- Kept the package fully green after the refactor batch, including
-  `R CMD check` and the built-package test suite.
 
 ## cryptoTax 0.1.0
 

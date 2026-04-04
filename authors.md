@@ -10,12 +10,12 @@ Source:
 [`DESCRIPTION`](https://github.com/cryptoltruist/cryptoTax/blob/main/DESCRIPTION)
 
 Wong S (2026). *cryptoTax: Report Crypto Taxes (Canada Only)*. R package
-version 0.1.0.5, <https://cryptoltruist.github.io/cryptoTax/>.
+version 0.1.0.6, <https://cryptoltruist.github.io/cryptoTax/>.
 
     @Manual{,
       title = {cryptoTax: Report Crypto Taxes (Canada Only)},
       author = {Steve Wong},
       year = {2026},
-      note = {R package version 0.1.0.5},
+      note = {R package version 0.1.0.6},
       url = {https://cryptoltruist.github.io/cryptoTax/},
     }

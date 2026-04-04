@@ -17,7 +17,7 @@ for older transactions)."><meta property="og:image" content="https://cryptoltrui
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,9 @@ calculate prices with CoinMarketCap and later capital gains and so on.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">format_CDC_exchange</span><span class="op">(</span><span class="va">data_CDC_exchange_trades</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Requires a Crypto.com Exchange "OEX_TRANSACTION.csv" export</span></span></span>
+<span class="r-in"><span><span class="co"># in the newer all-transactions format described above.</span></span></span>
+<span class="r-in"><span><span class="fu">format_CDC_exchange</span><span class="op">(</span><span class="va">my_cdc_exchange_transactions</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

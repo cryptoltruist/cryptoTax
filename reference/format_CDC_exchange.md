@@ -54,6 +54,8 @@ calculate prices with CoinMarketCap and later capital gains and so on.
 
 ``` r
 if (FALSE) { # \dontrun{
-format_CDC_exchange(data_CDC_exchange_trades)
+# Requires a Crypto.com Exchange "OEX_TRANSACTION.csv" export
+# in the newer all-transactions format described above.
+format_CDC_exchange(my_cdc_exchange_transactions)
 } # }
 ```
