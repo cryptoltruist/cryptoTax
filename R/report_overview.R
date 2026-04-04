@@ -1,3 +1,45 @@
+.report_overview_filter_year <- function(formatted.ACB, tax.year, local.timezone, verbose) {
+  if (identical(tax.year, "all")) {
+    return(formatted.ACB)
+  }
+
+  formatted.ACB.year <- formatted.ACB %>%
+    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
+    filter(lubridate::year(.data$datetime.local) == tax.year)
+
+  if (isTRUE(verbose)) {
+    message("gains, losses, and net have been filtered for tax year ", tax.year)
+  }
+
+  formatted.ACB.year
+}
+
+.report_overview_latest_acb <- function(formatted.ACB) {
+  formatted.ACB %>%
+    group_by(.data$currency) %>%
+    filter(date == max(.data$date)) %>%
+    slice_tail() %>%
+    select("date", "currency", "total.quantity", "ACB.share", "ACB")
+}
+
+.report_overview_finalize <- function(full) {
+  last.col <- last(full)
+
+  full %>%
+    slice(1:(n() - 1)) %>%
+    mutate(cost.gains = .data$total.cost + .data$gains) %>%
+    arrange(
+      desc(.data$cost.gains),
+      desc(.data$gains),
+      desc(.data$total.cost),
+      desc(.data$cost.share),
+      desc(.data$losses),
+      desc(.data$total.quantity)
+    ) %>%
+    select(-"cost.gains") %>%
+    bind_rows(last.col)
+}
+
 #' @title Summary of ACB
 #'
 #' @description Provides a summary of Adjusted Cost Base (ACB) per share, as well as realized and unrealized gains/losses (plus net value), per coin.
@@ -11,7 +53,6 @@
 #' @param verbose Logical; whether to print progress messages.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
-#' @param verbose Logical; whether to print progress messages.
 #' @return A summary data frame, containing at least the following columns:
 #' date.last, currency, total.quantity, cost.share, total.cost, gains,
 #' losses, net, currency.
@@ -22,11 +63,10 @@
 #' report_overview(formatted.ACB, today.data = FALSE)
 #' @importFrom dplyr %>% filter mutate group_by summarize slice_tail bind_rows
 #' arrange add_row across full_join last n
-
 report_overview <- function(formatted.ACB, 
-                            today.data = TRUE, 
-                            tax.year = "all",
-                            local.timezone = Sys.timezone(),
+                             today.data = TRUE, 
+                             tax.year = "all",
+                             local.timezone = Sys.timezone(),
                             list.prices = NULL,
                             slug = NULL,
                             start.date = NULL,
@@ -41,20 +81,12 @@ report_overview <- function(formatted.ACB,
   formatted.ACB <- formatted.ACB %>%
     filter(.data$currency != "CAD")
 
-  # Filter for year, if necessary!
-  if (tax.year != "all") {
-    formatted.ACB.year <- formatted.ACB %>%
-      mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
-      filter(lubridate::year(.data$datetime.local) == tax.year)
-
-    if (isTRUE(verbose)) {
-      message("gains, losses, and net have been filtered for tax year ", tax.year)  
-    }
-  }
-
-  if (tax.year == "all") {
-    formatted.ACB.year <- formatted.ACB
-  }
+  formatted.ACB.year <- .report_overview_filter_year(
+    formatted.ACB = formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    verbose = verbose
+  )
 
   net <- formatted.ACB.year %>%
     group_by(.data$currency) %>%
@@ -70,11 +102,7 @@ report_overview <- function(formatted.ACB,
     filter(.data$gains < 0) %>%
     summarize(losses = sum(.data$gains, na.rm = TRUE))
 
-  ACB.list <- formatted.ACB %>%
-    group_by(.data$currency) %>%
-    filter(date == max(.data$date)) %>%
-    slice_tail() %>%
-    select("date", "currency", "total.quantity", "ACB.share", "ACB")
+  ACB.list <- .report_overview_latest_acb(formatted.ACB)
 
   if (isTRUE(today.data) && is.null(list.prices)) {
     list.prices <- prepare_list_prices_slugs(
@@ -82,7 +110,9 @@ report_overview <- function(formatted.ACB,
       list.prices = list.prices,
       slug = slug,
       start.date = start.date,
-      verbose = verbose)
+      force = force,
+      verbose = verbose
+    )
   }
 
   if (isTRUE(today.data) && (is.null(list.prices) || is.null(list.prices$date2))) {
@@ -92,7 +122,7 @@ report_overview <- function(formatted.ACB,
     today.data <- FALSE
   }
 
-  if (today.data == TRUE) {
+  if (isTRUE(today.data)) {
     # Make warning for GB, NFTs, etc.
     if (any(ACB.list$currency %in% "GB") && isTRUE(verbose)) {
       warning("1. GB transactions are excluded from today's data because it is not listed on CoinMarketCap.")
@@ -101,24 +131,6 @@ report_overview <- function(formatted.ACB,
       warning("2. NFTs are excluded from today's data because NFTs are not listed individually on CoinMarketCap.")
     }
 
-    list.prices <- prepare_list_prices_slugs(
-      formatted.ACB,
-      list.prices = list.prices,
-      slug = slug,
-      start.date = start.date,
-      verbose = verbose)
-    
-    # if (is.null(list.prices)) {
-    #   my.coins <- formatted.ACB %>% 
-    #     select(currency) %>% 
-    #     unique %>% 
-    #     unlist()
-    #   my.coins <- popular_slugs %>% 
-    #     filter(currency == my.coins) %>% 
-    #     select(slug)
-    #   list.prices <- prepare_list_prices(my.coins, start.date = lubridate::today())
-    # }
-    
     rates <- ACB.list %>%
       filter(
         .data$currency != "GB",
@@ -187,7 +199,7 @@ report_overview <- function(formatted.ACB,
       )
   }
 
-  if (today.data == FALSE) {
+  if (isFALSE(today.data)) {
     full <- list(ACB.list, gains, losses, net) %>%
       Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "currency"), .)
 
@@ -215,20 +227,6 @@ report_overview <- function(formatted.ACB,
       )
   }
 
-  last.col <- last(full)
-  
-  full <- full %>% 
-    slice(1:(n() - 1)) %>% 
-    mutate(cost.gains = .data$total.cost + .data$gains) %>% 
-    arrange(desc(.data$cost.gains),
-            desc(.data$gains),
-            # desc(.data$net),
-            desc(.data$total.cost),
-            desc(.data$cost.share),
-            desc(.data$losses),
-            desc(.data$total.quantity)) %>% 
-    select(-"cost.gains")
-  
-  bind_rows(full, last.col)
+  .report_overview_finalize(full)
 }
 

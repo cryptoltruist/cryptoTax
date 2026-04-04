@@ -1,3 +1,47 @@
+.report_summary_filter_year <- function(formatted.ACB, tax.year, local.timezone) {
+  if (identical(tax.year, "all")) {
+    return(formatted.ACB)
+  }
+
+  formatted.ACB %>%
+    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
+    filter(lubridate::year(.data$datetime.local) == tax.year)
+}
+
+.report_summary_latest_acb <- function(formatted.ACB) {
+  formatted.ACB %>%
+    group_by(.data$currency) %>%
+    filter(.data$date == max(.data$date)) %>%
+    slice_tail() %>%
+    select("date", "currency", "total.quantity", "ACB.share", "ACB")
+}
+
+.report_summary_rates <- function(ACB.list, list.prices, force) {
+  rates <- ACB.list %>%
+    filter(
+      .data$currency != "GB",
+      !grepl("NFT", .data$currency)
+    ) %>%
+    mutate(
+      date.temp = .data$date,
+      date = last(list.prices$date2)
+    )
+
+  cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
+}
+
+.report_summary_table <- function(temp, tax.year) {
+  results <- temp %>%
+    as.data.frame() %>%
+    rename("Amount" = "gains") %>%
+    mutate(Type = rownames(temp)) %>%
+    select("Type", "Amount")
+  rownames(results) <- NULL
+
+  results <- rbind(c("tax.year", tax.year), results)
+  cbind(results, currency = "CAD")
+}
+
 #' @title Summary of gains and losses
 #'
 #' @description Provides a summary of realized capital gains and losses (and total).
@@ -20,7 +64,6 @@
 #' @importFrom dplyr %>% filter mutate group_by ungroup select summarize
 #' slice_tail arrange add_row rename
 #' @importFrom rlang .data
-
 report_summary <- function(formatted.ACB,
                            today.data = TRUE,
                            tax.year = "all",
@@ -37,17 +80,10 @@ report_summary <- function(formatted.ACB,
   formatted.ACB <- formatted.ACB %>%
     filter(.data$currency != "CAD")
 
-  ACB.list <- formatted.ACB %>%
-    group_by(.data$currency) %>%
-    filter(.data$date == max(.data$date)) %>%
-    slice_tail() %>%
-    select("date", "currency", "total.quantity", "ACB.share", "ACB")
+  ACB.list <- .report_summary_latest_acb(formatted.ACB)
 
   if (tax.year != "all") {
-    formatted.ACB.year <- formatted.ACB %>%
-      mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone)) %>%
-      filter(lubridate::year(.data$datetime.local) == tax.year)
-
+    formatted.ACB.year <- .report_summary_filter_year(formatted.ACB, tax.year, local.timezone)
     message(
       "gains, losses, and net have been filtered for tax year ",
       tax.year, " (time zone = ", local.timezone, ")"
@@ -111,27 +147,7 @@ report_summary <- function(formatted.ACB,
       )
     }
 
-    if (is.null(list.prices)) {
-      list.prices <- prepare_list_prices_slugs(
-        formatted.ACB,
-        list.prices = list.prices,
-        slug = slug,
-        start.date = start.date,
-        force = force
-      )
-    }
-
-    rates <- ACB.list %>%
-      filter(
-        .data$currency != "GB",
-        !grepl("NFT", .data$currency)
-      ) %>%
-      mutate(
-        date.temp = .data$date,
-        date = last(list.prices$date2)
-      )
-
-    rates <- cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
+    rates <- .report_summary_rates(ACB.list, list.prices, force)
 
     message("Date of current prices: ", last(list.prices$date2))
 
@@ -186,18 +202,7 @@ report_summary <- function(formatted.ACB,
     temp <- t(data.frame(gains, losses, net, total.cost, revenue))
   }
 
-  results <- temp %>%
-    as.data.frame() %>%
-    rename("Amount" = "gains") %>%
-    mutate(Type = rownames(temp)) %>%
-    select("Type", "Amount")
-  rownames(results) <- NULL
-
-  results <- rbind(c("tax.year", tax.year), results)
-
-  results <- cbind(results, currency = "CAD")
-
-  results
+  .report_summary_table(temp, tax.year)
 }
 
 formatC_2 <- function(x) {formatC(unlist(unlist(x)), format = "f", big.mark = ",", digits = 2)}

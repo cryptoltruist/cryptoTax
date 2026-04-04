@@ -4,6 +4,11 @@ options(scipen = 999)
 
 list.prices <- list_prices_example
 
+list2env(
+  stats::setNames(.test_exchange_data(), paste0("data_", .test_exchange_names)),
+  envir = environment()
+)
+
 # Generics ####
 
 test_that("generic1 - capitals", {

@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.2
+
+**Improvements:**
+
+- Continued a broader reporting-stack cleanup across `format_ACB()`, `report_overview()`, `report_summary()`, `report_revenues()`, `prepare_report()`, and `print_report()` to make report generation and summary logic easier to maintain without changing user-facing behavior.
+- Simplified workflow and exchange-format tests by introducing a shared example-data helper and removing brittle `eval(parse())` test paths.
+- Kept the package fully green through the reporting refactor batch, including `devtools::check(document = TRUE)`.
+
 # cryptoTax 0.1.0.1
 
 **Improvements:**

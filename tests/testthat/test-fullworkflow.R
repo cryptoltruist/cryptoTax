@@ -5,31 +5,8 @@
 
    list.prices <- list_prices_example
 
-   # Generate string list of exchanges ####
-  exchanges <- paste0(c(
-    "adalite",
-    "binance",
-    "binance_withdrawals",
-    "blockfi",
-    "CDC",
-    "CDC_exchange_rewards",
-    "CDC_exchange_trades",
-    "CDC_wallet",
-    "celsius",
-    "coinsmart",
-    "exodus",
-    "gemini",
-    "newton",
-    "pooltool",
-    "presearch",
-    "shakepay",
-    "uphold"
-  ))
-
-  data_exchanges <- paste0("data_", exchanges)
-
-  formatted.data <- suppressMessages(lapply(data_exchanges, function(x) {
-    format_detect(eval(parse(text = x)), list.prices = list.prices)
+  formatted.data <- suppressMessages(lapply(.test_exchange_data(), function(x) {
+    format_detect(x, list.prices = list.prices)
   })) %>%
     merge_exchanges()
 

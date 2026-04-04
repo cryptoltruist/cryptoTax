@@ -1,3 +1,29 @@
+.prepare_report_core <- function(formatted.ACB, list.prices, tax.year, local.timezone) {
+  report.overview <- report_overview(
+    formatted.ACB,
+    today.data = TRUE,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    list.prices = list.prices
+  )
+  report.summary <- report_summary(
+    formatted.ACB,
+    today.data = TRUE,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    list.prices = list.prices
+  )
+  proceeds <- get_proceeds(formatted.ACB, tax.year = tax.year)
+  sup.losses <- get_sup_losses(formatted.ACB, tax.year)
+  table.revenues <- report_revenues(
+    formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone
+  )
+
+  dplyr::lst(report.overview, report.summary, proceeds, sup.losses, table.revenues)
+}
+
 #' @title Prepare info for full crypto tax report
 #'
 #' @description Prepare all required information for a full crypto tax report.
@@ -21,25 +47,21 @@ prepare_report <- function(formatted.ACB,
                            list.prices = NULL,
                            tax.year = "all",
                            local.timezone = Sys.timezone()) {
-  report.overview <- report_overview(
-    formatted.ACB,
-    today.data = TRUE, tax.year = tax.year,
-    local.timezone = local.timezone, list.prices = list.prices
+  report.info <- .prepare_report_core(
+    formatted.ACB = formatted.ACB,
+    list.prices = list.prices,
+    tax.year = tax.year,
+    local.timezone = local.timezone
   )
-  report.summary <- report_summary(
-    formatted.ACB,
-    today.data = TRUE, tax.year = tax.year,
-    local.timezone = local.timezone, list.prices = list.prices
+
+  report.info$tax.box <- tax_box(
+    report.info$report.summary,
+    report.info$sup.losses,
+    report.info$table.revenues,
+    report.info$proceeds
   )
-  proceeds <- get_proceeds(formatted.ACB, tax.year = tax.year)
-  sup.losses <- get_sup_losses(formatted.ACB, tax.year)
-  table.revenues <- report_revenues(formatted.ACB, tax.year = tax.year)
-  tax.box <- tax_box(report.summary, sup.losses, table.revenues, proceeds)
-  pie_exchange <- crypto_pie(table.revenues)
-  pie_revenue <- crypto_pie(table.revenues, by = "revenue.type")
-  report.info <- dplyr::lst(
-    report.overview, report.summary, proceeds, sup.losses, table.revenues,
-    tax.box, pie_exchange, pie_revenue, local.timezone
-  )
+  report.info$pie_exchange <- crypto_pie(report.info$table.revenues)
+  report.info$pie_revenue <- crypto_pie(report.info$table.revenues, by = "revenue.type")
+  report.info$local.timezone <- local.timezone
   report.info
 }

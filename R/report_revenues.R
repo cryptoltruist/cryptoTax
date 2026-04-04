@@ -1,3 +1,41 @@
+.report_revenue_types <- c(
+  "airdrops",
+  "referrals",
+  "staking",
+  "promos",
+  "interests",
+  "rebates",
+  "rewards",
+  "forks",
+  "mining"
+)
+
+.safe_datetime_max <- function(x, local.timezone) {
+  if (length(x) == 0 || all(is.na(x))) {
+    return(as.POSIXct(NA, tz = local.timezone))
+  }
+
+  max(x, na.rm = TRUE)
+}
+
+.summarize_revenue_type <- function(revenues, revenue.type) {
+  revenue_type_value <- revenue.type
+
+  result <- revenues %>%
+    group_by(.data$exchange) %>%
+    filter(.data$revenue.type == revenue_type_value) %>%
+    summarize(value = sum(.data$value, na.rm = TRUE))
+
+  names(result)[names(result) == "value"] <- revenue.type
+  result
+}
+
+.revenue_type_tables <- function(revenues) {
+  lapply(.report_revenue_types, function(revenue.type) {
+    .summarize_revenue_type(revenues, revenue.type)
+  })
+}
+
 #' @title Report all revenues
 #'
 #' @description Provides a summary of revenues from all sources.
@@ -15,17 +53,8 @@
 #' @importFrom dplyr %>% filter mutate group_by select summarize slice arrange
 #' add_row across full_join
 #' @importFrom rlang .data
-
 report_revenues <- function(formatted.ACB, tax.year = "all",
-                            local.timezone = Sys.timezone()) {
-  safe_datetime_max <- function(x) {
-    if (length(x) == 0 || all(is.na(x))) {
-      return(as.POSIXct(NA, tz = local.timezone))
-    }
-
-    max(x, na.rm = TRUE)
-  }
-
+                             local.timezone = Sys.timezone()) {
   # Add revenues report!!
   revenues <- formatted.ACB %>%
     filter(.data$transaction == "revenue")
@@ -41,7 +70,7 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
   sum(revenues$value)
 
   # Get all revenues for selected year
-  revenues2 <- revenues %>%
+  revenues.total <- revenues %>%
     group_by(.data$exchange) %>%
     select("exchange", "date", "value") %>%
     rename(last.date = "date") %>%
@@ -49,58 +78,12 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
 
   revenues.dates <- revenues %>%
     group_by(.data$exchange) %>%
-    summarize(date = safe_datetime_max(.data$date))
-
-  # Add revenue.type
-  airdrops <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "airdrops") %>%
-    summarize(airdrops = sum(.data$value, na.rm = TRUE))
-
-  referrals <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "referrals") %>%
-    summarize(referrals = sum(.data$value, na.rm = TRUE))
-
-  staking <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "staking") %>%
-    summarize(staking = sum(.data$value, na.rm = TRUE))
-
-  promos <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "promos") %>%
-    summarize(promos = sum(.data$value, na.rm = TRUE))
-
-  interests <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "interests") %>%
-    summarize(interests = sum(.data$value, na.rm = TRUE))
-
-  rebates <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "rebates") %>%
-    summarize(rebates = sum(.data$value, na.rm = TRUE))
-
-  rewards <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "rewards") %>%
-    summarize(rewards = sum(.data$value, na.rm = TRUE))
-
-  forks <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "forks") %>%
-    summarize(forks = sum(.data$value, na.rm = TRUE))
-
-  mining <- revenues %>%
-    group_by(.data$exchange) %>%
-    filter(.data$revenue.type == "mining") %>%
-    summarize(mining = sum(.data$value, na.rm = TRUE))
+    summarize(date = .safe_datetime_max(.data$date, local.timezone))
 
   # Combine everything together
-  table <- list(
-    revenues.dates, revenues2, airdrops, referrals, staking,
-    promos, interests, rebates, rewards, forks, mining
+  table <- c(
+    list(revenues.dates, revenues.total),
+    .revenue_type_tables(revenues)
   ) %>%
     Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "exchange"), .)
 
@@ -114,7 +97,7 @@ report_revenues <- function(formatted.ACB, tax.year = "all",
   table <- table %>%
     add_row(
       exchange = "total",
-      date.last = safe_datetime_max(table$date.last),
+      date.last = .safe_datetime_max(table$date.last, local.timezone),
       summarize(., across(tidyselect::where(is.numeric), \(x) sum(x, na.rm = TRUE)))
     ) %>%
     mutate(
