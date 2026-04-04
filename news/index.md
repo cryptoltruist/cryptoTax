@@ -1,5 +1,19 @@
 # Changelog
 
+## cryptoTax 0.1.0.4
+
+**Improvements:**
+
+- Continued the formatter cleanup across
+  [`format_gemini()`](https://cryptoltruist.github.io/cryptoTax/reference/format_gemini.md),
+  [`format_CDC_exchange_trades()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_trades.md),
+  and
+  [`format_CDC()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.md)
+  to make larger exchange-formatting paths easier to read and maintain
+  without changing user-facing behavior.
+- Kept the package fully green through the CDC and Gemini refactor
+  batch, including `devtools::check(document = TRUE)`.
+
 ## cryptoTax 0.1.0.3
 
 **Improvements:**
