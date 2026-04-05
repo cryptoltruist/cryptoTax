@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.8
+
+**Improvements:**
+
+- Continued the reporting and tax-summary cleanup across `format_dollars()`, `prepare_report()`, `print_report()`, `crypto_pie()`, `get_proceeds()`, `get_sup_losses()`, `report_overview()`, and `report_summary()` to make report generation, current-price handling, and tax-summary helpers more consistent and easier to maintain without changing user-facing behavior.
+- Added focused report-helper and print-report tests, and simplified the full report template so it reads the current pricing date from prepared report data instead of directly depending on `list.prices`.
+
 # cryptoTax 0.1.0.7
 
 **Improvements:**

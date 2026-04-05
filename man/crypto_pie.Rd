@@ -15,7 +15,7 @@ crypto_pie(table.revenues, by = "exchange")
 A ggplot2 object in the form of a pie chart.
 }
 \description{
-Format a .csv file from Newton for later ACB processing.
+Make a pie chart of your crypto revenues.
 }
 \examples{
 shakepay <- format_shakepay(data_shakepay)

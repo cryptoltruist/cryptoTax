@@ -18,8 +18,8 @@ x <- report.info$report.summary[-1,]
 
 tax_table(x)
 
-if ("value.today" %in% x$Type) {
-  warning("Date of value.today: ", last(list.prices$date2))  
+if ("value.today" %in% x$Type && !is.null(report.info$current.price.date)) {
+  warning("Date of value.today: ", report.info$current.price.date)  
 }
 ```
 
@@ -98,8 +98,8 @@ sub2 <- report.info$report.overview %>%
 sub2 %>% 
   tax_table(repeat.header = TRUE)
 
-if ("value.today" %in% names(sub2)) {
-  warning("Date of value.today: ", last(list.prices$date2))  
+if ("value.today" %in% names(sub2) && !is.null(report.info$current.price.date)) {
+  warning("Date of value.today: ", report.info$current.price.date)  
 }
 ```
 

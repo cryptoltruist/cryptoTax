@@ -1,3 +1,23 @@
+.prepare_proceeds_bucket <- function(x) {
+  x %>%
+    mutate(
+      ACB.quantity = .data$total.price - .data$gains,
+      proceeds = .data$total.price,
+      profits = .data$proceeds - .data$ACB.quantity - .data$fees
+    )
+}
+
+#' @noRd
+.summarize_proceeds_bucket <- function(x) {
+  x %>%
+    ungroup() %>%
+    summarize(
+      proceeds = sum(.data$total.price),
+      ACB.total = sum(.data$ACB.quantity),
+      gains = .data$proceeds - .data$ACB.total
+    )
+}
+
 #' @title Get proceeds of all sold coins
 #'
 #' @description Get proceeds of sold coins, ACB of sold coins, and resulting
@@ -14,48 +34,20 @@
 #' get_proceeds(formatted.ACB, 2021)
 #' @importFrom dplyr mutate %>% filter ungroup summarize relocate bind_rows
 #' @importFrom rlang .data
-
 get_proceeds <- function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
-  formatted.ACB.year <- formatted.ACB %>%
-    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone))
-  if (tax.year != "all") {
-    formatted.ACB.year <- formatted.ACB.year %>%
-      filter(lubridate::year(.data$datetime.local) == tax.year)
-    message("Note: proceeds have been filtered for tax year ", tax.year)
-  }
+  formatted.ACB.year <- .filter_formatted_acb_tax_year(
+    formatted.ACB = formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    label = "proceeds"
+  )
   only.gains <- formatted.ACB.year %>%
-    filter(.data$gains > 0)
-  only.gains <- only.gains %>%
-    mutate(
-      ACB.quantity = .data$total.price - .data$gains,
-      proceeds = .data$total.price,
-      profits = .data$proceeds - .data$ACB.quantity - .data$fees
-    )
+    filter(.data$gains > 0) %>%
+    .prepare_proceeds_bucket()
 
   only.losses <- formatted.ACB.year %>%
-    filter(.data$gains < 0)
-  only.losses <- only.losses %>%
-    mutate(
-      ACB.quantity = .data$total.price - .data$gains,
-      proceeds = .data$total.price,
-      profits = .data$proceeds - .data$ACB.quantity - .data$fees
-    )
-
-  only.gains.sum <- only.gains %>%
-    ungroup() %>%
-    summarize(
-      proceeds = sum(.data$total.price),
-      ACB.total = sum(.data$ACB.quantity),
-      gains = .data$proceeds - .data$ACB.total
-    )
-
-  only.losses.sum <- only.losses %>%
-    ungroup() %>%
-    summarize(
-      proceeds = sum(.data$total.price),
-      ACB.total = sum(.data$ACB.quantity),
-      gains = .data$proceeds - .data$ACB.total
-    )
+    filter(.data$gains < 0) %>%
+    .prepare_proceeds_bucket()
 
   # sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
 
@@ -70,8 +62,11 @@ get_proceeds <- function(formatted.ACB, tax.year = "all", local.timezone = Sys.t
   #              gains = proceeds - ACB.total)
   # }
 
-  bind_rows(only.gains.sum, only.losses.sum) %>%
+  bind_rows(
+    .summarize_proceeds_bucket(only.gains),
+    .summarize_proceeds_bucket(only.losses)
+  ) %>%
     mutate(type = c("Gains", "Losses")) %>%
-    relocate("type") %>%
+    relocate("type") %>% 
     as.data.frame()
 }

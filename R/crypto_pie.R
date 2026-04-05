@@ -1,6 +1,45 @@
+.validate_crypto_pie_by <- function(by) {
+  if (!by %in% c("exchange", "revenue.type")) {
+    stop("`by` must be either 'exchange' or 'revenue.type'.")
+  }
+}
+
+.crypto_pie_colors <- function(n) {
+  grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Pastel1"))(n)
+}
+
+.prepare_exchange_pie_data <- function(table.revenues) {
+  pie.data <- table.revenues %>%
+    filter(.data$exchange != "total") %>%
+    arrange(desc(.data$exchange)) %>%
+    mutate(position = cumsum(.data$total.revenues) - 0.5 * .data$total.revenues)
+
+  pie.data %>%
+    mutate(my.label = paste0("$", .data$total.revenues, "\n", .data$exchange))
+}
+
+.prepare_revenue_type_pie_data <- function(table.revenues) {
+  table.revenues %>%
+    filter(.data$exchange != "total") %>%
+    select("airdrops":"mining") %>%
+    summarize(across(tidyselect::where(is.numeric), \(x) sum(x, na.rm = TRUE))) %>%
+    round(2) %>%
+    t() %>%
+    as.data.frame() %>%
+    filter(.data$V1 != 0) %>%
+    dplyr::mutate(revenue.type = rownames(.)) %>%
+    dplyr::rename(total.revenues = "V1") %>%
+    select("total.revenues":"revenue.type") %>%
+    arrange(desc(.data$revenue.type)) %>%
+    mutate(
+      position = cumsum(.data$total.revenues) - 0.5 * .data$total.revenues,
+      my.label = paste0("$", .data$total.revenues, "\n", .data$revenue.type)
+    )
+}
+
 #' @title Make a pie chart of your crypto revenues
 #'
-#' @description Format a .csv file from Newton for later ACB processing.
+#' @description Make a pie chart of your crypto revenues.
 #' @param table.revenues The revenue table to plot
 #' @param by To plot by which element, one of `c("exchange", "revenue.type")`.
 #' @return A ggplot2 object in the form of a pie chart.
@@ -15,52 +54,14 @@
 #' crypto_pie(table.revenues, by = "revenue.type")
 #' @importFrom dplyr %>% filter arrange mutate select summarize desc
 #' @importFrom rlang .data
-
 crypto_pie <- function(table.revenues, by = "exchange") {
-  if (by == "exchange") {
-    # Modify dataframe appropriately
-    pie.data <- table.revenues %>%
-      filter(.data$exchange != "total") %>%
-      arrange(desc(.data$exchange)) %>%
-      mutate(position = cumsum(.data$total.revenues) - 0.5 * .data$total.revenues)
-
-    # Define the number of colors for pastel palette
-    nb.cols <- nrow(table.revenues)
-    mycolors <- grDevices::colorRampPalette(
-      RColorBrewer::brewer.pal(8, "Pastel1")
-    )(nb.cols)
-
-    # Combine exchange with revenue!
-    pie.data <- pie.data %>%
-      mutate(my.label = paste0("$", .data$total.revenues, "\n", .data$exchange))
+  .validate_crypto_pie_by(by)
+  pie.data <- if (by == "exchange") {
+    .prepare_exchange_pie_data(table.revenues)
+  } else {
+    .prepare_revenue_type_pie_data(table.revenues)
   }
-
-  # Add option for revenue.type
-  if (by == "revenue.type") {
-    table.revenues <- table.revenues %>%
-      filter(.data$exchange != "total") %>%
-      select("airdrops":"mining") %>%
-      summarize(across(tidyselect::where(is.numeric), \(x) sum(x, na.rm = TRUE))) %>%
-      round(2) %>%
-      t() %>%
-      as.data.frame() %>%
-      filter(.data$V1 != 0)
-    table.revenues[, 2] <- rownames(table.revenues)
-    colnames(table.revenues) <- c("total.revenues", by)
-
-    pie.data <- table.revenues %>%
-      select("total.revenues":"revenue.type") %>%
-      arrange(desc(.data$revenue.type)) %>%
-      mutate(position = cumsum(.data$total.revenues) - 0.5 * .data$total.revenues)
-
-    # Define the number of colors for pastel palette
-    nb.cols <- nrow(table.revenues)
-    mycolors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Pastel1"))(nb.cols)
-
-    # Combine exchange with revenue!
-    pie.data <- pie.data %>%
-      mutate(my.label = paste0("$", .data$total.revenues, "\n", .data$revenue.type))
-  }
+  mycolors <- .crypto_pie_colors(nrow(pie.data))
 
   # Make the actual pie chart!
   pie <- pie.data %>%

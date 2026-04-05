@@ -16,20 +16,6 @@
     select("date", "currency", "total.quantity", "ACB.share", "ACB")
 }
 
-.report_summary_rates <- function(ACB.list, list.prices, force) {
-  rates <- ACB.list %>%
-    filter(
-      .data$currency != "GB",
-      !grepl("NFT", .data$currency)
-    ) %>%
-    mutate(
-      date.temp = .data$date,
-      date = last(list.prices$date2)
-    )
-
-  cryptoTax::match_prices(rates, list.prices = list.prices, force = force)
-}
-
 .report_summary_table <- function(temp, tax.year) {
   results <- temp %>%
     as.data.frame() %>%
@@ -72,11 +58,6 @@ report_summary <- function(formatted.ACB,
                            slug = NULL,
                            start.date = NULL,
                            force = FALSE) {
-  if (isTRUE(today.data) && is.null(list.prices) && isFALSE(curl::has_internet())) {
-    message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
-    today.data <- FALSE
-  }
-
   formatted.ACB <- formatted.ACB %>%
     filter(.data$currency != "CAD")
 
@@ -120,36 +101,25 @@ report_summary <- function(formatted.ACB,
     select("value") %>%
     summarize(revenue = sum(.data$value))
 
-  if (isTRUE(today.data) && is.null(list.prices)) {
-    list.prices <- prepare_list_prices_slugs(
-      formatted.ACB,
-      list.prices = list.prices,
-      slug = slug,
-      start.date = start.date,
-      force = force
-    )
-  }
-
-  if (isTRUE(today.data) && (is.null(list.prices) || is.null(list.prices$date2))) {
-    message("Could not reach pricing data at this time. The today.data argument has been set to `FALSE` automatically.")
-    today.data <- FALSE
-  }
+  price.state <- .resolve_report_today_data(
+    formatted.ACB = formatted.ACB,
+    today.data = today.data,
+    list.prices = list.prices,
+    slug = slug,
+    start.date = start.date,
+    force = force,
+    verbose = TRUE
+  )
+  today.data <- price.state$today.data
+  list.prices <- price.state$list.prices
 
   if (isTRUE(today.data)) {
-    if (any(ACB.list$currency %in% "GB")) {
-      message(
-        "1. GB transactions are excluded from today's data because it is not listed on CoinMarketCap."
-      )
-    }
-    if (any(grepl("NFT", ACB.list$currency))) {
-      message(
-        "2. NFTs are excluded from today's data because NFTs are not listed individually on CoinMarketCap."
-      )
-    }
-
-    rates <- .report_summary_rates(ACB.list, list.prices, force)
-
-    message("Date of current prices: ", last(list.prices$date2))
+    rates <- .prepare_report_current_rates(
+      ACB.list = ACB.list,
+      list.prices = list.prices,
+      force = force,
+      signal = "message"
+    )
 
     rates <- rates %>%
       mutate(

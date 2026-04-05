@@ -9,7 +9,7 @@ format_dollars(x, to = "character")
 \arguments{
 \item{x}{The formatted.ACB file}
 
-\item{to}{What to convert to, with otions \code{c("character", "numeric")}.}
+\item{to}{What to convert to, with options \code{c("character", "numeric")}.}
 }
 \value{
 A value representing dollars, either as a formatted

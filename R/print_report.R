@@ -6,6 +6,19 @@
   tax.year
 }
 
+.build_print_report_env <- function(report.info, list.prices, render.context) {
+  list2env(
+    c(
+      list(
+        report.info = report.info,
+        list.prices = list.prices
+      ),
+      render.context
+    ),
+    parent = asNamespace("cryptoTax")
+  )
+}
+
 .prepare_print_report_context <- function(report.info, tax.year, name) {
   person.name <- paste("Name:", name)
   total.income.numeric <- sum(
@@ -48,6 +61,17 @@
     tax.year,
     out.name
   )
+}
+
+.render_print_report <- function(render.env, out.name) {
+  rmarkdown::render(system.file("full_report.Rmd", package = "cryptoTax"),
+    output_file = out.name,
+    output_dir = getwd(),
+    envir = render.env
+  )
+  if (interactive()) {
+    rstudioapi::viewer(out.name)
+  }
 }
 
 #' @title Print full crypto tax report
@@ -96,19 +120,12 @@ print_report <- function(formatted.ACB,
     tax.year = tax.year,
     name = name
   )
-  out.name <- render.context$out.name
-  list2env(
-    render.context,
-    envir = environment()
+  render.env <- .build_print_report_env(
+    report.info = report.info,
+    list.prices = list.prices,
+    render.context = render.context
   )
-  rmarkdown::render(system.file("full_report.Rmd", package = "cryptoTax"),
-    output_file = out.name,
-    output_dir = getwd(),
-    envir = environment()
-  )
-  if (interactive()) {
-    rstudioapi::viewer(out.name)
-  }
+  .render_print_report(render.env, render.context$out.name)
 }
 
 

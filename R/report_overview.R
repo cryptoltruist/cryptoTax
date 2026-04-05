@@ -72,11 +72,6 @@ report_overview <- function(formatted.ACB,
                             start.date = NULL,
                             force = FALSE,
                             verbose = TRUE) {
-  if (isTRUE(today.data) && isFALSE(curl::has_internet()) && isTRUE(verbose)) {
-    message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
-    today.data <- FALSE
-  }
-
   # Remove CAD
   formatted.ACB <- formatted.ACB %>%
     filter(.data$currency != "CAD")
@@ -104,51 +99,26 @@ report_overview <- function(formatted.ACB,
 
   ACB.list <- .report_overview_latest_acb(formatted.ACB)
 
-  if (isTRUE(today.data) && is.null(list.prices)) {
-    list.prices <- prepare_list_prices_slugs(
-      formatted.ACB,
-      list.prices = list.prices,
-      slug = slug,
-      start.date = start.date,
-      force = force,
-      verbose = verbose
-    )
-  }
-
-  if (isTRUE(today.data) && (is.null(list.prices) || is.null(list.prices$date2))) {
-    if (isTRUE(verbose)) {
-      message("Could not reach pricing data at this time. The today.data argument has been set to `FALSE` automatically.")
-    }
-    today.data <- FALSE
-  }
+  price.state <- .resolve_report_today_data(
+    formatted.ACB = formatted.ACB,
+    today.data = today.data,
+    list.prices = list.prices,
+    slug = slug,
+    start.date = start.date,
+    force = force,
+    verbose = verbose
+  )
+  today.data <- price.state$today.data
+  list.prices <- price.state$list.prices
 
   if (isTRUE(today.data)) {
-    # Make warning for GB, NFTs, etc.
-    if (any(ACB.list$currency %in% "GB") && isTRUE(verbose)) {
-      warning("1. GB transactions are excluded from today's data because it is not listed on CoinMarketCap.")
-    }
-    if (any(grepl("NFT", ACB.list$currency)) && isTRUE(verbose)) {
-      warning("2. NFTs are excluded from today's data because NFTs are not listed individually on CoinMarketCap.")
-    }
-
-    rates <- ACB.list %>%
-      filter(
-        .data$currency != "GB",
-        !grepl("NFT", .data$currency)
-      ) %>%
-      mutate(
-        date.temp = .data$date,
-        date = last(list.prices$date2)
-      )
-
-    rates <- cryptoTax::match_prices(rates, 
-                                     list.prices = list.prices, 
-                                     force = force, 
-                                     verbose = verbose)
-    
-    if (isTRUE(verbose)) {
-      message("Date of current prices: ", last(list.prices$date2))
-    }
+    rates <- .prepare_report_current_rates(
+      ACB.list = ACB.list,
+      list.prices = list.prices,
+      force = force,
+      verbose = verbose,
+      signal = "warning"
+    )
 
     rates <- rates %>%
       mutate(

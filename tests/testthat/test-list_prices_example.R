@@ -17,6 +17,7 @@ test_that("list_prices_example supports an offline reporting workflow", {
   expect_true(all(c("report.overview", "report.summary", "tax.box") %in% names(report.info)))
   expect_s3_class(report.info$report.overview, "data.frame")
   expect_s3_class(report.info$report.summary, "data.frame")
+  expect_equal(report.info$current.price.date, max(list_prices_example$date2))
 })
 
 test_that("prepare_report passes local.timezone to report_revenues", {

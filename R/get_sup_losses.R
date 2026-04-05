@@ -10,24 +10,27 @@
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' get_sup_losses(formatted.ACB, 2021)
-#' @importFrom dplyr mutate %>% filter summarize add_row across
+#' @importFrom dplyr mutate %>% filter summarize
 #' @importFrom rlang .data
 
 get_sup_losses <- function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
-  formatted.ACB.year <- formatted.ACB %>%
-    mutate(datetime.local = lubridate::with_tz(.data$date, tz = local.timezone))
-  if (tax.year != "all") {
-    formatted.ACB.year <- formatted.ACB.year %>%
-      filter(lubridate::year(.data$datetime.local) == tax.year)
-    message("Note: superficial losses have been filtered for tax year ", tax.year)
-  }
-  formatted.ACB.year %>%
+  formatted.ACB.year <- .filter_formatted_acb_tax_year(
+    formatted.ACB = formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    label = "superficial losses"
+  )
+  total.sup.loss <- formatted.ACB.year %>%
     summarize(sup.loss = sum(.data$gains.sup, na.rm = TRUE)) %>%
-    filter(.data$sup.loss != 0) %>%
-    add_row(
-      currency = "Total",
-      summarize(., across("sup.loss", sum))
-    ) %>%
-    as.data.frame() %>%
     mutate(sup.loss = round(.data$sup.loss, 2))
+
+  if (identical(total.sup.loss$sup.loss[[1]], 0)) {
+    return(data.frame(currency = character(), sup.loss = numeric()))
+  }
+
+  data.frame(
+    currency = "Total",
+    sup.loss = total.sup.loss$sup.loss,
+    stringsAsFactors = FALSE
+  )
 }
