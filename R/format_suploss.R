@@ -50,9 +50,7 @@ add_quantities <- function(data, transaction = "transaction", quantity = "quanti
 sup_loss_single_df <- function(data, transaction = "transaction", quantity = "quantity") {
   data.range <- data %>%
     mutate(suploss.range = suploss_range(.data$date))
-  list.ranges <- data.range %>%
-    filter(.data[[transaction]] == "buy") %>%
-    select("suploss.range")
+  suploss.ranges <- .suploss_ranges(data.range, transaction = transaction)
   # Calculate the sum of buy quantities for each range of 60 days...
   list.ranges.df <- check_suploss(data.range)
   quantity.60days <- lapply(list.ranges.df, function(x) {
@@ -62,12 +60,8 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
         0
       )) %>%
       summarize(quantity.60days = sum(.data$quantity.buy))
-  }) %>% bind_rows()
-  if (nrow(quantity.60days) == 0) {
-    quantity.60days <- data.range %>%
-      ungroup() %>%
-      transmute(quantity.60days = NA)
-  }
+  }) %>% bind_rows() %>%
+    .suploss_default_column(template = data.range, column_name = "quantity.60days")
 
   # Now calculate share.left60
   share.left60 <- lapply(list.ranges.df, function(x) {
@@ -76,18 +70,14 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
       ungroup() %>%
       select("total.quantity") %>%
       rename(share.left60 = "total.quantity")
-  }) %>% bind_rows()
-  if (nrow(share.left60) == 0) {
-    share.left60 <- data.range %>%
-      ungroup() %>%
-      transmute(share.left60 = NA)
-  }
+  }) %>% bind_rows() %>%
+    .suploss_default_column(template = data.range, column_name = "share.left60")
 
   data.range2 <- data.frame(data.range, quantity.60days, share.left60)
   data.range3 <- data.range2 %>%
     rowwise() %>%
     mutate(
-      sup.loss = any(.data$date %within% list.ranges),
+      sup.loss = any(.data$date %within% suploss.ranges),
       sup.loss = ifelse(.data[[transaction]] != "sell",
         FALSE,
         .data$sup.loss
@@ -99,6 +89,24 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
     ) %>%
     ungroup()
   data.range3
+}
+
+.suploss_ranges <- function(data, transaction = "transaction") {
+  data %>%
+    filter(.data[[transaction]] == "buy") %>%
+    select("suploss.range")
+}
+
+.suploss_default_column <- function(data, template, column_name) {
+  if (nrow(data) > 0) {
+    return(data)
+  }
+
+  out <- template %>%
+    ungroup() %>%
+    transmute(value = NA)
+  names(out) <- column_name
+  out
 }
 
 suploss_range <- function(date) {

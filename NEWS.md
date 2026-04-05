@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.7
+
+**Improvements:**
+
+- Continued a broader formatter-family cleanup across `format_cronos_pos()`, `format_exodus()`, `format_newton()`, `format_pooltool()`, `format_presearch()`, `format_shakepay_old()`, `format_CDC_wallet()`, and `format_suploss()` to make smaller wallet, rewards, and loss-formatting paths easier to follow and maintain without changing user-facing behavior.
+- Updated the GitHub Actions coverage workflow to use the supported artifact action version.
+
 # cryptoTax 0.1.0.6
 
 **Improvements:**

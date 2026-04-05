@@ -27,90 +27,15 @@
 format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("", "cost", "Reward")
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "Received.Amount",
-      currency = "Received.Currency",
-      description = "Label",
-      comment = "Description",
-      date = "Date"
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
-
-  # Add description to deposits and withdrawals
-  data <- data %>%
-    mutate(
-      description = ifelse(grepl("Incoming", .data$comment),
-        "Deposit",
-        ifelse(grepl("Outgoing", .data$comment),
-          "Withdrawal",
-          .data$description
-        )
-      ),
-      currency = ifelse(.data$Sent.Currency != "",
-        .data$Sent.Currency,
-        .data$currency
-      ),
-      quantity = ifelse(!is.na(.data$Sent.Amount),
-        .data$Sent.Amount,
-        .data$quantity
-      )
-    )
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(.data$description %in% c("Reward")) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = "staking"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "revenue.type", "description", "comment"
-    )
-
-  # Create a "withdrawals" object
-  WITHDRAWALS <- data %>%
-    filter(.data$description == "Withdrawal") %>%
-    mutate(
-      quantity = .data$Fee.Amount,
-      transaction = "sell"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment"
-    )
+  data <- .format_cdc_wallet_prepare_input(data, known.transactions)
+  outputs <- .format_cdc_wallet_outputs(data)
 
   # Actually withdrawal fees should be like "selling at zero", so correct total.price
   # WITHDRAWALS <- WITHDRAWALS %>%
   #  mutate(total.price = 0)
 
-  # Create a "staking" object
-  STAKING <- data %>%
-    filter(.data$description == "cost") %>%
-    mutate(
-      quantity = .data$Sent.Amount,
-      transaction = "sell",
-      description = "staking cost"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment"
-    )
-
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(EARN, WITHDRAWALS, STAKING) %>%
+  data <- merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking) %>%
     mutate(exchange = "CDC.wallet")
 
   # Determine spot rate and value of coins
@@ -140,4 +65,82 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
 
   # Return result
   data
+}
+
+.format_cdc_wallet_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      quantity = "Received.Amount",
+      currency = "Received.Currency",
+      description = "Label",
+      comment = "Description",
+      date = "Date"
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::as_datetime(.data$date),
+      description = ifelse(grepl("Incoming", .data$comment),
+        "Deposit",
+        ifelse(grepl("Outgoing", .data$comment),
+          "Withdrawal",
+          .data$description
+        )
+      ),
+      currency = ifelse(.data$Sent.Currency != "", .data$Sent.Currency, .data$currency),
+      quantity = ifelse(!is.na(.data$Sent.Amount), .data$Sent.Amount, .data$quantity)
+    )
+}
+
+.format_cdc_wallet_earn <- function(data) {
+  data %>%
+    filter(.data$description %in% c("Reward")) %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = "staking"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "revenue.type", "description", "comment"
+    )
+}
+
+.format_cdc_wallet_withdrawals <- function(data) {
+  data %>%
+    filter(.data$description == "Withdrawal") %>%
+    mutate(
+      quantity = .data$Fee.Amount,
+      transaction = "sell"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+}
+
+.format_cdc_wallet_staking <- function(data) {
+  data %>%
+    filter(.data$description == "cost") %>%
+    mutate(
+      quantity = .data$Sent.Amount,
+      transaction = "sell",
+      description = "staking cost"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+}
+
+.format_cdc_wallet_outputs <- function(data) {
+  list(
+    earn = .format_cdc_wallet_earn(data),
+    withdrawals = .format_cdc_wallet_withdrawals(data),
+    staking = .format_cdc_wallet_staking(data)
+  )
 }
