@@ -104,6 +104,34 @@
   list.prices
 }
 
+.prepare_price_slugs <- function(data, slug = NULL) {
+  if (!is.null(slug)) {
+    return(slug)
+  }
+
+  data <- add_popular_slugs(data)
+  unique(data$slug)
+}
+
+.prepare_price_start_date <- function(data, start.date = NULL) {
+  if (!is.null(start.date)) {
+    return(start.date)
+  }
+
+  min(data$date)
+}
+
+.reject_usd_only_slug <- function(slug, verbose = TRUE) {
+  if (all(unique(slug) == "USD")) {
+    if (isTRUE(verbose)) {
+      message("Slug cannot be only USD for 'prepare_list_prices()'")
+    }
+    return(TRUE)
+  }
+
+  FALSE
+}
+
 #' Prepare the list of coins for prices
 #'
 #' The [crypto2::crypto_history] API is at times a bit capricious. You might
@@ -279,15 +307,10 @@ prepare_list_prices_slugs <- function(data,
     return(list.prices)
   }
 
-  if (is.null(slug)) {
-    data <- add_popular_slugs(data)
-    slug <- unique(data$slug)
-  }
-  if (is.null(start.date)) {
-    start.date <- min(data$date)
-  }
-  if (all(unique(slug) == "USD") && isTRUE(verbose)) {
-    message("Slug cannot be only USD for 'prepare_list_prices()'")
+  slug <- .prepare_price_slugs(data, slug = slug)
+  start.date <- .prepare_price_start_date(data, start.date = start.date)
+
+  if (.reject_usd_only_slug(slug, verbose = verbose)) {
     return(NULL)
   }
 

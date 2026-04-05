@@ -130,4 +130,89 @@ test_that("prepare_list_prices returns explicit list.prices unchanged even when 
   expect_identical(result, explicit_list_prices)
 })
 
+test_that("prepare_price_slugs falls back to popular slug mapping", {
+  input <- data.frame(currency = c("BTC", "ETH"), stringsAsFactors = FALSE)
+
+  result <- cryptoTax:::.prepare_price_slugs(input)
+
+  expect_equal(result, c("bitcoin", "ethereum"))
+})
+
+test_that("prepare_price_start_date defaults to the earliest transaction date", {
+  input <- data.frame(
+    date = as.POSIXct(c("2021-01-03 00:00:00", "2021-01-01 00:00:00"), tz = "UTC")
+  )
+
+  result <- cryptoTax:::.prepare_price_start_date(input)
+
+  expect_equal(result, as.POSIXct("2021-01-01 00:00:00", tz = "UTC"))
+})
+
+test_that("prepare_list_prices_slugs rejects USD-only slugs", {
+  input <- data.frame(
+    date = as.POSIXct("2021-01-01 10:00:00", tz = "UTC"),
+    currency = "USD",
+    slug = "USD"
+  )
+
+  expect_message(
+    result <- prepare_list_prices_slugs(input, slug = "USD"),
+    "Slug cannot be only USD for 'prepare_list_prices\\(\\)'"
+  )
+
+  expect_null(result)
+})
+
+test_that("resolve_list_prices prefers explicit input over cached state", {
+  local({
+    list.prices <<- data.frame(
+      currency = "BTC",
+      spot.rate2 = 1,
+      date2 = as.Date("2021-01-01")
+    )
+
+    explicit_list_prices <- data.frame(
+      currency = "ETH",
+      spot.rate2 = 2,
+      date2 = as.Date("2021-01-02")
+    )
+
+    result <- cryptoTax:::.resolve_list_prices(
+      force = FALSE,
+      list.prices = explicit_list_prices,
+      verbose = TRUE
+    )
+
+    expect_identical(result, explicit_list_prices)
+  })
+})
+
+test_that("build_list_prices_from_history appends USD rows for each date", {
+  coin_hist <- data.frame(
+    timestamp = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00"), tz = "UTC"),
+    slug = c("bitcoin", "bitcoin"),
+    name = c("Bitcoin", "Bitcoin"),
+    symbol = c("BTC", "BTC"),
+    open = c(100, 120),
+    close = c(110, 130)
+  )
+
+  fx_rates <- data.frame(
+    date = as.Date(c("2021-01-01", "2021-01-02")),
+    USD = c(1.30, 1.31),
+    CAD = c(1, 1)
+  )
+
+  result <- cryptoTax:::.build_list_prices_from_history(
+    coin_hist = coin_hist,
+    USD2CAD.table = fx_rates
+  )
+
+  usd_rows <- result[result$currency == "USD", ]
+
+  expect_equal(nrow(usd_rows), 2)
+  expect_equal(usd_rows$spot.rate2, c(1.30, 1.31))
+  expect_equal(usd_rows$date2, as.Date(c("2021-01-01", "2021-01-02")))
+})
+
 
