@@ -38,3 +38,27 @@ test_that("merge_exchanges orders merged rows by date", {
     as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00", "2021-01-03 00:00:00"), tz = "UTC")
   )
 })
+
+test_that("merge_exchanges flattens nested list inputs", {
+  one <- data.frame(
+    date = as.POSIXct("2021-01-02 00:00:00", tz = "UTC"),
+    exchange = "one"
+  )
+  two <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    exchange = "two"
+  )
+
+  result <- merge_exchanges(list(one, list(NULL, two)))
+
+  expect_equal(result$exchange, c("two", "one"))
+})
+
+test_that("merge_exchanges keeps data without date columns unsorted", {
+  one <- data.frame(exchange = "one", stringsAsFactors = FALSE)
+  two <- data.frame(exchange = "two", stringsAsFactors = FALSE)
+
+  result <- merge_exchanges(one, two)
+
+  expect_equal(result$exchange, c("one", "two"))
+})

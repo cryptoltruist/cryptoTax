@@ -71,21 +71,19 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   data <- .format_presearch_classify(data, rewards.names)
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-
+  data <- .resolve_formatted_prices(
+    data,
+    list.prices = list.prices,
+    force = force
+  )
   if (is.null(data)) {
-    message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
 
   data <- data %>%
-    mutate(
-      quantity = as.numeric(gsub(",", "", .data$quantity)),
-      total.price = ifelse(is.na(.data$total.price),
-        .data$quantity * .data$spot.rate,
-        .data$total.price
-      )
-    )
+    mutate(quantity = as.numeric(gsub(",", "", .data$quantity)))
+
+  data <- .fill_missing_total_price_from_spot(data)
 
   # Add fees, exchange
   data <- merge_exchanges(data) %>%

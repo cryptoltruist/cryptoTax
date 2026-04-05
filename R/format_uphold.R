@@ -40,18 +40,16 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
     ))
 
   # Determine spot rate and value of coins
-  data <- match_prices(data, list.prices = list.prices, force = force)
-
+  data <- .resolve_formatted_prices(
+    data,
+    list.prices = list.prices,
+    force = force
+  )
   if (is.null(data)) {
-    message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
 
-  data <- data %>%
-    mutate(total.price = ifelse(is.na(.data$total.price),
-      .data$quantity * .data$spot.rate,
-      .data$total.price
-    ))
+  data <- .fill_missing_total_price_from_spot(data)
 
   data <- .format_uphold_apply_sell_prices(data)
 

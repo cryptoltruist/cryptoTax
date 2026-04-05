@@ -165,15 +165,12 @@ format_generic <- function(data,
 
   if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
     "currency" %in% names(data)) {
-    data <- match_prices(data, list.prices = list.prices, force = force)
-    if (is.null(data)) {
-      message("Could not reach the CoinMarketCap API at this time")
-      return(NULL)
-    }
-    if (any(is.na(data$spot.rate))) {
-      warning("Could not calculate spot rate. Use `force = TRUE`.")
-    }
-    return(data)
+    return(.resolve_formatted_prices(
+      data,
+      list.prices = list.prices,
+      force = force,
+      warn_on_missing_spot = TRUE
+    ))
   }
 
   if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&

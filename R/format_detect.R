@@ -10,6 +10,10 @@
   registry[registry$exchange == exchange, , drop = FALSE]
 }
 
+.format_detect_message <- function(exchange) {
+  message("Exchange detected: ", exchange)
+}
+
 #' @title Detect transaction file exchange and format it
 #'
 #' @description Detect the exchange of a given transaction file and format
@@ -136,6 +140,11 @@ format_detect <- function(data, ...) {
   formatter(data)
 }
 
+.format_detect_many <- function(data, list.prices = NULL, force = FALSE) {
+  formatted.data <- lapply(data, format_detect, list.prices = list.prices, force = force)
+  merge_exchanges(formatted.data)
+}
+
 #' @rdname format_detect
 #' @export
 format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
@@ -149,7 +158,7 @@ format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ..
     force = force
   )
 
-  message("Exchange detected: ", condition)
+  .format_detect_message(condition)
 
   formatted.data
 }
@@ -157,7 +166,5 @@ format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ..
 #' @rdname format_detect
 #' @export
 format_detect.list <- function(data, list.prices = NULL, force = FALSE, ...) {
-  formatted.data <- lapply(data, format_detect, list.prices = list.prices, force = force)
-  formatted.data <- merge_exchanges(formatted.data)
-  formatted.data
+  .format_detect_many(data, list.prices = list.prices, force = force)
 }

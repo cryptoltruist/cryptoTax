@@ -39,22 +39,17 @@ format_cronos_pos <- function(data, list.prices = NULL, force = FALSE) {
     select(-"blockHash")
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
-
+  data <- .resolve_formatted_prices(
+    data,
+    list.prices = list.prices,
+    force = force,
+    warn_on_missing_spot = TRUE
+  )
   if (is.null(data)) {
-    message("Could not reach the CoinMarketCap API at this time")
     return(NULL)
   }
 
-  if (any(is.na(data$spot.rate))) {
-    warning("Could not calculate spot rate. Use `force = TRUE`.")
-  }
-
-  data <- data %>%
-    mutate(total.price = ifelse(is.na(.data$total.price),
-      .data$quantity * .data$spot.rate,
-      .data$total.price
-    ))
+  data <- .fill_missing_total_price_from_spot(data)
 
   # Reorder columns properly
   data <- data %>%

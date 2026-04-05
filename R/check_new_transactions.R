@@ -10,24 +10,42 @@
 
 .new_transaction_names <- function(data, known.transactions, transactions.col) {
   transaction.values <- unique(data[[transactions.col]])
-  transaction.values[!transaction.values %in% known.transactions]
+  sort(transaction.values[!transaction.values %in% known.transactions])
 }
 
 .new_transaction_descriptions <- function(data, known.transactions, transactions.col, description.col = NULL) {
   if (is.null(description.col)) {
-    return("")
+    return(character())
   }
 
   new.des.names <- data %>%
     filter(!.data[[transactions.col]] %in% known.transactions) %>%
     pull(.data[[description.col]]) %>%
-    unique()
+    unique() %>%
+    sort()
 
   if (!length(new.des.names)) {
-    return("")
+    return(character())
   }
 
-  paste0(". Associated descriptions: ", paste(new.des.names, collapse = ", "))
+  new.des.names
+}
+
+.format_new_transaction_warning <- function(new.transactions.names, new.descriptions = character()) {
+  warning.message <- paste0(
+    "New transaction types detected! These may be unaccounted for: ",
+    paste(new.transactions.names, collapse = ", ")
+  )
+
+  if (!length(new.descriptions)) {
+    return(warning.message)
+  }
+
+  paste0(
+    warning.message,
+    ". Associated descriptions: ",
+    paste(new.descriptions, collapse = ", ")
+  )
 }
 
 #' @title Check for new transactions
@@ -69,13 +87,14 @@ check_new_transactions <- function(data,
 
   if (length(new.transactions.names)) {
     warning(
-      "New transaction types detected! These may be unaccounted for: ",
-      paste(new.transactions.names, collapse = ", "),
-      .new_transaction_descriptions(
+      .format_new_transaction_warning(
+        new.transactions.names = new.transactions.names,
+        new.descriptions = .new_transaction_descriptions(
         data = data,
         known.transactions = known.transactions,
         transactions.col = transactions.col,
         description.col = description.col
+      )
       )
     )
   }

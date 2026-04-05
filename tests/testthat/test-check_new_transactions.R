@@ -50,3 +50,33 @@ test_that("check_new_transactions validates requested columns", {
     "Column 'missing' not found in data frame."
   )
 })
+
+test_that("new transaction helpers return sorted unique names and descriptions", {
+  data <- data.frame(
+    kind = c("known", "z_type", "a_type", "z_type"),
+    description = c("old", "z desc", "a desc", "z desc"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(
+    cryptoTax:::.new_transaction_names(data, "known", "kind"),
+    c("a_type", "z_type")
+  )
+
+  expect_equal(
+    cryptoTax:::.new_transaction_descriptions(
+      data,
+      known.transactions = "known",
+      transactions.col = "kind",
+      description.col = "description"
+    ),
+    c("a desc", "z desc")
+  )
+})
+
+test_that("format_new_transaction_warning omits descriptions when absent", {
+  expect_equal(
+    cryptoTax:::.format_new_transaction_warning("new_type"),
+    "New transaction types detected! These may be unaccounted for: new_type"
+  )
+})
