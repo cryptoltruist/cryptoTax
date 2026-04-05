@@ -1,5 +1,24 @@
 # Changelog
 
+## cryptoTax 0.1.0.7
+
+**Improvements:**
+
+- Continued a broader formatter-family cleanup across
+  [`format_cronos_pos()`](https://cryptoltruist.github.io/cryptoTax/reference/format_cronos_pos.md),
+  [`format_exodus()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.md),
+  [`format_newton()`](https://cryptoltruist.github.io/cryptoTax/reference/format_newton.md),
+  [`format_pooltool()`](https://cryptoltruist.github.io/cryptoTax/reference/format_pooltool.md),
+  [`format_presearch()`](https://cryptoltruist.github.io/cryptoTax/reference/format_presearch.md),
+  `format_shakepay_old()`,
+  [`format_CDC_wallet()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_wallet.md),
+  and
+  [`format_suploss()`](https://cryptoltruist.github.io/cryptoTax/reference/format_suploss.md)
+  to make smaller wallet, rewards, and loss-formatting paths easier to
+  follow and maintain without changing user-facing behavior.
+- Updated the GitHub Actions coverage workflow to use the supported
+  artifact action version.
+
 ## cryptoTax 0.1.0.6
 
 **Improvements:**
