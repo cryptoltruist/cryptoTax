@@ -1,3 +1,15 @@
+.format_detect_condition <- function(data) {
+  data.names <- toString(names(data))
+  registry <- .format_detect_registry()
+  exchanges.cols <- vapply(registry$exchange, .format_detect_example_names, character(1))
+  registry$exchange[data.names == exchanges.cols]
+}
+
+.format_detect_registry_row <- function(exchange) {
+  registry <- .format_detect_registry()
+  registry[registry$exchange == exchange, , drop = FALSE]
+}
+
 #' @title Detect transaction file exchange and format it
 #'
 #' @description Detect the exchange of a given transaction file and format
@@ -114,8 +126,7 @@ format_detect <- function(data, ...) {
 }
 
 .run_format_detect_formatter <- function(exchange, data, list.prices = NULL, force = FALSE) {
-  registry <- .format_detect_registry()
-  row <- registry[registry$exchange == exchange, , drop = FALSE]
+  row <- .format_detect_registry_row(exchange)
   formatter <- get(row$formatter, mode = "function")
 
   if (isTRUE(row$uses_prices)) {
@@ -128,10 +139,7 @@ format_detect <- function(data, ...) {
 #' @rdname format_detect
 #' @export
 format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
-  data.names <- toString(names(data))
-  registry <- .format_detect_registry()
-  exchanges.cols <- vapply(registry$exchange, .format_detect_example_names, character(1))
-  condition <- registry$exchange[data.names == exchanges.cols]
+  condition <- .format_detect_condition(data)
   condition <- .resolve_format_detect_condition(condition, data)
 
   formatted.data <- .run_format_detect_formatter(

@@ -1,6 +1,10 @@
-#' @title List transactions by coin
+.normalize_merge_inputs <- function(inputs) {
+  Filter(Negate(is.null), inputs)
+}
+
+#' @title Merge formatted exchange transactions
 #'
-#' @description Provides a list of transactions, separated by coin..
+#' @description Merge formatted exchange transactions into one data frame.
 #' @param ... To pass the other exchanges to be merged.
 #' @return A data frame, with rows binded and arranged, of the provided
 #' data frames.
@@ -10,7 +14,12 @@
 #' newton <- format_newton(data_newton)
 #' merge_exchanges(shakepay, newton)
 #' @importFrom dplyr %>% bind_rows arrange
-
 merge_exchanges <- function(...) {
-  bind_rows(...) %>% arrange(date)
+  inputs <- .normalize_merge_inputs(list(...))
+
+  if (length(inputs) == 0) {
+    return(data.frame())
+  }
+
+  bind_rows(inputs) %>% arrange(date)
 }

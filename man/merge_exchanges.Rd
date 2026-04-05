@@ -2,7 +2,7 @@
 % Please edit documentation in R/merge_exchanges.R
 \name{merge_exchanges}
 \alias{merge_exchanges}
-\title{List transactions by coin}
+\title{Merge formatted exchange transactions}
 \usage{
 merge_exchanges(...)
 }
@@ -14,7 +14,7 @@ A data frame, with rows binded and arranged, of the provided
 data frames.
 }
 \description{
-Provides a list of transactions, separated by coin..
+Merge formatted exchange transactions into one data frame.
 }
 \examples{
 shakepay <- format_shakepay(data_shakepay)

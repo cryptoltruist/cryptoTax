@@ -67,6 +67,34 @@ test_that("match_prices works offline with an explicit list.prices table", {
   expect_equal(result$rate.source, c("coinmarketcap", "exchange"))
 })
 
+test_that("ensure_match_price_columns adds missing columns and CAD defaults", {
+  tx <- data.frame(
+    currency = c("CAD", "TCAD", "BTC"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.ensure_match_price_columns(tx)
+
+  expect_true(all(c("spot.rate", "total.price", "rate.source") %in% names(result)))
+  expect_equal(result$spot.rate, c(1, 1, NA))
+})
+
+test_that("finalize_match_prices prefers existing exchange prices and fills missing ones", {
+  joined <- data.frame(
+    currency = c("BTC", "ETH"),
+    spot.rate = c(100, NA),
+    rate.source = c("exchange", NA),
+    date2 = as.Date(c("2021-01-01", "2021-01-01")),
+    spot.rate2 = c(123, 456)
+  )
+
+  result <- cryptoTax:::.finalize_match_prices(joined)
+
+  expect_equal(result$spot.rate, c(100, 456))
+  expect_equal(result$rate.source, c("exchange", "coinmarketcap"))
+  expect_false(any(c("date2", "spot.rate2") %in% names(result)))
+})
+
 test_that("prepare_list_prices_slugs returns explicit list.prices unchanged", {
   explicit_list_prices <- data.frame(
     currency = "BTC",

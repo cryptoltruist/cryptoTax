@@ -1,3 +1,35 @@
+.validate_check_new_transactions_input <- function(data, transactions.col, description.col = NULL) {
+  if (!transactions.col %in% names(data)) {
+    stop("Column '", transactions.col, "' not found in data frame. Double-check for typos.")
+  }
+
+  if (!is.null(description.col) && !description.col %in% names(data)) {
+    stop("Column '", description.col, "' not found in data frame. Double-check for typos.")
+  }
+}
+
+.new_transaction_names <- function(data, known.transactions, transactions.col) {
+  transaction.values <- unique(data[[transactions.col]])
+  transaction.values[!transaction.values %in% known.transactions]
+}
+
+.new_transaction_descriptions <- function(data, known.transactions, transactions.col, description.col = NULL) {
+  if (is.null(description.col)) {
+    return("")
+  }
+
+  new.des.names <- data %>%
+    filter(!.data[[transactions.col]] %in% known.transactions) %>%
+    pull(.data[[description.col]]) %>%
+    unique()
+
+  if (!length(new.des.names)) {
+    return("")
+  }
+
+  paste0(". Associated descriptions: ", paste(new.des.names, collapse = ", "))
+}
+
 #' @title Check for new transactions
 #'
 #' @description Check for new transactions for a given exchange
@@ -19,37 +51,32 @@
 #' )
 #' @importFrom dplyr %>% rename mutate select filter bind_rows
 #' @importFrom rlang .data
-
 check_new_transactions <- function(data,
                                    known.transactions,
                                    transactions.col,
                                    description.col = NULL) {
-  if (!transactions.col %in% names(data)) {
-    stop("Column '", transactions.col, "' not found in data frame. Double-check for typos.")
-  } else if (!is.null(description.col) && !description.col %in% names(data)) {
-    stop("Column '", description.col, "' not found in data frame. Double-check for typos.")
-  }
+  .validate_check_new_transactions_input(
+    data = data,
+    transactions.col = transactions.col,
+    description.col = description.col
+  )
 
-  new.transactions <- !unique(data[[transactions.col]]) %in% known.transactions
+  new.transactions.names <- .new_transaction_names(
+    data = data,
+    known.transactions = known.transactions,
+    transactions.col = transactions.col
+  )
 
-  if (any(new.transactions)) {
-    new.transactions.names <- unique(data[[transactions.col]])[new.transactions]
-    new.transactions.names <- paste(new.transactions.names, collapse = ", ")
-
-    if (!is.null(description.col)) {
-      new.des.names <- data %>%
-        filter(!data[[transactions.col]] %in% known.transactions) %>%
-        pull(.data[[description.col]]) %>%
-        unique()
-      new.des.names <- paste(new.des.names, collapse = ", ")
-      new.des.names <- paste0(". Associated descriptions: ", new.des.names)
-    } else {
-      new.des.names <- ""
-    }
-
+  if (length(new.transactions.names)) {
     warning(
       "New transaction types detected! These may be unaccounted for: ",
-      new.transactions.names, new.des.names
+      paste(new.transactions.names, collapse = ", "),
+      .new_transaction_descriptions(
+        data = data,
+        known.transactions = known.transactions,
+        transactions.col = transactions.col,
+        description.col = description.col
+      )
     )
   }
 }

@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.10
+
+**Improvements:**
+
+- Continued the shared-utility cleanup across `merge_exchanges()`, `check_new_transactions()`, `format_detect()`, `match_prices()`, and `format_generic()` to make ingestion, exchange detection, and pricing helper behavior more explicit and easier to maintain without changing user-facing behavior.
+- Expanded focused tests around merge behavior, new-transaction warnings, exchange-detection helpers, generic formatting helpers, and price-matching helper contracts.
+
 # cryptoTax 0.1.0.9
 
 **Improvements:**
