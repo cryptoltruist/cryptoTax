@@ -1,6 +1,6 @@
 # List transactions by coin
 
-Provides a list of transactions, separated by coin..
+Provides a list of transactions, separated by coin.
 
 ## Usage
 

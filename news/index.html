@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,12 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9" id="cryptotax-0109">cryptoTax 0.1.0.9<a class="anchor" aria-label="anchor" href="#cryptotax-0109"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued the ACB and tax-output cleanup across <code><a href="../reference/check_missing_transactions.html">check_missing_transactions()</a></code>, <code><a href="../reference/format_ACB.html">format_ACB()</a></code>, <code><a href="../reference/get_latest_transactions.html">get_latest_transactions()</a></code>, <code><a href="../reference/listby_coin.html">listby_coin()</a></code>, <code><a href="../reference/tax_box.html">tax_box()</a></code>, and <code><a href="../reference/tax_table.html">tax_table()</a></code> to make the ACB analysis helpers and tax-summary outputs more consistent and easier to maintain without changing user-facing behavior.</li>
+<li>Added shared internal helpers for ACB/report utilities, expanded focused tests around ACB helper outputs and tax-report formatting, and hardened the reporting path for cases where the superficial-loss summary is empty.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.8" id="cryptotax-0108">cryptoTax 0.1.0.8<a class="anchor" aria-label="anchor" href="#cryptotax-0108"></a></h2>
 <p><strong>Improvements:</strong></p>

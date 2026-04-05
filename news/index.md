@@ -1,5 +1,25 @@
 # Changelog
 
+## cryptoTax 0.1.0.9
+
+**Improvements:**
+
+- Continued the ACB and tax-output cleanup across
+  [`check_missing_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/check_missing_transactions.md),
+  [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md),
+  [`get_latest_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/get_latest_transactions.md),
+  [`listby_coin()`](https://cryptoltruist.github.io/cryptoTax/reference/listby_coin.md),
+  [`tax_box()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_box.md),
+  and
+  [`tax_table()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_table.md)
+  to make the ACB analysis helpers and tax-summary outputs more
+  consistent and easier to maintain without changing user-facing
+  behavior.
+- Added shared internal helpers for ACB/report utilities, expanded
+  focused tests around ACB helper outputs and tax-report formatting, and
+  hardened the reporting path for cases where the superficial-loss
+  summary is empty.
+
 ## cryptoTax 0.1.0.8
 
 **Improvements:**
