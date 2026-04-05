@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,12 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.8" id="cryptotax-0108">cryptoTax 0.1.0.8<a class="anchor" aria-label="anchor" href="#cryptotax-0108"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued the reporting and tax-summary cleanup across <code><a href="../reference/format_dollars.html">format_dollars()</a></code>, <code><a href="../reference/prepare_report.html">prepare_report()</a></code>, <code><a href="../reference/print_report.html">print_report()</a></code>, <code><a href="../reference/crypto_pie.html">crypto_pie()</a></code>, <code><a href="../reference/get_proceeds.html">get_proceeds()</a></code>, <code><a href="../reference/get_sup_losses.html">get_sup_losses()</a></code>, <code><a href="../reference/report_overview.html">report_overview()</a></code>, and <code><a href="../reference/report_summary.html">report_summary()</a></code> to make report generation, current-price handling, and tax-summary helpers more consistent and easier to maintain without changing user-facing behavior.</li>
+<li>Added focused report-helper and print-report tests, and simplified the full report template so it reads the current pricing date from prepared report data instead of directly depending on <code>list.prices</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.7" id="cryptotax-0107">cryptoTax 0.1.0.7<a class="anchor" aria-label="anchor" href="#cryptotax-0107"></a></h2>
 <p><strong>Improvements:</strong></p>

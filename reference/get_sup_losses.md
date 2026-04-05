@@ -37,6 +37,6 @@ all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 get_sup_losses(formatted.ACB, 2021)
 #> Note: superficial losses have been filtered for tax year 2021
-#>   currency sup.loss
-#> 1    Total        0
+#> [1] currency sup.loss
+#> <0 rows> (or 0-length row.names)
 ```

@@ -1,6 +1,6 @@
 # Make a pie chart of your crypto revenues
 
-Format a .csv file from Newton for later ACB processing.
+Make a pie chart of your crypto revenues.
 
 ## Usage
 

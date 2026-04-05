@@ -1,5 +1,26 @@
 # Changelog
 
+## cryptoTax 0.1.0.8
+
+**Improvements:**
+
+- Continued the reporting and tax-summary cleanup across
+  [`format_dollars()`](https://cryptoltruist.github.io/cryptoTax/reference/format_dollars.md),
+  [`prepare_report()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.md),
+  [`print_report()`](https://cryptoltruist.github.io/cryptoTax/reference/print_report.md),
+  [`crypto_pie()`](https://cryptoltruist.github.io/cryptoTax/reference/crypto_pie.md),
+  [`get_proceeds()`](https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.md),
+  [`get_sup_losses()`](https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.md),
+  [`report_overview()`](https://cryptoltruist.github.io/cryptoTax/reference/report_overview.md),
+  and
+  [`report_summary()`](https://cryptoltruist.github.io/cryptoTax/reference/report_summary.md)
+  to make report generation, current-price handling, and tax-summary
+  helpers more consistent and easier to maintain without changing
+  user-facing behavior.
+- Added focused report-helper and print-report tests, and simplified the
+  full report template so it reads the current pricing date from
+  prepared report data instead of directly depending on `list.prices`.
+
 ## cryptoTax 0.1.0.7
 
 **Improvements:**

@@ -17,7 +17,7 @@ format_dollars(x, to = "character")
 
 - to:
 
-  What to convert to, with otions `c("character", "numeric")`.
+  What to convert to, with options `c("character", "numeric")`.
 
 ## Value
 
