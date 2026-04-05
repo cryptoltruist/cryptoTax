@@ -1,5 +1,20 @@
 # Changelog
 
+## cryptoTax 0.1.0.11
+
+**Improvements:**
+
+- Continued the pricing-core cleanup across
+  [`prepare_list_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md)
+  and related helper paths to make slug derivation, start-date
+  selection, USD-only rejection, and list-price construction behavior
+  more explicit and easier to maintain without changing user-facing
+  behavior.
+- Expanded focused tests around price-prep helpers,
+  [`match_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/match_prices.md)
+  helper contracts, and deterministic list-price construction from
+  injected history and FX data.
+
 ## cryptoTax 0.1.0.10
 
 **Improvements:**
