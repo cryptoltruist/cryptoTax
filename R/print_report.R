@@ -36,7 +36,7 @@
   net.numeric <- format_dollars(net, "numeric")
   net.50 <- format_dollars(net.numeric * 0.5)
   total.tax <- format_dollars(net.numeric * 0.5 + total.income.numeric)
-  sup.losses.total <- report.info$sup.losses[nrow(report.info$sup.losses), "sup.loss"]
+  sup.losses.total <- .sup_losses_total(report.info$sup.losses)
   tot.losses <- format_dollars(as.numeric(losses) - sup.losses.total)
   tot.sup.loss <- as.numeric(tot.losses) + sup.losses.total
   tax.year <- .print_report_tax_year_label(tax.year)

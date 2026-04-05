@@ -105,3 +105,8 @@ test_that("prepare_report_current_rates emits the requested signal style", {
   expect_equal(rates$spot.rate, 42)
   expect_equal(rates$date, as.Date("2021-01-02"))
 })
+
+test_that("sup_losses_total returns zero for empty superficial-loss tables", {
+  expect_equal(cryptoTax:::.sup_losses_total(data.frame(currency = character(), sup.loss = numeric())), 0)
+  expect_equal(cryptoTax:::.sup_losses_total(NULL), 0)
+})

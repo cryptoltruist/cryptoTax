@@ -14,6 +14,5 @@
 #' @importFrom rlang .data
 
 check_missing_transactions <- function(formatted.ACB) {
-  formatted.ACB %>%
-    filter(.data$total.quantity < 0)
+  .negative_balance_rows(formatted.ACB)
 }

@@ -18,6 +18,9 @@ tax_table <- function(table, repeat.header = FALSE, type = 1) {
   rlang::check_installed(c("flextable", "rmarkdown"),
     reason = "for this function."
   )
+  if (!type %in% c(1, 2, 3)) {
+    stop("`type` must be one of 1, 2, or 3.")
+  }
 
   flex.table <- flextable::flextable(table) %>%
     flextable::theme_apa() %>%
@@ -39,7 +42,7 @@ tax_table <- function(table, repeat.header = FALSE, type = 1) {
 
 .tax_table_type2 <- function(flex.table, table) {
   # Count number of decimals and get index
-  small.index <- which(decimalplaces(table$total.quantity) == 0)
+  small.index <- which(.decimalplaces(table$total.quantity) == 0)
   exactly.one <- which(table$total.quantity == 1)
 
   flex.table %>%
@@ -93,8 +96,7 @@ repeat_header <- function(table) {
   table
 }
 
-# Function to count number of decimals
-decimalplaces <- function(x) {
+.decimalplaces <- function(x) {
   ifelse(abs(x - round(x)) > .Machine$double.eps^0.5,
     nchar(sub("^\\d+\\.", "", sub("0+$", "", as.character(x)))),
     0

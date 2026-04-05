@@ -53,3 +53,25 @@ test_that("print_report passes an explicit render env to the renderer", {
   expect_equal(get("person.name", envir = render.result$render.env), "Name: Mr. Test")
   expect_equal(get("tax.year", envir = render.result$render.env), 2021)
 })
+
+test_that("prepare_print_report_context handles empty superficial-loss tables", {
+  report.info <- list(
+    table.revenues = data.frame(staking = 10, interests = 5),
+    report.summary = data.frame(
+      Type = c("tax.year", "gains", "losses", "net", "total.cost"),
+      Amount = c("2021", "100.00", "-20.00", "80.00", "1,000.00"),
+      stringsAsFactors = FALSE
+    ),
+    sup.losses = data.frame(currency = character(), sup.loss = numeric())
+  )
+
+  context <- cryptoTax:::.prepare_print_report_context(
+    report.info = report.info,
+    tax.year = 2021,
+    name = "Mr. Test"
+  )
+
+  expect_equal(context$sup.losses.total, 0)
+  expect_equal(context$tot.losses, "-20.00")
+  expect_equal(context$tot.sup.loss, -20)
+})

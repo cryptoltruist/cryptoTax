@@ -100,3 +100,11 @@
 
   rates
 }
+
+.sup_losses_total <- function(sup.losses) {
+  if (is.null(sup.losses) || nrow(sup.losses) == 0 || !"sup.loss" %in% names(sup.losses)) {
+    return(0)
+  }
+
+  as.numeric(utils::tail(sup.losses[["sup.loss"]], 1))
+}

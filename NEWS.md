@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.9
+
+**Improvements:**
+
+- Continued the ACB and tax-output cleanup across `check_missing_transactions()`, `format_ACB()`, `get_latest_transactions()`, `listby_coin()`, `tax_box()`, and `tax_table()` to make the ACB analysis helpers and tax-summary outputs more consistent and easier to maintain without changing user-facing behavior.
+- Added shared internal helpers for ACB/report utilities, expanded focused tests around ACB helper outputs and tax-report formatting, and hardened the reporting path for cases where the superficial-loss summary is empty.
+
 # cryptoTax 0.1.0.8
 
 **Improvements:**

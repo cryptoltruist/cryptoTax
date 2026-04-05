@@ -1,6 +1,6 @@
 .tax_box_metrics <- function(report.summary, sup.losses, table.revenues, proceeds) {
   losses <- report.summary$Amount[3]
-  sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
+  sup.losses.total <- .sup_losses_total(sup.losses)
   total.income.numeric <- dplyr::last(table.revenues$staking) +
     dplyr::last(table.revenues$interests)
 
@@ -25,6 +25,68 @@
   )
 }
 
+.tax_box_rows <- function(metrics) {
+  data.frame(
+    Description = c(
+      "Gains proceeds",
+      "Gains ACB",
+      "Gains",
+      "50% of gains",
+      "Outlays of gains",
+      "Losses proceeds",
+      "Losses ACB",
+      "Losses",
+      "50% of losses",
+      "Outlays of losses",
+      "Foreign income",
+      "Foreign gains (losses)"
+    ),
+    Amount = c(
+      metrics$gains.proceeds,
+      metrics$gains.acb,
+      metrics$gains.amount,
+      metrics$gains.taxable,
+      0,
+      metrics$losses.proceeds,
+      metrics$losses.acb,
+      metrics$losses.amount,
+      metrics$losses.taxable,
+      0,
+      metrics$total.income.numeric,
+      metrics$foreign.gains.losses
+    ),
+    Comment = c(
+      "Proceeds of sold coins (gains)",
+      "ACB of sold coins (gains)",
+      "Proceeds - ACB (gains)",
+      "Half of gains",
+      "Expenses and trading fees (gains). Normally already integrated in the ACB",
+      "Proceeds of sold coins (losses)",
+      "ACB of sold coins (losses)",
+      "Proceeds - ACB (losses)",
+      "Half of losses",
+      "Expenses and trading fees (losses). Normally already integrated in the ACB",
+      "Income from crypto interest or staking is considered foreign income",
+      "Capital gains from crypto is considered foreign capital gains"
+    ),
+    Line = c(
+      "Schedule 3, line 15199 column 2",
+      "Schedule 3, line 15199 column 3",
+      "Schedule 3, lines 15199 column 5 & 15300",
+      "T1, line 12700; Schedule 3, line 15300, 19900",
+      "Tax software",
+      "Schedule 3, line 15199 column 2",
+      "Schedule 3, line 15199 column 3",
+      "Schedule 3, lines 15199 column 5 & 15300",
+      "T1, line 12700; Schedule 3, line 15300, 19900",
+      "Tax software",
+      "T1, line 13000, T1135",
+      "T1135"
+    ),
+    stringsAsFactors = FALSE
+  )
+}
+
 #' @title Get a simple table of relevant tax information
 #'
 #' @description Output a simple table with all the relevant tax information and tax form line numbers.
@@ -46,67 +108,5 @@
 #' tax_box(report.summary, sup.losses, table.revenues, proceeds)
 tax_box <- function(report.summary, sup.losses, table.revenues, proceeds) {
   metrics <- .tax_box_metrics(report.summary, sup.losses, table.revenues, proceeds)
-
-  out <- data.frame(
-    Description = c(
-      "Gains proceeds", # 1
-      "Gains ACB", # 2
-      "Gains", # 3
-      "50% of gains", # 4
-      "Outlays of gains", # 5
-      "Losses proceeds", # 6
-      "Losses ACB", # 7
-      "Losses", # 8
-      "50% of losses", # 9
-      "Outlays of losses", # 10
-      "Foreign income" # 11
-    ),
-    Amount = c(
-      metrics$gains.proceeds, # 1
-      metrics$gains.acb, # 2
-      metrics$gains.amount, # 3
-      metrics$gains.taxable, # 4
-      0, # 5
-      metrics$losses.proceeds, # 6
-      metrics$losses.acb, # 7
-      metrics$losses.amount, # 8
-      metrics$losses.taxable, # 9
-      0, # 10
-      metrics$total.income.numeric # 11
-    ),
-    Comment = c(
-      "Proceeds of sold coins (gains)", # 1
-      "ACB of sold coins (gains)", # 2
-      "Proceeds - ACB (gains)", # 3
-      "Half of gains", # 4
-      "Expenses and trading fees (gains). Normally already integrated in the ACB", # 5
-      "Proceeds of sold coins (losses)", # 6
-      "ACB of sold coins (losses)", # 7
-      "Proceeds - ACB (losses)", # 8
-      "Half of losses", # 9
-      "Expenses and trading fees (losses). Normally already integrated in the ACB", # 10
-      "Income from crypto interest or staking is considered foreign income" # 11
-    ),
-    Line = c(
-      "Schedule 3, line 15199 column 2", # 1
-      "Schedule 3, line 15199 column 3", # 2
-      "Schedule 3, lines 15199 column 5 & 15300", # 3
-      "T1, line 12700; Schedule 3, line 15300, 19900", # 4
-      "Tax software", # 5
-      "Schedule 3, line 15199 column 2", # 6
-      "Schedule 3, line 15199 column 3", # 7
-      "Schedule 3, lines 15199 column 5 & 15300", # 8
-      "T1, line 12700; Schedule 3, line 15300, 19900", # 9
-      "Tax software", # 10
-      "T1, line 13000, T1135" # 11
-    )
-  )
-  new.row <- data.frame(
-    Description = "Foreign gains (losses)",
-    Amount = metrics$foreign.gains.losses,
-    Comment = "Capital gains from crypto is considered foreign capital gains",
-    Line = "T1135"
-  )
-  out <- rbind(out, new.row)
-  out
+  .tax_box_rows(metrics)
 }

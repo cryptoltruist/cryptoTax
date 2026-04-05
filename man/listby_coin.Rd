@@ -13,7 +13,7 @@ listby_coin(formatted.ACB)
 A list of formatted data frames, by coin.
 }
 \description{
-Provides a list of transactions, separated by coin..
+Provides a list of transactions, separated by coin.
 }
 \examples{
 all.data <- format_shakepay(data_shakepay)

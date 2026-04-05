@@ -41,7 +41,7 @@
 }
 
 .report_format_acb_messages <- function(capital.gains, sup.loss, verbose, start_time) {
-  if (any(capital.gains$total.quantity < 0) && isTRUE(verbose)) {
+  if (nrow(.negative_balance_rows(capital.gains)) > 0 && isTRUE(verbose)) {
     warning("WARNING: Some balances have negative values. Double-check for missing transactions.\n")
   }
 
