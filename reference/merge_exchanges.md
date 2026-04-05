@@ -1,6 +1,6 @@
-# List transactions by coin
+# Merge formatted exchange transactions
 
-Provides a list of transactions, separated by coin..
+Merge formatted exchange transactions into one data frame.
 
 ## Usage
 

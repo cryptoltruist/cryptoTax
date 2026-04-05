@@ -1,5 +1,23 @@
 # Changelog
 
+## cryptoTax 0.1.0.10
+
+**Improvements:**
+
+- Continued the shared-utility cleanup across
+  [`merge_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.md),
+  [`check_new_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.md),
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md),
+  [`match_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/match_prices.md),
+  and
+  [`format_generic()`](https://cryptoltruist.github.io/cryptoTax/reference/format_generic.md)
+  to make ingestion, exchange detection, and pricing helper behavior
+  more explicit and easier to maintain without changing user-facing
+  behavior.
+- Expanded focused tests around merge behavior, new-transaction
+  warnings, exchange-detection helpers, generic formatting helpers, and
+  price-matching helper contracts.
+
 ## cryptoTax 0.1.0.9
 
 **Improvements:**

@@ -211,7 +211,7 @@
   : Get Fair Market Value (FMV) of transactions
 
 - [`merge_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.md)
-  : List transactions by coin
+  : Merge formatted exchange transactions
 
 - [`prepare_list_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md)
   [`add_popular_slugs()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md)
