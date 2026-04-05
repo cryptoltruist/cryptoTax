@@ -3,11 +3,15 @@
 The data is extracted from the CSV available for download at
 https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/
 The Bank of Canada only provides data for business days. On days which
-data is not available, the last known value is used instead."><meta property="og:description" content="This function allows you to convert USD to CAD.
+data is not available, the last known value is used instead.
+You can also supply an explicit USD2CAD.table to make the conversion
+deterministic and independent from session cache or network access."><meta property="og:description" content="This function allows you to convert USD to CAD.
 The data is extracted from the CSV available for download at
 https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/
 The Bank of Canada only provides data for business days. On days which
-data is not available, the last known value is used instead."><meta property="og:image" content="https://cryptoltruist.github.io/cryptoTax/logo.png"></head><body>
+data is not available, the last known value is used instead.
+You can also supply an explicit USD2CAD.table to make the conversion
+deterministic and independent from session cache or network access."><meta property="og:image" content="https://cryptoltruist.github.io/cryptoTax/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +19,7 @@ data is not available, the last known value is used instead."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +54,9 @@ data is not available, the last known value is used instead."><meta property="og
 The data is extracted from the CSV available for download at
 <a href="https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/" class="external-link">https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/</a>
 The Bank of Canada only provides data for business days. On days which
-data is not available, the last known value is used instead.</p>
+data is not available, the last known value is used instead.
+You can also supply an explicit <code>USD2CAD.table</code> to make the conversion
+deterministic and independent from session cache or network access.</p>
     </div>
 
     <div class="section level2">
@@ -90,9 +96,14 @@ of relying on a cached session object.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">formatted.dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="fu">USD2CAD</span><span class="op">(</span><span class="va">formatted.dates</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span><span class="va">example_fx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2021-01-01"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  USD <span class="op">=</span> <span class="fl">1.25</span>,</span></span>
+<span class="r-in"><span>  CAD <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">USD2CAD</span><span class="op">(</span><span class="va">formatted.dates</span>, USD2CAD.table <span class="op">=</span> <span class="va">example_fx</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] date     CAD.rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">cur2CAD_table</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date    AUD    BRL    CNY    EUR    HKD     INR     IDR     JPY    MYR</span>

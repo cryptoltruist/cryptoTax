@@ -2,7 +2,9 @@
 
 Matches prices obtained through the
 [`prepare_list_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md)
-function with the transaction data frame.
+function with the transaction data frame. For deterministic or offline
+use, you can supply explicit `list.prices`, `coins.list`, `coin_hist`,
+or `USD2CAD.table` inputs.
 
 ## Usage
 
@@ -73,8 +75,13 @@ A data frame, with the following added columns: spot.rate.
 
 ``` r
 data <- format_shakepay(data_shakepay)[c(1:2)]
-match_prices(data)
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> NULL
+match_prices(data, list.prices = list_prices_example)
+#>                  date currency spot.rate total.price   rate.source
+#> 1 2021-05-07 14:50:41      BTC     49410          NA coinmarketcap
+#> 2 2021-05-08 12:12:57      BTC     49445          NA coinmarketcap
+#> 3 2021-05-09 12:22:07      BTC     49480          NA coinmarketcap
+#> 4 2021-05-21 12:47:14      BTC     49900          NA coinmarketcap
+#> 5 2021-06-11 12:03:31      BTC     50635          NA coinmarketcap
+#> 6 2021-06-23 12:21:49      BTC     51055          NA coinmarketcap
+#> 7 2021-07-10 00:52:19      BTC     51650          NA coinmarketcap
 ```

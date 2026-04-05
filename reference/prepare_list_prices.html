@@ -11,7 +11,7 @@ errors."><meta property="og:image" content="https://cryptoltruist.github.io/cryp
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,7 +149,9 @@ time_open, time_close, time_high, time_low, spot.rate2, currency, date2.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Sometimes, <code>list.prices</code> (through coinmarketcap) will contain symbols for
+    <p>This function can also be run deterministically by supplying explicit
+<code>list.prices</code>, <code>coins.list</code>, <code>coin_hist</code>, or <code>USD2CAD.table</code> inputs.</p>
+<p>Sometimes, <code>list.prices</code> (through coinmarketcap) will contain symbols for
 a given coin (e.g., ETH) that is actually shared by multiple coins, thus,
 the necessity of the <code>remove.coins.slug</code> argument. In these cases, we can
 look at the slug column of <code>list.prices</code> to identify the correct coins.
@@ -163,9 +165,26 @@ should you wish to.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my.coins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bitcoin"</span>, <span class="st">"ethereum"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">my.list.prices</span> <span class="op">&lt;-</span> <span class="fu">prepare_list_prices</span><span class="op">(</span>slug <span class="op">=</span> <span class="va">my.coins</span>, start.date <span class="op">=</span> <span class="st">"2023-01-01"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">my.list.prices</span> <span class="op">&lt;-</span> <span class="fu">prepare_list_prices</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  slug <span class="op">=</span> <span class="va">my.coins</span>,</span></span>
+<span class="r-in"><span>  start.date <span class="op">=</span> <span class="st">"2023-01-01"</span>,</span></span>
+<span class="r-in"><span>  list.prices <span class="op">=</span> <span class="va">list_prices_example</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">my.list.prices</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    timestamp    slug    name currency  open close spot.rate_USD CAD.rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-01-01 bitcoin Bitcoin      BTC 45000 45000            NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-01-02 bitcoin Bitcoin      BTC 45035 45035            NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-01-03 bitcoin Bitcoin      BTC 45070 45070            NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-01-04 bitcoin Bitcoin      BTC 45105 45105            NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-01-05 bitcoin Bitcoin      BTC 45140 45140            NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-01-06 bitcoin Bitcoin      BTC 45175 45175            NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   spot.rate2       date      date2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      45000 2021-01-01 2021-01-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      45035 2021-01-02 2021-01-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      45070 2021-01-03 2021-01-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      45105 2021-01-04 2021-01-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      45140 2021-01-05 2021-01-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      45175 2021-01-06 2021-01-06</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
