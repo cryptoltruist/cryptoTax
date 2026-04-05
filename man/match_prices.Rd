@@ -44,9 +44,11 @@ A data frame, with the following added columns: spot.rate.
 }
 \description{
 Matches prices obtained through the \code{prepare_list_prices()}
-function with the transaction data frame.
+function with the transaction data frame. For deterministic or offline
+use, you can supply explicit \code{list.prices}, \code{coins.list}, \code{coin_hist},
+or \code{USD2CAD.table} inputs.
 }
 \examples{
 data <- format_shakepay(data_shakepay)[c(1:2)]
-match_prices(data)
+match_prices(data, list.prices = list_prices_example)
 }

@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.12
+
+**Improvements:**
+
+- Continued a broader pricing-core cleanup across `prepare_list_prices()`, `prepare_list_prices_slugs()`, `match_prices()`, and `USD2CAD()` to make slug preparation, missing-price handling, FX-table preparation, and price-resolution flow more explicit and easier to maintain without changing user-facing behavior.
+- Expanded focused tests around deterministic pricing helpers, FX-table builders, slug-preparation behavior, and shared missing-price paths, and updated the pricing documentation/examples to show the explicit offline-input workflows more clearly.
+
 # cryptoTax 0.1.0.11
 
 **Improvements:**

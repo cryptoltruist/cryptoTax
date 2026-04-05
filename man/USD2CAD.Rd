@@ -29,10 +29,17 @@ The data is extracted from the CSV available for download at
 \url{https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/}
 The Bank of Canada only provides data for business days. On days which
 data is not available, the last known value is used instead.
+You can also supply an explicit \code{USD2CAD.table} to make the conversion
+deterministic and independent from session cache or network access.
 }
 \examples{
 formatted.dates <- format_shakepay(data_shakepay)[1]
-USD2CAD(formatted.dates)
+example_fx <- data.frame(
+  date = as.Date("2021-01-01"),
+  USD = 1.25,
+  CAD = 1
+)
+USD2CAD(formatted.dates, USD2CAD.table = example_fx)
 x <- cur2CAD_table()
 head(x)
 }

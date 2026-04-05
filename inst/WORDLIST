@@ -108,3 +108,4 @@ xlsx
 FX
 POSIXct
 formatter
+deterministically

@@ -121,6 +121,13 @@
   min(data$date)
 }
 
+.prepare_list_price_inputs <- function(data, slug = NULL, start.date = NULL) {
+  list(
+    slug = .prepare_price_slugs(data, slug = slug),
+    start.date = .prepare_price_start_date(data, start.date = start.date)
+  )
+}
+
 .reject_usd_only_slug <- function(slug, verbose = TRUE) {
   if (all(unique(slug) == "USD")) {
     if (isTRUE(verbose)) {
@@ -132,11 +139,94 @@
   FALSE
 }
 
+.handle_missing_list_prices <- function(list.prices, verbose = TRUE) {
+  if (!is.null(list.prices)) {
+    return(list.prices)
+  }
+
+  if (isTRUE(verbose)) {
+    message("Could not reach the CoinMarketCap API at this time")
+  }
+
+  NULL
+}
+
+.fetch_coin_history <- function(my.coins,
+                                start.date,
+                                end.date,
+                                force = FALSE,
+                                verbose = TRUE,
+                                coins.list = NULL) {
+  coins.list <- .resolve_coins_list(
+    force = force,
+    coins.list = coins.list,
+    verbose = verbose
+  )
+
+  if (is.null(coins.list)) {
+    return(NULL)
+  }
+
+  if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
+    message("This function requires Internet access.")
+    return(NULL)
+  }
+
+  start.date <- .format_prepare_price_date(start.date)
+  end.date <- .format_prepare_price_date(end.date)
+
+  coins.temp <- coins.list %>%
+    filter(.data$slug %in% my.coins)
+
+  coin_hist <- tryCatch(
+    expr = {
+      crypto2::crypto_history(
+        coin_list = coins.temp,
+        start_date = start.date,
+        end_date = end.date,
+        sleep = 0,
+        finalWait = FALSE
+      )
+    },
+    error = function(e) {
+      message(c(
+        "Could not fetch crypto prices from the CoinMarketCap API. ",
+        "Please try again, perhaps with fewer coins."
+      ))
+      return(NULL)
+    },
+    warning = function(w) {
+      return(NULL)
+    }
+  )
+
+  if (is.null(coin_hist) && isTRUE(verbose)) {
+    message("'coin_hist' could not fetch correctly. Please try again.")
+    return(NULL)
+  }
+
+  coin_hist
+}
+
+.validate_coin_history <- function(coin_hist, verbose = TRUE) {
+  if (!"symbol" %in% names(coin_hist)) {
+    if (isTRUE(verbose)) {
+      message("'coin_hist' could not fetch correctly. Please try again.")
+    }
+    return(NULL)
+  }
+
+  coin_hist
+}
+
 #' Prepare the list of coins for prices
 #'
 #' The [crypto2::crypto_history] API is at times a bit capricious. You might
 #' need to try a few times before it processes correctly and without
 #' errors.
+#'
+#' This function can also be run deterministically by supplying explicit
+#' `list.prices`, `coins.list`, `coin_hist`, or `USD2CAD.table` inputs.
 #'
 #' Sometimes, `list.prices` (through coinmarketcap) will contain symbols for
 #' a given coin (e.g., ETH) that is actually shared by multiple coins, thus,
@@ -170,7 +260,11 @@
 #' @name prepare_list_prices
 #' @examples
 #' my.coins <- c("bitcoin", "ethereum")
-#' my.list.prices <- prepare_list_prices(slug = my.coins, start.date = "2023-01-01")
+#' my.list.prices <- prepare_list_prices(
+#'   slug = my.coins,
+#'   start.date = "2023-01-01",
+#'   list.prices = list_prices_example
+#' )
 #' head(my.list.prices)
 #' @export
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows
@@ -205,57 +299,21 @@ prepare_list_prices <- function(slug,
   names(my.coins) <- my.coins
 
   if (is.null(coin_hist)) {
-    coins.list <- .resolve_coins_list(
+    coin_hist <- .fetch_coin_history(
+      my.coins = my.coins,
+      start.date = start.date,
+      end.date = end.date,
       force = force,
-      coins.list = coins.list,
-      verbose = verbose
+      verbose = verbose,
+      coins.list = coins.list
     )
-
-    if (is.null(coins.list)) {
-      return(NULL)
-    }
-
-    if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
-      message("This function requires Internet access.")
-      return(NULL)
-    }
-
-    start.date <- .format_prepare_price_date(start.date)
-    end.date <- .format_prepare_price_date(end.date)
-
-    coins.temp <- coins.list %>%
-      filter(.data$slug %in% my.coins)
-
-    coin_hist <- tryCatch(
-      expr = {
-        crypto2::crypto_history(
-          coin_list = coins.temp,
-          start_date = start.date,
-          end_date = end.date,
-          sleep = 0,
-          finalWait = FALSE
-        )
-      },
-      error = function(e) {
-        message(c(
-          "Could not fetch crypto prices from the CoinMarketCap API. ",
-          "Please try again, perhaps with fewer coins."
-        ))
-        return(NULL)
-      },
-      warning = function(w) {
-        return(NULL)
-      }
-    )
-
-    if (is.null(coin_hist) && isTRUE(verbose)) {
-      message("'coin_hist' could not fetch correctly. Please try again.")
+    if (is.null(coin_hist)) {
       return(NULL)
     }
   }
 
-  if (!"symbol" %in% names(coin_hist) && isTRUE(verbose)) {
-    message("'coin_hist' could not fetch correctly. Please try again.")
+  coin_hist <- .validate_coin_history(coin_hist, verbose = verbose)
+  if (is.null(coin_hist)) {
     return(NULL)
   }
 
@@ -307,8 +365,13 @@ prepare_list_prices_slugs <- function(data,
     return(list.prices)
   }
 
-  slug <- .prepare_price_slugs(data, slug = slug)
-  start.date <- .prepare_price_start_date(data, start.date = start.date)
+  prepared_inputs <- .prepare_list_price_inputs(
+    data = data,
+    slug = slug,
+    start.date = start.date
+  )
+  slug <- prepared_inputs$slug
+  start.date <- prepared_inputs$start.date
 
   if (.reject_usd_only_slug(slug, verbose = verbose)) {
     return(NULL)
@@ -324,12 +387,8 @@ prepare_list_prices_slugs <- function(data,
     coin_hist = coin_hist,
     USD2CAD.table = USD2CAD.table
   )
-  if (is.null(resolved_list_prices) && isTRUE(verbose)) {
-    message("Could not reach the CoinMarketCap API at this time")
-    return(NULL)
-  }
 
-  resolved_list_prices
+  .handle_missing_list_prices(resolved_list_prices, verbose = verbose)
 }
 
 #' @rdname prepare_list_prices

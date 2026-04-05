@@ -84,6 +84,9 @@ need to try a few times before it processes correctly and without
 errors.
 }
 \details{
+This function can also be run deterministically by supplying explicit
+\code{list.prices}, \code{coins.list}, \code{coin_hist}, or \code{USD2CAD.table} inputs.
+
 Sometimes, \code{list.prices} (through coinmarketcap) will contain symbols for
 a given coin (e.g., ETH) that is actually shared by multiple coins, thus,
 the necessity of the \code{remove.coins.slug} argument. In these cases, we can
@@ -96,7 +99,11 @@ should you wish to.
 }
 \examples{
 my.coins <- c("bitcoin", "ethereum")
-my.list.prices <- prepare_list_prices(slug = my.coins, start.date = "2023-01-01")
+my.list.prices <- prepare_list_prices(
+  slug = my.coins,
+  start.date = "2023-01-01",
+  list.prices = list_prices_example
+)
 head(my.list.prices)
 }
 \keyword{datasets}
