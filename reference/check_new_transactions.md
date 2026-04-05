@@ -45,5 +45,5 @@ check_new_transactions(data,
   transactions.col = "Transaction.Kind",
   description.col = "Transaction.Description"
 )
-#> Warning: New transaction types detected! These may be unaccounted for: crypto_viban_exchange, mco_stake_reward, rewards_platform_deposit_credited, admin_wallet_credited. Associated descriptions: ETH -> CAD, BTC -> CAD, CRO Stake Rewards, Mission Rewards Deposit, Adjustment (Credit)
+#> Warning: New transaction types detected! These may be unaccounted for: admin_wallet_credited, crypto_viban_exchange, mco_stake_reward, rewards_platform_deposit_credited. Associated descriptions: Adjustment (Credit), BTC -> CAD, CRO Stake Rewards, ETH -> CAD, Mission Rewards Deposit
 ```

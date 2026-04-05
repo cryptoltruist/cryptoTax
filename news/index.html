@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,12 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.13" id="cryptotax-01013">cryptoTax 0.1.0.13<a class="anchor" aria-label="anchor" href="#cryptotax-01013"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader ingestion and formatter-entry cleanup across <code><a href="../reference/merge_exchanges.html">merge_exchanges()</a></code>, <code><a href="../reference/check_new_transactions.html">check_new_transactions()</a></code>, <code><a href="../reference/format_detect.html">format_detect()</a></code>, and a shared post-merge pricing flow used by <code><a href="../reference/format_generic.html">format_generic()</a></code> and many exchange formatters, making merge handling, transaction warnings, exchange dispatch, and price-resolution behavior more explicit and easier to maintain without changing user-facing behavior.</li>
+<li>Expanded focused tests around merge flattening, deterministic new-transaction warnings, format-detect helpers, and the shared formatter pricing helpers.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.12" id="cryptotax-01012">cryptoTax 0.1.0.12<a class="anchor" aria-label="anchor" href="#cryptotax-01012"></a></h2>
 <p><strong>Improvements:</strong></p>
