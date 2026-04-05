@@ -189,8 +189,17 @@ format_shakepay_old <- function(data) {
     mutate(date = lubridate::as_datetime(.data$date))
   # UTC confirmed
 
-  # Create a "buy" object
-  BUY <- data %>%
+  outputs <- .format_shakepay_old_outputs(data)
+  .format_shakepay_finalize(
+    outputs$buy,
+    outputs$shakes,
+    outputs$referral,
+    outputs$sell
+  )
+}
+
+.format_shakepay_old_buy <- function(data) {
+  data %>%
     filter(.data$description == "purchase/sale") %>%
     rename(
       quantity = "Amount.Credited",
@@ -206,9 +215,10 @@ format_shakepay_old <- function(data) {
       "transaction", "description", "comment"
     ) %>%
     filter(.data$currency != "CAD")
+}
 
-  # Create a "SHAKES" object
-  SHAKES <- data %>%
+.format_shakepay_old_shakes <- function(data) {
+  data %>%
     filter(.data$description == "shakingsats") %>%
     rename(
       quantity = "Amount.Credited",
@@ -228,10 +238,11 @@ format_shakepay_old <- function(data) {
       "spot.rate", "transaction", "revenue.type",
       "description", "comment"
     )
+}
 
-  # Create a "REFERRAL" object
-  REFERRAL <- data %>%
-    filter(.data$description == "other" & comment == "credit") %>%
+.format_shakepay_old_referral <- function(data) {
+  data %>%
+    filter(.data$description == "other" & .data$comment == "credit") %>%
     rename(
       quantity = "Amount.Credited",
       currency = "Credit.Currency"
@@ -240,16 +251,17 @@ format_shakepay_old <- function(data) {
       transaction = "revenue",
       revenue.type = "referrals",
       spot.rate = 1,
-      total.price = .data$quantity * .data$spot.rate,
+      total.price = .data$quantity * .data$spot.rate
     ) %>%
     select(
       "date", "quantity", "currency", "total.price",
       "spot.rate", "transaction", "revenue.type",
       "description", "comment"
     )
+}
 
-  # Create a "sell" object
-  SELL <- data %>%
+.format_shakepay_old_sell <- function(data) {
+  data %>%
     filter(.data$description == "purchase/sale") %>%
     rename(
       quantity = "Amount.Debited",
@@ -265,22 +277,13 @@ format_shakepay_old <- function(data) {
       "spot.rate", "transaction", "description", "comment"
     ) %>%
     filter(.data$currency != "CAD")
+}
 
-  # Merge the "buy" and "sell" objects
-  data <- bind_rows(BUY, SHAKES, REFERRAL, SELL) %>%
-    mutate(
-      exchange = "shakepay",
-      rate.source = "exchange"
-    ) %>%
-    arrange(date)
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+.format_shakepay_old_outputs <- function(data) {
+  list(
+    buy = .format_shakepay_old_buy(data),
+    shakes = .format_shakepay_old_shakes(data),
+    referral = .format_shakepay_old_referral(data),
+    sell = .format_shakepay_old_sell(data)
+  )
 }

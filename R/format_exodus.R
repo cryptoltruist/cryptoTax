@@ -17,78 +17,11 @@
 format_exodus <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("deposit", "withdrawal")
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "INAMOUNT",
-      currency = "INCURRENCY",
-      description = "TYPE",
-      date = "DATE"
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::ymd_hms(.data$date))
-  # mutate(date = lubridate::mdy_hms(.data$date))
-  # UTC confirmed
-
-  # Add currency to missing places
-  data <- data %>%
-    mutate(currency = ifelse(.data$currency == "",
-      .data$OUTCURRENCY,
-      .data$currency
-    ))
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(
-      .data$currency %in% c("XNO"),
-      .data$description == "deposit"
-    ) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = "airdrops"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "revenue.type", "description"
-    )
-
-  # Create a "withdrawals" object
-  WITHDRAWALS <- data %>%
-    filter(.data$description == "withdrawal") %>%
-    mutate(
-      quantity = .data$FEEAMOUNT * -1,
-      transaction = "sell"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description"
-    )
-
-  # Create a "staking fees" object
-  STAKING.FEES <- data %>%
-    filter(.data$description == "deposit" &
-      .data$FEEAMOUNT < 0) %>%
-    mutate(
-      quantity = .data$FEEAMOUNT * -1,
-      transaction = "sell",
-      description = "Initial staking fee",
-      total.price = 0
-    ) %>%
-    select(
-      "date", "quantity", "currency", "total.price", "transaction",
-      "description"
-    )
+  data <- .format_exodus_prepare_input(data, known.transactions)
+  outputs <- .format_exodus_outputs(data)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(EARN, WITHDRAWALS, STAKING.FEES) %>%
+  data <- merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking.fees) %>%
     mutate(exchange = "exodus")
 
   # Actually correct network fees sold for zero!
@@ -120,4 +53,77 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
 
   # Return result
   data
+}
+
+.format_exodus_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      quantity = "INAMOUNT",
+      currency = "INCURRENCY",
+      description = "TYPE",
+      date = "DATE"
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::ymd_hms(.data$date),
+      currency = ifelse(.data$currency == "", .data$OUTCURRENCY, .data$currency)
+    )
+}
+
+.format_exodus_earn <- function(data) {
+  data %>%
+    filter(
+      .data$currency %in% c("XNO"),
+      .data$description == "deposit"
+    ) %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = "airdrops"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "revenue.type", "description"
+    )
+}
+
+.format_exodus_withdrawals <- function(data) {
+  data %>%
+    filter(.data$description == "withdrawal") %>%
+    mutate(
+      quantity = .data$FEEAMOUNT * -1,
+      transaction = "sell"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description"
+    )
+}
+
+.format_exodus_staking_fees <- function(data) {
+  data %>%
+    filter(.data$description == "deposit" & .data$FEEAMOUNT < 0) %>%
+    mutate(
+      quantity = .data$FEEAMOUNT * -1,
+      transaction = "sell",
+      description = "Initial staking fee",
+      total.price = 0
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price", "transaction",
+      "description"
+    )
+}
+
+.format_exodus_outputs <- function(data) {
+  list(
+    earn = .format_exodus_earn(data),
+    withdrawals = .format_exodus_withdrawals(data),
+    staking.fees = .format_exodus_staking_fees(data)
+  )
 }

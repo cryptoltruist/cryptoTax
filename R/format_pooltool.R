@@ -17,32 +17,7 @@
 format_pooltool <- function(data, exchange = "exodus") {
   # There are no transaction types at all for this file type
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "stake_rewards",
-      total.price = "stake_rewards_value",
-      spot.rate = "rate",
-      date = "date" # used to be "\\u00ef..date" ....
-    )
-  # Have to find a way to remove that special character, "ï" (solution = use "\\u00ef")
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::ymd_hms(.data$date))
-  # Time zone (-04:00) being converted to UTC automatically confirmed
-
-  # Add currency to missing places
-  data <- data %>%
-    mutate(
-      local.currency = .data$currency,
-      currency = "ADA",
-      transaction = "revenue",
-      revenue.type = "staking",
-      rate.source = "pooltool",
-      description = paste0("epoch = ", .data$epoch),
-      comment = paste0("pool = ", .data$pool)
-    )
+  data <- .format_pooltool_rewards(data)
 
   # Put fees to zero and add exchange
   data <- merge_exchanges(data) %>%
@@ -58,4 +33,24 @@ format_pooltool <- function(data, exchange = "exodus") {
 
   # Return result
   data
+}
+
+.format_pooltool_rewards <- function(data) {
+  data %>%
+    rename(
+      quantity = "stake_rewards",
+      total.price = "stake_rewards_value",
+      spot.rate = "rate",
+      date = "date" # used to be "\\u00ef..date" ....
+    ) %>%
+    mutate(
+      date = lubridate::ymd_hms(.data$date),
+      local.currency = .data$currency,
+      currency = "ADA",
+      transaction = "revenue",
+      revenue.type = "staking",
+      rate.source = "pooltool",
+      description = paste0("epoch = ", .data$epoch),
+      comment = paste0("pool = ", .data$pool)
+    )
 }

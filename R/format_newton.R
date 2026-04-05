@@ -18,29 +18,45 @@
 format_newton <- function(data, filetype = "yearly") {
   known.transactions <- c("WITHDRAWN", "TRADE", "DEPOSIT")
 
-  # Rename columns
+  data <- .format_newton_prepare_input(data, known.transactions)
+  outputs <- .format_newton_outputs(data)
+
+  # Merge the "buy" and "sell" objects
+  data <- merge_exchanges(outputs$buy, outputs$sell, outputs$earn) %>%
+    mutate(exchange = "newton", rate.source = "exchange")
+
+  # Reorder columns properly
+  data <- data %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+
+  # Return result
+  data
+}
+
+.format_newton_prepare_input <- function(data, known.transactions) {
   data <- data %>%
     rename(
       description = "Type",
       date = "Date"
     )
 
-  # Check if there's any new transactions
   check_new_transactions(data,
     known.transactions = known.transactions,
     transactions.col = "description"
   )
 
-  # Add single dates to dataframe
-  data <- data %>%
+  data %>%
     mutate(
       date = lubridate::mdy_hms(.data$date, tz = "America/New_York"),
       date = lubridate::with_tz(.data$date, tz = "UTC")
     )
-  # UTC confirmed (original time = "America/New_York"))
+}
 
-  # Create a "buy" object
-  BUY <- data %>%
+.format_newton_buy <- function(data) {
+  data %>%
     filter(.data$description == "TRADE") %>%
     rename(
       quantity = "Received.Quantity",
@@ -56,9 +72,10 @@ format_newton <- function(data, filetype = "yearly") {
       "transaction", "description"
     ) %>%
     filter(.data$currency != "CAD")
+}
 
-  # Create a "sell" object
-  SELL <- data %>%
+.format_newton_sell <- function(data) {
+  data %>%
     filter(.data$description == "TRADE") %>%
     rename(
       quantity = "Sent.Quantity",
@@ -74,9 +91,10 @@ format_newton <- function(data, filetype = "yearly") {
       "transaction", "description"
     ) %>%
     filter(.data$currency != "CAD")
+}
 
-  # Create a "earn" object
-  EARN <- data %>%
+.format_newton_earn <- function(data) {
+  earn <- data %>%
     filter(.data$Fee.Amount %in% c("Referral Program")) %>%
     mutate(
       quantity = .data$Received.Quantity,
@@ -96,19 +114,14 @@ format_newton <- function(data, filetype = "yearly") {
       "transaction", "revenue.type", "description"
     )
 
-  EARN$description <- as.character(EARN$description)
+  earn$description <- as.character(earn$description)
+  earn
+}
 
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(BUY, SELL, EARN) %>%
-    mutate(exchange = "newton", rate.source = "exchange")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+.format_newton_outputs <- function(data) {
+  list(
+    buy = .format_newton_buy(data),
+    sell = .format_newton_sell(data),
+    earn = .format_newton_earn(data)
+  )
 }

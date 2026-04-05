@@ -27,11 +27,7 @@
 #' @importFrom rlang .data
 
 format_presearch <- function(data, list.prices = NULL, force = FALSE) {
-  transferred.from <- grep("Transferred from", data$description, value = TRUE)
-  staked.to <- unique(grep("Staked to keyword", data$description, value = TRUE))
-  removed.from <- unique(grep("Removed from keyword", data$description, value = TRUE))
-  search.against <- unique(grep("Search reward against", data$description, value = TRUE))
-  airdrop <- unique(grep("Airdrop", data$description, value = TRUE))
+  patterns <- .format_presearch_patterns(data)
 
   known.transactions <- c(
     "Search Reward",
@@ -39,17 +35,14 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
     "Browser Extension Installation Bonus",
     "Increased search staking",
     "Removed from search staking",
-    transferred.from,
-    staked.to,
-    removed.from,
-    search.against,
-    airdrop
+    patterns$transferred.from,
+    patterns$staked.to,
+    patterns$removed.from,
+    patterns$search.against,
+    patterns$airdrop
   )
 
-  # Rename columns
-  data <- data %>%
-    rename(quantity = "amount") %>%
-    mutate(quantity = as.numeric(gsub(",", "", .data$quantity, fixed = TRUE)))
+  data <- .format_presearch_prepare_input(data)
 
   # Check if there's any new transactions
   check_new_transactions(data,
@@ -60,7 +53,7 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   # Remove irrelevant rows
   data <- data %>%
     filter(!.data$description %in% c(
-      staked.to, removed.from, "Increased search staking",
+      patterns$staked.to, patterns$removed.from, "Increased search staking",
       "Removed from search staking"
     ))
 
@@ -70,34 +63,12 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
     "Base search reward",
     "Browser Extension Installation Bonus",
     "Transferred from Rewards",
-    search.against,
-    airdrop
+    patterns$search.against,
+    patterns$airdrop
   )
 
   # Add currency and transaction type
-  data <- data %>%
-    mutate(
-      currency = "PRE",
-      transaction = case_when(
-        .data$description %in% rewards.names ~ "revenue",
-        grepl(
-          "Transferred from Presearch Portal",
-          .data$description
-        ) ~ "buy"
-      )
-    )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::ymd_hms(.data$date))
-  # UTC confirmed
-
-  # Add revenu type
-  data <- data %>%
-    mutate(revenue.type = ifelse(.data$transaction == "revenue",
-      "airdrops",
-      NA
-    ))
+  data <- .format_presearch_classify(data, rewards.names)
 
   # Determine spot rate and value of coins
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
@@ -129,4 +100,33 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
 
   # Return result
   data
+}
+
+.format_presearch_patterns <- function(data) {
+  list(
+    transferred.from = grep("Transferred from", data$description, value = TRUE),
+    staked.to = unique(grep("Staked to keyword", data$description, value = TRUE)),
+    removed.from = unique(grep("Removed from keyword", data$description, value = TRUE)),
+    search.against = unique(grep("Search reward against", data$description, value = TRUE)),
+    airdrop = unique(grep("Airdrop", data$description, value = TRUE))
+  )
+}
+
+.format_presearch_prepare_input <- function(data) {
+  data %>%
+    rename(quantity = "amount") %>%
+    mutate(quantity = as.numeric(gsub(",", "", .data$quantity, fixed = TRUE)))
+}
+
+.format_presearch_classify <- function(data, rewards.names) {
+  data %>%
+    mutate(
+      currency = "PRE",
+      transaction = case_when(
+        .data$description %in% rewards.names ~ "revenue",
+        grepl("Transferred from Presearch Portal", .data$description) ~ "buy"
+      ),
+      date = lubridate::ymd_hms(.data$date),
+      revenue.type = ifelse(.data$transaction == "revenue", "airdrops", NA)
+    )
 }
