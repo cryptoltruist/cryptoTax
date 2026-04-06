@@ -1,3 +1,88 @@
+#' @noRd
+.format_shakepay_prepare_input <- function(data, referral) {
+  .format_shakepay_add_referral(data, referral) %>%
+    rename(
+      description = "Type",
+      comment = "Description",
+      spot.rate = "Spot.Rate",
+      date = "Date"
+    ) %>%
+    mutate(date = lubridate::as_datetime(.data$date))
+}
+
+#' @noRd
+.format_shakepay_buy <- function(data) {
+  data %>%
+    filter(.data$description == "Buy") %>%
+    rename(
+      quantity = "Amount.Credited",
+      currency = "Asset.Credited",
+      total.price = "Book.Cost"
+    ) %>%
+    mutate(transaction = "buy") %>%
+    select(
+      "date", "quantity", "currency", "total.price", "spot.rate",
+      "transaction", "description", "comment"
+    )
+}
+
+#' @noRd
+.format_shakepay_shakes <- function(data) {
+  data %>%
+    filter(.data$comment == "ShakingSats") %>%
+    rename(
+      quantity = "Amount.Credited",
+      currency = "Asset.Credited"
+    ) %>%
+    mutate(
+      total.price = .data$quantity * .data$spot.rate,
+      transaction = "revenue",
+      revenue.type = "airdrops"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price",
+      "spot.rate", "transaction", "revenue.type",
+      "description", "comment"
+    )
+}
+
+#' @noRd
+.format_shakepay_referral <- function(data) {
+  data %>%
+    filter(.data$comment == "Referral reward") %>%
+    rename(
+      quantity = "Amount.Credited",
+      currency = "Asset.Credited",
+      total.price = "Book.Cost"
+    ) %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = "referrals",
+      spot.rate = 1
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price",
+      "spot.rate", "transaction", "revenue.type",
+      "description", "comment"
+    )
+}
+
+#' @noRd
+.format_shakepay_sell <- function(data) {
+  data %>%
+    filter(.data$description == "Sell") %>%
+    rename(
+      quantity = "Amount.Debited",
+      currency = "Asset.Debited",
+      total.price = "Book.Cost"
+    ) %>%
+    mutate(transaction = "sell") %>%
+    select(
+      "date", "quantity", "currency", "total.price",
+      "spot.rate", "transaction", "description", "comment"
+    )
+}
+
 #' @title Format Shakepay file
 #'
 #' @description Format a .csv transaction history file from Shakepay for later ACB processing.
@@ -32,23 +117,13 @@
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows arrange
 #' case_when add_row
 #' @importFrom rlang .data
-
 format_shakepay <- function(data, referral) {
   known.transactions <- c(
     "Reward", "Buy", "Sell", "Send"
     # "shakingsats", "fiat funding", "purchase/sale", "other", "crypto cashout"
   )
 
-  data <- .format_shakepay_add_referral(data, referral)
-
-  # Rename columns
-  data <- data %>%
-    rename(
-      description = "Type",
-      comment = "Description",
-      spot.rate = "Spot.Rate",
-      date = "Date"
-    )
+  data <- .format_shakepay_prepare_input(data, referral)
 
   # Check if there's any new transactions
   check_new_transactions(data,
@@ -57,78 +132,12 @@ format_shakepay <- function(data, referral) {
     description.col = "comment"
   )
 
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::as_datetime(.data$date))
-  # UTC confirmed
-
-  # Create a "buy" object
-  BUY <- data %>%
-    filter(.data$description == "Buy") %>%
-    rename(
-      quantity = "Amount.Credited",
-      currency = "Asset.Credited",
-      total.price = "Book.Cost"
-    ) %>%
-    mutate(transaction = "buy") %>%
-    select(
-      "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "description", "comment"
-    )
-
-  # Create a "SHAKES" object
-  SHAKES <- data %>%
-    filter(.data$comment == "ShakingSats") %>%
-    rename(
-      quantity = "Amount.Credited",
-      currency = "Asset.Credited"
-    ) %>%
-    mutate(
-      # spot.rate = .data$Mid.Market.Rate,
-      total.price = .data$quantity * .data$spot.rate,
-      transaction = "revenue",
-      revenue.type = "airdrops"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "total.price",
-      "spot.rate", "transaction", "revenue.type",
-      "description", "comment"
-    )
-
-  # Create a "REFERRAL" object
-  REFERRAL <- data %>%
-    filter(.data$comment == "Referral reward") %>%
-    rename(
-      quantity = "Amount.Credited",
-      currency = "Asset.Credited",
-      total.price = "Book.Cost"
-    ) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = "referrals",
-      spot.rate = 1
-    ) %>%
-    select(
-      "date", "quantity", "currency", "total.price",
-      "spot.rate", "transaction", "revenue.type",
-      "description", "comment"
-    )
-
-  # Create a "sell" object
-  SELL <- data %>%
-    filter(.data$description == "Sell") %>%
-    rename(
-      quantity = "Amount.Debited",
-      currency = "Asset.Debited",
-      total.price = "Book.Cost"
-    ) %>%
-    mutate(transaction = "sell") %>%
-    select(
-      "date", "quantity", "currency", "total.price",
-      "spot.rate", "transaction", "description", "comment"
-    )
-
-  .format_shakepay_finalize(BUY, SHAKES, REFERRAL, SELL)
+  .format_shakepay_finalize(
+    .format_shakepay_buy(data),
+    .format_shakepay_shakes(data),
+    .format_shakepay_referral(data),
+    .format_shakepay_sell(data)
+  )
 }
 
 .format_shakepay_add_referral <- function(data, referral) {

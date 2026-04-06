@@ -13,13 +13,18 @@
 format_coinbase <- function(data) {
   known.transactions <- c("Send", "Convert", "Receive")
 
-  # Check if there's any new transactions
+  data <- .format_coinbase_prepare_input(data, known.transactions)
+  outputs <- .format_coinbase_outputs(data)
+  .format_coinbase_finalize(outputs)
+}
+
+#' @noRd
+.format_coinbase_prepare_input <- function(data, known.transactions) {
   check_new_transactions(data,
     known.transactions = known.transactions,
     transactions.col = "Transaction.Type"
   )
 
-  # Rename columns
   data <- format_generic(
     data,
     date = "Timestamp",
@@ -32,28 +37,7 @@ format_coinbase <- function(data) {
     comment = "Notes"
   )
 
-  # Reverse sign of fees
   data$fees <- abs(data$fees)
-  outputs <- .format_coinbase_outputs(data)
-
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(
-    outputs$buy,
-    outputs$sell,
-    outputs$earn,
-    outputs$withdrawals
-  ) %>%
-    mutate(exchange = "coinbase", rate.source = "exchange") %>%
-    arrange(date, desc(.data$transaction))
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
   data
 }
 
@@ -106,4 +90,20 @@ format_coinbase <- function(data) {
     earn = .format_coinbase_earn(data),
     withdrawals = .format_coinbase_withdrawals(data)
   )
+}
+
+#' @noRd
+.format_coinbase_finalize <- function(outputs) {
+  merge_exchanges(
+    outputs$buy,
+    outputs$sell,
+    outputs$earn,
+    outputs$withdrawals
+  ) %>%
+    mutate(exchange = "coinbase", rate.source = "exchange") %>%
+    arrange(date, desc(.data$transaction)) %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
+    )
 }

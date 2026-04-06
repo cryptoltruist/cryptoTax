@@ -19,10 +19,7 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- .format_exodus_prepare_input(data, known.transactions)
   outputs <- .format_exodus_outputs(data)
-
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking.fees) %>%
-    mutate(exchange = "exodus")
+  data <- .format_exodus_finalize(outputs)
 
   # Actually correct network fees sold for zero!
   # data <- data %>%
@@ -124,4 +121,10 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
     withdrawals = .format_exodus_withdrawals(data),
     staking.fees = .format_exodus_staking_fees(data)
   )
+}
+
+#' @noRd
+.format_exodus_finalize <- function(outputs) {
+  merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking.fees) %>%
+    mutate(exchange = "exodus")
 }

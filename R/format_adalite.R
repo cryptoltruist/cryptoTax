@@ -17,65 +17,9 @@
 format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Reward awarded", "Received", "Sent")
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "Received.amount",
-      currency = "Received.currency",
-      description = "Type",
-      date = "Date"
-    )
-
-  # Check if there's any new transactions
-  check_new_transactions(data,
-    known.transactions = known.transactions,
-    transactions.col = "description"
-  )
-
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::mdy_hm(.data$date))
-  # UTC confirmed
-
-  # Add currency to missing places
-  data <- data %>%
-    mutate(currency = ifelse(.data$currency == "",
-      .data$Sent.currency,
-      .data$currency
-    ))
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(.data$description %in% c("Reward awarded")) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = replace(
-        .data$description,
-        .data$description %in% c("Reward awarded"),
-        "staking"
-      )
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "revenue.type", "description"
-    )
-
-  # Create a "withdrawals" object
-  WITHDRAWALS <- data %>%
-    filter(.data$description == "Sent") %>%
-    mutate(
-      quantity = .data$Fee.amount,
-      transaction = "sell",
-      comment = "Withdrawal Fee"
-    ) %>%
-    select(
-      "date", "quantity", "currency", "transaction",
-      "description", "comment"
-    )
-
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(EARN, WITHDRAWALS) %>%
-    mutate(exchange = "adalite")
+  data <- .format_adalite_prepare_input(data, known.transactions)
+  outputs <- .format_adalite_outputs(data)
+  data <- .format_adalite_finalize(outputs)
 
   # Determine spot rate and value of coins
   data <- .resolve_formatted_prices(
@@ -105,4 +49,72 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
 
   # Return result
   data
+}
+
+#' @noRd
+.format_adalite_prepare_input <- function(data, known.transactions) {
+  data <- data %>%
+    rename(
+      quantity = "Received.amount",
+      currency = "Received.currency",
+      description = "Type",
+      date = "Date"
+    )
+
+  check_new_transactions(data,
+    known.transactions = known.transactions,
+    transactions.col = "description"
+  )
+
+  data %>%
+    mutate(
+      date = lubridate::mdy_hm(.data$date),
+      currency = ifelse(.data$currency == "",
+        .data$Sent.currency,
+        .data$currency
+      )
+    )
+}
+
+#' @noRd
+.format_adalite_earn <- function(data) {
+  data %>%
+    filter(.data$description == "Reward awarded") %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = "staking"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "revenue.type", "description"
+    )
+}
+
+#' @noRd
+.format_adalite_withdrawals <- function(data) {
+  data %>%
+    filter(.data$description == "Sent") %>%
+    mutate(
+      quantity = .data$Fee.amount,
+      transaction = "sell",
+      comment = "Withdrawal Fee"
+    ) %>%
+    select(
+      "date", "quantity", "currency", "transaction",
+      "description", "comment"
+    )
+}
+
+#' @noRd
+.format_adalite_outputs <- function(data) {
+  list(
+    earn = .format_adalite_earn(data),
+    withdrawals = .format_adalite_withdrawals(data)
+  )
+}
+
+#' @noRd
+.format_adalite_finalize <- function(outputs) {
+  merge_exchanges(outputs$earn, outputs$withdrawals) %>%
+    mutate(exchange = "adalite")
 }

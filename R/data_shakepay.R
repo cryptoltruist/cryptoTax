@@ -1,6 +1,6 @@
 #' Sample data set of a fictive Shakepay transaction history file
 #'
-#' A fictive Shakepay data set to demonstrate [format_shakepay()].
+#' A fictive Shakepay data set to demonstrate [cryptoTax::format_shakepay()].
 #'
 #' @docType data
 #' @format A data frame with 8 rows and 11 variables:

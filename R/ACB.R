@@ -75,11 +75,15 @@
 
 .update_acb_add_row <- function(data, i, quantity, total.price) {
   if (i == 1) {
+    # TODO: Verify whether fees should always be added on top of total.price
+    # here, or whether some inputs already include fees in total.price.
     data[i, "ACB"] <- data[i, total.price] + data[i, "fees"]
     return(data)
   }
 
   data[i, "total.quantity"] <- data[i - 1, "total.quantity"] + data[i, quantity]
+  # TODO: Verify whether fees should always be added on top of total.price
+  # here, or whether some inputs already include fees in total.price.
   data[i, "ACB"] <- data[i - 1, "ACB"] + data[i, total.price] + data[i, "fees"]
   data
 }
@@ -246,7 +250,7 @@ ACB <- function(data,
         quantity = quantity,
         total.price = total.price
       )
-    } # Remove fees from total quantity too?? (comment before refactor)
+    }
 
     if (i > 1 && is_sell_transaction) {
       data <- .update_acb_sell_row(data, i, quantity = quantity)

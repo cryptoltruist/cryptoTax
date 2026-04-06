@@ -50,13 +50,6 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
     transactions.col = "description"
   )
 
-  # Remove irrelevant rows
-  data <- data %>%
-    filter(!.data$description %in% c(
-      patterns$staked.to, patterns$removed.from, "Increased search staking",
-      "Removed from search staking"
-    ))
-
   # Add currency, transaction type
   rewards.names <- c(
     "Search Reward",
@@ -67,7 +60,7 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
     patterns$airdrop
   )
 
-  # Add currency and transaction type
+  data <- .format_presearch_filter_irrelevant(data, patterns)
   data <- .format_presearch_classify(data, rewards.names)
 
   # Determine spot rate and value of coins
@@ -85,19 +78,7 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- .fill_missing_total_price_from_spot(data)
 
-  # Add fees, exchange
-  data <- merge_exchanges(data) %>%
-    mutate(exchange = "presearch")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+  .format_presearch_finalize(data)
 }
 
 .format_presearch_patterns <- function(data) {
@@ -116,6 +97,15 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
     mutate(quantity = as.numeric(gsub(",", "", .data$quantity, fixed = TRUE)))
 }
 
+#' @noRd
+.format_presearch_filter_irrelevant <- function(data, patterns) {
+  data %>%
+    filter(!.data$description %in% c(
+      patterns$staked.to, patterns$removed.from, "Increased search staking",
+      "Removed from search staking"
+    ))
+}
+
 .format_presearch_classify <- function(data, rewards.names) {
   data %>%
     mutate(
@@ -126,5 +116,15 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
       ),
       date = lubridate::ymd_hms(.data$date),
       revenue.type = ifelse(.data$transaction == "revenue", "airdrops", NA)
+    )
+}
+
+#' @noRd
+.format_presearch_finalize <- function(data) {
+  merge_exchanges(data) %>%
+    mutate(exchange = "presearch") %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "description", "revenue.type", "exchange", "rate.source"
     )
 }

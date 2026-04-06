@@ -18,21 +18,7 @@ format_pooltool <- function(data, exchange = "exodus") {
   # There are no transaction types at all for this file type
 
   data <- .format_pooltool_rewards(data)
-
-  # Put fees to zero and add exchange
-  data <- merge_exchanges(data) %>%
-    mutate(exchange = exchange)
-
-  # Select and reorder correct columns
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price",
-      "spot.rate", "transaction", "description", "comment",
-      "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+  .format_pooltool_finalize(data, exchange = exchange)
 }
 
 .format_pooltool_rewards <- function(data) {
@@ -52,5 +38,16 @@ format_pooltool <- function(data, exchange = "exodus") {
       rate.source = "pooltool",
       description = paste0("epoch = ", .data$epoch),
       comment = paste0("pool = ", .data$pool)
+    )
+}
+
+#' @noRd
+.format_pooltool_finalize <- function(data, exchange) {
+  merge_exchanges(data) %>%
+    mutate(exchange = exchange) %>%
+    select(
+      "date", "currency", "quantity", "total.price",
+      "spot.rate", "transaction", "description", "comment",
+      "revenue.type", "exchange", "rate.source"
     )
 }

@@ -383,6 +383,20 @@ test_that("fetch_usd2cad_crypto2_table builds rates from prepared prices", {
   expect_equal(result$CAD.rate[1], 0.8)
 })
 
+test_that("cache_usd2cad_table returns cached rates unchanged", {
+  local({
+    rates <- data.frame(
+      date = as.Date("2021-01-01"),
+      CAD.rate = 1.25
+    )
+
+    result <- cryptoTax:::.cache_usd2cad_table(rates)
+
+    expect_identical(result, rates)
+    expect_equal(USD2CAD.table$CAD.rate, 1.25)
+  })
+})
+
 test_that("fetch_usd2cad_pricer_table normalizes fetched exchange-rate data", {
   testthat::local_mocked_bindings(
     .package = "priceR",

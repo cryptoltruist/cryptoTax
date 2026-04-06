@@ -1,3 +1,69 @@
+#' @noRd
+.format_celsius_prepare_input <- function(data) {
+  data %>%
+    rename(
+      quantity = "Coin.amount",
+      currency = "Coin.type",
+      description = "Transaction.type",
+      date = "Date.and.time"
+    ) %>%
+    mutate(date = lubridate::mdy_hm(.data$date))
+}
+
+#' @noRd
+.format_celsius_add_cad_prices <- function(data) {
+  data.tmp <- data %>%
+    cryptoTax::USD2CAD()
+
+  if (is.null(data.tmp)) {
+    message("Could not fetch exchange rates from the exchange rate API.")
+    return(NULL)
+  }
+
+  data.tmp %>%
+    mutate(total.price = .data$USD.Value * .data$CAD.rate)
+}
+
+#' @noRd
+.format_celsius_revenue_type <- function(description) {
+  dplyr::case_when(
+    description %in% "Reward" ~ "interests",
+    description %in% "Referred Award" ~ "referrals",
+    description %in% "Promo Code Reward" ~ "promos",
+    TRUE ~ description
+  )
+}
+
+#' @noRd
+.format_celsius_earn_rows <- function(data) {
+  data %>%
+    filter(.data$description %in% c(
+      "Referred Award",
+      "Reward",
+      "Promo Code Reward"
+    )) %>%
+    mutate(
+      transaction = "revenue",
+      revenue.type = .format_celsius_revenue_type(.data$description),
+      quantity = abs(.data$quantity),
+      spot.rate = .data$total.price / .data$quantity
+    ) %>%
+    select(
+      "date", "quantity", "currency", "total.price", "spot.rate",
+      "transaction", "revenue.type", "description"
+    )
+}
+
+#' @noRd
+.format_celsius_output <- function(earn) {
+  merge_exchanges(earn) %>%
+    mutate(exchange = "celsius", rate.source = "exchange (USD conversion)") %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "description", "revenue.type", "exchange", "rate.source"
+    )
+}
+
 #' @title Format Celsius file
 #'
 #' @description Format a .csv transaction history file from Celsius for later ACB processing.
@@ -15,14 +81,7 @@ format_celsius <- function(data) {
     "Referrer Award", "Referred Award"
   )
 
-  # Rename columns
-  data <- data %>%
-    rename(
-      quantity = "Coin.amount",
-      currency = "Coin.type",
-      description = "Transaction.type",
-      date = "Date.and.time"
-    )
+  data <- .format_celsius_prepare_input(data)
 
   # Check if there's any new transactions
   check_new_transactions(data,
@@ -30,66 +89,10 @@ format_celsius <- function(data) {
     transactions.col = "description"
   )
 
-  # Add single dates to dataframe
-  data <- data %>%
-    mutate(date = lubridate::mdy_hm(.data$date))
-  # UTC confirmed
-
-  # Convert USD value to CAD
-  data.tmp <- data %>%
-    cryptoTax::USD2CAD()
-
-  if (is.null(data.tmp)) {
-    message("Could not fetch exchange rates from the exchange rate API.")
+  data <- .format_celsius_add_cad_prices(data)
+  if (is.null(data)) {
     return(NULL)
   }
 
-  data <- data.tmp %>%
-    mutate(total.price = .data$USD.Value * .data$CAD.rate)
-
-  # Create a "earn" object
-  EARN <- data %>%
-    filter(.data$description %in% c(
-      "Referred Award",
-      "Reward",
-      "Promo Code Reward"
-    )) %>%
-    mutate(
-      transaction = "revenue",
-      revenue.type = replace(
-        .data$description,
-        .data$description %in% c("Reward"),
-        "interests"
-      ),
-      revenue.type = replace(
-        .data$revenue.type,
-        .data$revenue.type %in% c("Referred Award"),
-        "referrals"
-      ),
-      revenue.type = replace(
-        .data$revenue.type,
-        .data$revenue.type %in% c("Promo Code Reward"),
-        "promos"
-      ),
-      quantity = abs(.data$quantity),
-      spot.rate = .data$total.price / .data$quantity
-    ) %>%
-    select(
-      "date", "quantity", "currency", "total.price", "spot.rate",
-      "transaction", "revenue.type", "description"
-    )
-
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(EARN) %>%
-    mutate(exchange = "celsius", rate.source = "exchange (USD conversion)")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+  .format_celsius_output(.format_celsius_earn_rows(data))
 }

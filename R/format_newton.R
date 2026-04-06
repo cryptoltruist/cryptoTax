@@ -20,20 +20,7 @@ format_newton <- function(data, filetype = "yearly") {
 
   data <- .format_newton_prepare_input(data, known.transactions)
   outputs <- .format_newton_outputs(data)
-
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(outputs$buy, outputs$sell, outputs$earn) %>%
-    mutate(exchange = "newton", rate.source = "exchange")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
-
-  # Return result
-  data
+  .format_newton_finalize(outputs)
 }
 
 .format_newton_prepare_input <- function(data, known.transactions) {
@@ -124,4 +111,14 @@ format_newton <- function(data, filetype = "yearly") {
     sell = .format_newton_sell(data),
     earn = .format_newton_earn(data)
   )
+}
+
+#' @noRd
+.format_newton_finalize <- function(outputs) {
+  merge_exchanges(outputs$buy, outputs$sell, outputs$earn) %>%
+    mutate(exchange = "newton", rate.source = "exchange") %>%
+    select(
+      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+      "description", "revenue.type", "exchange", "rate.source"
+    )
 }

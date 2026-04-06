@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.15
+
+**Improvements:**
+
+- Continued a broader formatter cleanup across `format_shakepay()`, `format_celsius()`, `format_coinbase()`, `format_adalite()`, `format_newton()`, `format_exodus()`, `format_presearch()`, and `format_pooltool()` to make wallet and exchange formatting paths more explicit and easier to maintain without changing user-facing behavior.
+- Added focused helper tests for the new formatter seams, including exchange-specific classification, timestamp parsing, reward mapping, and final output annotation.
+
 # cryptoTax 0.1.0.14
 
 **Improvements:**
