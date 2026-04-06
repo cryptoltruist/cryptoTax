@@ -1,5 +1,28 @@
 # Changelog
 
+## cryptoTax 0.1.0.14
+
+**Improvements:**
+
+- Continued a broader ACB, reporting, and tax-output cleanup across
+  [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md),
+  [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md),
+  [`format_suploss()`](https://cryptoltruist.github.io/cryptoTax/reference/format_suploss.md),
+  [`get_proceeds()`](https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.md),
+  [`get_sup_losses()`](https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.md),
+  [`report_summary()`](https://cryptoltruist.github.io/cryptoTax/reference/report_summary.md),
+  [`report_overview()`](https://cryptoltruist.github.io/cryptoTax/reference/report_overview.md),
+  [`prepare_report()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.md),
+  [`print_report()`](https://cryptoltruist.github.io/cryptoTax/reference/print_report.md),
+  and
+  [`tax_box()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_box.md)
+  to make cost-base analysis and report-generation logic more explicit
+  and easier to maintain without changing user-facing behavior.
+- Expanded focused tests around ACB helper seams, superficial-loss
+  helpers, proceeds and tax-box output contracts,
+  report-summary/report-overview helper behavior, and report timezone
+  propagation.
+
 ## cryptoTax 0.1.0.13
 
 **Improvements:**

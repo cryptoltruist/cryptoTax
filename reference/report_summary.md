@@ -63,11 +63,11 @@ Amount, currency.
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_summary(formatted.ACB, today.data = FALSE)
-#>         Type   Amount currency
-#> 1   tax.year      all      CAD
-#> 2      gains     5.81      CAD
-#> 3     losses     0.00      CAD
-#> 4        net     5.81      CAD
-#> 5 total.cost    27.62      CAD
-#> 6    revenue 3.641656      CAD
+#>                  Type Amount currency
+#>              tax.year    all      CAD
+#> gains           gains   5.81      CAD
+#> losses         losses   0.00      CAD
+#> net               net   5.81      CAD
+#> total.cost total.cost  27.62      CAD
+#> revenue       revenue   3.64      CAD
 ```

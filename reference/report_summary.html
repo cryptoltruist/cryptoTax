@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,13 +103,13 @@ Type, Amount, currency.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">report_summary</span><span class="op">(</span><span class="va">formatted.ACB</span>, today.data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Type   Amount currency</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   tax.year      all      CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      gains     5.81      CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     losses     0.00      CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        net     5.81      CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 total.cost    27.62      CAD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    revenue 3.641656      CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Type Amount currency</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              tax.year    all      CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gains           gains   5.81      CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> losses         losses   0.00      CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> net               net   5.81      CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> total.cost total.cost  27.62      CAD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> revenue       revenue   3.64      CAD</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

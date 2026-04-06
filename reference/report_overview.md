@@ -70,10 +70,10 @@ losses, net, currency.
 all.data <- format_shakepay(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_overview(formatted.ACB, today.data = FALSE)
-#>             date.last currency total.quantity cost.share total.cost gains
-#> 1 2021-07-10 00:52:19      BTC     0.00057491   48034.74      27.62  5.81
-#> 2 2021-07-10 00:52:19    Total             NA         NA      27.62  5.81
-#>   losses  net currency2
-#> 1      0 5.81       BTC
-#> 2      0 5.81     Total
+#>             date.last currency total.quantity cost.share total.cost  net
+#> 1 2021-07-10 00:52:19      BTC     0.00057491   48034.74      27.62 5.81
+#> 2 2021-07-10 00:52:19    Total             NA         NA      27.62 5.81
+#>      gains losses currency2
+#> 1 5.814382      0       BTC
+#> 2 5.814382      0     Total
 ```
