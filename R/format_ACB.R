@@ -23,10 +23,14 @@
   data
 }
 
-.run_format_acb_by_currency <- function(data, as.revenue, sup.loss, verbose) {
+.prepare_format_acb_input <- function(data) {
   data %>%
-    arrange(date) %>%
-    mutate(currency2 = .data$currency) %>%
+    arrange(.data$date) %>%
+    mutate(currency2 = .data$currency)
+}
+
+.format_acb_by_currency <- function(data, as.revenue, sup.loss, verbose) {
+  data %>%
     group_by(.data$currency, .drop = FALSE) %>%
     group_modify(~ ACB(
       .x,
@@ -34,10 +38,39 @@
       as.revenue = as.revenue,
       sup.loss = sup.loss,
       verbose = verbose
-    )) %>%
-    arrange(date) %>%
+    ))
+}
+
+.finalize_format_acb_output <- function(capital.gains) {
+  capital.gains %>%
+    arrange(.data$date) %>%
     relocate("date", .before = "currency") %>%
     relocate("fees", .before = "description")
+}
+
+.report_format_acb_start <- function(verbose = TRUE) {
+  start_time <- Sys.time()
+
+  if (isTRUE(verbose)) {
+    cat(paste0(
+      "Process started at ", start_time,
+      ". Please be patient as the transactions process.\n"
+    ))
+    cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
+  }
+
+  start_time
+}
+
+.run_format_acb_by_currency <- function(data, as.revenue, sup.loss, verbose) {
+  data %>%
+    .prepare_format_acb_input() %>%
+    .format_acb_by_currency(
+      as.revenue = as.revenue,
+      sup.loss = sup.loss,
+      verbose = verbose
+    ) %>%
+    .finalize_format_acb_output()
 }
 
 .report_format_acb_messages <- function(capital.gains, sup.loss, verbose, start_time) {
@@ -88,14 +121,7 @@ format_ACB <- function(data,
     return(NULL)
   }
 
-  start_time <- Sys.time()
-  if (isTRUE(verbose)) {
-    cat(paste0(
-      "Process started at ", start_time,
-      ". Please be patient as the transactions process.\n"
-    ))
-    cat("[Formatting ACB (progress bar repeats for each coin)...]\n")
-  }
+  start_time <- .report_format_acb_start(verbose = verbose)
 
   capital.gains <- .run_format_acb_by_currency(
     data = data,

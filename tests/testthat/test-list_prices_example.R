@@ -20,12 +20,16 @@ test_that("list_prices_example supports an offline reporting workflow", {
   expect_equal(report.info$current.price.date, max(list_prices_example$date2))
 })
 
-test_that("prepare_report passes local.timezone to report_revenues", {
+test_that("prepare_report passes local.timezone to report outputs", {
   testthat::local_mocked_bindings(
     report_overview = function(...) data.frame(ok = TRUE),
     report_summary = function(...) data.frame(ok = TRUE),
-    get_proceeds = function(...) data.frame(ok = TRUE),
-    get_sup_losses = function(...) data.frame(sup.loss = 0),
+    get_proceeds = function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
+      data.frame(type = "Gains", proceeds = 0, ACB.total = 0, tz = local.timezone)
+    },
+    get_sup_losses = function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
+      data.frame(currency = local.timezone, sup.loss = 0)
+    },
     report_revenues = function(formatted.ACB, tax.year = "all", local.timezone = Sys.timezone()) {
       data.frame(exchange = "total", date.last = as.POSIXct(NA), total.revenues = 0, interests = 0,
         rebates = 0, staking = 0, promos = 0, airdrops = 0, referrals = 0,
@@ -43,5 +47,7 @@ test_that("prepare_report passes local.timezone to report_revenues", {
   )
 
   expect_equal(report.info$table.revenues$currency[[1]], "America/Toronto")
+  expect_equal(report.info$proceeds$tz[[1]], "America/Toronto")
+  expect_equal(report.info$sup.losses$currency[[1]], "America/Toronto")
   expect_equal(report.info$local.timezone, "America/Toronto")
 })

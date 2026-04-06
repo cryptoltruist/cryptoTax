@@ -80,103 +80,64 @@ test_that("uphold", {
 
 test_that("gemini", {
   x <- format_gemini(data_gemini, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale.
-  x <- x %>%
-    dplyr::add_row(
-      date = lubridate::as_datetime("2021-04-08 22:22:22"),
-      currency = "LTC",
-      quantity = 1,
-      total.price = 286,
-      spot.rate = 286,
-      transaction = "buy",
-      description = "fake transaction for format_ACB",
-      exchange = "gemini",
-      rate.source = "fake"
-    ) %>%
-    merge_exchanges()
+  x <- .acb_seed_buy(
+    x,
+    date = "2021-04-08 22:22:22",
+    currency = "LTC",
+    quantity = 1,
+    total.price = 286,
+    exchange = "gemini"
+  )
   formatted.gemini <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.gemini)
 })
 
 test_that("exodus", {
   x <- format_exodus(data_exodus, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale.
-  df <- x %>%
-    dplyr::mutate(
-      date = date - months(1),
-      quantity = quantity * 2,
-      total.price = total.price * 2,
-      transaction = "buy",
-      description = "fake transaction for format_ACB"
-    )
-  x <- merge_exchanges(x, df)
+  x <- .acb_seed_from_existing(x)
   formatted.exodus <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.exodus)
 })
 
 test_that("binance", {
   x <- format_binance(data_binance, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale.
-  x <- x %>%
-    dplyr::add_row(
-      date = lubridate::as_datetime("2021-03-08 22:22:22"),
-      currency = "ETH",
-      quantity = 1,
-      total.price = 3098.137539,
-      spot.rate = 3098.137539,
-      transaction = "buy",
-      description = "fake transaction for format_ACB",
-      exchange = "binance",
-      rate.source = "fake"
-    ) %>%
-    dplyr::add_row(
-      date = lubridate::as_datetime("2021-03-08 22:22:22"),
+  x <- .acb_seed_buy(
+    x,
+    date = "2021-03-08 22:22:22",
+    currency = "ETH",
+    quantity = 1,
+    total.price = 3098.137539,
+    exchange = "binance"
+  ) %>%
+    .acb_seed_buy(
+      date = "2021-03-08 22:22:22",
       currency = "USDC",
       quantity = 5.77124200,
       total.price = 7.736523,
       spot.rate = 1.340530,
-      transaction = "buy",
-      description = "fake transaction for format_ACB",
-      exchange = "binance",
-      rate.source = "fake"
-    ) %>%
-    merge_exchanges()
+      exchange = "binance"
+    )
   formatted.binance <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.binance)
 })
 
 test_that("binance withdrawals", {
   x <- format_binance_withdrawals(data_binance_withdrawals, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale.
-  df <- x %>%
-    dplyr::mutate(
-      date = date - months(1),
-      quantity = quantity * 2,
-      total.price = total.price * 2,
-      transaction = "buy",
-      description = "fake transaction for format_ACB"
-    )
-  x <- merge_exchanges(x, df)
+  x <- .acb_seed_from_existing(x)
   formatted.binance.withdrawals <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.binance.withdrawals)
 })
 
 test_that("CDC exchange trades", {
   x <- format_CDC_exchange_trades(data_CDC_exchange_trades, list.prices = list.prices)
-  # Add row to fix error: The first transaction for this currency cannot be a sale.
-  x <- x %>%
-    dplyr::add_row(
-      date = lubridate::as_datetime("2021-03-08 22:22:22"),
-      currency = "ETH",
-      quantity = 1,
-      total.price = 3098.137539,
-      spot.rate = 3098.137539,
-      transaction = "buy",
-      description = "fake transaction for format_ACB",
-      exchange = "CDC.exchange",
-      rate.source = "fake"
-    ) %>%
-    merge_exchanges()
+  x <- .acb_seed_buy(
+    x,
+    date = "2021-03-08 22:22:22",
+    currency = "ETH",
+    quantity = 1,
+    total.price = 3098.137539,
+    exchange = "CDC.exchange"
+  )
   formatted.CDC.exchange.trades <- as.data.frame(format_ACB(x, verbose = FALSE))
   expect_snapshot(formatted.CDC.exchange.trades)
 })

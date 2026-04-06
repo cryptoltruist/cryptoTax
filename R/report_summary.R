@@ -1,3 +1,75 @@
+.report_summary_amount_total <- function(formatted.ACB.year, predicate = NULL, column = "gains") {
+  data <- formatted.ACB.year
+
+  if (!is.null(predicate)) {
+    data <- dplyr::filter(data, !!predicate)
+  }
+
+  sum(data[[column]], na.rm = TRUE)
+}
+
+.report_summary_static_metrics <- function(formatted.ACB.year, ACB.list) {
+  list(
+    gains = .report_summary_amount_total(
+      formatted.ACB.year,
+      predicate = rlang::quo(.data$gains > 0)
+    ),
+    losses = .report_summary_amount_total(
+      formatted.ACB.year,
+      predicate = rlang::quo(.data$gains < 0)
+    ),
+    net = sum(formatted.ACB.year$gains, na.rm = TRUE),
+    total.cost = sum(ACB.list$ACB, na.rm = TRUE),
+    revenue = .report_summary_amount_total(
+      formatted.ACB.year,
+      predicate = rlang::quo(.data$transaction == "revenue"),
+      column = "value"
+    )
+  )
+}
+
+.report_summary_today_metrics <- function(rates, ACB.list, static.metrics) {
+  value.today <- sum(rates$value.today, na.rm = TRUE)
+  unrealized.gains <- sum(rates$unrealized.gains, na.rm = TRUE)
+  unrealized.losses <- sum(rates$unrealized.losses, na.rm = TRUE)
+  unrealized.net <- sum(rates$unrealized.net, na.rm = TRUE)
+  percentage.up <- (value.today / sum(ACB.list$ACB, na.rm = TRUE) - 1) * 100
+  all.time.up.CAD <- value.today + static.metrics$net
+  all.time.up <- (all.time.up.CAD / sum(ACB.list$ACB, na.rm = TRUE) - 1) * 100
+  all.time.up.revenue.CAD <- all.time.up.CAD + static.metrics$revenue
+  all.time.up.revenue <- (all.time.up.revenue.CAD / sum(ACB.list$ACB, na.rm = TRUE) - 1) * 100
+
+  list(
+    value.today = value.today,
+    unrealized.gains = unrealized.gains,
+    unrealized.losses = unrealized.losses,
+    unrealized.net = unrealized.net,
+    percentage.up = percentage.up,
+    all.time.up = all.time.up,
+    all.time.up.revenue = all.time.up.revenue
+  )
+}
+
+.report_summary_table <- function(metrics, tax.year) {
+  format_metric <- function(name, value) {
+    if (name %in% c("percentage.up", "all.time.up", "all.time.up.revenue")) {
+      return(paste0(formatC_2(value), "%"))
+    }
+
+    formatC_2(value)
+  }
+
+  metric.order <- names(metrics)
+  amounts <- vapply(metric.order, function(name) format_metric(name, metrics[[name]]), character(1))
+
+  data.frame(
+    Type = c("tax.year", metric.order),
+    Amount = c(as.character(tax.year), amounts),
+    currency = "CAD",
+    stringsAsFactors = FALSE
+  )
+}
+
 .report_summary_filter_year <- function(formatted.ACB, tax.year, local.timezone) {
   if (identical(tax.year, "all")) {
     return(formatted.ACB)
@@ -14,18 +86,6 @@
     filter(.data$date == max(.data$date)) %>%
     slice_tail() %>%
     select("date", "currency", "total.quantity", "ACB.share", "ACB")
-}
-
-.report_summary_table <- function(temp, tax.year) {
-  results <- temp %>%
-    as.data.frame() %>%
-    rename("Amount" = "gains") %>%
-    mutate(Type = rownames(temp)) %>%
-    select("Type", "Amount")
-  rownames(results) <- NULL
-
-  results <- rbind(c("tax.year", tax.year), results)
-  cbind(results, currency = "CAD")
 }
 
 #' @title Summary of gains and losses
@@ -73,33 +133,7 @@ report_summary <- function(formatted.ACB,
     formatted.ACB.year <- formatted.ACB
   }
 
-  gains <- formatted.ACB.year %>%
-    filter(.data$gains > 0) %>%
-    ungroup() %>%
-    select("gains") %>%
-    summarize(gains = sum(.data$gains))
-
-  gains <- formatC_2(gains)
-
-  losses <- formatted.ACB.year %>%
-    filter(.data$gains < 0) %>%
-    ungroup() %>%
-    select("gains") %>%
-    summarize(losses = sum(.data$gains))
-
-  losses <- formatC_2(losses)
-
-  net <- sum(formatted.ACB.year$gains, na.rm = TRUE)
-  net.numeric <- net
-  net <- formatC_2(net)
-
-  total.cost <- formatC_2(sum(ACB.list$ACB))
-
-  revenue <- formatted.ACB.year %>%
-    filter(.data$transaction == "revenue") %>%
-    ungroup() %>%
-    select("value") %>%
-    summarize(revenue = sum(.data$value))
+  static.metrics <- .report_summary_static_metrics(formatted.ACB.year, ACB.list)
 
   price.state <- .resolve_report_today_data(
     formatted.ACB = formatted.ACB,
@@ -140,39 +174,20 @@ report_summary <- function(formatted.ACB,
         "unrealized.losses", "unrealized.net"
       )
 
-    unrealized.gains <- sum(rates$unrealized.gains, na.rm = TRUE)
-    unrealized.losses <- sum(rates$unrealized.losses, na.rm = TRUE)
-    unrealized.net <- sum(rates$unrealized.net, na.rm = TRUE)
-    value.today <- sum(rates$value.today)
-    percentage.up <- (value.today / sum(ACB.list$ACB) - 1) * 100
-    all.time.up.CAD <- value.today + net.numeric
-    all.time.up <- (all.time.up.CAD / sum(ACB.list$ACB) - 1) * 100
-    all.time.up.revenue.CAD <- all.time.up.CAD + revenue
-    all.time.up.revenue <- (all.time.up.revenue.CAD / sum(ACB.list$ACB) - 1) * 100
+    today.metrics <- .report_summary_today_metrics(rates, ACB.list, static.metrics)
 
-    unrealized.gains <- formatC_2(unrealized.gains)
-    unrealized.losses <- formatC_2(unrealized.losses)
-    unrealized.net <- formatC_2(unrealized.net)
-    value.today <- formatC_2(value.today)
-    percentage.up <- paste0(formatC_2(percentage.up), "%")
-    all.time.up <- paste0(formatC_2(all.time.up), "%")
-    revenue <- formatC_2(revenue)
-    all.time.up.revenue <- paste0(formatC_2(all.time.up.revenue), "%")
-
-    temp <- t(data.frame(
-      gains, losses, net, total.cost,
-      value.today, unrealized.gains,
-      unrealized.losses, unrealized.net,
-      percentage.up, all.time.up, revenue,
-      all.time.up.revenue
-    ))
+    metrics <- c(
+      static.metrics[setdiff(names(static.metrics), "revenue")],
+      today.metrics,
+      revenue = static.metrics$revenue
+    )
   }
 
   if (isFALSE(today.data)) {
-    temp <- t(data.frame(gains, losses, net, total.cost, revenue))
+    metrics <- static.metrics
   }
 
-  .report_summary_table(temp, tax.year)
+  .report_summary_table(metrics, tax.year)
 }
 
 formatC_2 <- function(x) {formatC(unlist(unlist(x)), format = "f", big.mark = ",", digits = 2)}

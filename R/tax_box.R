@@ -1,25 +1,50 @@
+.proceeds_metrics_row <- function(proceeds, type) {
+  if (!"type" %in% names(proceeds)) {
+    index <- switch(type,
+      Gains = 1,
+      Losses = 2
+    )
+
+    if (is.na(index) || nrow(proceeds) < index) {
+      return(list(proceeds = 0, ACB.total = 0))
+    }
+
+    row <- proceeds[index, , drop = FALSE]
+  } else {
+    row <- proceeds[proceeds$type == type, , drop = FALSE]
+  }
+
+  if (nrow(row) == 0) {
+    return(list(proceeds = 0, ACB.total = 0))
+  }
+
+  list(
+    proceeds = row$proceeds[[1]],
+    ACB.total = row$ACB.total[[1]]
+  )
+}
+
 .tax_box_metrics <- function(report.summary, sup.losses, table.revenues, proceeds) {
   losses <- report.summary$Amount[3]
   sup.losses.total <- .sup_losses_total(sup.losses)
   total.income.numeric <- dplyr::last(table.revenues$staking) +
     dplyr::last(table.revenues$interests)
 
-  gains.proceeds <- proceeds$proceeds[1]
-  gains.acb <- proceeds$ACB.total[1]
-  losses.proceeds <- proceeds$proceeds[2]
-  losses.acb <- proceeds$ACB.total[2]
+  gains.row <- .proceeds_metrics_row(proceeds, "Gains")
+  losses.row <- .proceeds_metrics_row(proceeds, "Losses")
 
   list(
-    gains.proceeds = gains.proceeds,
-    gains.acb = gains.acb,
-    gains.amount = gains.proceeds - gains.acb,
-    gains.taxable = (gains.proceeds - gains.acb) / 2,
-    losses.proceeds = losses.proceeds,
-    losses.acb = losses.acb,
-    losses.amount = losses.proceeds - losses.acb,
-    losses.taxable = (losses.proceeds - losses.acb) / 2,
+    gains.proceeds = gains.row$proceeds,
+    gains.acb = gains.row$ACB.total,
+    gains.amount = gains.row$proceeds - gains.row$ACB.total,
+    gains.taxable = (gains.row$proceeds - gains.row$ACB.total) / 2,
+    losses.proceeds = losses.row$proceeds,
+    losses.acb = losses.row$ACB.total,
+    losses.amount = losses.row$proceeds - losses.row$ACB.total,
+    losses.taxable = (losses.row$proceeds - losses.row$ACB.total) / 2,
     total.income.numeric = total.income.numeric,
-    foreign.gains.losses = (gains.proceeds - gains.acb) + (losses.proceeds - losses.acb),
+    foreign.gains.losses = (gains.row$proceeds - gains.row$ACB.total) +
+      (losses.row$proceeds - losses.row$ACB.total),
     sup.losses.total = sup.losses.total,
     total.losses = as.numeric(losses) - sup.losses.total
   )

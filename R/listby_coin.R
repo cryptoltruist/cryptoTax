@@ -1,7 +1,3 @@
-.listby_coin_names <- function(formatted.ACB) {
-  unique(sort(formatted.ACB$currency))
-}
-
 #' @title List transactions by coin
 #'
 #' @description Provides a list of transactions, separated by coin.
@@ -12,11 +8,7 @@
 #' all.data <- format_shakepay(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' listby_coin(formatted.ACB)
-#' @importFrom dplyr group_by group_map
-#' @importFrom rlang .data
 listby_coin <- function(formatted.ACB) {
-  formatted.ACB %>%
-    group_by(.data$currency) %>%
-    group_map(~ as.data.frame(.x), .keep = TRUE) %>%
+  .split_formatted_acb_by_group(formatted.ACB, "currency") %>%
     stats::setNames(.listby_coin_names(formatted.ACB))
 }

@@ -108,3 +108,17 @@
 
   as.numeric(utils::tail(sup.losses[["sup.loss"]], 1))
 }
+
+.report_summary_amount <- function(report.summary, type, default = NA_character_) {
+  if (!"Type" %in% names(report.summary) || !"Amount" %in% names(report.summary)) {
+    return(default)
+  }
+
+  row <- report.summary[report.summary$Type == type, , drop = FALSE]
+
+  if (nrow(row) == 0) {
+    return(default)
+  }
+
+  row$Amount[[1]]
+}

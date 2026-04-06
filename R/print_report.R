@@ -27,12 +27,12 @@
     na.rm = TRUE
   )
   total.income <- format_dollars(total.income.numeric)
-  total.cost <- report.info$report.summary$Amount[5]
-  gains <- report.info$report.summary$Amount[2]
+  total.cost <- .report_summary_amount(report.info$report.summary, "total.cost")
+  gains <- .report_summary_amount(report.info$report.summary, "gains")
   gains.numeric <- format_dollars(gains, "numeric")
   gains.50 <- format_dollars(gains.numeric * 0.5)
-  losses <- report.info$report.summary$Amount[3]
-  net <- report.info$report.summary$Amount[4]
+  losses <- .report_summary_amount(report.info$report.summary, "losses")
+  net <- .report_summary_amount(report.info$report.summary, "net")
   net.numeric <- format_dollars(net, "numeric")
   net.50 <- format_dollars(net.numeric * 0.5)
   total.tax <- format_dollars(net.numeric * 0.5 + total.income.numeric)

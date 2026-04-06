@@ -2,6 +2,57 @@
   transaction %in% c("buy", "revenue", "rebates")
 }
 
+.prepare_acb_revenue_values <- function(data, total.price, as.revenue) {
+  # List all possible revenue sources
+  all.revenue.type <- c(
+    "airdrops", "referrals", "promos", "rewards",
+    "rebates", "staking", "interests", "mining"
+  )
+
+  # List all non-revenue
+  not.revenue <- all.revenue.type[!(all.revenue.type %in% as.revenue)]
+
+  if (!missing(total.price) && "revenue.type" %in% names(data)) {
+    return(data %>%
+      mutate(
+        value = .data[[total.price]],
+        total.price = ifelse(.data$revenue.type %in% not.revenue,
+          0,
+          .data[[total.price]]
+        )
+      ) %>%
+      relocate("value", .after = "revenue.type"))
+  }
+
+  data
+}
+
+.ensure_acb_total_price <- function(data, total.price, spot.rate, quantity) {
+  if (total.price %in% names(data)) {
+    return(data)
+  }
+
+  if (spot.rate %in% names(data)) {
+    data[total.price] <- data[spot.rate] * data[quantity]
+    return(data)
+  }
+
+  stop(
+    "Cannot calculate column 'total.price'. ",
+    "Please provide either 'spot.rate' or 'total.price' columns."
+  )
+}
+
+.ensure_acb_fees <- function(data, total.price) {
+  if (!"fees" %in% names(data)) {
+    data <- data %>%
+      mutate(fees = 0, .after = all_of(total.price))
+  }
+
+  data %>%
+    mutate(fees = ifelse(is.na(.data$fees), 0, .data$fees))
+}
+
 .acb_currency_label <- function(data) {
   if ("currency2" %in% names(data)) {
     return(data$currency2[1])
@@ -12,6 +63,47 @@
   }
 
   ""
+}
+
+.initialize_acb_quantity <- function(data, i, quantity) {
+  if (i == 1) {
+    data[i, "total.quantity"] <- data[i, quantity]
+  }
+
+  data
+}
+
+.update_acb_add_row <- function(data, i, quantity, total.price) {
+  if (i == 1) {
+    data[i, "ACB"] <- data[i, total.price] + data[i, "fees"]
+    return(data)
+  }
+
+  data[i, "total.quantity"] <- data[i - 1, "total.quantity"] + data[i, quantity]
+  data[i, "ACB"] <- data[i - 1, "ACB"] + data[i, total.price] + data[i, "fees"]
+  data
+}
+
+.update_acb_sell_row <- function(data, i, quantity) {
+  data[i, "total.quantity"] <- data[i - 1, "total.quantity"] - data[i, quantity]
+  data[i, "ACB"] <- data[i - 1, "ACB"] *
+    ((data[i - 1, "total.quantity"] - data[i, quantity]) /
+      data[i - 1, "total.quantity"])
+  data
+}
+
+.update_acb_share <- function(data, i) {
+  data[i, "ACB.share"] <- ifelse(data[i, "ACB"] > 0,
+    data[i, "ACB"] / data[i, "total.quantity"],
+    0
+  )
+  data
+}
+
+.update_acb_gains <- function(data, i, total.price, quantity) {
+  data[i, "gains"] <- data[i, total.price] - data[i, "fees"] -
+    data[i - 1, "ACB.share"] * data[i, quantity]
+  data
 }
 
 .correct_zero_quantity_acb <- function(data, i) {
@@ -83,47 +175,22 @@ ACB <- function(data,
     }
   }
 
-  # List all possible revenue sources
-  all.revenue.type <- c(
-    "airdrops", "referrals", "promos", "rewards",
-    "rebates", "staking", "interests", "mining"
-  )
-
-  # List all non-revenue
-  not.revenue <- all.revenue.type[!(all.revenue.type %in% as.revenue)]
-
   # Change total.price of non-taxable revenue sources to 0$
   # Also keep the original total.price information in a "value" row for revenue calculations...
-  if (!missing(total.price) && "revenue.type" %in% names(data)) {
-    data <- data %>%
-      mutate(
-        value = .data[[total.price]],
-        total.price = ifelse(.data$revenue.type %in% not.revenue,
-          0,
-          .data[[total.price]]
-        )
-      ) %>%
-      relocate("value", .after = "revenue.type")
-  } else if (!total.price %in% names(data) &&
-    spot.rate %in% names(data)) {
-    # Set total price if it is missing
-    data[total.price] <- data[spot.rate] * data[quantity]
-  } else if (!total.price %in% names(data) &&
-    !spot.rate %in% names(data)) {
-    stop(
-      "Cannot calculate column 'total.price'. ",
-      "Please provide either 'spot.rate' or 'total.price' columns."
-    )
-  }
+  data <- .prepare_acb_revenue_values(
+    data = data,
+    total.price = total.price,
+    as.revenue = as.revenue
+  )
+  data <- .ensure_acb_total_price(
+    data = data,
+    total.price = total.price,
+    spot.rate = spot.rate,
+    quantity = quantity
+  )
 
   # Handle fees
-  if (!"fees" %in% names(data)) {
-    data <- data %>%
-      mutate(fees = 0, .after = all_of(total.price))
-  }
-
-  data <- data %>%
-    mutate(fees = ifelse(is.na(.data$fees), 0, .data$fees))
+  data <- .ensure_acb_fees(data, total.price = total.price)
 
   if (isTRUE(sup.loss)) {
     data <- data %>%
@@ -170,50 +237,31 @@ ACB <- function(data,
     # Loop ####
 
     # First row: add first quantity
-    if (i == 1) {
-      data[i, "total.quantity"] <- data[i, quantity]
-    }
+    data <- .initialize_acb_quantity(data, i, quantity = quantity)
 
-    # First row: calculate ACB for added quantities
-    if (i == 1 && is_add_transaction) {
-      data[i, "ACB"] <- data[i, total.price] + data[i, fees]
-    }
+    if (is_add_transaction) {
+      data <- .update_acb_add_row(
+        data,
+        i,
+        quantity = quantity,
+        total.price = total.price
+      )
+    } # Remove fees from total quantity too?? (comment before refactor)
 
-    # After first row: add new quantities
-    if (i > 1 && is_add_transaction) {
-      data[i, "total.quantity"] <- data[i - 1, "total.quantity"] +
-        data[i, quantity]
-    }
-
-    # After first row: calculate ACB for added quantities
-    if (i > 1 && is_add_transaction) {
-      data[i, "ACB"] <- data[i - 1, "ACB"] +
-        data[i, total.price] + data[i, fees]
-    }
-
-    # After first row: remove new quantities
     if (i > 1 && is_sell_transaction) {
-      data[i, "total.quantity"] <- data[i - 1, "total.quantity"] - data[i, quantity]
-    }
-    # Remove fees from total quantity too??
-
-    # After first row: calculate ACB for removed quantities
-    if (i > 1 && is_sell_transaction) {
-      data[i, "ACB"] <- data[i - 1, "ACB"] *
-        ((data[i - 1, "total.quantity"] - data[i, quantity]) /
-          data[i - 1, "total.quantity"])
+      data <- .update_acb_sell_row(data, i, quantity = quantity)
     }
 
-    # Calculate ACB per share (total ACB / number of shares)
-    data[i, "ACB.share"] <- ifelse(data[i, "ACB"] > 0,
-      data[i, "ACB"] / data[i, "total.quantity"],
-      0
-    )
+    data <- .update_acb_share(data, i)
 
     # After first row: calculate capital gains and losses
     if (i > 1 && is_sell_transaction) {
-      data[i, "gains"] <- data[i, total.price] - data[i, fees] -
-        data[i - 1, "ACB.share"] * data[i, quantity]
+      data <- .update_acb_gains(
+        data,
+        i,
+        total.price = total.price,
+        quantity = quantity
+      )
     }
 
     ################################

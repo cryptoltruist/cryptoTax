@@ -18,6 +18,31 @@
     )
 }
 
+#' @noRd
+.split_proceeds_buckets <- function(formatted.ACB.year) {
+  list(
+    gains = formatted.ACB.year %>%
+      filter(.data$gains > 0) %>%
+      .prepare_proceeds_bucket(),
+    losses = formatted.ACB.year %>%
+      filter(.data$gains < 0) %>%
+      .prepare_proceeds_bucket()
+  )
+}
+
+#' @noRd
+.proceeds_summary_table <- function(formatted.ACB.year) {
+  buckets <- .split_proceeds_buckets(formatted.ACB.year)
+
+  bind_rows(
+    .summarize_proceeds_bucket(buckets$gains),
+    .summarize_proceeds_bucket(buckets$losses)
+  ) %>%
+    mutate(type = c("Gains", "Losses")) %>%
+    relocate("type") %>%
+    as.data.frame()
+}
+
 #' @title Get proceeds of all sold coins
 #'
 #' @description Get proceeds of sold coins, ACB of sold coins, and resulting
@@ -41,32 +66,6 @@ get_proceeds <- function(formatted.ACB, tax.year = "all", local.timezone = Sys.t
     local.timezone = local.timezone,
     label = "proceeds"
   )
-  only.gains <- formatted.ACB.year %>%
-    filter(.data$gains > 0) %>%
-    .prepare_proceeds_bucket()
 
-  only.losses <- formatted.ACB.year %>%
-    filter(.data$gains < 0) %>%
-    .prepare_proceeds_bucket()
-
-  # sup.losses.total <- sup.losses[nrow(sup.losses), "sup.loss"]
-
-  # if(nrow(only.losses) == 0) {
-  #  only.losses.sum <- only.losses %>%
-  #    ungroup() %>%
-  #    summarize(proceeds = sum(total.price) + sup.losses.total,
-  #              proceeds = ifelse(proceeds < 0,
-  #                                0,
-  #                                proceeds),
-  #              ACB.total = sum(ACB.quantity),
-  #              gains = proceeds - ACB.total)
-  # }
-
-  bind_rows(
-    .summarize_proceeds_bucket(only.gains),
-    .summarize_proceeds_bucket(only.losses)
-  ) %>%
-    mutate(type = c("Gains", "Losses")) %>%
-    relocate("type") %>% 
-    as.data.frame()
+  .proceeds_summary_table(formatted.ACB.year)
 }

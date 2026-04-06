@@ -13,8 +13,16 @@
     local.timezone = local.timezone,
     list.prices = list.prices
   )
-  proceeds <- get_proceeds(formatted.ACB, tax.year = tax.year)
-  sup.losses <- get_sup_losses(formatted.ACB, tax.year)
+  proceeds <- get_proceeds(
+    formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone
+  )
+  sup.losses <- get_sup_losses(
+    formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone
+  )
   table.revenues <- report_revenues(
     formatted.ACB,
     tax.year = tax.year,

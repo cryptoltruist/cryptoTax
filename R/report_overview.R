@@ -1,3 +1,86 @@
+.report_overview_group_totals <- function(formatted.ACB.year) {
+  list(
+    net = formatted.ACB.year %>%
+      group_by(.data$currency) %>%
+      summarize(net = sum(.data$gains, na.rm = TRUE)),
+    gains = formatted.ACB.year %>%
+      group_by(.data$currency) %>%
+      filter(.data$gains > 0) %>%
+      summarize(gains = sum(.data$gains, na.rm = TRUE)),
+    losses = formatted.ACB.year %>%
+      group_by(.data$currency) %>%
+      filter(.data$gains < 0) %>%
+      summarize(losses = sum(.data$gains, na.rm = TRUE))
+  )
+}
+
+.report_overview_prepare_rates <- function(rates) {
+  rates %>%
+    mutate(
+      rate.today = .data$spot.rate,
+      value.today = round(.data$total.quantity * .data$rate.today, 2),
+      unrealized.net = round(.data$value.today - ACB, 2),
+      unrealized.gains = ifelse(.data$unrealized.net > 0,
+        .data$unrealized.net,
+        NA
+      ),
+      unrealized.losses = ifelse(.data$unrealized.net < 0,
+        .data$unrealized.net,
+        NA
+      ),
+      currency2 = .data$currency
+    ) %>%
+    select(
+      "currency", "rate.today", "value.today", "unrealized.gains",
+      "unrealized.losses", "unrealized.net", "currency2"
+    )
+}
+
+.report_overview_total_row <- function(full, today.data) {
+  total.columns <- if (isTRUE(today.data)) {
+    c("total.cost", "gains", "losses", "net", "value.today", "unrealized.gains", "unrealized.losses", "unrealized.net")
+  } else {
+    c("total.cost", "gains", "losses", "net")
+  }
+  total.columns <- intersect(total.columns, names(full))
+
+  full %>%
+    add_row(
+      date.last = max(full$date.last),
+      currency = "Total",
+      currency2 = "Total",
+      summarize(., across(dplyr::all_of(total.columns), \(x) sum(x, na.rm = TRUE)))
+    )
+}
+
+.report_overview_full_table <- function(ACB.list, grouped.totals, rates = NULL, today.data = FALSE) {
+  pieces <- c(list(ACB.list), grouped.totals, list(rates))
+  pieces <- Filter(Negate(is.null), pieces)
+
+  full <- Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "currency"), pieces) %>%
+    rename(
+      date.last = "date",
+      total.cost = "ACB",
+      cost.share = "ACB.share"
+    ) %>%
+    group_by(.data$currency)
+
+  if (isTRUE(today.data)) {
+    full <- full %>%
+      mutate(across("cost.share":"unrealized.gains", \(x) round(x, 2))) %>%
+      as.data.frame()
+  } else {
+    full <- full %>%
+      mutate(
+        across("cost.share":"net", \(x) round(x, 2)),
+        currency2 = .data$currency
+      ) %>%
+      as.data.frame()
+  }
+
+  .report_overview_total_row(full, today.data = today.data)
+}
+
 .report_overview_filter_year <- function(formatted.ACB, tax.year, local.timezone, verbose) {
   if (identical(tax.year, "all")) {
     return(formatted.ACB)
@@ -82,21 +165,7 @@ report_overview <- function(formatted.ACB,
     local.timezone = local.timezone,
     verbose = verbose
   )
-
-  net <- formatted.ACB.year %>%
-    group_by(.data$currency) %>%
-    summarize(net = sum(.data$gains, na.rm = TRUE))
-
-  gains <- formatted.ACB.year %>%
-    group_by(.data$currency) %>%
-    filter(.data$gains > 0) %>%
-    summarize(gains = sum(.data$gains, na.rm = TRUE))
-
-  losses <- formatted.ACB.year %>%
-    group_by(.data$currency) %>%
-    filter(.data$gains < 0) %>%
-    summarize(losses = sum(.data$gains, na.rm = TRUE))
-
+  grouped.totals <- .report_overview_group_totals(formatted.ACB.year)
   ACB.list <- .report_overview_latest_acb(formatted.ACB)
 
   price.state <- .resolve_report_today_data(
@@ -119,82 +188,20 @@ report_overview <- function(formatted.ACB,
       verbose = verbose,
       signal = "warning"
     )
-
-    rates <- rates %>%
-      mutate(
-        rate.today = .data$spot.rate,
-        value.today = round(.data$total.quantity * .data$rate.today, 2),
-        unrealized.net = round(.data$value.today - ACB, 2),
-        unrealized.gains = ifelse(.data$unrealized.net > 0,
-          .data$unrealized.net,
-          NA
-        ),
-        unrealized.losses = ifelse(.data$unrealized.net < 0,
-          .data$unrealized.net,
-          NA
-        ),
-        currency2 = .data$currency
-      ) %>%
-      select(
-        "currency", "rate.today", "value.today", "unrealized.gains",
-        "unrealized.losses", "unrealized.net", "currency2"
-      )
-
-    full <- list(ACB.list, gains, losses, net, rates) %>%
-      Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "currency"), .)
-
-    full <- full %>%
-      rename(
-        date.last = "date",
-        total.cost = "ACB",
-        cost.share = "ACB.share"
-      ) %>%
-      group_by(.data$currency) %>%
-      # arrange(desc(.data$total.cost), desc(.data$cost.share), desc(.data$total.quantity)) %>%
-      mutate(across("cost.share":"unrealized.gains", \(x) round(x, 2))) %>%
-      as.data.frame(full)
-
-    full <- full %>%
-      add_row(
-        date.last = max(full$date.last),
-        currency = "Total",
-        currency2 = "Total",
-        summarize(., across(
-          c(
-            "total.cost":"net",
-            "value.today":"unrealized.net"
-          ),
-          \(x) sum(x, na.rm = TRUE)
-        ))
-      )
+    full <- .report_overview_full_table(
+      ACB.list = ACB.list,
+      grouped.totals = grouped.totals,
+      rates = .report_overview_prepare_rates(rates),
+      today.data = TRUE
+    )
   }
 
   if (isFALSE(today.data)) {
-    full <- list(ACB.list, gains, losses, net) %>%
-      Reduce(function(dtf1, dtf2) full_join(dtf1, dtf2, by = "currency"), .)
-
-    full <- full %>%
-      rename(
-        date.last = "date",
-        total.cost = "ACB",
-        cost.share = "ACB.share"
-      ) %>%
-      group_by(.data$currency) %>%
-      mutate(across("cost.share":"net", \(x) round(x, 2)),
-        currency2 = .data$currency
-      ) %>%
-      as.data.frame(full)
-
-    full <- full %>%
-      add_row(
-        date.last = max(full$date.last),
-        currency = "Total",
-        currency2 = "Total",
-        summarize(., across(
-          c("total.cost":"net"),
-          \(x) sum(x, na.rm = TRUE)
-        ))
-      )
+    full <- .report_overview_full_table(
+      ACB.list = ACB.list,
+      grouped.totals = grouped.totals,
+      today.data = FALSE
+    )
   }
 
   .report_overview_finalize(full)

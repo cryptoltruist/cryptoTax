@@ -13,6 +13,5 @@
 #' @importFrom rlang .data
 
 get_latest_transactions <- function(formatted.ACB) {
-  .latest_rows_by_group(formatted.ACB, "exchange") %>%
-    select("exchange", "date")
+  .latest_transaction_dates(formatted.ACB)
 }

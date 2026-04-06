@@ -48,33 +48,62 @@ add_quantities <- function(data, transaction = "transaction", quantity = "quanti
 # won't create other problems elsewhere.
 
 sup_loss_single_df <- function(data, transaction = "transaction", quantity = "quantity") {
-  data.range <- data %>%
-    mutate(suploss.range = suploss_range(.data$date))
-  suploss.ranges <- .suploss_ranges(data.range, transaction = transaction)
-  # Calculate the sum of buy quantities for each range of 60 days...
+  data.range <- .prepare_suploss_ranges(data)
   list.ranges.df <- check_suploss(data.range)
-  quantity.60days <- lapply(list.ranges.df, function(x) {
+  quantity.60days <- .summarize_suploss_buy_quantities(
+    list.ranges.df,
+    template = data.range,
+    transaction = transaction,
+    quantity = quantity
+  )
+  share.left60 <- .summarize_suploss_share_left(
+    list.ranges.df,
+    template = data.range
+  )
+
+  data.frame(data.range, quantity.60days, share.left60) %>%
+    .mark_superficial_losses(transaction = transaction, quantity = quantity)
+}
+
+.prepare_suploss_ranges <- function(data) {
+  data %>%
+    mutate(suploss.range = suploss_range(.data$date))
+}
+
+.summarize_suploss_buy_quantities <- function(list.ranges.df,
+                                              template,
+                                              transaction = "transaction",
+                                              quantity = "quantity") {
+  lapply(list.ranges.df, function(x) {
     x %>%
       mutate(quantity.buy = ifelse(.data[[transaction]] == "buy",
         .data[[quantity]],
         0
       )) %>%
       summarize(quantity.60days = sum(.data$quantity.buy))
-  }) %>% bind_rows() %>%
-    .suploss_default_column(template = data.range, column_name = "quantity.60days")
+  }) %>%
+    bind_rows() %>%
+    .suploss_default_column(template = template, column_name = "quantity.60days")
+}
 
-  # Now calculate share.left60
-  share.left60 <- lapply(list.ranges.df, function(x) {
+.summarize_suploss_share_left <- function(list.ranges.df, template) {
+  lapply(list.ranges.df, function(x) {
     x %>%
       utils::tail(1) %>%
       ungroup() %>%
       select("total.quantity") %>%
       rename(share.left60 = "total.quantity")
-  }) %>% bind_rows() %>%
-    .suploss_default_column(template = data.range, column_name = "share.left60")
+  }) %>%
+    bind_rows() %>%
+    .suploss_default_column(template = template, column_name = "share.left60")
+}
 
-  data.range2 <- data.frame(data.range, quantity.60days, share.left60)
-  data.range3 <- data.range2 %>%
+.mark_superficial_losses <- function(data.range,
+                                     transaction = "transaction",
+                                     quantity = "quantity") {
+  suploss.ranges <- .suploss_ranges(data.range, transaction = transaction)
+
+  data.range %>%
     rowwise() %>%
     mutate(
       sup.loss = any(.data$date %within% suploss.ranges),
@@ -88,7 +117,6 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
       )
     ) %>%
     ungroup()
-  data.range3
 }
 
 .suploss_ranges <- function(data, transaction = "transaction") {

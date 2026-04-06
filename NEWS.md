@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.14
+
+**Improvements:**
+
+- Continued a broader ACB, reporting, and tax-output cleanup across `ACB()`, `format_ACB()`, `format_suploss()`, `get_proceeds()`, `get_sup_losses()`, `report_summary()`, `report_overview()`, `prepare_report()`, `print_report()`, and `tax_box()` to make cost-base analysis and report-generation logic more explicit and easier to maintain without changing user-facing behavior.
+- Expanded focused tests around ACB helper seams, superficial-loss helpers, proceeds and tax-box output contracts, report-summary/report-overview helper behavior, and report timezone propagation.
+
 # cryptoTax 0.1.0.13
 
 **Improvements:**

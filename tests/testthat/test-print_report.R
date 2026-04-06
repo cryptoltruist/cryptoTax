@@ -75,3 +75,27 @@ test_that("prepare_print_report_context handles empty superficial-loss tables", 
   expect_equal(context$tot.losses, "-20.00")
   expect_equal(context$tot.sup.loss, -20)
 })
+
+test_that("prepare_print_report_context matches summary rows by type instead of row order", {
+  report.info <- list(
+    table.revenues = data.frame(staking = 10, interests = 5),
+    report.summary = data.frame(
+      Type = c("total.cost", "net", "losses", "gains"),
+      Amount = c("1,000.00", "80.00", "-20.00", "100.00"),
+      stringsAsFactors = FALSE
+    ),
+    sup.losses = data.frame(currency = character(), sup.loss = numeric())
+  )
+
+  context <- cryptoTax:::.prepare_print_report_context(
+    report.info = report.info,
+    tax.year = 2021,
+    name = "Mr. Test"
+  )
+
+  expect_equal(context$total.cost, "1,000.00")
+  expect_equal(context$gains, "100.00")
+  expect_equal(context$losses, "-20.00")
+  expect_equal(context$net, "80.00")
+  expect_equal(context$total.tax, "55.00")
+})

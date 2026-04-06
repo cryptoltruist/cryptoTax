@@ -26,6 +26,36 @@ test_that("get_proceeds and get_sup_losses filter consistently by tax year", {
   expect_equal(sup.losses$sup.loss, 5)
 })
 
+test_that("proceeds_summary_table keeps gain and loss rows even when one side is empty", {
+  only.gains <- data.frame(
+    gains = c(10, 5),
+    total.price = c(100, 50),
+    fees = c(1, 2)
+  )
+
+  result <- cryptoTax:::.proceeds_summary_table(only.gains)
+
+  expect_equal(result$type, c("Gains", "Losses"))
+  expect_equal(result$proceeds, c(150, 0))
+  expect_equal(result$ACB.total, c(135, 0))
+  expect_equal(result$gains, c(15, 0))
+})
+
+test_that("split_proceeds_buckets separates gains and losses before summarizing", {
+  formatted.ACB.year <- data.frame(
+    gains = c(10, -5),
+    total.price = c(100, 50),
+    fees = c(1, 0)
+  )
+
+  buckets <- cryptoTax:::.split_proceeds_buckets(formatted.ACB.year)
+
+  expect_equal(nrow(buckets$gains), 1)
+  expect_equal(nrow(buckets$losses), 1)
+  expect_equal(buckets$gains$ACB.quantity, 90)
+  expect_equal(buckets$losses$ACB.quantity, 55)
+})
+
 test_that("crypto_pie validates the `by` argument", {
   expect_error(
     crypto_pie(data.frame(), by = "invalid"),
@@ -109,4 +139,15 @@ test_that("prepare_report_current_rates emits the requested signal style", {
 test_that("sup_losses_total returns zero for empty superficial-loss tables", {
   expect_equal(cryptoTax:::.sup_losses_total(data.frame(currency = character(), sup.loss = numeric())), 0)
   expect_equal(cryptoTax:::.sup_losses_total(NULL), 0)
+})
+
+test_that("report_summary_amount matches rows by type and falls back cleanly", {
+  report.summary <- data.frame(
+    Type = c("losses", "gains"),
+    Amount = c("-20.00", "100.00"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(cryptoTax:::.report_summary_amount(report.summary, "gains"), "100.00")
+  expect_equal(cryptoTax:::.report_summary_amount(report.summary, "net", default = "0.00"), "0.00")
 })
