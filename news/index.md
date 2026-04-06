@@ -1,5 +1,25 @@
 # Changelog
 
+## cryptoTax 0.1.0.15
+
+**Improvements:**
+
+- Continued a broader formatter cleanup across
+  [`format_shakepay()`](https://cryptoltruist.github.io/cryptoTax/reference/format_shakepay.md),
+  [`format_celsius()`](https://cryptoltruist.github.io/cryptoTax/reference/format_celsius.md),
+  [`format_coinbase()`](https://cryptoltruist.github.io/cryptoTax/reference/format_coinbase.md),
+  [`format_adalite()`](https://cryptoltruist.github.io/cryptoTax/reference/format_adalite.md),
+  [`format_newton()`](https://cryptoltruist.github.io/cryptoTax/reference/format_newton.md),
+  [`format_exodus()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.md),
+  [`format_presearch()`](https://cryptoltruist.github.io/cryptoTax/reference/format_presearch.md),
+  and
+  [`format_pooltool()`](https://cryptoltruist.github.io/cryptoTax/reference/format_pooltool.md)
+  to make wallet and exchange formatting paths more explicit and easier
+  to maintain without changing user-facing behavior.
+- Added focused helper tests for the new formatter seams, including
+  exchange-specific classification, timestamp parsing, reward mapping,
+  and final output annotation.
+
 ## cryptoTax 0.1.0.14
 
 **Improvements:**
