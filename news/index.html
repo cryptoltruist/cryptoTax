@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.17" id="cryptotax-01017">cryptoTax 0.1.0.17<a class="anchor" aria-label="anchor" href="#cryptotax-01017"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader proceeds, revenues, and superficial-loss cleanup across <code><a href="../reference/get_proceeds.html">get_proceeds()</a></code>, <code><a href="../reference/get_sup_losses.html">get_sup_losses()</a></code>, <code><a href="../reference/report_revenues.html">report_revenues()</a></code>, <code>report_helpers()</code>, <code><a href="../reference/tax_box.html">tax_box()</a></code>, and <code><a href="../reference/print_report.html">print_report()</a></code> to make summary-table assembly, total-row handling, and report-metric extraction more explicit and less dependent on row order.</li>
+<li>Fixed a <code><a href="../reference/report_revenues.html">report_revenues()</a></code> regression that was collapsing multi-exchange revenue output down to a single exchange row before totals were added.</li>
+<li>Expanded focused tests around empty proceeds/revenue shapes, multi-exchange revenue finalization, total-row selection for revenues and superficial losses, and tax-box/report helpers that now match values by labels instead of row position.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.16" id="cryptotax-01016">cryptoTax 0.1.0.16<a class="anchor" aria-label="anchor" href="#cryptotax-01016"></a></h2>
 <p><strong>Improvements:</strong></p>

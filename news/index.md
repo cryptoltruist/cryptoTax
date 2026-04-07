@@ -1,5 +1,29 @@
 # Changelog
 
+## cryptoTax 0.1.0.17
+
+**Improvements:**
+
+- Continued a broader proceeds, revenues, and superficial-loss cleanup
+  across
+  [`get_proceeds()`](https://cryptoltruist.github.io/cryptoTax/reference/get_proceeds.md),
+  [`get_sup_losses()`](https://cryptoltruist.github.io/cryptoTax/reference/get_sup_losses.md),
+  [`report_revenues()`](https://cryptoltruist.github.io/cryptoTax/reference/report_revenues.md),
+  `report_helpers()`,
+  [`tax_box()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_box.md),
+  and
+  [`print_report()`](https://cryptoltruist.github.io/cryptoTax/reference/print_report.md)
+  to make summary-table assembly, total-row handling, and report-metric
+  extraction more explicit and less dependent on row order.
+- Fixed a
+  [`report_revenues()`](https://cryptoltruist.github.io/cryptoTax/reference/report_revenues.md)
+  regression that was collapsing multi-exchange revenue output down to a
+  single exchange row before totals were added.
+- Expanded focused tests around empty proceeds/revenue shapes,
+  multi-exchange revenue finalization, total-row selection for revenues
+  and superficial losses, and tax-box/report helpers that now match
+  values by labels instead of row position.
+
 ## cryptoTax 0.1.0.16
 
 **Improvements:**
