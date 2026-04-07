@@ -1,5 +1,22 @@
 # Changelog
 
+## cryptoTax 0.1.0.16
+
+**Improvements:**
+
+- Continued a broader ingestion and detection hardening pass across
+  [`merge_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.md),
+  [`check_new_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.md),
+  and
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+  to make merge behavior, transaction-warning generation, exchange
+  detection, and list dispatch more explicit and robust without changing
+  user-facing behavior.
+- Expanded focused helper tests around nested merge inputs,
+  schema-preserving empty data frames, factor and blank-string
+  transaction values, format-detect registry lookups, and `NULL`/invalid
+  list inputs.
+
 ## cryptoTax 0.1.0.15
 
 **Improvements:**
