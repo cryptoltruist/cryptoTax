@@ -1,6 +1,18 @@
+.validate_column_name_arg <- function(x, arg) {
+  if (!is.character(x) || length(x) != 1 || is.na(x) || !nzchar(x)) {
+    stop("Argument '", arg, "' must be a single non-empty column name.")
+  }
+}
+
 .validate_check_new_transactions_input <- function(data, transactions.col, description.col = NULL) {
+  .validate_column_name_arg(transactions.col, "transactions.col")
+
   if (!transactions.col %in% names(data)) {
     stop("Column '", transactions.col, "' not found in data frame. Double-check for typos.")
+  }
+
+  if (!is.null(description.col)) {
+    .validate_column_name_arg(description.col, "description.col")
   }
 
   if (!is.null(description.col) && !description.col %in% names(data)) {
@@ -8,9 +20,28 @@
   }
 }
 
+.unknown_transaction_rows <- function(data, known.transactions, transactions.col) {
+  !is.na(data[[transactions.col]]) &
+    !data[[transactions.col]] %in% known.transactions
+}
+
+.coerce_transaction_values <- function(x) {
+  as.character(x)
+}
+
+.coerce_known_transactions <- function(x) {
+  as.character(x)
+}
+
 .new_transaction_names <- function(data, known.transactions, transactions.col) {
-  transaction.values <- unique(data[[transactions.col]])
-  sort(transaction.values[!transaction.values %in% known.transactions])
+  known.transactions <- .coerce_known_transactions(known.transactions)
+  transaction.values <- unique(.coerce_transaction_values(data[[transactions.col]])[.unknown_transaction_rows(
+    data = data,
+    known.transactions = known.transactions,
+    transactions.col = transactions.col
+  )])
+  transaction.values <- transaction.values[!is.na(transaction.values)]
+  sort(transaction.values)
 }
 
 .new_transaction_descriptions <- function(data, known.transactions, transactions.col, description.col = NULL) {
@@ -18,9 +49,16 @@
     return(character())
   }
 
+  known.transactions <- .coerce_known_transactions(known.transactions)
   new.des.names <- data %>%
-    filter(!.data[[transactions.col]] %in% known.transactions) %>%
+    filter(.unknown_transaction_rows(
+      data = data,
+      known.transactions = known.transactions,
+      transactions.col = transactions.col
+    )) %>%
     pull(.data[[description.col]]) %>%
+    .coerce_transaction_values() %>%
+    .[!is.na(.) & nzchar(.)] %>%
     unique() %>%
     sort()
 
@@ -29,6 +67,10 @@
   }
 
   new.des.names
+}
+
+.has_new_transactions <- function(new.transactions.names) {
+  length(new.transactions.names) > 0
 }
 
 .format_new_transaction_warning <- function(new.transactions.names, new.descriptions = character()) {
@@ -73,6 +115,7 @@ check_new_transactions <- function(data,
                                    known.transactions,
                                    transactions.col,
                                    description.col = NULL) {
+  known.transactions <- .coerce_known_transactions(known.transactions)
   .validate_check_new_transactions_input(
     data = data,
     transactions.col = transactions.col,
@@ -85,7 +128,7 @@ check_new_transactions <- function(data,
     transactions.col = transactions.col
   )
 
-  if (length(new.transactions.names)) {
+  if (.has_new_transactions(new.transactions.names)) {
     warning(
       .format_new_transaction_warning(
         new.transactions.names = new.transactions.names,
@@ -94,7 +137,7 @@ check_new_transactions <- function(data,
         known.transactions = known.transactions,
         transactions.col = transactions.col,
         description.col = description.col
-      )
+        )
       )
     )
   }

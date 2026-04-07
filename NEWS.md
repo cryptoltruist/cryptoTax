@@ -1,3 +1,10 @@
+# cryptoTax 0.1.0.16
+
+**Improvements:**
+
+- Continued a broader ingestion and detection hardening pass across `merge_exchanges()`, `check_new_transactions()`, and `format_detect()` to make merge behavior, transaction-warning generation, exchange detection, and list dispatch more explicit and robust without changing user-facing behavior.
+- Expanded focused helper tests around nested merge inputs, schema-preserving empty data frames, factor and blank-string transaction values, format-detect registry lookups, and `NULL`/invalid list inputs.
+
 # cryptoTax 0.1.0.15
 
 **Improvements:**

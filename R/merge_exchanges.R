@@ -1,6 +1,10 @@
+.is_mergeable_exchange_input <- function(x) {
+  is.data.frame(x) || is.null(x)
+}
+
 .flatten_merge_inputs <- function(inputs) {
   flattened <- lapply(inputs, function(x) {
-    if (is.null(x) || is.data.frame(x)) {
+    if (.is_mergeable_exchange_input(x)) {
       return(list(x))
     }
 
@@ -14,13 +18,21 @@
   unlist(flattened, recursive = FALSE)
 }
 
+.is_nonempty_merge_input <- function(x) {
+  is.data.frame(x) && nrow(x) > 0
+}
+
 .normalize_merge_inputs <- function(inputs) {
   inputs <- .flatten_merge_inputs(inputs)
-  Filter(function(x) is.data.frame(x), inputs)
+  Filter(is.data.frame, inputs)
+}
+
+.merge_exchanges_has_date <- function(data) {
+  "date" %in% names(data)
 }
 
 .sort_merged_exchanges <- function(data) {
-  if (!("date" %in% names(data))) {
+  if (!.merge_exchanges_has_date(data)) {
     return(data)
   }
 
