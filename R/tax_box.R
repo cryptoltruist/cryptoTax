@@ -25,10 +25,9 @@
 }
 
 .tax_box_metrics <- function(report.summary, sup.losses, table.revenues, proceeds) {
-  losses <- report.summary$Amount[3]
+  losses <- .report_summary_amount(report.summary, "losses", default = "0")
   sup.losses.total <- .sup_losses_total(sup.losses)
-  total.income.numeric <- dplyr::last(table.revenues$staking) +
-    dplyr::last(table.revenues$interests)
+  total.income.numeric <- .table_revenues_income_total(table.revenues)
 
   gains.row <- .proceeds_metrics_row(proceeds, "Gains")
   losses.row <- .proceeds_metrics_row(proceeds, "Losses")

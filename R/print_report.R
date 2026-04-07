@@ -21,11 +21,7 @@
 
 .prepare_print_report_context <- function(report.info, tax.year, name) {
   person.name <- paste("Name:", name)
-  total.income.numeric <- sum(
-    dplyr::last(report.info$table.revenues$staking),
-    dplyr::last(report.info$table.revenues$interests),
-    na.rm = TRUE
-  )
+  total.income.numeric <- .table_revenues_income_total(report.info$table.revenues)
   total.income <- format_dollars(total.income.numeric)
   total.cost <- .report_summary_amount(report.info$report.summary, "total.cost")
   gains <- .report_summary_amount(report.info$report.summary, "gains")

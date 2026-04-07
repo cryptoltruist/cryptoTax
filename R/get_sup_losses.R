@@ -1,3 +1,22 @@
+#' @noRd
+.empty_sup_losses_table <- function() {
+  data.frame(currency = character(), sup.loss = numeric())
+}
+
+#' @noRd
+.sup_losses_has_values <- function(formatted.ACB.year) {
+  "gains.sup" %in% names(formatted.ACB.year) && any(!is.na(formatted.ACB.year$gains.sup))
+}
+
+#' @noRd
+.sup_losses_table <- function(formatted.ACB.year) {
+  if (!.sup_losses_has_values(formatted.ACB.year)) {
+    return(.empty_sup_losses_table())
+  }
+
+  .total_sup_loss_table(formatted.ACB.year)
+}
+
 #' @title Get superficial loss amounts
 #'
 #' @description Get superficial loss amounts
@@ -21,5 +40,5 @@ get_sup_losses <- function(formatted.ACB, tax.year = "all", local.timezone = Sys
     label = "superficial losses"
   )
 
-  .total_sup_loss_table(formatted.ACB.year)
+  .sup_losses_table(formatted.ACB.year)
 }

@@ -56,6 +56,32 @@ test_that("split_proceeds_buckets separates gains and losses before summarizing"
   expect_equal(buckets$losses$ACB.quantity, 55)
 })
 
+test_that("proceeds_bucket_rows selects positive and negative gains separately", {
+  formatted.ACB.year <- data.frame(gains = c(10, 0, -5))
+
+  expect_equal(
+    cryptoTax:::.proceeds_bucket_rows(formatted.ACB.year, "positive")$gains,
+    10
+  )
+  expect_equal(
+    cryptoTax:::.proceeds_bucket_rows(formatted.ACB.year, "negative")$gains,
+    -5
+  )
+})
+
+test_that("proceeds_summary_rows preserves gain and loss ordering before labels", {
+  formatted.ACB.year <- data.frame(
+    gains = c(10, -5),
+    total.price = c(100, 50),
+    fees = c(1, 0)
+  )
+
+  result <- cryptoTax:::.proceeds_summary_rows(formatted.ACB.year)
+
+  expect_equal(result$proceeds, c(100, 50))
+  expect_equal(result$gains, c(10, -5))
+})
+
 test_that("crypto_pie validates the `by` argument", {
   expect_error(
     crypto_pie(data.frame(), by = "invalid"),
@@ -141,6 +167,46 @@ test_that("sup_losses_total returns zero for empty superficial-loss tables", {
   expect_equal(cryptoTax:::.sup_losses_total(NULL), 0)
 })
 
+test_that("sup_losses_total prefers the explicit Total row over row order", {
+  sup.losses <- data.frame(
+    currency = c("Total", "BTC"),
+    sup.loss = c(5, 1),
+    stringsAsFactors = FALSE
+  )
+
+  total.row <- cryptoTax:::.sup_losses_total_row(sup.losses)
+
+  expect_equal(total.row$currency, "Total")
+  expect_equal(cryptoTax:::.sup_losses_total(sup.losses), 5)
+})
+
+test_that("table_revenues income helpers handle missing tables and missing columns", {
+  table.revenues <- data.frame(
+    staking = c(1, 5),
+    interests = c(2, 7)
+  )
+
+  expect_equal(cryptoTax:::.table_revenues_amount(table.revenues, "staking"), 5)
+  expect_equal(cryptoTax:::.table_revenues_amount(table.revenues, "rebates"), 0)
+  expect_equal(cryptoTax:::.table_revenues_amount(NULL, "staking"), 0)
+  expect_equal(cryptoTax:::.table_revenues_income_total(table.revenues), 12)
+})
+
+test_that("table_revenues helpers prefer the explicit total row over row order", {
+  table.revenues <- data.frame(
+    exchange = c("total", "shakepay"),
+    staking = c(5, 1),
+    interests = c(7, 2),
+    stringsAsFactors = FALSE
+  )
+
+  total.row <- cryptoTax:::.table_revenues_total_row(table.revenues)
+
+  expect_equal(total.row$exchange, "total")
+  expect_equal(cryptoTax:::.table_revenues_amount(table.revenues, "staking"), 5)
+  expect_equal(cryptoTax:::.table_revenues_income_total(table.revenues), 12)
+})
+
 test_that("report_summary_amount matches rows by type and falls back cleanly", {
   report.summary <- data.frame(
     Type = c("losses", "gains"),
@@ -150,4 +216,201 @@ test_that("report_summary_amount matches rows by type and falls back cleanly", {
 
   expect_equal(cryptoTax:::.report_summary_amount(report.summary, "gains"), "100.00")
   expect_equal(cryptoTax:::.report_summary_amount(report.summary, "net", default = "0.00"), "0.00")
+})
+
+test_that("summarize_proceeds_bucket returns zero rows for empty buckets", {
+  empty <- data.frame(
+    gains = numeric(),
+    total.price = numeric(),
+    fees = numeric(),
+    ACB.quantity = numeric()
+  )
+
+  result <- cryptoTax:::.summarize_proceeds_bucket(empty)
+
+  expect_equal(result$proceeds, 0)
+  expect_equal(result$ACB.total, 0)
+  expect_equal(result$gains, 0)
+})
+
+test_that("summarize_proceeds_values computes explicit proceeds totals", {
+  bucket <- data.frame(
+    total.price = c(100, 50),
+    ACB.quantity = c(90, 40)
+  )
+
+  result <- cryptoTax:::.summarize_proceeds_values(bucket)
+
+  expect_equal(result$proceeds, 150)
+  expect_equal(result$ACB.total, 130)
+  expect_equal(result$gains, 20)
+})
+
+test_that("report_revenues helper tables summarize totals and dates by exchange", {
+  revenues <- data.frame(
+    exchange = c("shakepay", "shakepay", "newton"),
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-02 00:00:00"
+    ), tz = "UTC"),
+    value = c(5, 7, 3),
+    revenue.type = c("staking", "airdrops", "referrals"),
+    stringsAsFactors = FALSE
+  )
+
+  totals <- cryptoTax:::.report_revenues_totals(revenues)
+  dates <- cryptoTax:::.report_revenues_dates(revenues, "UTC")
+
+  expect_equal(totals$total.revenues[totals$exchange == "shakepay"], 12)
+  expect_equal(
+    dates$date[dates$exchange == "shakepay"],
+    as.POSIXct("2021-01-03 00:00:00", tz = "UTC")
+  )
+})
+
+test_that("report_revenues_filter_year keeps only rows in the requested local year", {
+  revenues <- data.frame(
+    exchange = "shakepay",
+    date = as.POSIXct(c(
+      "2020-12-31 23:30:00",
+      "2021-01-01 01:00:00"
+    ), tz = "UTC"),
+    value = c(5, 7),
+    revenue.type = c("staking", "staking"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.report_revenues_filter_year(
+    revenues,
+    tax.year = 2020,
+    local.timezone = "America/Toronto"
+  )
+
+  expect_equal(nrow(result), 2)
+})
+
+test_that("report_revenues_round_numeric rounds numeric columns and sets currency", {
+  table <- data.frame(
+    exchange = "shakepay",
+    total.revenues = 10.126,
+    staking = 5.555,
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.report_revenues_round_numeric(table)
+
+  expect_equal(result$total.revenues, 10.13)
+  expect_equal(result$staking, 5.56)
+  expect_equal(result$currency, "CAD")
+})
+
+test_that("report_revenues_total_row sums numeric columns explicitly", {
+  table <- data.frame(
+    exchange = c("shakepay", "newton"),
+    date.last = as.POSIXct(c("2021-01-02 00:00:00", "2021-01-03 00:00:00"), tz = "UTC"),
+    total.revenues = c(12.345, 4.4),
+    staking = c(5, 0),
+    interests = c(7.345, 3.3),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.report_revenues_total_row(table, "UTC")
+
+  expect_equal(utils::tail(result$exchange, 1), "total")
+  expect_equal(utils::tail(result$total.revenues, 1), 16.745)
+  expect_equal(utils::tail(result$staking, 1), 5)
+  expect_equal(utils::tail(result$interests, 1), 10.645)
+})
+
+test_that("report_revenues helpers return explicit empty and finalized table shapes", {
+  empty <- cryptoTax:::.empty_report_revenues_table("UTC")
+
+  expect_equal(names(empty), cryptoTax:::.report_revenues_columns())
+  expect_equal(empty$exchange, "total")
+  expect_equal(empty$total.revenues, 0)
+
+  table <- data.frame(
+    exchange = "shakepay",
+    date = as.POSIXct("2021-01-02 00:00:00", tz = "UTC"),
+    total.revenues = 12.345,
+    airdrops = 2,
+    referrals = 0,
+    staking = 5,
+    promos = 0,
+    interests = 7.345,
+    rebates = 0,
+    rewards = 0,
+    forks = 0,
+    mining = 0,
+    stringsAsFactors = FALSE
+  )
+
+  finalized <- cryptoTax:::.report_revenues_finalize_table(table, "UTC")
+
+  expect_equal(names(finalized), cryptoTax:::.report_revenues_columns())
+  expect_equal(utils::tail(finalized$exchange, 1), "total")
+  expect_equal(utils::tail(finalized$total.revenues, 1), 12.35)
+})
+
+test_that("report_revenues_finalize_table preserves all exchanges before adding totals", {
+  table <- data.frame(
+    exchange = c("shakepay", "newton"),
+    date = as.POSIXct(c("2021-01-02 00:00:00", "2021-01-03 00:00:00"), tz = "UTC"),
+    total.revenues = c(12.345, 4.4),
+    airdrops = c(2, 0),
+    referrals = c(0, 1.1),
+    staking = c(5, 0),
+    promos = c(0, 0),
+    interests = c(7.345, 3.3),
+    rebates = c(0, 0),
+    rewards = c(0, 0),
+    forks = c(0, 0),
+    mining = c(0, 0),
+    stringsAsFactors = FALSE
+  )
+
+  finalized <- cryptoTax:::.report_revenues_finalize_table(table, "UTC")
+
+  expect_equal(finalized$exchange, c("shakepay", "newton", "total"))
+  expect_equal(finalized$total.revenues, c(12.35, 4.4, 16.75))
+})
+
+test_that("sup_losses_table matches total_sup_loss_table and empty helper shape", {
+  formatted.ACB.year <- data.frame(gains.sup = c(2, 3))
+
+  expect_equal(
+    cryptoTax:::.sup_losses_table(formatted.ACB.year),
+    cryptoTax:::.total_sup_loss_table(formatted.ACB.year)
+  )
+
+  empty <- cryptoTax:::.empty_sup_losses_table()
+  expect_equal(names(empty), c("currency", "sup.loss"))
+  expect_equal(nrow(empty), 0)
+})
+
+test_that("sup_losses helpers return empty output when gains.sup is missing or all NA", {
+  expect_false(cryptoTax:::.sup_losses_has_values(data.frame(x = 1)))
+  expect_false(cryptoTax:::.sup_losses_has_values(data.frame(gains.sup = c(NA_real_, NA_real_))))
+
+  expect_equal(
+    cryptoTax:::.sup_losses_table(data.frame(x = 1)),
+    cryptoTax:::.empty_sup_losses_table()
+  )
+})
+
+test_that("report_revenues_rows extracts only revenue transactions", {
+  formatted.ACB <- data.frame(
+    transaction = c("buy", "revenue", "sell", "revenue"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.report_revenues_rows(formatted.ACB)
+
+  expect_equal(result$transaction, c("revenue", "revenue"))
+})
+
+test_that("report_revenues_has_rows reflects whether any revenue rows remain", {
+  expect_false(cryptoTax:::.report_revenues_has_rows(data.frame()))
+  expect_true(cryptoTax:::.report_revenues_has_rows(data.frame(x = 1)))
 })

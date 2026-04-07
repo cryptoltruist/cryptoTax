@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.17
+
+**Improvements:**
+
+- Continued a broader proceeds, revenues, and superficial-loss cleanup across `get_proceeds()`, `get_sup_losses()`, `report_revenues()`, `report_helpers()`, `tax_box()`, and `print_report()` to make summary-table assembly, total-row handling, and report-metric extraction more explicit and less dependent on row order.
+- Fixed a `report_revenues()` regression that was collapsing multi-exchange revenue output down to a single exchange row before totals were added.
+- Expanded focused tests around empty proceeds/revenue shapes, multi-exchange revenue finalization, total-row selection for revenues and superficial losses, and tax-box/report helpers that now match values by labels instead of row position.
+
 # cryptoTax 0.1.0.16
 
 **Improvements:**

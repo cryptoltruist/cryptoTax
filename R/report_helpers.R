@@ -101,12 +101,59 @@
   rates
 }
 
+.sup_losses_total_row <- function(sup.losses) {
+  if (is.null(sup.losses) || nrow(sup.losses) == 0) {
+    return(NULL)
+  }
+
+  if ("currency" %in% names(sup.losses)) {
+    total.row <- sup.losses[sup.losses$currency == "Total", , drop = FALSE]
+    if (nrow(total.row) > 0) {
+      return(utils::tail(total.row, 1))
+    }
+  }
+
+  utils::tail(sup.losses, 1)
+}
+
 .sup_losses_total <- function(sup.losses) {
-  if (is.null(sup.losses) || nrow(sup.losses) == 0 || !"sup.loss" %in% names(sup.losses)) {
+  total.row <- .sup_losses_total_row(sup.losses)
+
+  if (is.null(total.row) || !"sup.loss" %in% names(total.row)) {
     return(0)
   }
 
-  as.numeric(utils::tail(sup.losses[["sup.loss"]], 1))
+  as.numeric(total.row[["sup.loss"]][[1]])
+}
+
+.table_revenues_total_row <- function(table.revenues) {
+  if (is.null(table.revenues) || nrow(table.revenues) == 0) {
+    return(NULL)
+  }
+
+  if ("exchange" %in% names(table.revenues)) {
+    total.row <- table.revenues[table.revenues$exchange == "total", , drop = FALSE]
+    if (nrow(total.row) > 0) {
+      return(utils::tail(total.row, 1))
+    }
+  }
+
+  utils::tail(table.revenues, 1)
+}
+
+.table_revenues_amount <- function(table.revenues, column) {
+  total.row <- .table_revenues_total_row(table.revenues)
+
+  if (is.null(total.row) || !column %in% names(total.row)) {
+    return(0)
+  }
+
+  as.numeric(total.row[[column]][[1]])
+}
+
+.table_revenues_income_total <- function(table.revenues) {
+  .table_revenues_amount(table.revenues, "staking") +
+    .table_revenues_amount(table.revenues, "interests")
 }
 
 .report_summary_amount <- function(report.summary, type, default = NA_character_) {

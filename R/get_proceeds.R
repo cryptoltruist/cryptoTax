@@ -7,38 +7,80 @@
     )
 }
 
+.empty_proceeds_summary <- function() {
+  data.frame(
+    proceeds = 0,
+    ACB.total = 0,
+    gains = 0
+  )
+}
+
+#' @noRd
+.summarize_proceeds_values <- function(x) {
+  if (nrow(x) == 0) {
+    return(.empty_proceeds_summary())
+  }
+
+  proceeds <- sum(x$total.price)
+  ACB.total <- sum(x$ACB.quantity)
+
+  data.frame(
+    proceeds = proceeds,
+    ACB.total = ACB.total,
+    gains = proceeds - ACB.total
+  )
+}
+
 #' @noRd
 .summarize_proceeds_bucket <- function(x) {
+  if (nrow(x) == 0) {
+    return(.empty_proceeds_summary())
+  }
+
   x %>%
     ungroup() %>%
-    summarize(
-      proceeds = sum(.data$total.price),
-      ACB.total = sum(.data$ACB.quantity),
-      gains = .data$proceeds - .data$ACB.total
-    )
+    .summarize_proceeds_values()
+}
+
+#' @noRd
+.proceeds_type_labels <- function() {
+  c("Gains", "Losses")
+}
+
+.proceeds_bucket_rows <- function(formatted.ACB.year, gains_sign = c("positive", "negative")) {
+  gains_sign <- match.arg(gains_sign)
+
+  if (gains_sign == "positive") {
+    return(formatted.ACB.year %>% filter(.data$gains > 0))
+  }
+
+  formatted.ACB.year %>% filter(.data$gains < 0)
+}
+
+#' @noRd
+.proceeds_summary_rows <- function(formatted.ACB.year) {
+  buckets <- .split_proceeds_buckets(formatted.ACB.year)
+
+  bind_rows(
+    .summarize_proceeds_bucket(buckets$gains),
+    .summarize_proceeds_bucket(buckets$losses)
+  )
 }
 
 #' @noRd
 .split_proceeds_buckets <- function(formatted.ACB.year) {
   list(
-    gains = formatted.ACB.year %>%
-      filter(.data$gains > 0) %>%
+    gains = .proceeds_bucket_rows(formatted.ACB.year, "positive") %>%
       .prepare_proceeds_bucket(),
-    losses = formatted.ACB.year %>%
-      filter(.data$gains < 0) %>%
+    losses = .proceeds_bucket_rows(formatted.ACB.year, "negative") %>%
       .prepare_proceeds_bucket()
   )
 }
 
 #' @noRd
 .proceeds_summary_table <- function(formatted.ACB.year) {
-  buckets <- .split_proceeds_buckets(formatted.ACB.year)
-
-  bind_rows(
-    .summarize_proceeds_bucket(buckets$gains),
-    .summarize_proceeds_bucket(buckets$losses)
-  ) %>%
-    mutate(type = c("Gains", "Losses")) %>%
+  .proceeds_summary_rows(formatted.ACB.year) %>%
+    mutate(type = .proceeds_type_labels()) %>%
     relocate("type") %>%
     as.data.frame()
 }
