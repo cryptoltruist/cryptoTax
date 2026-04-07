@@ -1,6 +1,7 @@
 # Check for new transactions
 
-Check for new transactions for a given exchange
+Check for new transactions for a given exchange after normalizing
+transaction names and descriptions for surrounding whitespace.
 
 ## Usage
 
@@ -46,4 +47,9 @@ check_new_transactions(data,
   description.col = "Transaction.Description"
 )
 #> Warning: New transaction types detected! These may be unaccounted for: admin_wallet_credited, crypto_viban_exchange, mco_stake_reward, rewards_platform_deposit_credited. Associated descriptions: Adjustment (Credit), BTC -> CAD, CRO Stake Rewards, ETH -> CAD, Mission Rewards Deposit
+check_new_transactions(data,
+  known.transactions = c(" crypto_purchase ", "lockup_lock"),
+  transactions.col = "Transaction.Kind"
+)
+#> Warning: New transaction types detected! These may be unaccounted for: admin_wallet_credited, crypto_viban_exchange, mco_stake_reward, rewards_platform_deposit_credited
 ```

@@ -1,5 +1,29 @@
 # Changelog
 
+## cryptoTax 0.1.0.18
+
+**Improvements:**
+
+- Continued a broader ingestion and orchestration hardening pass across
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md),
+  [`merge_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.md),
+  and
+  [`check_new_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.md)
+  to make top-level list formatting, merge ordering, and
+  transaction-warning behavior more explicit and robust without changing
+  the underlying exchange-specific tax logic.
+- Hardened the public list path in
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+  so nested lists are accepted recursively, empty data frames are
+  skipped cleanly, and whitespace-only description values do not create
+  false detection signals.
+- Expanded focused tests around nested and empty list inputs,
+  public-path whitespace normalization in transaction warnings,
+  missing-date merge ordering, and the full workflow path that now
+  exercises
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+  directly for grouped exchange inputs.
+
 ## cryptoTax 0.1.0.17
 
 **Improvements:**

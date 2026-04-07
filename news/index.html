@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.18</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.18" id="cryptotax-01018">cryptoTax 0.1.0.18<a class="anchor" aria-label="anchor" href="#cryptotax-01018"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader ingestion and orchestration hardening pass across <code><a href="../reference/format_detect.html">format_detect()</a></code>, <code><a href="../reference/merge_exchanges.html">merge_exchanges()</a></code>, and <code><a href="../reference/check_new_transactions.html">check_new_transactions()</a></code> to make top-level list formatting, merge ordering, and transaction-warning behavior more explicit and robust without changing the underlying exchange-specific tax logic.</li>
+<li>Hardened the public list path in <code><a href="../reference/format_detect.html">format_detect()</a></code> so nested lists are accepted recursively, empty data frames are skipped cleanly, and whitespace-only description values do not create false detection signals.</li>
+<li>Expanded focused tests around nested and empty list inputs, public-path whitespace normalization in transaction warnings, missing-date merge ordering, and the full workflow path that now exercises <code><a href="../reference/format_detect.html">format_detect()</a></code> directly for grouped exchange inputs.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.17" id="cryptotax-01017">cryptoTax 0.1.0.17<a class="anchor" aria-label="anchor" href="#cryptotax-01017"></a></h2>
 <p><strong>Improvements:</strong></p>
