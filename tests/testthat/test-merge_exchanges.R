@@ -12,6 +12,21 @@ test_that("merge_exchanges ignores NULL and empty inputs", {
   expect_equal(result$exchange, "one")
 })
 
+test_that("merge_exchanges public path handles nested lists and missing dates", {
+  one <- data.frame(
+    date = as.POSIXct("2021-01-02 00:00:00", tz = "UTC"),
+    exchange = "one"
+  )
+  two <- data.frame(
+    date = as.POSIXct(c(NA, "2021-01-01 00:00:00"), tz = "UTC"),
+    exchange = c("missing", "two")
+  )
+
+  result <- merge_exchanges(list(one, list(NULL, two)))
+
+  expect_equal(result$exchange, c("two", "one", "missing"))
+})
+
 test_that("merge_exchanges returns an empty data frame when nothing is mergeable", {
   empty <- data.frame(date = as.POSIXct(character()), exchange = character())
 
@@ -104,4 +119,21 @@ test_that("merge input helpers classify mergeable and nonempty inputs", {
 test_that("merge_exchanges_has_date reflects whether sorting should use date", {
   expect_true(cryptoTax:::.merge_exchanges_has_date(data.frame(date = Sys.time())))
   expect_false(cryptoTax:::.merge_exchanges_has_date(data.frame(exchange = "x")))
+})
+
+test_that("merge_exchanges_date_order pushes missing dates to the end", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-02 00:00:00",
+      NA,
+      "2021-01-01 00:00:00"
+    ), tz = "UTC"),
+    exchange = c("two", "missing", "one")
+  )
+
+  order.index <- cryptoTax:::.merge_exchanges_date_order(data)
+  sorted <- cryptoTax:::.sort_merged_exchanges(data)
+
+  expect_equal(order.index, c(3, 1, 2))
+  expect_equal(sorted$exchange, c("one", "two", "missing"))
 })

@@ -5,10 +5,9 @@
 
    list.prices <- list_prices_example
 
-  formatted.data <- suppressMessages(lapply(.test_exchange_data(), function(x) {
-    format_detect(x, list.prices = list.prices)
-  })) %>%
-    merge_exchanges()
+  formatted.data <- suppressMessages(
+    format_detect(.test_exchange_data(), list.prices = list.prices)
+  )
 
   # Format data ####
   expect_warning(suppressMessages(format_ACB(formatted.data), "negative values"))

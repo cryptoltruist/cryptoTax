@@ -15,9 +15,12 @@ data frames.
 }
 \description{
 Merge formatted exchange transactions into one data frame.
+Nested lists are flattened, \code{NULL} inputs are ignored, and rows with missing
+dates are placed after dated rows.
 }
 \examples{
 shakepay <- format_shakepay(data_shakepay)
 newton <- format_newton(data_newton)
 merge_exchanges(shakepay, newton)
+merge_exchanges(list(shakepay, list(NULL, newton)))
 }

@@ -28,6 +28,23 @@ test_that("check_new_transactions is silent when all transaction types are known
   )
 })
 
+test_that("check_new_transactions public path normalizes whitespace in known transactions", {
+  data <- data.frame(
+    kind = c(" known ", "known"),
+    description = c(" old ", "old"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_no_warning(
+    check_new_transactions(
+      data,
+      known.transactions = "known",
+      transactions.col = "kind",
+      description.col = "description"
+    )
+  )
+})
+
 test_that("check_new_transactions validates requested columns", {
   data <- data.frame(kind = "known", stringsAsFactors = FALSE)
 
@@ -48,6 +65,17 @@ test_that("check_new_transactions validates requested columns", {
       description.col = "missing"
     ),
     "Column 'missing' not found in data frame."
+  )
+})
+
+test_that("check_new_transactions validates that data is a data frame", {
+  expect_error(
+    check_new_transactions(
+      list(kind = "known"),
+      known.transactions = "known",
+      transactions.col = "kind"
+    ),
+    "Argument 'data' must be a data frame."
   )
 })
 
@@ -156,6 +184,24 @@ test_that("new transaction helpers work with factor known.transactions", {
   )
 })
 
+test_that("known.transactions normalization drops NA and blank values", {
+  expect_equal(
+    cryptoTax:::.normalize_known_transactions(c(" known ", NA, "", "known", "   ")),
+    "known"
+  )
+
+  data <- data.frame(
+    kind = c("known", "new_type"),
+    description = c("old", "desc one"),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(
+    cryptoTax:::.new_transaction_names(data, c(" known ", NA, " "), "kind"),
+    "new_type"
+  )
+})
+
 test_that("new transaction helpers ignore NA transaction names and descriptions", {
   data <- data.frame(
     kind = c("known", NA, "new_type"),
@@ -190,6 +236,29 @@ test_that("new transaction descriptions ignore blank strings", {
     cryptoTax:::.new_transaction_descriptions(
       data,
       known.transactions = "known",
+      transactions.col = "kind",
+      description.col = "description"
+    ),
+    "kept"
+  )
+})
+
+test_that("new transaction helpers ignore whitespace-only strings", {
+  data <- data.frame(
+    kind = c("known", "  ", " new_type "),
+    description = c("  ", "   ", " kept "),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(
+    cryptoTax:::.new_transaction_names(data, " known ", "kind"),
+    "new_type"
+  )
+
+  expect_equal(
+    cryptoTax:::.new_transaction_descriptions(
+      data,
+      known.transactions = " known ",
       transactions.col = "kind",
       description.col = "description"
     ),

@@ -1,3 +1,9 @@
+.validate_check_new_transactions_data <- function(data) {
+  if (!is.data.frame(data)) {
+    stop("Argument 'data' must be a data frame.")
+  }
+}
+
 .validate_column_name_arg <- function(x, arg) {
   if (!is.character(x) || length(x) != 1 || is.na(x) || !nzchar(x)) {
     stop("Argument '", arg, "' must be a single non-empty column name.")
@@ -5,6 +11,7 @@
 }
 
 .validate_check_new_transactions_input <- function(data, transactions.col, description.col = NULL) {
+  .validate_check_new_transactions_data(data)
   .validate_column_name_arg(transactions.col, "transactions.col")
 
   if (!transactions.col %in% names(data)) {
@@ -21,26 +28,34 @@
 }
 
 .unknown_transaction_rows <- function(data, known.transactions, transactions.col) {
-  !is.na(data[[transactions.col]]) &
-    !data[[transactions.col]] %in% known.transactions
+  transaction.values <- .coerce_transaction_values(data[[transactions.col]])
+  !is.na(transaction.values) &
+    nzchar(transaction.values) &
+    !transaction.values %in% known.transactions
 }
 
 .coerce_transaction_values <- function(x) {
-  as.character(x)
+  trimws(as.character(x))
 }
 
 .coerce_known_transactions <- function(x) {
-  as.character(x)
+  trimws(as.character(x))
+}
+
+.normalize_known_transactions <- function(x) {
+  x <- .coerce_known_transactions(x)
+  x <- x[!is.na(x) & nzchar(x)]
+  unique(x)
 }
 
 .new_transaction_names <- function(data, known.transactions, transactions.col) {
-  known.transactions <- .coerce_known_transactions(known.transactions)
+  known.transactions <- .normalize_known_transactions(known.transactions)
   transaction.values <- unique(.coerce_transaction_values(data[[transactions.col]])[.unknown_transaction_rows(
     data = data,
     known.transactions = known.transactions,
     transactions.col = transactions.col
   )])
-  transaction.values <- transaction.values[!is.na(transaction.values)]
+  transaction.values <- transaction.values[!is.na(transaction.values) & nzchar(transaction.values)]
   sort(transaction.values)
 }
 
@@ -49,7 +64,7 @@
     return(character())
   }
 
-  known.transactions <- .coerce_known_transactions(known.transactions)
+  known.transactions <- .normalize_known_transactions(known.transactions)
   new.des.names <- data %>%
     filter(.unknown_transaction_rows(
       data = data,
@@ -93,6 +108,8 @@
 #' @title Check for new transactions
 #'
 #' @description Check for new transactions for a given exchange
+#' after normalizing transaction names and descriptions for surrounding
+#' whitespace.
 #' @param data The dataframe
 #' @param known.transactions A list of known transactions
 #' @param transactions.col The name of the transaction column
@@ -109,13 +126,17 @@
 #'   transactions.col = "Transaction.Kind",
 #'   description.col = "Transaction.Description"
 #' )
+#' check_new_transactions(data,
+#'   known.transactions = c(" crypto_purchase ", "lockup_lock"),
+#'   transactions.col = "Transaction.Kind"
+#' )
 #' @importFrom dplyr %>% rename mutate select filter bind_rows
 #' @importFrom rlang .data
 check_new_transactions <- function(data,
                                    known.transactions,
                                    transactions.col,
                                    description.col = NULL) {
-  known.transactions <- .coerce_known_transactions(known.transactions)
+  known.transactions <- .normalize_known_transactions(known.transactions)
   .validate_check_new_transactions_input(
     data = data,
     transactions.col = transactions.col,

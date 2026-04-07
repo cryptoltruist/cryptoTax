@@ -140,6 +140,21 @@ test_that("format_detect description helpers ignore blank descriptions safely", 
   )
 })
 
+test_that("format_detect description helpers ignore whitespace-only descriptions safely", {
+  data <- data.frame(
+    Description = c("   ", " APR reward "),
+    stringsAsFactors = FALSE
+  )
+
+  expect_equal(
+    cryptoTax:::.format_detect_description_values(data),
+    "APR reward"
+  )
+  expect_true(
+    cryptoTax:::.format_detect_description_matches(data, c("APR"))
+  )
+})
+
 test_that("format_detect description values coerce factors to characters", {
   data <- data.frame(
     Description = factor(c("APR reward", "Validator"))
@@ -214,8 +229,42 @@ test_that("format_detect list-input validator accepts data frames and NULL only"
 
   expect_error(
     cryptoTax:::.validate_format_detect_list_input(list(data_shakepay, "nope")),
-    "must be data frames or NULL"
+    "nested lists of data frames"
   )
+})
+
+test_that("format_detect list-input validator accepts nested lists recursively", {
+  nested <- list(NULL, list(data_shakepay, list(data_newton)))
+
+  expect_equal(
+    cryptoTax:::.validate_format_detect_list_input(nested),
+    nested
+  )
+
+  expect_true(cryptoTax:::.format_detect_is_valid_input_list(nested))
+})
+
+test_that("format_detect list-input validator rejects invalid nested list entries", {
+  expect_false(cryptoTax:::.format_detect_is_valid_input_list(list(data_shakepay, "nope")))
+
+  expect_error(
+    cryptoTax:::.validate_format_detect_list_input(list(data_shakepay, list("nope"))),
+    "nested lists of data frames"
+  )
+})
+
+test_that("format_detect helpers identify and drop empty data-frame inputs", {
+  empty <- data_shakepay[0, ]
+  nested <- list(empty, list(NULL, data_newton[0, ], data_shakepay))
+
+  expect_true(cryptoTax:::.format_detect_is_empty_input(empty))
+
+  dropped <- cryptoTax:::.drop_empty_format_detect_inputs(nested)
+
+  expect_length(dropped, 1)
+  expect_true(is.list(dropped[[1]]))
+  expect_s3_class(dropped[[1]][[1]], "data.frame")
+  expect_equal(names(dropped[[1]][[1]]), names(data_shakepay))
 })
 
 test_that("format_detect_formatted_list ignores NULL entries", {
@@ -234,9 +283,65 @@ test_that("format_detect_formatted_list ignores NULL entries", {
   expect_true(is.data.frame(result[[1]]))
 })
 
+test_that("format_detect_formatted_list ignores empty data-frame entries", {
+  explicit_list_prices <- data.frame(
+    currency = "ADA",
+    date2 = as.Date("2021-01-01"),
+    spot.rate2 = 1
+  )
+
+  result <- cryptoTax:::.format_detect_formatted_list(
+    list(data_shakepay[0, ], data_shakepay),
+    list.prices = explicit_list_prices
+  )
+
+  expect_length(result, 1)
+  expect_true(is.data.frame(result[[1]]))
+})
+
 test_that("format_detect_many returns an empty data frame for empty/NULL-only lists", {
   result <- cryptoTax:::.format_detect_many(list(NULL))
 
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 0)
+})
+
+test_that("format_detect_many returns an empty data frame for empty/NULL-only nested lists", {
+  result <- cryptoTax:::.format_detect_many(list(NULL, list(data_shakepay[0, ])))
+
+  expect_s3_class(result, "data.frame")
+  expect_equal(nrow(result), 0)
+})
+
+test_that("format_detect.list skips empty data-frame inputs in the public path", {
+  explicit_list_prices <- data.frame(
+    currency = "ADA",
+    date2 = as.Date("2021-01-01"),
+    spot.rate2 = 1
+  )
+
+  result <- format_detect(
+    list(data_shakepay[0, ], list(data_shakepay, data_newton)),
+    list.prices = explicit_list_prices
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_true(nrow(result) > 0)
+  expect_true(all(c("shakepay", "newton") %in% result$exchange))
+})
+
+test_that("format_detect_many handles nested lists of exchange files", {
+  explicit_list_prices <- data.frame(
+    currency = "ADA",
+    date2 = as.Date("2021-01-01"),
+    spot.rate2 = 1
+  )
+
+  result <- cryptoTax:::.format_detect_many(
+    list(data_shakepay, list(NULL, data_newton)),
+    list.prices = explicit_list_prices
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_true(nrow(result) > 0)
 })

@@ -11,7 +11,7 @@
     return(character())
   }
 
-  descriptions <- as.character(data$Description)
+  descriptions <- trimws(as.character(data$Description))
   descriptions[!is.na(descriptions) & nzchar(descriptions)]
 }
 
@@ -59,7 +59,43 @@
 }
 
 .format_detect_is_valid_input <- function(x) {
-  is.null(x) || is.data.frame(x)
+  is.null(x) || is.data.frame(x) || .format_detect_is_valid_input_list(x)
+}
+
+.format_detect_is_empty_input <- function(x) {
+  is.data.frame(x) && nrow(x) == 0
+}
+
+.format_detect_is_valid_input_list <- function(x) {
+  if (!is.list(x)) {
+    return(FALSE)
+  }
+
+  all(vapply(x, .format_detect_is_valid_input, logical(1)))
+}
+
+.drop_empty_format_detect_inputs <- function(data) {
+  out <- lapply(data, function(x) {
+    if (is.null(x) || .format_detect_is_empty_input(x)) {
+      return(NULL)
+    }
+
+    if (is.data.frame(x)) {
+      return(x)
+    }
+
+    if (is.list(x)) {
+      nested <- .drop_empty_format_detect_inputs(x)
+      if (length(nested) == 0) {
+        return(NULL)
+      }
+      return(nested)
+    }
+
+    x
+  })
+
+  Filter(Negate(is.null), out)
 }
 
 .validate_format_detect_list_input <- function(data) {
@@ -67,7 +103,7 @@
 
   if (any(invalid)) {
     stop(
-      "All elements supplied to format_detect.list() must be data frames or NULL."
+      "All elements supplied to format_detect.list() must be data frames, nested lists of data frames, or NULL."
     )
   }
 
@@ -105,6 +141,7 @@
 #' format_detect(data_shakepay)
 #' format_detect(data_newton)
 #' format_detect(list(data_shakepay, data_newton))
+#' format_detect(list(data_shakepay[0, ], list(data_shakepay, data_newton)))
 #' @importFrom dplyr %>% rename mutate select filter bind_rows
 #' @importFrom rlang .data
 
@@ -222,7 +259,7 @@ format_detect <- function(data, ...) {
 
 .format_detect_formatted_list <- function(data, list.prices = NULL, force = FALSE) {
   data <- .validate_format_detect_list_input(data)
-  data <- Filter(Negate(is.null), data)
+  data <- .drop_empty_format_detect_inputs(data)
 
   if (length(data) == 0) {
     return(list())

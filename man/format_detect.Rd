@@ -33,4 +33,5 @@ it with the proper function for later ACB processing.
 format_detect(data_shakepay)
 format_detect(data_newton)
 format_detect(list(data_shakepay, data_newton))
+format_detect(list(data_shakepay[0, ], list(data_shakepay, data_newton)))
 }

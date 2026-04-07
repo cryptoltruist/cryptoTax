@@ -31,17 +31,31 @@
   "date" %in% names(data)
 }
 
+.merge_exchanges_date_order <- function(data) {
+  if (!.merge_exchanges_has_date(data)) {
+    return(seq_len(nrow(data)))
+  }
+
+  order(is.na(data$date), data$date)
+}
+
 .sort_merged_exchanges <- function(data) {
   if (!.merge_exchanges_has_date(data)) {
     return(data)
   }
 
-  arrange(data, .data$date)
+  data %>%
+    dplyr::mutate(.missing.date = is.na(.data$date)) %>%
+    dplyr::arrange(.data$.missing.date, .data$date) %>%
+    dplyr::select(-".missing.date") %>%
+    as.data.frame()
 }
 
 #' @title Merge formatted exchange transactions
 #'
 #' @description Merge formatted exchange transactions into one data frame.
+#' Nested lists are flattened, `NULL` inputs are ignored, and rows with missing
+#' dates are placed after dated rows.
 #' @param ... To pass the other exchanges to be merged.
 #' @return A data frame, with rows binded and arranged, of the provided
 #' data frames.
@@ -50,6 +64,7 @@
 #' shakepay <- format_shakepay(data_shakepay)
 #' newton <- format_newton(data_newton)
 #' merge_exchanges(shakepay, newton)
+#' merge_exchanges(list(shakepay, list(NULL, newton)))
 #' @importFrom dplyr %>% bind_rows arrange
 #' @importFrom rlang .data
 merge_exchanges <- function(...) {

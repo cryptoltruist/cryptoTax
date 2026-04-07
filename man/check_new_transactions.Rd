@@ -27,6 +27,8 @@ nothing otherwise.
 }
 \description{
 Check for new transactions for a given exchange
+after normalizing transaction names and descriptions for surrounding
+whitespace.
 }
 \examples{
 data <- data_CDC[1:5, ]
@@ -35,5 +37,9 @@ check_new_transactions(data,
   known.transactions = known.transactions,
   transactions.col = "Transaction.Kind",
   description.col = "Transaction.Description"
+)
+check_new_transactions(data,
+  known.transactions = c(" crypto_purchase ", "lockup_lock"),
+  transactions.col = "Transaction.Kind"
 )
 }
