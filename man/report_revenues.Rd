@@ -26,7 +26,7 @@ rewards, forks, mining, currency.
 Provides a summary of revenues from all sources.
 }
 \examples{
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_revenues(formatted.ACB)
 }

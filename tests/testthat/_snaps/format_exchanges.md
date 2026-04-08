@@ -1151,3 +1151,146 @@
       19           Reward           ShakingSats     airdrops shakepay      exchange
       20             Sell Bought @ CA$59,007.14         <NA> shakepay      exchange
 
+# format_exchanges public wrapper
+
+    Code
+      format_exchanges(list(data_shakepay, data_newton, data_adalite), list.prices = list.prices)
+    Message
+      Exchange detected: shakepay
+      Exchange detected: newton
+      Exchange detected: adalite
+    Output
+                        date currency    quantity  total.price  spot.rate transaction
+      1  2021-04-04 22:50:12      LTC  0.10482910   23.4912731   224.0911         buy
+      2  2021-04-04 22:53:46      CAD 25.00000000   25.0000000     1.0000     revenue
+      3  2021-04-04 22:55:55      ETH  2.71987120 3423.8221510  1258.8178         buy
+      4  2021-04-21 19:57:26      BTC  0.00343000  153.1241354 44642.6051         buy
+      5  2021-04-28 16:56:00      ADA  0.31204000    0.4474654     1.4340     revenue
+      6  2021-05-07 14:50:41      BTC  0.00103982   53.0697400 51037.4327         buy
+      7  2021-05-07 16:53:00      ADA  0.31251320    0.4537692     1.4520     revenue
+      8  2021-05-08 12:12:57      BTC  0.00001100    0.5784024 52582.0324     revenue
+      9  2021-05-09 12:22:07      BTC  0.00001200    0.6034441 50287.0079     revenue
+      10 2021-05-12 16:56:00      ADA  0.22124100    0.3234543     1.4620     revenue
+      11 2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.3175         buy
+      12 2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.3894        sell
+      13 2021-05-17 17:16:00      ADA  0.41232100    0.6069365     1.4720     revenue
+      14 2021-05-17 21:16:00      ADA  0.16918700    0.2490433     1.4720        sell
+      15 2021-05-17 21:31:00      ADA  0.19123000    0.2814906     1.4720        sell
+      16 2021-05-21 12:47:14      BTC  0.00001300    0.7348590 56527.6188     revenue
+      17 2021-06-11 12:03:31      BTC  0.00001400    0.8396927 59978.0477     revenue
+      18 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.0000     revenue
+      19 2021-06-23 12:21:49      BTC  0.00001500    0.8852574 59017.1621     revenue
+      20 2021-07-10 00:52:19      BTC  0.00052991   31.2684700 59017.1922        sell
+              description               comment revenue.type exchange   rate.source
+      1             TRADE                  <NA>         <NA>   newton      exchange
+      2  Referral Program                  <NA>    referrals   newton      exchange
+      3             TRADE                  <NA>         <NA>   newton      exchange
+      4             TRADE                  <NA>         <NA>   newton      exchange
+      5    Reward awarded                  <NA>      staking  adalite coinmarketcap
+      6               Buy Bought @ CA$51,002.43         <NA> shakepay      exchange
+      7    Reward awarded                  <NA>      staking  adalite coinmarketcap
+      8            Reward           ShakingSats     airdrops shakepay      exchange
+      9            Reward           ShakingSats     airdrops shakepay      exchange
+      10   Reward awarded                  <NA>      staking  adalite coinmarketcap
+      11            TRADE                  <NA>         <NA>   newton      exchange
+      12            TRADE                  <NA>         <NA>   newton      exchange
+      13   Reward awarded                  <NA>      staking  adalite coinmarketcap
+      14             Sent        Withdrawal Fee         <NA>  adalite coinmarketcap
+      15             Sent        Withdrawal Fee         <NA>  adalite coinmarketcap
+      16           Reward           ShakingSats     airdrops shakepay      exchange
+      17           Reward           ShakingSats     airdrops shakepay      exchange
+      18 Referral Program                  <NA>    referrals   newton      exchange
+      19           Reward           ShakingSats     airdrops shakepay      exchange
+      20             Sell Bought @ CA$59,007.14         <NA> shakepay      exchange
+
+# format_exchanges public wrapper with multiple arguments
+
+    Code
+      format_exchanges(data_shakepay, data_newton, data_adalite, list.prices = list.prices)
+    Message
+      Exchange detected: shakepay
+      Exchange detected: newton
+      Exchange detected: adalite
+    Output
+                        date currency    quantity  total.price  spot.rate transaction
+      1  2021-04-04 22:50:12      LTC  0.10482910   23.4912731   224.0911         buy
+      2  2021-04-04 22:53:46      CAD 25.00000000   25.0000000     1.0000     revenue
+      3  2021-04-04 22:55:55      ETH  2.71987120 3423.8221510  1258.8178         buy
+      4  2021-04-21 19:57:26      BTC  0.00343000  153.1241354 44642.6051         buy
+      5  2021-04-28 16:56:00      ADA  0.31204000    0.4474654     1.4340     revenue
+      6  2021-05-07 14:50:41      BTC  0.00103982   53.0697400 51037.4327         buy
+      7  2021-05-07 16:53:00      ADA  0.31251320    0.4537692     1.4520     revenue
+      8  2021-05-08 12:12:57      BTC  0.00001100    0.5784024 52582.0324     revenue
+      9  2021-05-09 12:22:07      BTC  0.00001200    0.6034441 50287.0079     revenue
+      10 2021-05-12 16:56:00      ADA  0.22124100    0.3234543     1.4620     revenue
+      11 2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.3175         buy
+      12 2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.3894        sell
+      13 2021-05-17 17:16:00      ADA  0.41232100    0.6069365     1.4720     revenue
+      14 2021-05-17 21:16:00      ADA  0.16918700    0.2490433     1.4720        sell
+      15 2021-05-17 21:31:00      ADA  0.19123000    0.2814906     1.4720        sell
+      16 2021-05-21 12:47:14      BTC  0.00001300    0.7348590 56527.6188     revenue
+      17 2021-06-11 12:03:31      BTC  0.00001400    0.8396927 59978.0477     revenue
+      18 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.0000     revenue
+      19 2021-06-23 12:21:49      BTC  0.00001500    0.8852574 59017.1621     revenue
+      20 2021-07-10 00:52:19      BTC  0.00052991   31.2684700 59017.1922        sell
+              description               comment revenue.type exchange   rate.source
+      1             TRADE                  <NA>         <NA>   newton      exchange
+      2  Referral Program                  <NA>    referrals   newton      exchange
+      3             TRADE                  <NA>         <NA>   newton      exchange
+      4             TRADE                  <NA>         <NA>   newton      exchange
+      5    Reward awarded                  <NA>      staking  adalite coinmarketcap
+      6               Buy Bought @ CA$51,002.43         <NA> shakepay      exchange
+      7    Reward awarded                  <NA>      staking  adalite coinmarketcap
+      8            Reward           ShakingSats     airdrops shakepay      exchange
+      9            Reward           ShakingSats     airdrops shakepay      exchange
+      10   Reward awarded                  <NA>      staking  adalite coinmarketcap
+      11            TRADE                  <NA>         <NA>   newton      exchange
+      12            TRADE                  <NA>         <NA>   newton      exchange
+      13   Reward awarded                  <NA>      staking  adalite coinmarketcap
+      14             Sent        Withdrawal Fee         <NA>  adalite coinmarketcap
+      15             Sent        Withdrawal Fee         <NA>  adalite coinmarketcap
+      16           Reward           ShakingSats     airdrops shakepay      exchange
+      17           Reward           ShakingSats     airdrops shakepay      exchange
+      18 Referral Program                  <NA>    referrals   newton      exchange
+      19           Reward           ShakingSats     airdrops shakepay      exchange
+      20             Sell Bought @ CA$59,007.14         <NA> shakepay      exchange
+
+# format_exchanges mixed public wrapper
+
+    Code
+      format_exchanges(list(format_shakepay(data_shakepay), data_newton, data_adalite[
+        0, ]), list.prices = list.prices)
+    Message
+      Exchange detected: newton
+    Output
+                        date currency    quantity  total.price  spot.rate transaction
+      1  2021-04-04 22:50:12      LTC  0.10482910   23.4912731   224.0911         buy
+      2  2021-04-04 22:53:46      CAD 25.00000000   25.0000000     1.0000     revenue
+      3  2021-04-04 22:55:55      ETH  2.71987120 3423.8221510  1258.8178         buy
+      4  2021-04-21 19:57:26      BTC  0.00343000  153.1241354 44642.6051         buy
+      5  2021-05-07 14:50:41      BTC  0.00103982   53.0697400 51037.4327         buy
+      6  2021-05-08 12:12:57      BTC  0.00001100    0.5784024 52582.0324     revenue
+      7  2021-05-09 12:22:07      BTC  0.00001200    0.6034441 50287.0079     revenue
+      8  2021-05-12 21:37:42      BTC  0.00000400    0.3049013 76225.3175         buy
+      9  2021-05-12 21:52:40      BTC  0.00321300  156.1241341 48591.3894        sell
+      10 2021-05-21 12:47:14      BTC  0.00001300    0.7348590 56527.6188     revenue
+      11 2021-06-11 12:03:31      BTC  0.00001400    0.8396927 59978.0477     revenue
+      12 2021-06-16 18:49:11      CAD 25.00000000   25.0000000     1.0000     revenue
+      13 2021-06-23 12:21:49      BTC  0.00001500    0.8852574 59017.1621     revenue
+      14 2021-07-10 00:52:19      BTC  0.00052991   31.2684700 59017.1922        sell
+              description               comment revenue.type exchange rate.source
+      1             TRADE                  <NA>         <NA>   newton    exchange
+      2  Referral Program                  <NA>    referrals   newton    exchange
+      3             TRADE                  <NA>         <NA>   newton    exchange
+      4             TRADE                  <NA>         <NA>   newton    exchange
+      5               Buy Bought @ CA$51,002.43         <NA> shakepay    exchange
+      6            Reward           ShakingSats     airdrops shakepay    exchange
+      7            Reward           ShakingSats     airdrops shakepay    exchange
+      8             TRADE                  <NA>         <NA>   newton    exchange
+      9             TRADE                  <NA>         <NA>   newton    exchange
+      10           Reward           ShakingSats     airdrops shakepay    exchange
+      11           Reward           ShakingSats     airdrops shakepay    exchange
+      12 Referral Program                  <NA>    referrals   newton    exchange
+      13           Reward           ShakingSats     airdrops shakepay    exchange
+      14             Sell Bought @ CA$59,007.14         <NA> shakepay    exchange
+

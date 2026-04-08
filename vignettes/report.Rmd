@@ -56,7 +56,7 @@ list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")`r
 
 # Formatting your data
 
-Below we use a shortcut for this vignette to format all exchanges quickly with `lapply()` and the `format_detect()` function. However, you can use the dedicated functions should you wish so.
+Below we use `format_exchanges()` to format all exchanges in one step. Under the hood it uses `format_detect()` and also accepts nested lists, empty files, or already formatted transaction tables if needed.
 
 ```{r format exchanges, message=FALSE}
 exchanges <- list(
@@ -66,7 +66,7 @@ exchanges <- list(
   data_shakepay, data_uphold
 )
 
-formatted.data <- format_detect(exchanges, list.prices = list.prices)
+formatted.data <- format_exchanges(exchanges, list.prices = list.prices)
 ```
 
 # Adjusted Cost Base

@@ -26,7 +26,7 @@
 #' @return A data frame, with the following columns: currency, sup.loss.
 #' @export
 #' @examples
-#' all.data <- format_shakepay(data_shakepay)
+#' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' get_sup_losses(formatted.ACB, 2021)
 #' @importFrom dplyr mutate %>% filter summarize

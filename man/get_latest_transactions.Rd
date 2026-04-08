@@ -17,7 +17,7 @@ as the date of the latest transaction.
 Get the date from the latest transactions per exchange
 }
 \examples{
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 get_latest_transactions(formatted.ACB)
 }

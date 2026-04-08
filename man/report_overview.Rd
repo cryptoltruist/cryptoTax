@@ -45,7 +45,7 @@ losses, net, currency.
 Provides a summary of Adjusted Cost Base (ACB) per share, as well as realized and unrealized gains/losses (plus net value), per coin.
 }
 \examples{
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_overview(formatted.ACB, today.data = FALSE)
 }

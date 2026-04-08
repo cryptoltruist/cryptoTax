@@ -66,6 +66,19 @@
   is.data.frame(x) && nrow(x) == 0
 }
 
+.format_detect_is_formatted_input <- function(x) {
+  if (!is.data.frame(x)) {
+    return(FALSE)
+  }
+
+  required_columns <- c("date", "currency", "quantity", "transaction")
+  has_required_columns <- all(required_columns %in% names(x))
+  has_price_columns <- any(c("total.price", "spot.rate") %in% names(x))
+  has_origin_columns <- any(c("exchange", "rate.source") %in% names(x))
+
+  has_required_columns && has_price_columns && has_origin_columns
+}
+
 .format_detect_is_valid_input_list <- function(x) {
   if (!is.list(x)) {
     return(FALSE)
@@ -130,7 +143,13 @@
 #' @title Detect transaction file exchange and format it
 #'
 #' @description Detect the exchange of a given transaction file and format
-#' it with the proper function for later ACB processing.
+#' it with the proper function for later ACB processing. This is the
+#' lower-level auto-detection engine used by [format_exchanges()], which is
+#' usually the clearer public entry point for end-to-end workflows.
+#'
+#' Lists may contain raw exchange files, already formatted transaction
+#' tables, nested lists, and empty data frames; empty inputs are skipped and
+#' already formatted tables are passed through unchanged.
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' @param force Whether to force recreating `list.prices` even though
@@ -142,6 +161,8 @@
 #' format_detect(data_newton)
 #' format_detect(list(data_shakepay, data_newton))
 #' format_detect(list(data_shakepay[0, ], list(data_shakepay, data_newton)))
+#' format_detect(list(format_shakepay(data_shakepay), data_newton))
+#' @seealso [format_exchanges()] for the higher-level public workflow wrapper.
 #' @importFrom dplyr %>% rename mutate select filter bind_rows
 #' @importFrom rlang .data
 
@@ -265,7 +286,13 @@ format_detect <- function(data, ...) {
     return(list())
   }
 
-  lapply(data, format_detect, list.prices = list.prices, force = force)
+  lapply(data, function(x) {
+    if (is.data.frame(x) && .format_detect_is_formatted_input(x)) {
+      return(x)
+    }
+
+    format_detect(x, list.prices = list.prices, force = force)
+  })
 }
 
 .format_detect_many <- function(data, list.prices = NULL, force = FALSE) {

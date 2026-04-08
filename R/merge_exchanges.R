@@ -56,6 +56,10 @@
 #' @description Merge formatted exchange transactions into one data frame.
 #' Nested lists are flattened, `NULL` inputs are ignored, and rows with missing
 #' dates are placed after dated rows.
+#'
+#' This is mainly a lower-level combiner for already formatted transaction
+#' tables. For the common workflow of starting from raw exchange exports, use
+#' [format_exchanges()] instead.
 #' @param ... To pass the other exchanges to be merged.
 #' @return A data frame, with rows binded and arranged, of the provided
 #' data frames.
@@ -65,6 +69,7 @@
 #' newton <- format_newton(data_newton)
 #' merge_exchanges(shakepay, newton)
 #' merge_exchanges(list(shakepay, list(NULL, newton)))
+#' @seealso [format_exchanges()] for the higher-level public workflow wrapper.
 #' @importFrom dplyr %>% bind_rows arrange
 #' @importFrom rlang .data
 merge_exchanges <- function(...) {

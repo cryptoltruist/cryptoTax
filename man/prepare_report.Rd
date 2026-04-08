@@ -30,7 +30,7 @@ Prepare all required information for a full crypto tax report.
 }
 \examples{
 list.prices <- list_prices_example
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 if (!is.null(list.prices)) {
   x <- prepare_report(formatted.ACB, list.prices = list.prices)

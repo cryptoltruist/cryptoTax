@@ -16,7 +16,7 @@ A list of formatted data frames, by coin.
 Provides a list of transactions, separated by coin.
 }
 \examples{
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 listby_coin(formatted.ACB)
 }

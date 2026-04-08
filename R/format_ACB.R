@@ -106,7 +106,7 @@
 #' @return A data frame, formatted for the Adjusted Cost Base (ACB).
 #' @export
 #' @examples
-#' all.data <- format_shakepay(data_shakepay)
+#' all.data <- format_exchanges(data_shakepay)
 #' format_ACB(all.data, verbose = FALSE)
 #' @importFrom dplyr %>% arrange group_by group_modify relocate mutate
 #' @importFrom rlang .data

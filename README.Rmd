@@ -70,7 +70,7 @@ For more on calculating the ACB, as well as superficial losses, see the [corresp
 
 # Supported exchanges
 
-Currently, the following exchanges are supported with the `format_*` (or `format_detect()`) functions:
+Currently, the following exchanges are supported with the `format_*` functions, and can also be auto-detected through `format_exchanges()`:
 
 1. Adalite
 1. Binance
@@ -91,21 +91,18 @@ To support another exchange not listed here, please open an issue. You can also 
 # Workflow demo
 
 ```{r workflow, warning=FALSE, message=FALSE}
-# Prepare list of coins
-my.coins <- c("BTC", "CRO", "ETH", "ETHW")
-list.prices <- prepare_list_prices(coins = my.coins, start.date = "2021-01-01")
-# Note that for some exchanges this step may be unnecessary
+# Use bundled example prices for an offline, reproducible demo
+data(list_prices_example)
+list.prices <- list_prices_example
 
-# Load data and format shakepay file
+# Load data
 data(data_shakepay)
-formatted.shakepay <- format_shakepay(data_shakepay)
-
-# Load data and format CDC file
 data(data_CDC)
-formatted.CDC <- format_CDC(data_CDC)
 
-# Merge data from the different exchanges
-all.data <- merge_exchanges(formatted.shakepay, formatted.CDC)
+# Format one or more exchange files
+all.data <- format_exchanges(list(data_shakepay, data_CDC),
+  list.prices = list.prices
+)
 
 # Format data with ACB
 formatted.ACB <- format_ACB(all.data)

@@ -137,3 +137,20 @@ test_that("merge_exchanges_date_order pushes missing dates to the end", {
   expect_equal(order.index, c(3, 1, 2))
   expect_equal(sorted$exchange, c("one", "two", "missing"))
 })
+
+test_that("format_exchanges matches the manual detect-then-merge path", {
+  list.prices <- list_prices_example
+
+  public_result <- suppressMessages(
+    format_exchanges(data_shakepay, data_newton, list.prices = list.prices)
+  )
+
+  manual_result <- suppressMessages(
+    merge_exchanges(
+      format_detect(data_shakepay, list.prices = list.prices),
+      format_detect(data_newton, list.prices = list.prices)
+    )
+  )
+
+  expect_identical(public_result, manual_result)
+})

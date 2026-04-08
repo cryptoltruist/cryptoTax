@@ -5,7 +5,7 @@
 #' @return A list of formatted data frames, by coin.
 #' @export
 #' @examples
-#' all.data <- format_shakepay(data_shakepay)
+#' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' listby_coin(formatted.ACB)
 listby_coin <- function(formatted.ACB) {

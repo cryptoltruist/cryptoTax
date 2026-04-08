@@ -27,11 +27,21 @@ A data frame of exchange transactions, formatted for further processing.
 }
 \description{
 Detect the exchange of a given transaction file and format
-it with the proper function for later ACB processing.
+it with the proper function for later ACB processing. This is the
+lower-level auto-detection engine used by \code{\link[=format_exchanges]{format_exchanges()}}, which is
+usually the clearer public entry point for end-to-end workflows.
+
+Lists may contain raw exchange files, already formatted transaction
+tables, nested lists, and empty data frames; empty inputs are skipped and
+already formatted tables are passed through unchanged.
 }
 \examples{
 format_detect(data_shakepay)
 format_detect(data_newton)
 format_detect(list(data_shakepay, data_newton))
 format_detect(list(data_shakepay[0, ], list(data_shakepay, data_newton)))
+format_detect(list(format_shakepay(data_shakepay), data_newton))
+}
+\seealso{
+\code{\link[=format_exchanges]{format_exchanges()}} for the higher-level public workflow wrapper.
 }

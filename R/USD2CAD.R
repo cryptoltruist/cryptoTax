@@ -150,7 +150,7 @@
 #' @return A data frame, with the following columns: date, CAD.rate.
 #' @export
 #' @examples
-#' formatted.dates <- format_shakepay(data_shakepay)[1]
+#' formatted.dates <- format_exchanges(data_shakepay)[1]
 #' example_fx <- data.frame(
 #'   date = as.Date("2021-01-01"),
 #'   USD = 1.25,

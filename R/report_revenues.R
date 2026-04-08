@@ -163,7 +163,7 @@
 #' rewards, forks, mining, currency.
 #' @export
 #' @examples
-#' all.data <- format_shakepay(data_shakepay)
+#' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' report_revenues(formatted.ACB)
 #' @importFrom dplyr %>% filter mutate group_by select summarize slice arrange

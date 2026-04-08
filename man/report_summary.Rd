@@ -41,7 +41,7 @@ Type, Amount, currency.
 Provides a summary of realized capital gains and losses (and total).
 }
 \examples{
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_summary(formatted.ACB, today.data = FALSE)
 }

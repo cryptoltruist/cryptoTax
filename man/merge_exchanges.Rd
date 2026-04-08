@@ -17,10 +17,17 @@ data frames.
 Merge formatted exchange transactions into one data frame.
 Nested lists are flattened, \code{NULL} inputs are ignored, and rows with missing
 dates are placed after dated rows.
+
+This is mainly a lower-level combiner for already formatted transaction
+tables. For the common workflow of starting from raw exchange exports, use
+\code{\link[=format_exchanges]{format_exchanges()}} instead.
 }
 \examples{
 shakepay <- format_shakepay(data_shakepay)
 newton <- format_newton(data_newton)
 merge_exchanges(shakepay, newton)
 merge_exchanges(list(shakepay, list(NULL, newton)))
+}
+\seealso{
+\code{\link[=format_exchanges]{format_exchanges()}} for the higher-level public workflow wrapper.
 }

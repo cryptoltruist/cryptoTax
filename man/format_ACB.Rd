@@ -33,6 +33,6 @@ Formats transaction data with Adjusted Cost Base (ACB),
 along with ACB per share and realized capital gains or losses.
 }
 \examples{
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 format_ACB(all.data, verbose = FALSE)
 }

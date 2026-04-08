@@ -33,7 +33,7 @@ You can also supply an explicit \code{USD2CAD.table} to make the conversion
 deterministic and independent from session cache or network access.
 }
 \examples{
-formatted.dates <- format_shakepay(data_shakepay)[1]
+formatted.dates <- format_exchanges(data_shakepay)[1]
 example_fx <- data.frame(
   date = as.Date("2021-01-01"),
   USD = 1.25,

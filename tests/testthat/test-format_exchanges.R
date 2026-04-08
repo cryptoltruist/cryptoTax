@@ -136,5 +136,30 @@ test_that("format_detect list", {
   ))
 })
 
+test_that("format_exchanges public wrapper", {
+  expect_snapshot(format_exchanges(list(data_shakepay, data_newton, data_adalite),
+    list.prices = list.prices
+  ))
+})
+
+test_that("format_exchanges public wrapper with multiple arguments", {
+  expect_snapshot(format_exchanges(
+    data_shakepay,
+    data_newton,
+    data_adalite,
+    list.prices = list.prices
+  ))
+})
+
+test_that("format_exchanges mixed public wrapper", {
+  expect_snapshot(format_exchanges(list(
+    format_shakepay(data_shakepay),
+    data_newton,
+    data_adalite[0, ]
+  ),
+  list.prices = list.prices
+  ))
+})
+
 # Add test: timezone!
 

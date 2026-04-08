@@ -45,9 +45,7 @@
 #' @return A ggplot2 object in the form of a pie chart.
 #' @export
 #' @examples
-#' shakepay <- format_shakepay(data_shakepay)
-#' newton <- format_newton(data_newton)
-#' all.data <- merge_exchanges(shakepay, newton)
+#' all.data <- format_exchanges(list(data_shakepay, data_newton))
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' table.revenues <- report_revenues(formatted.ACB)
 #' crypto_pie(table.revenues)

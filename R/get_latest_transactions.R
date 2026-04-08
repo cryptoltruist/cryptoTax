@@ -6,7 +6,7 @@
 #' as the date of the latest transaction.
 #' @export
 #' @examples
-#' all.data <- format_shakepay(data_shakepay)
+#' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' get_latest_transactions(formatted.ACB)
 #' @importFrom dplyr %>% rename mutate select filter bind_rows group_by slice_tail

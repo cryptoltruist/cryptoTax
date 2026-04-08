@@ -49,6 +49,6 @@ use, you can supply explicit \code{list.prices}, \code{coins.list}, \code{coin_h
 or \code{USD2CAD.table} inputs.
 }
 \examples{
-data <- format_shakepay(data_shakepay)[c(1:2)]
+data <- format_exchanges(data_shakepay)[c(1:2)]
 match_prices(data, list.prices = list_prices_example)
 }

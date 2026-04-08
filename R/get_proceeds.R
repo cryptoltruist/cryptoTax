@@ -96,7 +96,7 @@
 #' gains.
 #' @export
 #' @examples
-#' all.data <- format_shakepay(data_shakepay)
+#' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 #' get_proceeds(formatted.ACB, 2021)
 #' @importFrom dplyr mutate %>% filter ungroup summarize relocate bind_rows

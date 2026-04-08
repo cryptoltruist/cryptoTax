@@ -95,7 +95,7 @@
 #' @return A data frame, with the following added columns: spot.rate.
 #' @export
 #' @examples
-#' data <- format_shakepay(data_shakepay)[c(1:2)]
+#' data <- format_exchanges(data_shakepay)[c(1:2)]
 #' match_prices(data, list.prices = list_prices_example)
 #' @importFrom dplyr %>% rename mutate rowwise filter select bind_rows left_join arrange
 #' @importFrom utils timestamp

@@ -29,3 +29,11 @@
   ns <- asNamespace("cryptoTax")
   get(paste0("data_", exchange), envir = ns)
 }
+
+.test_mixed_exchange_data <- function(list.prices = list_prices_example) {
+  list(
+    format_shakepay(.test_exchange_data_by_name("shakepay")),
+    .test_exchange_data_by_name("newton"),
+    .test_exchange_data_by_name("adalite")
+  )
+}

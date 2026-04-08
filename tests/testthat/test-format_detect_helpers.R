@@ -345,3 +345,69 @@ test_that("format_detect_many handles nested lists of exchange files", {
   expect_s3_class(result, "data.frame")
   expect_true(nrow(result) > 0)
 })
+
+test_that("format_detect helpers recognize already formatted transaction data", {
+  formatted <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    total.price = 100,
+    spot.rate = 100,
+    transaction = "buy",
+    exchange = "manual",
+    rate.source = "exchange",
+    stringsAsFactors = FALSE
+  )
+
+  raw_like <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    transaction = "buy",
+    stringsAsFactors = FALSE
+  )
+
+  expect_true(cryptoTax:::.format_detect_is_formatted_input(formatted))
+  expect_false(cryptoTax:::.format_detect_is_formatted_input(raw_like))
+})
+
+test_that("format_detect.list preserves already formatted entries in mixed lists", {
+  formatted <- data.frame(
+    date = as.POSIXct("2021-01-01 12:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    total.price = 100,
+    spot.rate = 100,
+    transaction = "buy",
+    exchange = "manual",
+    rate.source = "exchange",
+    stringsAsFactors = FALSE
+  )
+
+  result <- format_detect(
+    list(
+      formatted,
+      data_shakepay[1:2, ]
+    )
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_true(any(result$exchange == "manual"))
+  expect_true(any(result$exchange == "shakepay"))
+})
+
+test_that("format_exchanges delegates to format_detect for mixed public inputs", {
+  formatted <- format_shakepay(data_shakepay)
+
+  result <- format_exchanges(list(formatted, data_newton))
+
+  expect_s3_class(result, "data.frame")
+  expect_true(all(c("shakepay", "newton") %in% result$exchange))
+})
+
+test_that("format_exchanges accepts multiple exchange inputs directly", {
+  result <- format_exchanges(data_shakepay, data_newton)
+
+  expect_s3_class(result, "data.frame")
+  expect_true(all(c("shakepay", "newton") %in% result$exchange))
+})

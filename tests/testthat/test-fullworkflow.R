@@ -6,7 +6,7 @@
    list.prices <- list_prices_example
 
   formatted.data <- suppressMessages(
-    format_detect(.test_exchange_data(), list.prices = list.prices)
+    format_exchanges(.test_exchange_data(), list.prices = list.prices)
   )
 
   # Format data ####
@@ -85,5 +85,31 @@
   )
 
   unlink("full_report_2021.html")
+})
+
+test_that("full workflow accepts mixed raw and already formatted inputs", {
+  testthat::skip_on_cran()
+
+  options(scipen = 999)
+
+  list.prices <- list_prices_example
+
+  formatted.data <- suppressMessages(
+    format_exchanges(.test_mixed_exchange_data(list.prices = list.prices), list.prices = list.prices)
+  )
+
+  expect_s3_class(formatted.data, "data.frame")
+  expect_true(all(c("shakepay", "newton", "adalite") %in% formatted.data$exchange))
+
+  formatted.ACB <- format_ACB(formatted.data, verbose = FALSE)
+
+  expect_s3_class(formatted.ACB, "data.frame")
+  expect_s3_class(report_summary(
+    formatted.ACB,
+    today.data = TRUE,
+    tax.year = "all",
+    list.prices = list.prices,
+    local.timezone = "America/Toronto"
+  ), "data.frame")
 })
 

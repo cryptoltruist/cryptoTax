@@ -24,7 +24,7 @@ Output a simple table with all the relevant tax information and tax form line nu
 }
 \examples{
 my.list.prices <- list_prices_example
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)
 sup.losses <- get_sup_losses(formatted.ACB, 2021)
