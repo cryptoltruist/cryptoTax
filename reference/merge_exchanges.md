@@ -4,6 +4,12 @@ Merge formatted exchange transactions into one data frame. Nested lists
 are flattened, `NULL` inputs are ignored, and rows with missing dates
 are placed after dated rows.
 
+This is mainly a lower-level combiner for already formatted transaction
+tables. For the common workflow of starting from raw exchange exports,
+use
+[`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
+instead.
+
 ## Usage
 
 ``` r
@@ -20,6 +26,11 @@ merge_exchanges(...)
 
 A data frame, with rows binded and arranged, of the provided data
 frames.
+
+## See also
+
+[`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
+for the higher-level public workflow wrapper.
 
 ## Examples
 

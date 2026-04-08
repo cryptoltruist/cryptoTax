@@ -163,6 +163,9 @@
 - [`format_dollars()`](https://cryptoltruist.github.io/cryptoTax/reference/format_dollars.md)
   : Format numeric values to dollars
 
+- [`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
+  : Format One or More Exchange Files
+
 - [`format_exodus()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.md)
   : Format Exodus wallet file
 

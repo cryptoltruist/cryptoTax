@@ -1,37 +1,32 @@
-# Detect transaction file exchange and format it
+# Format One or More Exchange Files
 
-Detect the exchange of a given transaction file and format it with the
-proper function for later ACB processing. This is the lower-level
-auto-detection engine used by
-[`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md),
-which is usually the clearer public entry point for end-to-end
-workflows.
+Format one or more exchange transaction files into the canonical
+transaction table used throughout `cryptoTax`. This is a user-facing
+wrapper around
+[`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+for the common workflow of passing a single exchange file, a list of raw
+exchange files, or a mixed list containing already formatted transaction
+tables.
 
-Lists may contain raw exchange files, already formatted transaction
-tables, nested lists, and empty data frames; empty inputs are skipped
-and already formatted tables are passed through unchanged.
+Empty data frames and `NULL` list entries are skipped. Already formatted
+transaction tables are passed through unchanged.
 
 ## Usage
 
 ``` r
-format_detect(data, ...)
-
-# S3 method for class 'data.frame'
-format_detect(data, list.prices = NULL, force = FALSE, ...)
-
-# S3 method for class 'list'
-format_detect(data, list.prices = NULL, force = FALSE, ...)
+format_exchanges(data, ..., list.prices = NULL, force = FALSE)
 ```
 
 ## Arguments
 
 - data:
 
-  The dataframe
+  A data frame, or a (possibly nested) list of exchange data frames
+  and/or already formatted transaction tables.
 
 - ...:
 
-  Used for other methods.
+  Additional exchange data frames or nested lists to format.
 
 - list.prices:
 
@@ -48,13 +43,14 @@ A data frame of exchange transactions, formatted for further processing.
 
 ## See also
 
-[`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
-for the higher-level public workflow wrapper.
+[`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+for the lower-level exchange auto-detection engine, and the specific
+`format_*()` functions for manual exchange-by- exchange formatting.
 
 ## Examples
 
 ``` r
-format_detect(data_shakepay)
+format_exchanges(data_shakepay)
 #> Exchange detected: shakepay
 #>                  date currency   quantity total.price spot.rate transaction
 #> 1 2021-05-07 14:50:41      BTC 0.00103982  53.0697400  51037.43         buy
@@ -72,25 +68,7 @@ format_detect(data_shakepay)
 #> 5      Reward           ShakingSats     airdrops shakepay    exchange
 #> 6      Reward           ShakingSats     airdrops shakepay    exchange
 #> 7        Sell Bought @ CA$59,007.14         <NA> shakepay    exchange
-format_detect(data_newton)
-#> Exchange detected: newton
-#>                  date currency   quantity  total.price  spot.rate transaction
-#> 1 2021-04-04 22:50:12      LTC  0.1048291   23.4912731   224.0911         buy
-#> 2 2021-04-04 22:53:46      CAD 25.0000000   25.0000000     1.0000     revenue
-#> 3 2021-04-04 22:55:55      ETH  2.7198712 3423.8221510  1258.8178         buy
-#> 4 2021-04-21 19:57:26      BTC  0.0034300  153.1241354 44642.6051         buy
-#> 5 2021-05-12 21:37:42      BTC  0.0000040    0.3049013 76225.3175         buy
-#> 6 2021-05-12 21:52:40      BTC  0.0032130  156.1241341 48591.3894        sell
-#> 7 2021-06-16 18:49:11      CAD 25.0000000   25.0000000     1.0000     revenue
-#>        description revenue.type exchange rate.source
-#> 1            TRADE         <NA>   newton    exchange
-#> 2 Referral Program    referrals   newton    exchange
-#> 3            TRADE         <NA>   newton    exchange
-#> 4            TRADE         <NA>   newton    exchange
-#> 5            TRADE         <NA>   newton    exchange
-#> 6            TRADE         <NA>   newton    exchange
-#> 7 Referral Program    referrals   newton    exchange
-format_detect(list(data_shakepay, data_newton))
+format_exchanges(data_shakepay, data_newton)
 #> Exchange detected: shakepay
 #> Exchange detected: newton
 #>                   date currency    quantity  total.price  spot.rate transaction
@@ -123,7 +101,7 @@ format_detect(list(data_shakepay, data_newton))
 #> 12 Referral Program                  <NA>    referrals   newton    exchange
 #> 13           Reward           ShakingSats     airdrops shakepay    exchange
 #> 14             Sell Bought @ CA$59,007.14         <NA> shakepay    exchange
-format_detect(list(data_shakepay[0, ], list(data_shakepay, data_newton)))
+format_exchanges(list(data_shakepay, data_newton))
 #> Exchange detected: shakepay
 #> Exchange detected: newton
 #>                   date currency    quantity  total.price  spot.rate transaction
@@ -156,7 +134,7 @@ format_detect(list(data_shakepay[0, ], list(data_shakepay, data_newton)))
 #> 12 Referral Program                  <NA>    referrals   newton    exchange
 #> 13           Reward           ShakingSats     airdrops shakepay    exchange
 #> 14             Sell Bought @ CA$59,007.14         <NA> shakepay    exchange
-format_detect(list(format_shakepay(data_shakepay), data_newton))
+format_exchanges(list(format_shakepay(data_shakepay), data_newton))
 #> Exchange detected: newton
 #>                   date currency    quantity  total.price  spot.rate transaction
 #> 1  2021-04-04 22:50:12      LTC  0.10482910   23.4912731   224.0911         buy

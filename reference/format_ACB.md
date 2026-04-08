@@ -46,7 +46,8 @@ A data frame, formatted for the Adjusted Cost Base (ACB).
 ## Examples
 
 ``` r
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
+#> Exchange detected: shakepay
 format_ACB(all.data, verbose = FALSE)
 #> # A tibble: 7 × 26
 #> # Groups:   currency [1]

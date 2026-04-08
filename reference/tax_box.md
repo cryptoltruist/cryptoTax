@@ -36,7 +36,8 @@ Line
 
 ``` r
 my.list.prices <- list_prices_example
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
+#> Exchange detected: shakepay
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report.summary <- report_summary(formatted.ACB, today.data = TRUE, list.prices = my.list.prices)
 #> Date of current prices: 2023-12-31

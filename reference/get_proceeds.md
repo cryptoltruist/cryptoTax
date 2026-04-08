@@ -31,7 +31,8 @@ gains.
 ## Examples
 
 ``` r
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
+#> Exchange detected: shakepay
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 get_proceeds(formatted.ACB, 2021)
 #> Note: proceeds have been filtered for tax year 2021

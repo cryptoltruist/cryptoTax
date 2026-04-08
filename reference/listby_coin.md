@@ -21,7 +21,8 @@ A list of formatted data frames, by coin.
 ## Examples
 
 ``` r
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
+#> Exchange detected: shakepay
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 listby_coin(formatted.ACB)
 #> $BTC

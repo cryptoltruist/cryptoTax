@@ -67,7 +67,8 @@ losses, net, currency.
 ## Examples
 
 ``` r
-all.data <- format_shakepay(data_shakepay)
+all.data <- format_exchanges(data_shakepay)
+#> Exchange detected: shakepay
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 report_overview(formatted.ACB, today.data = FALSE)
 #>             date.last currency total.quantity cost.share total.cost  net

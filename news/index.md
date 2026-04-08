@@ -1,5 +1,27 @@
 # Changelog
 
+## cryptoTax 0.1.0.19
+
+**Improvements:**
+
+- Added
+  [`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
+  as the higher-level public entry point for formatting one or more
+  exchange exports, including mixed raw/formatted inputs, nested lists,
+  empty inputs, and multiple direct arguments.
+- Shifted the user-facing workflow toward
+  [`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
+  across the README, report vignette, higher-level help examples, and
+  utility examples so the package now teaches a more consistent
+  ingest-to-report happy path.
+- Expanded direct and snapshot coverage around the new public ingest
+  wrapper, including mixed-input behavior and equivalence with the older
+  manual
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+  plus
+  [`merge_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.md)
+  path.
+
 ## cryptoTax 0.1.0.18
 
 **Improvements:**

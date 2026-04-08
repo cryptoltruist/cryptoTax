@@ -74,7 +74,8 @@ A data frame, with the following added columns: spot.rate.
 ## Examples
 
 ``` r
-data <- format_shakepay(data_shakepay)[c(1:2)]
+data <- format_exchanges(data_shakepay)[c(1:2)]
+#> Exchange detected: shakepay
 match_prices(data, list.prices = list_prices_example)
 #>                  date currency spot.rate total.price   rate.source
 #> 1 2021-05-07 14:50:41      BTC     49410          NA coinmarketcap
