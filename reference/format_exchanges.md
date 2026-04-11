@@ -41,7 +41,11 @@ format_exchanges(data, ..., list.prices = NULL, force = FALSE)
 
 ## Value
 
-A data frame of exchange transactions, formatted for further processing.
+A data frame of exchange transactions, formatted for further processing
+with the canonical columns `date`, `currency`, `quantity`,
+`total.price`, `spot.rate`, `transaction`, and `exchange`, plus optional
+descriptive columns such as `fees`, `description`, `comment`,
+`revenue.type`, and `rate.source`.
 
 ## See also
 

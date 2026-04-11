@@ -38,6 +38,13 @@
   `list_prices_example` fixture and standardized formatter/report
   documentation so the public `list.prices` contract is clearer and more
   reproducible.
+- Added canonical formatted-transaction schema validation at the
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+  /
+  [`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md)
+  boundary and expanded representative formatter tests so malformed
+  formatted inputs or malformed formatter outputs fail early with direct
+  schema errors.
 - Expanded focused regressions around malformed explicit pricing inputs,
   cache-reuse behavior, FX fallback behavior, formatter orchestration,
   report helpers, and the public report-preparation path.

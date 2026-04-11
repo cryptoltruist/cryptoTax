@@ -44,6 +44,7 @@
 <li>Tightened session-cache behavior by validating cached pricing/FX tables before reuse, scoping cache reads explicitly to <code>.GlobalEnv</code>, and removing a lingering <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists()</a></code>-driven Bank of Canada FX fetch pattern.</li>
 <li>Moved normal in-session pricing cache writes into a package-owned cache with new <code><a href="../reference/pricing_cache.html">pricing_cache()</a></code> and <code><a href="../reference/clear_pricing_cache.html">clear_pricing_cache()</a></code> helpers, while keeping <code>.GlobalEnv</code> reuse as a deprecated compatibility fallback with explicit migration messaging.</li>
 <li>Converted the full report vignette to the built-in offline <code>list_prices_example</code> fixture and standardized formatter/report documentation so the public <code>list.prices</code> contract is clearer and more reproducible.</li>
+<li>Added canonical formatted-transaction schema validation at the <code><a href="../reference/format_detect.html">format_detect()</a></code> / <code><a href="../reference/format_exchanges.html">format_exchanges()</a></code> boundary and expanded representative formatter tests so malformed formatted inputs or malformed formatter outputs fail early with direct schema errors.</li>
 <li>Expanded focused regressions around malformed explicit pricing inputs, cache-reuse behavior, FX fallback behavior, formatter orchestration, report helpers, and the public report-preparation path.</li>
 </ul></div>
     <div class="section level2">
