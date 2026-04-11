@@ -55,7 +55,7 @@ it already exists (e.g., if you added new coins or new dates).}
 \item{verbose}{Logical; whether to print progress messages.}
 
 \item{list.prices}{Optional explicit \code{list.prices} object to reuse instead
-of relying on a cached session object.}
+of relying on the current session cache.}
 
 \item{coins.list}{Optional explicit output from \code{\link[crypto2:crypto_list]{crypto2::crypto_list()}}.}
 

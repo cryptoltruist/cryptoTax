@@ -5,6 +5,7 @@
 - Continued a broader pricing, FX, formatting, and reporting hardening pass across `prepare_list_prices()`, `match_prices()`, `USD2CAD()`, `format_detect()`, `format_exchanges()`, `report_summary()`, `report_overview()`, `prepare_report()`, and `print_report()` to make explicit offline inputs the primary safe path while preserving compatibility with the older session-cache workflow.
 - Hardened malformed-price handling so explicit `list.prices` inputs now fail cleanly and consistently across price matching, formatter entry points, and current-value reporting paths instead of surfacing misleading API/network messages or partial outputs.
 - Tightened session-cache behavior by validating cached pricing/FX tables before reuse, scoping cache reads explicitly to `.GlobalEnv`, and removing a lingering `exists()`-driven Bank of Canada FX fetch pattern.
+- Moved normal in-session pricing cache writes into a package-owned cache with new `pricing_cache()` and `clear_pricing_cache()` helpers, while keeping `.GlobalEnv` reuse as a deprecated compatibility fallback with explicit migration messaging.
 - Converted the full report vignette to the built-in offline `list_prices_example` fixture and standardized formatter/report documentation so the public `list.prices` contract is clearer and more reproducible.
 - Expanded focused regressions around malformed explicit pricing inputs, cache-reuse behavior, FX fallback behavior, formatter orchestration, report helpers, and the public report-preparation path.
 

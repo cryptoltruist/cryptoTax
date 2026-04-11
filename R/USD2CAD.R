@@ -14,15 +14,25 @@
   }
 
   cached_table <- .get_cached_pricing_object("USD2CAD.table")
+  cache_source <- .cached_pricing_object_source("USD2CAD.table", allow_null = TRUE)
 
   if (!.usd2cad_table_has_conversion(cached_table, conversion = conversion)) {
     return(cur2CAD_table())
   }
 
-  message(
-    "Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. ",
-    "To force a fresh download, use argument 'force = TRUE'."
-  )
+  if (identical(cache_source, "legacy")) {
+    message(
+      "Using deprecated legacy '.GlobalEnv' cache for 'USD2CAD.table'. ",
+      "This compatibility path may be removed in a future release; ",
+      "prefer `pricing_cache()` or pass `USD2CAD.table` explicitly. ",
+      "To force a fresh download, use argument 'force = TRUE'."
+    )
+  } else {
+    message(
+      "Using cached 'USD2CAD.table'. ",
+      "To force a fresh download, use argument 'force = TRUE'."
+    )
+  }
 
   cached_table
 }
@@ -158,7 +168,7 @@
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param USD2CAD.table Optional explicit exchange-rate table to use instead
-#' of relying on a cached session object.
+#' of relying on the current session cache.
 #' @return A data frame, with the following columns: date, CAD.rate.
 #' @export
 #' @examples
@@ -301,10 +311,21 @@ USD2CAD_crypto2 <- function(data,
 
     USD2CAD.table <- .cache_usd2cad_table(USD2CAD.table)
   } else {
-    message(
-      "Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. ",
-      "To force a fresh download, use argument 'force = TRUE'."
-    )
+    cache_source <- .cached_pricing_object_source("USD2CAD.table", allow_null = TRUE)
+
+    if (identical(cache_source, "legacy")) {
+      message(
+        "Using deprecated legacy '.GlobalEnv' cache for 'USD2CAD.table'. ",
+        "This compatibility path may be removed in a future release; ",
+        "prefer `pricing_cache()` or pass `USD2CAD.table` explicitly. ",
+        "To force a fresh download, use argument 'force = TRUE'."
+      )
+    } else {
+      message(
+        "Using cached 'USD2CAD.table'. ",
+        "To force a fresh download, use argument 'force = TRUE'."
+      )
+    }
   }
 
   USD2CAD.table_short <- USD2CAD.table %>%

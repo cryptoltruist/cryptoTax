@@ -193,6 +193,7 @@ test_that("prepare_list_prices_slugs rejects USD-only slugs", {
 
 test_that("resolve_list_prices prefers explicit input over cached state", {
   local({
+    clear_pricing_cache()
     list.prices <<- data.frame(
       currency = "BTC",
       spot.rate2 = 1,
@@ -217,7 +218,10 @@ test_that("resolve_list_prices prefers explicit input over cached state", {
 
 test_that("resolve_list_prices ignores cached objects with the wrong schema", {
   local({
+    clear_pricing_cache()
     list.prices <<- data.frame(date = as.Date("2021-01-01"), CAD.rate = 1.25)
+    on.exit(clear_pricing_cache(), add = TRUE)
+    on.exit(rm(list = "list.prices", envir = .GlobalEnv), add = TRUE)
 
     result <- cryptoTax:::.resolve_list_prices(
       force = FALSE,
@@ -226,6 +230,62 @@ test_that("resolve_list_prices ignores cached objects with the wrong schema", {
     )
 
     expect_null(result)
+  })
+})
+
+test_that("resolve_list_prices reports package-cache reuse with the new message", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cryptoTax:::.set_cached_pricing_object(
+      "list.prices",
+      data.frame(
+        currency = "BTC",
+        spot.rate2 = 1,
+        date2 = as.Date("2021-01-01")
+      )
+    )
+
+    expect_message(
+      result <- cryptoTax:::.resolve_list_prices(
+        force = FALSE,
+        list.prices = NULL,
+        verbose = TRUE
+      ),
+      "Using cached 'list.prices'"
+    )
+
+    expect_true(is.data.frame(result))
+  })
+})
+
+test_that("resolve_list_prices warns when reusing the legacy global cache path", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    assign(
+      "list.prices",
+      data.frame(
+        currency = "BTC",
+        spot.rate2 = 1,
+        date2 = as.Date("2021-01-01")
+      ),
+      envir = .GlobalEnv
+    )
+    on.exit(rm(list = "list.prices", envir = .GlobalEnv), add = TRUE)
+
+    expect_message(
+      result <- cryptoTax:::.resolve_list_prices(
+        force = FALSE,
+        list.prices = NULL,
+        verbose = TRUE
+      ),
+      "Using deprecated legacy '.GlobalEnv' cache for 'list.prices'"
+    )
+
+    expect_true(is.data.frame(result))
   })
 })
 
@@ -345,10 +405,13 @@ test_that("resolve_usd2cad_table refetches when cached rates lack the requested 
   )
 
   local({
+    clear_pricing_cache()
     USD2CAD.table <<- data.frame(
       date = as.Date("2021-01-01"),
       CAD.rate = 1.25
     )
+    on.exit(clear_pricing_cache(), add = TRUE)
+    on.exit(rm(list = "USD2CAD.table", envir = .GlobalEnv), add = TRUE)
 
     testthat::local_mocked_bindings(
       cur2CAD_table = function() refreshed_rates,
@@ -362,6 +425,62 @@ test_that("resolve_usd2cad_table refetches when cached rates lack the requested 
     )
 
     expect_identical(result, refreshed_rates)
+  })
+})
+
+test_that("resolve_usd2cad_table reports package-cache reuse with the new message", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cryptoTax:::.set_cached_pricing_object(
+      "USD2CAD.table",
+      data.frame(
+        date = as.Date("2021-01-01"),
+        USD = 1.25,
+        CAD = 1
+      )
+    )
+
+    expect_message(
+      result <- cryptoTax:::.resolve_usd2cad_table(
+        force = FALSE,
+        USD2CAD.table = NULL,
+        conversion = "USD"
+      ),
+      "Using cached 'USD2CAD.table'"
+    )
+
+    expect_true(is.data.frame(result))
+  })
+})
+
+test_that("resolve_usd2cad_table warns when reusing the legacy global cache path", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    assign(
+      "USD2CAD.table",
+      data.frame(
+        date = as.Date("2021-01-01"),
+        USD = 1.25,
+        CAD = 1
+      ),
+      envir = .GlobalEnv
+    )
+    on.exit(rm(list = "USD2CAD.table", envir = .GlobalEnv), add = TRUE)
+
+    expect_message(
+      result <- cryptoTax:::.resolve_usd2cad_table(
+        force = FALSE,
+        USD2CAD.table = NULL,
+        conversion = "USD"
+      ),
+      "Using deprecated legacy '.GlobalEnv' cache for 'USD2CAD.table'"
+    )
+
+    expect_true(is.data.frame(result))
   })
 })
 
@@ -435,7 +554,7 @@ test_that("cache_usd2cad_table returns cached rates unchanged", {
     result <- cryptoTax:::.cache_usd2cad_table(rates)
 
     expect_identical(result, rates)
-    expect_equal(USD2CAD.table$CAD.rate, 1.25)
+    expect_equal(pricing_cache("USD2CAD.table")$CAD.rate, 1.25)
   })
 })
 
@@ -627,6 +746,7 @@ test_that("match_prices rejects explicit list.prices tables that are not joinabl
 test_that("pricing cache helpers detect and reuse cached objects safely", {
   local({
     cache_name <- "pricing.cache.helper.test"
+    cache_env <- cryptoTax:::.pricing_cache_env()
 
     expect_false(cryptoTax:::.has_cached_pricing_object(cache_name))
     expect_false(cryptoTax:::.can_reuse_cached_pricing_object(cache_name))
@@ -635,15 +755,15 @@ test_that("pricing cache helpers detect and reuse cached objects safely", {
       currency = "BTC",
       spot.rate2 = 1,
       date2 = as.Date("2021-01-01")
-    ), envir = .GlobalEnv)
-    on.exit(rm(list = cache_name, envir = .GlobalEnv), add = TRUE)
+    ), envir = cache_env)
+    on.exit(rm(list = cache_name, envir = cache_env), add = TRUE)
 
     expect_true(cryptoTax:::.has_cached_pricing_object(cache_name))
     expect_true(cryptoTax:::.can_reuse_cached_pricing_object(cache_name))
     expect_false(cryptoTax:::.can_reuse_cached_pricing_object(cache_name, force = TRUE))
     expect_identical(
       cryptoTax:::.get_cached_pricing_object(cache_name),
-      get(cache_name, envir = .GlobalEnv)
+      get(cache_name, envir = cache_env)
     )
   })
 })
@@ -651,8 +771,9 @@ test_that("pricing cache helpers detect and reuse cached objects safely", {
 test_that("pricing cache helpers can treat NULL caches as present when requested", {
   local({
     cache_name <- "pricing.cache.helper.null.test"
-    assign(cache_name, NULL, envir = .GlobalEnv)
-    on.exit(rm(list = cache_name, envir = .GlobalEnv), add = TRUE)
+    cache_env <- cryptoTax:::.pricing_cache_env()
+    assign(cache_name, NULL, envir = cache_env)
+    on.exit(rm(list = cache_name, envir = cache_env), add = TRUE)
 
     expect_false(cryptoTax:::.has_cached_pricing_object(cache_name))
     expect_true(cryptoTax:::.has_cached_pricing_object(cache_name, allow_null = TRUE))
@@ -660,7 +781,7 @@ test_that("pricing cache helpers can treat NULL caches as present when requested
   })
 })
 
-test_that("pricing cache helpers only read from the global cache environment", {
+test_that("pricing cache helpers use the package-owned cache ahead of local objects", {
   local({
     cache_name <- "pricing.cache.helper.scope.test"
     cache_env <- cryptoTax:::.pricing_cache_env()
@@ -694,9 +815,77 @@ test_that("pricing cache helpers only read from the global cache environment", {
   })
 })
 
+test_that("pricing cache helpers can fall back to legacy global cache objects", {
+  local({
+    cache_name <- "pricing.cache.helper.legacy.test"
+    cache_env <- cryptoTax:::.pricing_cache_env()
+
+    on.exit(rm(list = cache_name, envir = .GlobalEnv), add = TRUE)
+
+    expect_false(exists(cache_name, envir = cache_env, inherits = FALSE))
+
+    legacy_value <- data.frame(
+      currency = "BTC",
+      spot.rate2 = 5,
+      date2 = as.Date("2021-01-03")
+    )
+    assign(cache_name, legacy_value, envir = .GlobalEnv)
+
+    expect_true(cryptoTax:::.has_cached_pricing_object(cache_name))
+    expect_identical(
+      cryptoTax:::.get_cached_pricing_object(cache_name),
+      legacy_value
+    )
+  })
+})
+
+test_that("pricing_cache inspects the package-owned cache and legacy fallback", {
+  local({
+    clear_pricing_cache()
+
+    cache_value <- data.frame(
+      currency = "BTC",
+      spot.rate2 = 7,
+      date2 = as.Date("2021-01-04")
+    )
+    cryptoTax:::.set_cached_pricing_object("list.prices", cache_value)
+    assign("USD2CAD.table", data.frame(date = as.Date("2021-01-04"), USD = 1.2), envir = .GlobalEnv)
+    on.exit(rm(list = "USD2CAD.table", envir = .GlobalEnv), add = TRUE)
+
+    cache_state <- pricing_cache()
+    expect_identical(cache_state$list.prices, cache_value)
+    expect_null(cache_state$USD2CAD.table)
+
+    expect_identical(pricing_cache("list.prices"), cache_value)
+    expect_true(is.data.frame(pricing_cache("USD2CAD.table", include.legacy = TRUE)))
+  })
+})
+
+test_that("clear_pricing_cache removes package cache entries without touching globals", {
+  local({
+    cache_value <- data.frame(
+      currency = "BTC",
+      spot.rate2 = 8,
+      date2 = as.Date("2021-01-05")
+    )
+    cryptoTax:::.set_cached_pricing_object("list.prices", cache_value)
+    assign("list.prices", cache_value, envir = .GlobalEnv)
+    on.exit(rm(list = "list.prices", envir = .GlobalEnv), add = TRUE)
+
+    expect_identical(pricing_cache("list.prices"), cache_value)
+
+    clear_pricing_cache("list.prices")
+
+    expect_null(pricing_cache("list.prices"))
+    expect_true(exists("list.prices", envir = .GlobalEnv, inherits = FALSE))
+  })
+})
+
 test_that("match_prices ignores cached list.prices objects with the wrong schema", {
   local({
+    clear_pricing_cache()
     list.prices <<- data.frame(date = as.Date("2021-01-01"), CAD.rate = 1.25)
+    on.exit(clear_pricing_cache(), add = TRUE)
     on.exit(rm(list = "list.prices", envir = .GlobalEnv), add = TRUE)
 
     testthat::local_mocked_bindings(

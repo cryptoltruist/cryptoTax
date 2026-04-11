@@ -43,16 +43,26 @@
   }
 
   cached_list_prices <- .get_cached_pricing_object("list.prices")
+  cache_source <- .cached_pricing_object_source("list.prices")
 
   if (!.is_valid_list_prices_table(cached_list_prices)) {
     return(NULL)
   }
 
   if (isTRUE(verbose)) {
-    message(
-      "Object 'list.prices' already exists. Reusing 'list.prices'. ",
-      "To force a fresh download, use argument 'force = TRUE'."
-    )
+    if (identical(cache_source, "legacy")) {
+      message(
+        "Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. ",
+        "This compatibility path may be removed in a future release; ",
+        "prefer `pricing_cache()` or pass `list.prices` explicitly. ",
+        "To force a fresh download, use argument 'force = TRUE'."
+      )
+    } else {
+      message(
+        "Using cached 'list.prices'. ",
+        "To force a fresh download, use argument 'force = TRUE'."
+      )
+    }
   }
 
   cached_list_prices
@@ -252,7 +262,7 @@
 #' already exists (e.g., if you added new coins or new dates).
 #' @param verbose Logical; whether to print progress messages.
 #' @param list.prices Optional explicit `list.prices` object to reuse instead
-#' of relying on a cached session object.
+#' of relying on the current session cache.
 #' @param coins.list Optional explicit output from [crypto2::crypto_list()].
 #' @param coin_hist Optional explicit historical price data to transform into
 #' a `list.prices` object.
