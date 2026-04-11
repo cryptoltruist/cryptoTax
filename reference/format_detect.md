@@ -17,10 +17,22 @@ and already formatted tables are passed through unchanged.
 format_detect(data, ...)
 
 # S3 method for class 'data.frame'
-format_detect(data, list.prices = NULL, force = FALSE, ...)
+format_detect(
+  data,
+  list.prices = NULL,
+  USD2CAD.table = NULL,
+  force = FALSE,
+  ...
+)
 
 # S3 method for class 'list'
-format_detect(data, list.prices = NULL, force = FALSE, ...)
+format_detect(
+  data,
+  list.prices = NULL,
+  USD2CAD.table = NULL,
+  force = FALSE,
+  ...
+)
 ```
 
 ## Arguments
@@ -38,6 +50,12 @@ format_detect(data, list.prices = NULL, force = FALSE, ...)
   A `list.prices` object from which to fetch coin prices. When supplied
   explicitly, it must contain at least `currency`, `spot.rate2`, and
   `date2` for exchanges that require external pricing.
+
+- USD2CAD.table:
+
+  Optional explicit USD/CAD rate table to use for exchanges that convert
+  USD-denominated values to CAD. When supplied explicitly, it must
+  contain at least `date` and `USD`.
 
 - force:
 

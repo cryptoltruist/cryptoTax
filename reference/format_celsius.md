@@ -6,7 +6,7 @@ processing.
 ## Usage
 
 ``` r
-format_celsius(data)
+format_celsius(data, USD2CAD.table = NULL)
 ```
 
 ## Arguments
@@ -14,6 +14,11 @@ format_celsius(data)
 - data:
 
   The dataframe
+
+- USD2CAD.table:
+
+  Optional explicit USD/CAD rate table to use instead of relying on
+  session cache or network access for USD conversions.
 
 ## Value
 

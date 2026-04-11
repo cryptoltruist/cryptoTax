@@ -1,5 +1,35 @@
 # Changelog
 
+## cryptoTax 0.1.0.21
+
+**Improvements:**
+
+- Continued a broader formatter-architecture and deterministic-pricing
+  cleanup across
+  [`format_CDC()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.md),
+  [`format_celsius()`](https://cryptoltruist.github.io/cryptoTax/reference/format_celsius.md),
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md),
+  [`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md),
+  [`format_coinsmart()`](https://cryptoltruist.github.io/cryptoTax/reference/format_coinsmart.md),
+  [`format_CDC_exchange()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange.md),
+  [`format_CDC_exchange_trades()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_trades.md),
+  [`format_gemini()`](https://cryptoltruist.github.io/cryptoTax/reference/format_gemini.md),
+  [`format_blockfi()`](https://cryptoltruist.github.io/cryptoTax/reference/format_blockfi.md),
+  and
+  [`format_uphold()`](https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.md)
+  so explicit pricing/FX inputs are supported more consistently and more
+  formatter paths reuse shared helper behavior instead of hand-rolled
+  branching.
+- Expanded formatter governance by turning the
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md)
+  registry into the source of truth for schema regressions, so every
+  bundled exchange example is now validated against the canonical
+  formatted-transaction contract.
+- Replaced repeated sell-price propagation logic with a shared formatter
+  helper and added direct regressions for that paired buy/sell pricing
+  behavior, reducing one of the largest remaining duplicated formatter
+  patterns.
+
 ## cryptoTax 0.1.0.20
 
 **Improvements:**

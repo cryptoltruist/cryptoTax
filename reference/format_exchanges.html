@@ -19,7 +19,7 @@ transaction tables are passed through unchanged."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,13 @@ transaction tables are passed through unchanged.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_exchanges</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_exchanges</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  USD2CAD.table <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -81,6 +87,12 @@ frames and/or already formatted transaction tables.</p></dd>
 <dd><p>A <code>list.prices</code> object from which to fetch coin prices.
 When supplied explicitly, it must contain at least <code>currency</code>,
 <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
+
+
+<dt id="arg-usd-cad-table">USD2CAD.table<a class="anchor" aria-label="anchor" href="#arg-usd-cad-table"></a></dt>
+<dd><p>Optional explicit USD/CAD rate table to use for
+exchanges that convert USD-denominated values to CAD. When supplied
+explicitly, it must contain at least <code>date</code> and <code>USD</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>

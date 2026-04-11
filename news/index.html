@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.21" id="cryptotax-01021">cryptoTax 0.1.0.21<a class="anchor" aria-label="anchor" href="#cryptotax-01021"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader formatter-architecture and deterministic-pricing cleanup across <code><a href="../reference/format_CDC.html">format_CDC()</a></code>, <code><a href="../reference/format_celsius.html">format_celsius()</a></code>, <code><a href="../reference/format_detect.html">format_detect()</a></code>, <code><a href="../reference/format_exchanges.html">format_exchanges()</a></code>, <code><a href="../reference/format_coinsmart.html">format_coinsmart()</a></code>, <code><a href="../reference/format_CDC_exchange.html">format_CDC_exchange()</a></code>, <code><a href="../reference/format_CDC_exchange_trades.html">format_CDC_exchange_trades()</a></code>, <code><a href="../reference/format_gemini.html">format_gemini()</a></code>, <code><a href="../reference/format_blockfi.html">format_blockfi()</a></code>, and <code><a href="../reference/format_uphold.html">format_uphold()</a></code> so explicit pricing/FX inputs are supported more consistently and more formatter paths reuse shared helper behavior instead of hand-rolled branching.</li>
+<li>Expanded formatter governance by turning the <code><a href="../reference/format_detect.html">format_detect()</a></code> registry into the source of truth for schema regressions, so every bundled exchange example is now validated against the canonical formatted-transaction contract.</li>
+<li>Replaced repeated sell-price propagation logic with a shared formatter helper and added direct regressions for that paired buy/sell pricing behavior, reducing one of the largest remaining duplicated formatter patterns.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.20" id="cryptotax-01020">cryptoTax 0.1.0.20<a class="anchor" aria-label="anchor" href="#cryptotax-01020"></a></h2>
 <p><strong>Improvements:</strong></p>

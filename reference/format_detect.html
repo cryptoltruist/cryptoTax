@@ -19,7 +19,7 @@ already formatted tables are passed through unchanged."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,10 +64,22 @@ already formatted tables are passed through unchanged.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_detect</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
-<span><span class="fu">format_detect</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">format_detect</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  USD2CAD.table <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'list'</span></span>
-<span><span class="fu">format_detect</span><span class="op">(</span><span class="va">data</span>, list.prices <span class="op">=</span> <span class="cn">NULL</span>, force <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">format_detect</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  USD2CAD.table <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,6 +98,12 @@ already formatted tables are passed through unchanged.</p>
 <dd><p>A <code>list.prices</code> object from which to fetch coin prices.
 When supplied explicitly, it must contain at least <code>currency</code>,
 <code>spot.rate2</code>, and <code>date2</code> for exchanges that require external pricing.</p></dd>
+
+
+<dt id="arg-usd-cad-table">USD2CAD.table<a class="anchor" aria-label="anchor" href="#arg-usd-cad-table"></a></dt>
+<dd><p>Optional explicit USD/CAD rate table to use for
+exchanges that convert USD-denominated values to CAD. When supplied
+explicitly, it must contain at least <code>date</code> and <code>USD</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
