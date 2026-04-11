@@ -9,7 +9,7 @@ wallet for later ACB processing."><meta property="og:image" content="https://cry
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,9 @@ wallet for later ACB processing.</p>
 
 
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
-<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+<dd><p>An optional explicit <code>list.prices</code> object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -75,10 +77,21 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_adalite</span></span></span>
 <span class="r-in"><span><span class="fu">format_adalite</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency  quantity total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-28 16:56:00      ADA 0.3120400   0.5092906  1.632132     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-07 16:53:00      ADA 0.3125132   0.6272258  2.007038     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-12 16:56:00      ADA 0.2212410   0.4437400  2.005686     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-05-17 17:16:00      ADA 0.4123210   1.0790423  2.616996     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-17 21:16:00      ADA 0.1691870   0.4427617  2.616996        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-05-17 21:31:00      ADA 0.1912300   0.5004481  2.616996        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      description        comment revenue.type exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           Sent Withdrawal Fee         &lt;NA&gt;  adalite coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           Sent Withdrawal Fee         &lt;NA&gt;  adalite coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

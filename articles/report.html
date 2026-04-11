@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@
 
 
 
-
-<div class="row">
+<link href="report_files/tabwid-1.1.3/tabwid.css" rel="stylesheet">
+<script src="report_files/tabwid-1.1.3/tabwid.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Generate a Full Tax Report</h1>
             
@@ -71,19 +71,957 @@
     
 <p>It is possible to generate a full tax report with
 <code>cryptoTax</code>. This vignette shows how.</p>
+<p>To keep the workflow reproducible and easy to run without internet
+access, the examples below use the built-in
+<code>list_prices_example</code> fixture.</p>
 <div class="section level2">
 <h2 id="preparing-your-list-of-coins">Preparing your list of coins<a class="anchor" aria-label="anchor" href="#preparing-your-list-of-coins"></a>
 </h2>
-<p>First, you want to fetch the price information for all your
-coins.</p>
+<p>First, you want price information for all your coins.</p>
 <blockquote>
-<p><em>Note</em>: Some exchanges don’t require fetching this information
-from coinmarketcap because they already give the CAD value of your
-trades or revenues. However, this is still necessary to get the current
-value, and therefore your unrealized gains and losses.</p>
+<p><em>Note</em>: Some exchanges don’t require external pricing for
+their raw formatting because they already include CAD values. However,
+price data is still useful for current-value reporting, and therefore
+your unrealized gains and losses.</p>
+</blockquote>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
+<span><span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="va">list_prices_example</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="formatting-your-data">Formatting your data<a class="anchor" aria-label="anchor" href="#formatting-your-data"></a>
+</h2>
+<p>Below we use <code><a href="../reference/format_exchanges.html">format_exchanges()</a></code> to format all exchanges
+in one step. Under the hood it uses <code><a href="../reference/format_detect.html">format_detect()</a></code> and
+also accepts nested lists, empty files, or already formatted transaction
+tables if needed.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">exchanges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="va">data_adalite</span>, <span class="va">data_binance</span>, <span class="va">data_binance_withdrawals</span>, <span class="va">data_blockfi</span>, <span class="va">data_CDC</span>,</span>
+<span>  <span class="va">data_CDC_exchange_rewards</span>, <span class="va">data_CDC_exchange_trades</span>, <span class="va">data_CDC_wallet</span>, <span class="va">data_celsius</span>,</span>
+<span>  <span class="va">data_coinsmart</span>, <span class="va">data_exodus</span>, <span class="va">data_gemini</span>, <span class="va">data_newton</span>, <span class="va">data_pooltool</span>, <span class="va">data_presearch</span>,</span>
+<span>  <span class="va">data_shakepay</span>, <span class="va">data_uphold</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">formatted.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_exchanges.html">format_exchanges</a></span><span class="op">(</span><span class="va">exchanges</span>, list.prices <span class="op">=</span> <span class="va">list.prices</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="adjusted-cost-base">Adjusted Cost Base<a class="anchor" aria-label="anchor" href="#adjusted-cost-base"></a>
+</h2>
+<p>Next, we can begin processing that data. We start by formatting the
+<a href="https://cryptoltruist.github.io/cryptoTax/articles/ACB.html">Adjusted
+Cost Base (ACB)</a> of each transaction. The <code>formatted.ACB</code>
+is going to be our core object with which we will be working for all
+future steps.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">formatted.data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Process started at 2026-04-11 12:45:29.809694. Please be patient as the transactions process.</span></span>
+<span><span class="co">#&gt; [Formatting ACB (progress bar repeats for each coin)...]</span></span>
+<span><span class="co">#&gt; Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.</span></span>
+<span><span class="co">#&gt; Process ended at 2026-04-11 12:45:32.029109. Total time elapsed: 0.04 minutes</span></span></code></pre></div>
+<blockquote>
+<p>Per default, <code><a href="../reference/format_ACB.html">format_ACB()</a></code> considers taxable revenue (and
+not aquisition at $0 ACB) the following transaction types: staking,
+interests, and mining. If you want a different treatment for those
+transactions (or other types of revenues like cashback and airdrops),
+use the <code>as.revenue</code> argument of
+<code><a href="../reference/format_ACB.html">format_ACB()</a></code>.</p>
+</blockquote>
+<p>We get a warning that there are negative values in some places,
+therefore that we might have forgotten some transactions. The
+<code><a href="../reference/check_missing_transactions.html">check_missing_transactions()</a></code> function makes it easy to
+identify which transactions (and therefore which coin) are concerned
+with this.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_missing_transactions.html">check_missing_transactions</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 28</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   currency [11]</span></span></span>
+<span><span class="co">#&gt;   date                currency quantity total.price spot.rate transaction  fees</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2021-03-07 <span style="color: #949494;">21:46:57</span> BAT         52.6        38.5      0.733 sell            0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2021-04-05 <span style="color: #949494;">12:22:00</span> BAT          8.52        0        0.994 revenue         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2021-04-06 <span style="color: #949494;">04:47:00</span> BAT          8.52        5.92     0.695 sell            0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 21 more variables: description &lt;chr&gt;, comment &lt;chr&gt;, revenue.type &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   value &lt;dbl&gt;, exchange &lt;chr&gt;, rate.source &lt;chr&gt;, fees.quantity &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   fees.currency &lt;chr&gt;, currency2 &lt;chr&gt;, total.quantity &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   suploss.range &lt;Interval&gt;, quantity.60days &lt;dbl&gt;, share.left60 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   sup.loss.quantity &lt;dbl&gt;, sup.loss &lt;lgl&gt;, gains.uncorrected &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   gains.sup &lt;dbl&gt;, gains.excess &lt;lgl&gt;, gains &lt;dbl&gt;, ACB &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ACB.share &lt;dbl&gt;</span></span></span></code></pre></div>
+<p>Next, we might want to make sure that we have downloaded the latest
+files for each exchange. If you shake your phone every day for sats, or
+you receive daily weekly payments from staking, you would expect the
+latest date to be recent. For this we use the
+<code><a href="../reference/get_latest_transactions.html">get_latest_transactions()</a></code> function.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_latest_transactions.html">get_latest_transactions</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   exchange [14]</span></span></span>
+<span><span class="co">#&gt;    exchange     date               </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> CDC          2021-07-28 <span style="color: #949494;">23:23:04</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> CDC.exchange 2021-12-24 <span style="color: #949494;">15:34:45</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> CDC.wallet   2021-06-26 <span style="color: #949494;">14:51:02</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> adalite      2021-05-17 <span style="color: #949494;">21:31:00</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> binance      2022-11-27 <span style="color: #949494;">08:05:35</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> blockfi      2021-10-24 <span style="color: #949494;">04:29:23</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> celsius      2021-05-23 <span style="color: #949494;">05:00:00</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> coinsmart    2021-06-03 <span style="color: #949494;">02:04:49</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> exodus       2021-06-12 <span style="color: #949494;">22:31:35</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> gemini       2021-06-18 <span style="color: #949494;">01:38:54</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> newton       2021-06-16 <span style="color: #949494;">18:49:11</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> presearch    2021-12-09 <span style="color: #949494;">06:24:22</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> shakepay     2021-07-10 <span style="color: #949494;">00:52:19</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> uphold       2021-06-09 <span style="color: #949494;">04:52:23</span></span></span></code></pre></div>
+<p>At this stage, it is possible to list transactions by coin, if you
+have few transactions. The output can be very long as soon as you have
+many transactions however, so we will not be showing it here, but you
+can have a look at the <code><a href="../reference/listby_coin.html">listby_coin()</a></code> function and its
+example.</p>
+</div>
+<div class="section level2">
+<h2 id="full-tax-report">Full Tax Report<a class="anchor" aria-label="anchor" href="#full-tax-report"></a>
+</h2>
+<p>Next, we need to calculate a few extra bits of information for the
+final report. Fortunately, the <code><a href="../reference/prepare_report.html">prepare_report()</a></code> function
+makes this easy for us.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">report.info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_report.html">prepare_report</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
+<span>  tax.year <span class="op">=</span> <span class="fl">2021</span>,</span>
+<span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="va">list.prices</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The <code>report.info</code> object is a list containing all the
+different info (tables, figures) necessary for the final report. They
+can be accessed individually too:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">report.info</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "report.overview"    "report.summary"     "proceeds"          </span></span>
+<span><span class="co">#&gt;  [4] "sup.losses"         "table.revenues"     "tax.box"           </span></span>
+<span><span class="co">#&gt;  [7] "pie_exchange"       "pie_revenue"        "current.price.date"</span></span>
+<span><span class="co">#&gt; [10] "local.timezone"</span></span></code></pre></div>
+<p>Finally, to generate the report, we use <code><a href="../reference/print_report.html">print_report()</a></code>
+with the relevant information:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/print_report.html">print_report</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
+<span>  list.prices <span class="op">=</span> <span class="va">list.prices</span>,</span>
+<span>  tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"Mr. Cryptoltruist"</span>,</span>
+<span>  local.timezone <span class="op">=</span> <span class="st">"America/Toronto"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="full-crypto-tax-report-for-tax-year-2021">Full Crypto Tax Report for Tax Year 2021<a class="anchor" aria-label="anchor" href="#full-crypto-tax-report-for-tax-year-2021"></a>
+</h2>
+<p>Name: Mr. Cryptoltruist</p>
+<p>Date: Sat Apr 11 12:45:33 2026</p>
+<div class="section level4">
+<h4 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h4>
+<div class="tabwid">
+<style>.cl-54ab8d6e{table-layout:auto;}.cl-54a35ee6{font-family:'Times New Roman';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-54a35ef0{font-family:'Times New Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-54a73156{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-54a75564{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-54a7556e{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-54a75578{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-54ab8d6e">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-54a75564"><p class="cl-54a73156"><span class="cl-54a35ee6">Type</span></p></th>
+<th class="cl-54a75564"><p class="cl-54a73156"><span class="cl-54a35ee6">Amount</span></p></th>
+<th class="cl-54a75564"><p class="cl-54a73156"><span class="cl-54a35ee6">currency</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">gains</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">3,970.17</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">losses</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">0.00</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">net</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">3,970.17</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">total.cost</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">7,887.33</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">value.today</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">17,316.13</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">unrealized.gains</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">9,428.81</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">unrealized.losses</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">0.00</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">unrealized.net</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">9,428.81</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">percentage.up</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">119.54%</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">all.time.up</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">169.88%</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">all.time.up.revenue</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">176.22%</span></p></td>
+<td class="cl-54a7556e"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-54a75578"><p class="cl-54a73156"><span class="cl-54a35ef0">revenue</span></p></td>
+<td class="cl-54a75578"><p class="cl-54a73156"><span class="cl-54a35ef0">500.46</span></p></td>
+<td class="cl-54a75578"><p class="cl-54a73156"><span class="cl-54a35ef0">CAD</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre><code><span><span class="co">#&gt; Warning: Date of value.today: 2023-12-31</span></span></code></pre>
+<!-- All time up in percentage (including all unrealized gains and revenues received) is . In absolute dollars, that is  CAD. -->
+</div>
+<div class="section level4">
+<h4 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h4>
+<div class="tabwid">
+<style>.cl-55bcd9ec{table-layout:auto;}.cl-55b55ec4{font-family:'Times New Roman';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-55b55ed8{font-family:'Times New Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-55b85ed0{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-55b88090{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55b8809a{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-55b880a4{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-55bcd9ec">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">date.last</span></p></th>
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">currency</span></p></th>
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">total.quantity</span></p></th>
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">cost.share</span></p></th>
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">total.cost</span></p></th>
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">net</span></p></th>
+<th class="cl-55b88090"><p class="cl-55b85ed0"><span class="cl-55b55ec4">currency2</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-12-24 15:34:45</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">CRO</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">19,234.2928403</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.32</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">6,226.49</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">CRO</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-10-24 04:29:23</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">LTC</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">5.5542096</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">172.65</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">958.91</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">1,554.56</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">LTC</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-12-24 15:34:45</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">ETH</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.0761972</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">1,569.90</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">119.62</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2,254.32</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">ETH</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-08-07 21:43:44</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">BTC</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.0048642</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">29,138.16</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">141.73</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">116.59</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">BTC</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-06-06 22:14:11</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">ADA</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">209.0297373</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">1.23</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">256.29</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.23</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">ADA</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-06-18 01:38:54</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">BAT</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">29.6939758</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">1.64</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">48.62</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">44.47</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">BAT</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2021-12-09 06:24:22</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">PRE</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">3,010.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.02</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">62.60</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">PRE</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2022-11-27 08:05:35</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">USDC</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">49.2669990</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">1.26</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">62.31</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">USDC</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2022-11-27 08:05:35</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">BUSD</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">5.8763653</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">1.28</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">7.55</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">BUSD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2022-11-17 11:54:25</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">ETHW</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.3559272</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">9.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">3.20</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">0.00</span></p></td>
+<td class="cl-55b8809a"><p class="cl-55b85ed0"><span class="cl-55b55ed8">ETHW</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8">2022-11-27 08:05:35</span></p></td>
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8">Total</span></p></td>
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8"></span></p></td>
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8"></span></p></td>
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8">7,887.32</span></p></td>
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8">3,970.17</span></p></td>
+<td class="cl-55b880a4"><p class="cl-55b85ed0"><span class="cl-55b55ed8">Total</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="current-value">Current Value<a class="anchor" aria-label="anchor" href="#current-value"></a>
+</h4>
+<div class="tabwid">
+<style>.cl-5653a49e{table-layout:auto;}.cl-564bedbc{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-564bedc6{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-564f25ae{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-564f25b8{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-564f4994{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-564f499e{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-564f499f{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-564f49a8{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-564f49a9{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-5653a49e">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">currency</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">cost.share</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">total.cost</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">rate.today</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">value.today</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">unrealized.gains</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">unrealized.losses</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">unrealized.net</span></p></th>
+<th class="cl-564f4994"><p class="cl-564f25ae"><span class="cl-564bedbc">currency2</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">CRO</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">0.32</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">6,226.49</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">0.70</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">13,406.30</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">7,179.81</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">7,179.81</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">CRO</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">LTC</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">172.65</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">958.91</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">314.10</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1,744.58</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">785.67</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">785.67</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">LTC</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">ADA</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.23</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">256.29</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">3.39</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">708.19</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">451.90</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">451.90</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">ADA</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">PRE</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">0.02</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">62.60</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">0.16</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">479.79</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">417.19</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">417.19</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">PRE</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">ETH</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1,569.90</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">119.62</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">5,629.00</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">428.91</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">309.29</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">309.29</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">ETH</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">BTC</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">29,138.16</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">141.73</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">83,290.00</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">405.14</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">263.41</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">263.41</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">BTC</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">USDC</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.26</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">62.31</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.30</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">64.28</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.97</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.97</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">USDC</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">BAT</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.64</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">48.62</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">1.99</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">59.21</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">10.59</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">10.59</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">BAT</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">ETHW</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">9.00</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">3.20</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">33.88</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">12.06</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">8.86</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">8.86</span></p></td>
+<td class="cl-564f499e"><p class="cl-564f25ae"><span class="cl-564bedc6">ETHW</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">BUSD</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">1.28</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">7.55</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">1.30</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">7.67</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">0.12</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6"></span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">0.12</span></p></td>
+<td class="cl-564f499f"><p class="cl-564f25ae"><span class="cl-564bedc6">BUSD</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">Total</span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc"></span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">7,887.32</span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc"></span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">17,316.13</span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">9,428.81</span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">0</span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">9,428.81</span></p></td>
+<td class="cl-564f49a8"><p class="cl-564f25ae"><span class="cl-564bedbc">Total</span></p></td>
+</tr>
+</tbody>
+<tfoot><tr style="overflow-wrap:break-word;">
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">currency</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">cost.share</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">total.cost</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">rate.today</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">value.today</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">unrealized.gains</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">unrealized.losses</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">unrealized.net</span></p></td>
+<td class="cl-564f49a9"><p class="cl-564f25b8"><span class="cl-564bedbc">currency2</span></p></td>
+</tr></tfoot>
+</table>
+</div>
+<pre><code><span><span class="co">#&gt; Warning: Date of value.today: 2023-12-31</span></span></code></pre>
+</div>
+<div class="section level4">
+<h4 id="superficial-losses">Superficial losses<a class="anchor" aria-label="anchor" href="#superficial-losses"></a>
+</h4>
+<div class="tabwid">
+<style>.cl-56ce1288{table-layout:auto;}.cl-56c6b682{font-family:'Times New Roman';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-56c9d4a2{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-56ca06c0{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-56ce1288"><thead><tr style="overflow-wrap:break-word;">
+<th class="cl-56ca06c0"><p class="cl-56c9d4a2"><span class="cl-56c6b682">currency</span></p></th>
+<th class="cl-56ca06c0"><p class="cl-56c9d4a2"><span class="cl-56c6b682">sup.loss</span></p></th>
+</tr></thead></table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="revenues-cad">Revenues (CAD)<a class="anchor" aria-label="anchor" href="#revenues-cad"></a>
+</h4>
+<div class="tabwid">
+<style>.cl-5768dfca{table-layout:auto;}.cl-5760b85e{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5760b868{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-576412ba{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-576412c4{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-57643844{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5764384e{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5764384f{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57643858{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57643859{background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-5768dfca">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">exchange</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">date.last</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">total</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">interests</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">rebates</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">staking</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">promos</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">airdrops</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">referrals</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">rewards</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">forks</span></p></th>
+<th class="cl-57643844"><p class="cl-576412ba"><span class="cl-5760b85e">mining</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">celsius</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-05-23</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">164.95</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">3.11</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">111.52</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">50.32</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">presearch</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-12-09</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">112.54</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">112.54</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">CDC</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-07-23</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">96.11</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">10.41</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">51.15</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">30.15</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.20</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">3.20</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">newton</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-06-16</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">50.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">50.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">blockfi</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-08-07</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">41.62</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">9.06</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">23.22</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">9.34</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">gemini</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-06-18</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">32.40</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">15.68</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">16.72</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">uphold</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-06-09</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">23.40</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">23.40</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">exodus</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-06-06</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">17.26</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">17.26</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">coinsmart</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-05-15</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">16.99</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.99</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">15.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">shakepay</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-06-23</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">3.64</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">3.64</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">CDC.wallet</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-06-26</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.88</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.88</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">adalite</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-05-17</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.83</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.83</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">binance</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">2021-11-05</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.71</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.13</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">1.58</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384e"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">CDC.exchange</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">2021-09-07</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">1.13</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">1.10</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.02</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+<td class="cl-5764384f"><p class="cl-576412ba"><span class="cl-5760b868">0.00</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">total</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">2021-12-09</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">565.46</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">23.81</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">52.75</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">20.97</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">134.75</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">157.25</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">171.53</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">1.20</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">3.20</span></p></td>
+<td class="cl-57643858"><p class="cl-576412ba"><span class="cl-5760b85e">0.00</span></p></td>
+</tr>
+</tbody>
+<tfoot><tr style="overflow-wrap:break-word;">
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">exchange</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">date.last</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">total</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">interests</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">rebates</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">staking</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">promos</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">airdrops</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">referrals</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">rewards</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">forks</span></p></td>
+<td class="cl-57643859"><p class="cl-576412c4"><span class="cl-5760b85e">mining</span></p></td>
+</tr></tfoot>
+</table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="revenue-sources-by-exchanges">Revenue Sources by <strong>Exchanges</strong><a class="anchor" aria-label="anchor" href="#revenue-sources-by-exchanges"></a>
+</h4>
+<p><img src="report_files/figure-html/pie_exchange-1.png" class="r-plt" alt="" width="60%"></p>
+</div>
+<div class="section level4">
+<h4 id="revenue-sources-by-types">Revenue Sources by <strong>Types</strong><a class="anchor" aria-label="anchor" href="#revenue-sources-by-types"></a>
+</h4>
+<p><img src="report_files/figure-html/pie_revenue-1.png" class="r-plt" alt="" width="60%"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="important-tax-information-for-your-accountant">Important Tax Information for Your Accountant<a class="anchor" aria-label="anchor" href="#important-tax-information-for-your-accountant"></a>
+</h2>
+<p><br><br></p>
+<div class="section level4">
+<h4 id="capital-gains">Capital gains<a class="anchor" aria-label="anchor" href="#capital-gains"></a>
+</h4>
+<p><font size="4">Your <strong>capital gains</strong> for 2021 are
+<strong>$3,970.17</strong>, whereas your <strong>capital losses</strong>
+are <strong>$0.00</strong> (net = <strong>$3,970.17</strong>).</font></p>
+<blockquote>
+<p>Those are only taxed at 50%. Your <strong>capital losses</strong> are
+calculated as <strong>total capital losses</strong> (<strong>$</strong>)
+- <strong>superficial losses</strong> (<strong>$</strong>) =
+<strong>actual capital losses</strong> (<strong>$</strong>).</p>
+</blockquote>
+<p>Your total “proceeds” <em>for the coins you sold at a
+<strong>profit</strong></em> is: <strong>$10,069.79</strong> (aggregated
+for all coins). Your total ACB <em>for the coins you sold at a
+profit</em> is: <strong>$6,099.62</strong> (average of all coins). The
+difference between the two is your capital gains:
+<strong>$3,970.17</strong>.</p>
+<p>Your total “proceeds” (adjusted for superficial gains) <em>for the
+coins you sold at a <strong>loss</strong></em> is:
+<strong>$0.00</strong> (aggregated for all coins). Your total ACB
+<em>for the coins you sold at a loss</em> is: <strong>$0.00</strong>
+(average of all coins). The difference between the two is your capital
+losses: <strong>$0.00</strong>.</p>
+</div>
+<div class="section level4">
+<h4 id="income">Income<a class="anchor" aria-label="anchor" href="#income"></a>
+</h4>
+<p>Your <strong>total taxable income</strong> from crypto (from interest
+&amp; staking exclusively) for 2021 is <strong>$44.78</strong>, which is
+considered 100% taxable income.</p>
+<blockquote>
+<p><em>Note that per default, this amount excludes revenue from credit
+card cashback because it is considered rebate, not income, so considered
+acquired at the fair market value at the time of reception.</em> The
+income reported above also excludes other forms of airdrops and rewards
+(e.g., from Shakepay, Brave, Presearch), referrals, and promos, which
+are considered acquired at a cost of 0$ (and will thus incur a capital
+gain of 100% upon selling). Note that should you wish to give different
+tax treatment to the different transaction types, you can do so through
+the ‘as.revenue’ argument of the ‘ACB’ function. Mining rewards needs to
+be labelled individually in the files before using
+<code><a href="../reference/format_ACB.html">format_ACB()</a></code>.</p>
 </blockquote>
 </div>
-  </main>
+<div class="section level4">
+<h4 id="total-tax-estimation">Total tax estimation<a class="anchor" aria-label="anchor" href="#total-tax-estimation"></a>
+</h4>
+<p>In general, you can expect to pay tax on 50%
+(<strong>$1,985.09</strong>) of your net capital gains + 100% of your
+taxable income (<strong>$44.78</strong>), for a total of
+<strong>$2,029.87</strong>. This amount will be taxed based on your tax
+bracket.</p>
+<blockquote>
+<p>Note that if your capital gains are net negative for the current
+year, any excess capital losses can be deferred to following years.
+However, capital losses have to be used in the same year first if you
+have outstanding capital gains.</p>
+</blockquote>
+</div>
+<div class="section level4">
+<h4 id="form-t1135">Form T1135<a class="anchor" aria-label="anchor" href="#form-t1135"></a>
+</h4>
+<p>If your <strong>total acquisition cost</strong> has been greater than
+<strong>$100,000</strong> at any point during 2021 (it is
+<strong>$7,887.33</strong> at the time of this report), you will need to
+fill <strong>form T1135</strong> (<em>Foreign Income Verification
+Statement</em>). Form T1135 is <a href="https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t1135.html" class="external-link">available
+for download</a>, and more information about it can be found on the <a href="https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/information-been-moved/foreign-reporting/questions-answers-about-form-t1135.html" class="external-link">CRA
+website</a>.</p>
+</div>
+<div class="section level4">
+<h4 id="summary-table">Summary table<a class="anchor" aria-label="anchor" href="#summary-table"></a>
+</h4>
+<p>Here is a summary of what you need to enter on which lines of your
+income tax:</p>
+<div class="tabwid">
+<style>.cl-5a173ed8{table-layout:auto;}.cl-5a105b2c{font-family:'Times New Roman';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5a105b40{font-family:'Times New Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5a135bba{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-5a137f46{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5a137f50{background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5a137f5a{background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-5a173ed8">
+<thead><tr style="overflow-wrap:break-word;">
+<th class="cl-5a137f46"><p class="cl-5a135bba"><span class="cl-5a105b2c">Description</span></p></th>
+<th class="cl-5a137f46"><p class="cl-5a135bba"><span class="cl-5a105b2c">Amount</span></p></th>
+<th class="cl-5a137f46"><p class="cl-5a135bba"><span class="cl-5a105b2c">Comment</span></p></th>
+<th class="cl-5a137f46"><p class="cl-5a135bba"><span class="cl-5a105b2c">Line</span></p></th>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Gains proceeds</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">10,069.79</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Proceeds of sold coins (gains)</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Schedule 3, line 15199 column 2</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Gains ACB</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">6,099.62</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">ACB of sold coins (gains)</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Schedule 3, line 15199 column 3</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Gains</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">3,970.17</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Proceeds - ACB (gains)</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Schedule 3, lines 15199 column 5 &amp; 15300</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">50% of gains</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">1,985.08</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Half of gains</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">T1, line 12700; Schedule 3, line 15300, 19900</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Outlays of gains</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">0.00</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Expenses and trading fees (gains). Normally already integrated in the ACB</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Tax software</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Losses proceeds</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">0.00</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Proceeds of sold coins (losses)</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Schedule 3, line 15199 column 2</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Losses ACB</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">0.00</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">ACB of sold coins (losses)</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Schedule 3, line 15199 column 3</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Losses</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">0.00</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Proceeds - ACB (losses)</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Schedule 3, lines 15199 column 5 &amp; 15300</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">50% of losses</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">0.00</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Half of losses</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">T1, line 12700; Schedule 3, line 15300, 19900</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Outlays of losses</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">0.00</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Expenses and trading fees (losses). Normally already integrated in the ACB</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Tax software</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Foreign income</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">44.78</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">Income from crypto interest or staking is considered foreign income</span></p></td>
+<td class="cl-5a137f50"><p class="cl-5a135bba"><span class="cl-5a105b40">T1, line 13000, T1135</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td class="cl-5a137f5a"><p class="cl-5a135bba"><span class="cl-5a105b40">Foreign gains (losses)</span></p></td>
+<td class="cl-5a137f5a"><p class="cl-5a135bba"><span class="cl-5a105b40">3,970.17</span></p></td>
+<td class="cl-5a137f5a"><p class="cl-5a135bba"><span class="cl-5a105b40">Capital gains from crypto is considered foreign capital gains</span></p></td>
+<td class="cl-5a137f5a"><p class="cl-5a135bba"><span class="cl-5a105b40">T1135</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="other-situations">Other situations<a class="anchor" aria-label="anchor" href="#other-situations"></a>
+</h4>
+<p>If applicable, you may also need to enter the following:</p>
+<blockquote>
+<p>Interest expense on money borrowed to purchase investments for the
+purpose of gaining or producing income is tax-deductible. Use line 22100
+(was line 221) of the personal income tax return, after completion of
+Schedule 4 (federal).</p>
+</blockquote>
+<p></p>
+<p><br><br><br><br></p>
+<p>……………………………………………………………………………………………………………………………………………………………………………….</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

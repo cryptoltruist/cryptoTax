@@ -9,7 +9,7 @@ ACB processing."><meta property="og:image" content="https://cryptoltruist.github
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,9 @@ ACB processing.</p>
 
 
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
-<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+<dd><p>An optional explicit <code>list.prices</code> object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -85,10 +87,15 @@ function for this purpose.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_binance_withdrawals</span><span class="op">(</span><span class="va">data_binance_withdrawals</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-28 17:13:50      LTC  1.0e-03   0.3202293  320.2293        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-28 18:15:14      ETH  7.1e-05   0.2373691 3343.2269        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-06 19:55:52      ETH  6.2e-05   0.2653380 4279.6449        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       description exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Withdrawal fees  binance coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Withdrawal fees  binance coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Withdrawal fees  binance coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

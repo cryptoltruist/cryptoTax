@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,9 @@
 
 
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
-<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+<dd><p>An optional explicit <code>list.prices</code> object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -72,10 +74,17 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">format_exodus</span><span class="op">(</span><span class="va">data_exodus</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency  quantity total.price    spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-05-25 22:06:11      LTC 0.0014430   0.3205936   222.171556        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-25 23:08:12      ADA 0.1782410   0.3337199     1.872296        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-06-12 12:15:28      BTC 0.0000503   2.2270326 44275.001680        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-06-12 22:31:35      ETH 0.0014500   4.1634192  2871.323554        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   description revenue.type exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  withdrawal         &lt;NA&gt;   exodus coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  withdrawal         &lt;NA&gt;   exodus coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  withdrawal         &lt;NA&gt;   exodus coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  withdrawal         &lt;NA&gt;   exodus coinmarketcap</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

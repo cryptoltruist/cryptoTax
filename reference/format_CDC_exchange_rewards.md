@@ -40,7 +40,9 @@ format_CDC_exchange_rewards(data, list.prices = NULL, force = FALSE)
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  An optional explicit `list.prices` object from which to fetch coin
+  prices. For exchanges that require external pricing, it must contain
+  at least `currency`, `spot.rate2`, and `date2`.
 
 - force:
 
@@ -55,8 +57,38 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_CDC_exchange_rewards(data_CDC_exchange_rewards)
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> NULL
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#>                   date currency   quantity  total.price    spot.rate
+#> 1  2021-02-19 00:00:00      CRO 1.36512341 0.2221748898 1.627508e-01
+#> 2  2021-02-21 00:00:00      CRO 1.36945123 0.2412313569 1.761518e-01
+#> 3  2021-04-15 16:04:21      BTC 0.00000023 0.0182120528 7.918284e+04
+#> 4  2021-04-18 00:00:00      CRO 1.36512310 0.3795803682 2.780558e-01
+#> 5  2021-05-14 06:02:22      BTC 0.00000035 0.0210982556 6.028073e+04
+#> 6  2021-06-12 15:21:34      BTC 0.00000630 0.2789325106 4.427500e+04
+#> 7  2021-06-27 01:34:00      CRO 0.00100000 0.0001240084 1.240084e-01
+#> 8  2021-07-07 00:00:00      CRO 0.01512903 0.0022880434 1.512353e-01
+#> 9  2021-07-13 00:00:00      CRO 0.05351230 0.0084290717 1.575165e-01
+#> 10 2021-09-07 00:00:00      CRO 0.01521310 0.0035727817 2.348490e-01
+#>    transaction description                                          comment
+#> 1      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
+#> 2      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
+#> 3      revenue      Reward                          BTC Supercharger reward
+#> 4      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)
+#> 5      revenue      Reward                          BTC Supercharger reward
+#> 6      revenue      Reward                          BTC Supercharger reward
+#> 7         sell  Withdrawal                                             <NA>
+#> 8      revenue      Reward                  Rebate on 0.18512341 CRO at 10%
+#> 9      revenue      Reward                Rebate on 0.5231512346 CRO at 10%
+#> 10     revenue      Reward                 Rebate on 0.155125123 CRO at 10%
+#>    revenue.type     exchange   rate.source
+#> 1     interests CDC.exchange coinmarketcap
+#> 2     interests CDC.exchange coinmarketcap
+#> 3     interests CDC.exchange coinmarketcap
+#> 4     interests CDC.exchange coinmarketcap
+#> 5     interests CDC.exchange coinmarketcap
+#> 6     interests CDC.exchange coinmarketcap
+#> 7          <NA> CDC.exchange coinmarketcap
+#> 8       rebates CDC.exchange coinmarketcap
+#> 9       rebates CDC.exchange coinmarketcap
+#> 10      rebates CDC.exchange coinmarketcap
 ```

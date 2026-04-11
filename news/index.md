@@ -1,5 +1,40 @@
 # Changelog
 
+## cryptoTax 0.1.0.20
+
+**Improvements:**
+
+- Continued a broader pricing, FX, formatting, and reporting hardening
+  pass across
+  [`prepare_list_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md),
+  [`match_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/match_prices.md),
+  [`USD2CAD()`](https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.md),
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md),
+  [`format_exchanges()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exchanges.md),
+  [`report_summary()`](https://cryptoltruist.github.io/cryptoTax/reference/report_summary.md),
+  [`report_overview()`](https://cryptoltruist.github.io/cryptoTax/reference/report_overview.md),
+  [`prepare_report()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.md),
+  and
+  [`print_report()`](https://cryptoltruist.github.io/cryptoTax/reference/print_report.md)
+  to make explicit offline inputs the primary safe path while preserving
+  compatibility with the older session-cache workflow.
+- Hardened malformed-price handling so explicit `list.prices` inputs now
+  fail cleanly and consistently across price matching, formatter entry
+  points, and current-value reporting paths instead of surfacing
+  misleading API/network messages or partial outputs.
+- Tightened session-cache behavior by validating cached pricing/FX
+  tables before reuse, scoping cache reads explicitly to `.GlobalEnv`,
+  and removing a lingering
+  [`exists()`](https://rdrr.io/r/base/exists.html)-driven Bank of Canada
+  FX fetch pattern.
+- Converted the full report vignette to the built-in offline
+  `list_prices_example` fixture and standardized formatter/report
+  documentation so the public `list.prices` contract is clearer and more
+  reproducible.
+- Expanded focused regressions around malformed explicit pricing inputs,
+  cache-reuse behavior, FX fallback behavior, formatter orchestration,
+  report helpers, and the public report-preparation path.
+
 ## cryptoTax 0.1.0.19
 
 **Improvements:**

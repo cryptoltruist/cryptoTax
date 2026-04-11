@@ -43,7 +43,7 @@ accessed through the Archive section. For this, see format_CDC_exchange.'><meta 
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,7 +109,9 @@ accessed through the Archive section. For this, see <a href="format_CDC_exchange
 
 
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
-<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+<dd><p>An optional explicit <code>list.prices</code> object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -125,10 +127,40 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_CDC_exchange_rewards</span><span class="op">(</span><span class="va">data_CDC_exchange_rewards</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency   quantity  total.price    spot.rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-02-19 00:00:00      CRO 1.36512341 0.2221748898 1.627508e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-02-21 00:00:00      CRO 1.36945123 0.2412313569 1.761518e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-15 16:04:21      BTC 0.00000023 0.0182120528 7.918284e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-18 00:00:00      CRO 1.36512310 0.3795803682 2.780558e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-05-14 06:02:22      BTC 0.00000035 0.0210982556 6.028073e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-06-12 15:21:34      BTC 0.00000630 0.2789325106 4.427500e+04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-06-27 01:34:00      CRO 0.00100000 0.0001240084 1.240084e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-07-07 00:00:00      CRO 0.01512903 0.0022880434 1.512353e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-07-13 00:00:00      CRO 0.05351230 0.0084290717 1.575165e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-09-07 00:00:00      CRO 0.01521310 0.0035727817 2.348490e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    transaction description                                          comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      revenue      Reward                          BTC Supercharger reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      revenue      Reward Interest on 5000.00000000 at 10% APR (Completed)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      revenue      Reward                          BTC Supercharger reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      revenue      Reward                          BTC Supercharger reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         sell  Withdrawal                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      revenue      Reward                  Rebate on 0.18512341 CRO at 10%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      revenue      Reward                Rebate on 0.5231512346 CRO at 10%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     revenue      Reward                 Rebate on 0.155125123 CRO at 10%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type     exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     interests CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          &lt;NA&gt; CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       rebates CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       rebates CDC.exchange coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      rebates CDC.exchange coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

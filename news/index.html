@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,15 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.20" id="cryptotax-01020">cryptoTax 0.1.0.20<a class="anchor" aria-label="anchor" href="#cryptotax-01020"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader pricing, FX, formatting, and reporting hardening pass across <code><a href="../reference/prepare_list_prices.html">prepare_list_prices()</a></code>, <code><a href="../reference/match_prices.html">match_prices()</a></code>, <code><a href="../reference/USD2CAD.html">USD2CAD()</a></code>, <code><a href="../reference/format_detect.html">format_detect()</a></code>, <code><a href="../reference/format_exchanges.html">format_exchanges()</a></code>, <code><a href="../reference/report_summary.html">report_summary()</a></code>, <code><a href="../reference/report_overview.html">report_overview()</a></code>, <code><a href="../reference/prepare_report.html">prepare_report()</a></code>, and <code><a href="../reference/print_report.html">print_report()</a></code> to make explicit offline inputs the primary safe path while preserving compatibility with the older session-cache workflow.</li>
+<li>Hardened malformed-price handling so explicit <code>list.prices</code> inputs now fail cleanly and consistently across price matching, formatter entry points, and current-value reporting paths instead of surfacing misleading API/network messages or partial outputs.</li>
+<li>Tightened session-cache behavior by validating cached pricing/FX tables before reuse, scoping cache reads explicitly to <code>.GlobalEnv</code>, and removing a lingering <code><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists()</a></code>-driven Bank of Canada FX fetch pattern.</li>
+<li>Converted the full report vignette to the built-in offline <code>list_prices_example</code> fixture and standardized formatter/report documentation so the public <code>list.prices</code> contract is clearer and more reproducible.</li>
+<li>Expanded focused regressions around malformed explicit pricing inputs, cache-reuse behavior, FX fallback behavior, formatter orchestration, report helpers, and the public report-preparation path.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.19" id="cryptotax-01019">cryptoTax 0.1.0.19<a class="anchor" aria-label="anchor" href="#cryptotax-01019"></a></h2>
 <p><strong>Improvements:</strong></p>

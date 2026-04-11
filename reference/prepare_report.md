@@ -21,7 +21,9 @@ prepare_report(
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  A `list.prices` object from which to fetch coin prices. For
+  `today.data` reporting paths, it must contain at least `currency`,
+  `spot.rate2`, and `date2`.
 
 - tax.year:
 
@@ -44,7 +46,7 @@ list.prices <- list_prices_example
 all.data <- format_exchanges(data_shakepay)
 #> Exchange detected: shakepay
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-if (!is.null(list.prices)) {
+if (is.data.frame(list.prices)) {
   x <- prepare_report(formatted.ACB, list.prices = list.prices)
   x$proceeds
 }

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,9 @@
 
 
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
-<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+<dd><p>An optional explicit <code>list.prices</code> object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -83,10 +85,22 @@ we will use this new strategy.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_presearch</span><span class="op">(</span><span class="va">data_presearch</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price  spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-01-02 19:08:59      PRE     1000   17.286345 0.01728634     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-27 19:12:15      PRE     1000   93.074345 0.09307434     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-07 05:55:33      PRE     1000   78.969090 0.07896909         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-12-09 06:24:22      PRE       10    3.195957 0.31959575     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                       description revenue.type  exchange</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                        Transferred from Rewards     airdrops presearch</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                        Transferred from Rewards     airdrops presearch</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Transferred from Presearch Portal (PO#: 412893)         &lt;NA&gt; presearch</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        Presearch 2021 Airdrop (Increased Stake)     airdrops presearch</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

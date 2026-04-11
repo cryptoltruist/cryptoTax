@@ -89,7 +89,9 @@ format_generic(
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  An optional explicit `list.prices` object from which to fetch coin
+  prices. For exchanges that require external pricing, it must contain
+  at least `currency`, `spot.rate2`, and `date2`.
 
 ## Value
 
@@ -144,8 +146,13 @@ format_generic(data_generic3)
 # If both total.price and spot.rate are missing, it will
 # scrap the spot.rate from coinmarketcap based on the coin:
 format_generic(data_generic4)
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> NULL
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#>                  date currency quantity total.price spot.rate transaction fees
+#> 1 2021-03-02 10:36:06      BTC 0.001240    76.70861 61861.778         buy 0.72
+#> 2 2021-03-10 12:49:04      ETH 0.063067   146.15197  2317.408         buy 0.72
+#> 3 2021-03-15 14:12:08      ETH 0.065048   147.98240  2274.972        sell 1.75
+#>           exchange   rate.source
+#> 1 generic_exchange coinmarketcap
+#> 2 generic_exchange coinmarketcap
+#> 3 generic_exchange coinmarketcap
 ```

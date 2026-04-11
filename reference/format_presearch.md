@@ -17,7 +17,9 @@ format_presearch(data, list.prices = NULL, force = FALSE)
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  An optional explicit `list.prices` object from which to fetch coin
+  prices. For exchanges that require external pricing, it must contain
+  at least `currency`, `spot.rate2`, and `date2`.
 
 - force:
 
@@ -46,8 +48,20 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_presearch(data_presearch)
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> NULL
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#>                  date currency quantity total.price  spot.rate transaction
+#> 1 2021-01-02 19:08:59      PRE     1000   17.286345 0.01728634     revenue
+#> 2 2021-04-27 19:12:15      PRE     1000   93.074345 0.09307434     revenue
+#> 3 2021-05-07 05:55:33      PRE     1000   78.969090 0.07896909         buy
+#> 4 2021-12-09 06:24:22      PRE       10    3.195957 0.31959575     revenue
+#>                                       description revenue.type  exchange
+#> 1                        Transferred from Rewards     airdrops presearch
+#> 2                        Transferred from Rewards     airdrops presearch
+#> 3 Transferred from Presearch Portal (PO#: 412893)         <NA> presearch
+#> 4        Presearch 2021 Airdrop (Increased Stake)     airdrops presearch
+#>     rate.source
+#> 1 coinmarketcap
+#> 2 coinmarketcap
+#> 3 coinmarketcap
+#> 4 coinmarketcap
 ```

@@ -37,7 +37,9 @@ report_summary(
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  A `list.prices` object from which to fetch coin prices. For
+  `today.data = TRUE`, it must contain at least `currency`,
+  `spot.rate2`, and `date2`.
 
 - slug:
 

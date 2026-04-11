@@ -17,7 +17,9 @@ format_binance_withdrawals(data, list.prices = NULL, force = FALSE)
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  An optional explicit `list.prices` object from which to fetch coin
+  prices. For exchanges that require external pricing, it must contain
+  at least `currency`, `spot.rate2`, and `date2`.
 
 - force:
 
@@ -45,8 +47,13 @@ function for this purpose.
 
 ``` r
 format_binance_withdrawals(data_binance_withdrawals)
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> Could not reach the CoinMarketCap API at this time
-#> NULL
+#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#>                  date currency quantity total.price spot.rate transaction
+#> 1 2021-04-28 17:13:50      LTC  1.0e-03   0.3202293  320.2293        sell
+#> 2 2021-04-28 18:15:14      ETH  7.1e-05   0.2373691 3343.2269        sell
+#> 3 2021-05-06 19:55:52      ETH  6.2e-05   0.2653380 4279.6449        sell
+#>       description exchange   rate.source
+#> 1 Withdrawal fees  binance coinmarketcap
+#> 2 Withdrawal fees  binance coinmarketcap
+#> 3 Withdrawal fees  binance coinmarketcap
 ```

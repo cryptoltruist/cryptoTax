@@ -41,7 +41,9 @@ match_prices(
 
 - list.prices:
 
-  A `list.prices` object from which to fetch coin prices.
+  A `list.prices` object from which to fetch coin prices. When supplied
+  explicitly, it must contain at least `currency`, `spot.rate2`, and
+  `date2`.
 
 - force:
 

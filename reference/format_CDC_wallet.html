@@ -25,7 +25,7 @@ http://crypto.barkisoft.de/ does not provide a valid CSV file anymore.'><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,9 @@ http://crypto.barkisoft.de/ does not provide a valid CSV file anymore.</p>
 
 
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
-<dd><p>A <code>list.prices</code> object from which to fetch coin prices.</p></dd>
+<dd><p>An optional explicit <code>list.prices</code> object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2</code>.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
@@ -98,10 +100,39 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_CDC_wallet</span><span class="op">(</span><span class="va">data_CDC_wallet</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could not reach the CoinMarketCap API at this time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity  total.price spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-12 18:28:50      CRO 0.512510 1.359843e-01 0.2653300     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-18 18:28:50      CRO 0.000200 5.561116e-05 0.2780558        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-04-23 18:51:53      CRO 1.656708 3.601218e-01 0.2173720     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-04-25 18:51:53      CRO 0.000200 4.177234e-05 0.2088617        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-21 01:19:01      CRO 0.000200 2.992587e-05 0.1496293        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-06-25 04:11:53      CRO 0.000200 2.406829e-05 0.1203414        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 2021-06-26 14:51:02      CRO 6.051235 7.078748e-01 0.1169802     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    description</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       Reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       Reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Withdrawal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       Reward</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                     comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                Auto Withdraw Reward from </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                            Stake on Validator(abcdefghijklmnopqrstuvwxyz)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                                Auto Withdraw Reward from </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                        Unstake from Validator(abcdefghijklmnopqrstuvwxyz)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                        Outgoing Transaction to abcdefghijklmnopqrstuvwxyz</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 Move 530.41289045 CRO from Validator(abcdefghijklmnopqrstuvwxyz) to Validator(abcdefghijklmnopqrstuvwxyz)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                           Withdraw Reward from abcdefghijklmnopqrstuvwxyz</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   revenue.type   exchange   rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      staking CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      staking CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      staking CDC.wallet coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
