@@ -56,7 +56,7 @@ data <- fetch_cronos_pos(
 #> 
 #> Warning: Total number of transactions detected higher than the set limit. Adjust as needed with the 'limit' argument
 format_cronos_pos(data)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                   date currency     quantity  total.price spot.rate transaction
 #> 1  2021-11-28 06:00:38      CRO   0.00000000 0.000000e+00 0.9815073     revenue
 #> 2  2021-11-28 06:00:38      CRO   0.00020000 1.963015e-04 0.9815073        sell

@@ -34,7 +34,7 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_blockfi(data_blockfi)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                   date currency     quantity total.price    spot.rate
 #> 1  2021-05-29 21:43:44      LTC  0.022451200  4.62896363   206.178896
 #> 2  2021-05-29 21:43:44      BTC  0.000018512  0.78643467 42482.425898

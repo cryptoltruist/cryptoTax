@@ -71,7 +71,7 @@ An object of class `data.frame` with 31 rows and 2 columns.
 - list.prices:
 
   Optional explicit `list.prices` object to reuse instead of relying on
-  a cached session object.
+  the current session cache.
 
 - coins.list:
 

@@ -47,7 +47,7 @@ function for this purpose.
 
 ``` r
 format_binance_withdrawals(data_binance_withdrawals)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                  date currency quantity total.price spot.rate transaction
 #> 1 2021-04-28 17:13:50      LTC  1.0e-03   0.3202293  320.2293        sell
 #> 2 2021-04-28 18:15:14      ETH  7.1e-05   0.2373691 3343.2269        sell

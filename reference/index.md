@@ -25,6 +25,9 @@
 - [`check_new_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.md)
   : Check for new transactions
 
+- [`clear_pricing_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/clear_pricing_cache.md)
+  : Clear the cryptoTax pricing cache
+
 - [`crypto_pie()`](https://cryptoltruist.github.io/cryptoTax/reference/crypto_pie.md)
   : Make a pie chart of your crypto revenues
 
@@ -224,6 +227,9 @@
 
 - [`prepare_report()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.md)
   : Prepare info for full crypto tax report
+
+- [`pricing_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/pricing_cache.md)
+  : Inspect the cryptoTax pricing cache
 
 - [`print_report()`](https://cryptoltruist.github.io/cryptoTax/reference/print_report.md)
   : Print full crypto tax report

@@ -33,8 +33,8 @@ cur2CAD_table()
 
 - USD2CAD.table:
 
-  Optional explicit exchange-rate table to use instead of relying on a
-  cached session object.
+  Optional explicit exchange-rate table to use instead of relying on the
+  current session cache.
 
 ## Value
 

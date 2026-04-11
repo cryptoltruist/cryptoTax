@@ -73,7 +73,7 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_coinsmart</span><span class="op">(</span><span class="va">data_coinsmart</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency  quantity total.price    spot.rate transaction</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-25 16:11:24      ADA 198.50000  237.937430     1.198677         buy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-04-28 18:37:15      CAD  15.00000   15.000000     1.000000     revenue</span>

@@ -27,6 +27,13 @@
   and removing a lingering
   [`exists()`](https://rdrr.io/r/base/exists.html)-driven Bank of Canada
   FX fetch pattern.
+- Moved normal in-session pricing cache writes into a package-owned
+  cache with new
+  [`pricing_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/pricing_cache.md)
+  and
+  [`clear_pricing_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/clear_pricing_cache.md)
+  helpers, while keeping `.GlobalEnv` reuse as a deprecated
+  compatibility fallback with explicit migration messaging.
 - Converted the full report vignette to the built-in offline
   `list_prices_example` fixture and standardized formatter/report
   documentation so the public `list.prices` contract is clearer and more

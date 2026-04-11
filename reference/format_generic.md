@@ -146,7 +146,7 @@ format_generic(data_generic3)
 # If both total.price and spot.rate are missing, it will
 # scrap the spot.rate from coinmarketcap based on the coin:
 format_generic(data_generic4)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                  date currency quantity total.price spot.rate transaction fees
 #> 1 2021-03-02 10:36:06      BTC 0.001240    76.70861 61861.778         buy 0.72
 #> 2 2021-03-10 12:49:04      ETH 0.063067   146.15197  2317.408         buy 0.72

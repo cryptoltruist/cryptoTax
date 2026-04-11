@@ -35,7 +35,7 @@ A data frame of exchange transactions, formatted for further processing.
 ``` r
 # \donttest{
 format_exodus(data_exodus)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                  date currency  quantity total.price    spot.rate transaction
 #> 1 2021-05-25 22:06:11      LTC 0.0014430   0.3205936   222.171556        sell
 #> 2 2021-05-25 23:08:12      ADA 0.1782410   0.3337199     1.872296        sell

@@ -46,7 +46,7 @@ function for this purpose).
 ``` r
 # \donttest{
 format_binance(data_binance)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                   date currency   quantity  total.price   spot.rate transaction
 #> 1  2021-05-29 17:07:20      LTC 2.53200000 5.220450e+02  206.178896         buy
 #> 2  2021-05-29 17:07:20      ETH 0.19521000 5.220450e+02 2674.273677        sell

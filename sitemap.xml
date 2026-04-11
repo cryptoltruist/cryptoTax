@@ -16,6 +16,7 @@
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD_priceR.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/check_missing_transactions.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/check_new_transactions.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/clear_pricing_cache.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/cryptoTax-package.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/crypto_pie.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/data_CDC.html</loc></url>
@@ -78,6 +79,7 @@
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/merge_exchanges.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/prepare_report.html</loc></url>
+<url><loc>https://cryptoltruist.github.io/cryptoTax/reference/pricing_cache.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/print_report.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/report_overview.html</loc></url>
 <url><loc>https://cryptoltruist.github.io/cryptoTax/reference/report_revenues.html</loc></url>

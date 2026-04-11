@@ -34,7 +34,7 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_coinsmart(data_coinsmart)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                  date currency  quantity total.price    spot.rate transaction
 #> 1 2021-04-25 16:11:24      ADA 198.50000  237.937430     1.198677         buy
 #> 2 2021-04-28 18:37:15      CAD  15.00000   15.000000     1.000000     revenue

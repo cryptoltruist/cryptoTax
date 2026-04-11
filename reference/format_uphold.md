@@ -34,7 +34,7 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_uphold(data_uphold)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                   date currency    quantity total.price   spot.rate transaction
 #> 1  2021-01-07 02:40:31      BAT  1.59081275   0.5126760   0.3222730     revenue
 #> 2  2021-02-09 14:26:49      BAT 12.69812163   6.8809223   0.5418851     revenue

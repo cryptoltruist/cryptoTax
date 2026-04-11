@@ -35,7 +35,7 @@ A data frame of exchange transactions, formatted for further processing.
 ``` r
 data <- data_adalite
 format_adalite(data)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                  date currency  quantity total.price spot.rate transaction
 #> 1 2021-04-28 16:56:00      ADA 0.3120400   0.5092906  1.632132     revenue
 #> 2 2021-05-07 16:53:00      ADA 0.3125132   0.6272258  2.007038     revenue

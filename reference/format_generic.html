@@ -195,7 +195,7 @@ contain at least <code>currency</code>, <code>spot.rate2</code>, and <code>date2
 <span class="r-in"><span><span class="co"># If both total.price and spot.rate are missing, it will</span></span></span>
 <span class="r-in"><span><span class="co"># scrap the spot.rate from coinmarketcap based on the coin:</span></span></span>
 <span class="r-in"><span><span class="fu">format_generic</span><span class="op">(</span><span class="va">data_generic4</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency quantity total.price spot.rate transaction fees</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-03-02 10:36:06      BTC 0.001240    76.70861 61861.778         buy 0.72</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-03-10 12:49:04      ETH 0.063067   146.15197  2317.408         buy 0.72</span>

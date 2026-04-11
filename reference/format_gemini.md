@@ -34,8 +34,8 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_gemini(data_gemini)
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
-#> Object 'list.prices' already exists. Reusing 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
 #>                   date currency     quantity total.price    spot.rate
 #> 1  2021-04-09 22:50:55      BTC 9.662784e-04  70.6481728 7.311369e+04
 #> 2  2021-04-09 22:50:55      LTC 2.466906e-01  70.6481728 2.863837e+02
