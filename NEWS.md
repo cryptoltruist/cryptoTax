@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.21
+
+**Improvements:**
+
+- Continued a broader formatter-architecture and deterministic-pricing cleanup across `format_CDC()`, `format_celsius()`, `format_detect()`, `format_exchanges()`, `format_coinsmart()`, `format_CDC_exchange()`, `format_CDC_exchange_trades()`, `format_gemini()`, `format_blockfi()`, and `format_uphold()` so explicit pricing/FX inputs are supported more consistently and more formatter paths reuse shared helper behavior instead of hand-rolled branching.
+- Expanded formatter governance by turning the `format_detect()` registry into the source of truth for schema regressions, so every bundled exchange example is now validated against the canonical formatted-transaction contract.
+- Replaced repeated sell-price propagation logic with a shared formatter helper and added direct regressions for that paired buy/sell pricing behavior, reducing one of the largest remaining duplicated formatter patterns.
+
 # cryptoTax 0.1.0.20
 
 **Improvements:**

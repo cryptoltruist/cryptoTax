@@ -9,6 +9,8 @@
 #' certainly inaccurate. You will have to make a manual correction for the
 #' withdrawal fees after using `format_CDC`, on the resulting dataframe.
 #' @param data The dataframe
+#' @param USD2CAD.table Optional explicit USD/CAD rate table to use instead of
+#' relying on session cache or network access for USD conversions.
 #' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
@@ -16,7 +18,7 @@
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange bind_rows case_when
 #' @importFrom rlang .data
 
-format_CDC <- function(data) {
+format_CDC <- function(data, USD2CAD.table = NULL) {
   # Known transactions ####
   known.transactions <- c(
     "crypto_earn_program_withdrawn", "rewards_platform_deposit_credited",
@@ -38,7 +40,7 @@ format_CDC <- function(data) {
   data <- .format_cdc_prepare_input(data, known.transactions)
 
   # Convert USD value to CAD ####
-  data.tmp <- cryptoTax::USD2CAD(data)
+  data.tmp <- cryptoTax::USD2CAD(data, USD2CAD.table = USD2CAD.table)
 
   if (is.null(data.tmp)) {
     message("Could not fetch exchange rates from coinmarketcap.")

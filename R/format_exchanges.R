@@ -15,6 +15,9 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' When supplied explicitly, it must contain at least `currency`,
 #' `spot.rate2`, and `date2`.
+#' @param USD2CAD.table Optional explicit USD/CAD rate table to use for
+#' exchanges that convert USD-denominated values to CAD. When supplied
+#' explicitly, it must contain at least `date` and `USD`.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame of exchange transactions, formatted for further
@@ -31,12 +34,17 @@
 #' @seealso [format_detect()] for the lower-level exchange auto-detection
 #' engine, and the specific `format_*()` functions for manual exchange-by-
 #' exchange formatting.
-format_exchanges <- function(data, ..., list.prices = NULL, force = FALSE) {
+format_exchanges <- function(data, ..., list.prices = NULL, USD2CAD.table = NULL, force = FALSE) {
   extra_inputs <- list(...)
 
   if (length(extra_inputs) > 0) {
     data <- c(list(data), extra_inputs)
   }
 
-  format_detect(data, list.prices = list.prices, force = force)
+  format_detect(
+    data,
+    list.prices = list.prices,
+    USD2CAD.table = USD2CAD.table,
+    force = force
+  )
 }

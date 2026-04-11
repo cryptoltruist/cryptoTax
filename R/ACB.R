@@ -302,9 +302,9 @@ ACB <- function(data,
         0
       )
 
-      # After first row: calculate superficial capital gains and losses for any excess
+      # Preserve the deductible remainder whenever only part of the loss is superficial.
       if (i > 1 && isTRUE(data[[i, "sup.loss"]]) &&
-        data[i, "sup.loss.quantity"] > data[i, "quantity.60days"]) {
+        !is.na(data[i, "gains.sup"])) {
         data[i, "gains.excess"] <- data[i, "gains"] - data[i, "gains.sup"]
       }
 
@@ -342,6 +342,10 @@ ACB <- function(data,
         gains = ifelse(.data$gains == 0,
           NA,
           .data$gains
+        ),
+        gains.excess = ifelse(.data$gains.excess == 0,
+          NA,
+          .data$gains.excess
         ),
         gains.sup = ifelse(.data$gains.sup == 0,
           NA,

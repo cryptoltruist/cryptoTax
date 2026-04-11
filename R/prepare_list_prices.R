@@ -3,8 +3,15 @@
     return(coins.list)
   }
 
-  if (.can_reuse_cached_pricing_object("coins.list", force = force, allow_null = TRUE)) {
-    return(.get_cached_pricing_object("coins.list"))
+  cached_coins <- .reuse_cached_pricing_object(
+    name = "coins.list",
+    force = force,
+    verbose = verbose,
+    allow_null = TRUE,
+    validator = .is_valid_coins_list
+  )
+  if (!is.null(cached_coins)) {
+    return(cached_coins)
   }
 
   if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
@@ -38,34 +45,12 @@
     return(list.prices)
   }
 
-  if (!.can_reuse_cached_pricing_object("list.prices", force = force)) {
-    return(NULL)
-  }
-
-  cached_list_prices <- .get_cached_pricing_object("list.prices")
-  cache_source <- .cached_pricing_object_source("list.prices")
-
-  if (!.is_valid_list_prices_table(cached_list_prices)) {
-    return(NULL)
-  }
-
-  if (isTRUE(verbose)) {
-    if (identical(cache_source, "legacy")) {
-      message(
-        "Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. ",
-        "This compatibility path may be removed in a future release; ",
-        "prefer `pricing_cache()` or pass `list.prices` explicitly. ",
-        "To force a fresh download, use argument 'force = TRUE'."
-      )
-    } else {
-      message(
-        "Using cached 'list.prices'. ",
-        "To force a fresh download, use argument 'force = TRUE'."
-      )
-    }
-  }
-
-  cached_list_prices
+  .reuse_cached_pricing_object(
+    name = "list.prices",
+    force = force,
+    verbose = verbose,
+    validator = .is_valid_list_prices_table
+  )
 }
 
 .format_prepare_price_date <- function(x) {

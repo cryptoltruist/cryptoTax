@@ -37,3 +37,11 @@
     .test_exchange_data_by_name("adalite")
   )
 }
+
+.test_usd2cad_table <- function(start = "2017-01-01", end = "2030-12-31", usd = 1.25) {
+  data.frame(
+    date = seq(as.Date(start), as.Date(end), by = "day"),
+    USD = usd,
+    CAD = 1
+  )
+}

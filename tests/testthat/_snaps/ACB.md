@@ -145,7 +145,7 @@
       2 2015-03-11 UTC--2015-05-10 UTC             100           20                80
         sup.loss gains.uncorrected gains.sup gains.excess gains ACB ACB.share
       1    FALSE                 0        NA           NA    NA 300         3
-      2     TRUE               -80       -20           NA    NA  80         4
+      2     TRUE               -80       -20          -60   -60  80         4
 
 # Example #5 - ACB
 

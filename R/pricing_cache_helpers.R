@@ -78,9 +78,73 @@
   !isTRUE(force) && .has_cached_pricing_object(name, allow_null = allow_null)
 }
 
+.message_cached_pricing_reuse <- function(name, source, verbose = TRUE) {
+  if (!isTRUE(verbose) || is.null(source)) {
+    return(invisible(NULL))
+  }
+
+  if (identical(source, "legacy")) {
+    message(
+      "Using deprecated legacy '.GlobalEnv' cache for '", name, "'. ",
+      "This compatibility path may be removed in a future release; ",
+      "prefer `pricing_cache()` or pass `", name, "` explicitly. ",
+      "To force a fresh download, use argument 'force = TRUE'."
+    )
+    return(invisible(NULL))
+  }
+
+  if (identical(source, "package")) {
+    message(
+      "Using cached '", name, "'. ",
+      "To force a fresh download, use argument 'force = TRUE'."
+    )
+  }
+
+  invisible(NULL)
+}
+
+.reuse_cached_pricing_object <- function(name,
+                                         force = FALSE,
+                                         verbose = TRUE,
+                                         allow_null = FALSE,
+                                         validator = NULL) {
+  if (!.can_reuse_cached_pricing_object(name, force = force, allow_null = allow_null)) {
+    return(NULL)
+  }
+
+  cached_value <- .get_cached_pricing_object(name)
+
+  if (is.function(validator) && !isTRUE(validator(cached_value))) {
+    return(NULL)
+  }
+
+  .message_cached_pricing_reuse(
+    name = name,
+    source = .cached_pricing_object_source(name, allow_null = allow_null),
+    verbose = verbose
+  )
+
+  cached_value
+}
+
 .is_valid_list_prices_table <- function(list.prices) {
   is.data.frame(list.prices) &&
     all(c("currency", "spot.rate2", "date2") %in% names(list.prices))
+}
+
+.is_valid_coins_list <- function(coins.list) {
+  is.data.frame(coins.list) &&
+    "slug" %in% names(coins.list)
+}
+
+.is_valid_usd2cad_crypto2_table <- function(USD2CAD.table) {
+  is.data.frame(USD2CAD.table) &&
+    all(c("date2", "CAD.rate") %in% names(USD2CAD.table))
+}
+
+.is_valid_usd2cad_pricer_cache <- function(USD2CAD.table) {
+  is.data.frame(USD2CAD.table) &&
+    all(c("date", "CAD.rate") %in% names(USD2CAD.table))
 }
 
 #' @title Inspect the cryptoTax pricing cache

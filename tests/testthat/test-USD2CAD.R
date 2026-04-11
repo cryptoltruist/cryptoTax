@@ -362,6 +362,57 @@ test_that("fetch_coin_history uses explicit coins.list and returns fetched histo
   expect_identical(result, expected)
 })
 
+test_that("resolve_coins_list reports package-cache reuse with the new message", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cached_coin_list <- data.frame(
+      slug = c("bitcoin", "ethereum"),
+      symbol = c("BTC", "ETH"),
+      stringsAsFactors = FALSE
+    )
+    cryptoTax:::.set_cached_pricing_object("coins.list", cached_coin_list)
+
+    expect_message(
+      result <- cryptoTax:::.resolve_coins_list(
+        force = FALSE,
+        coins.list = NULL,
+        verbose = TRUE
+      ),
+      "Using cached 'coins.list'"
+    )
+
+    expect_identical(result, cached_coin_list)
+  })
+})
+
+test_that("resolve_coins_list warns when reusing the legacy global cache path", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cached_coin_list <- data.frame(
+      slug = c("bitcoin", "ethereum"),
+      symbol = c("BTC", "ETH"),
+      stringsAsFactors = FALSE
+    )
+    assign("coins.list", cached_coin_list, envir = .GlobalEnv)
+    on.exit(rm(list = "coins.list", envir = .GlobalEnv), add = TRUE)
+
+    expect_message(
+      result <- cryptoTax:::.resolve_coins_list(
+        force = FALSE,
+        coins.list = NULL,
+        verbose = TRUE
+      ),
+      "Using deprecated legacy '.GlobalEnv' cache for 'coins.list'"
+    )
+
+    expect_identical(result, cached_coin_list)
+  })
+})
+
 test_that("join_usd2cad_rates can preserve Date output when restore_datetime is FALSE", {
   input <- data.frame(
     date = as.POSIXct("2021-01-01 10:00:00", tz = "UTC")
@@ -573,6 +624,70 @@ test_that("fetch_usd2cad_pricer_table normalizes fetched exchange-rate data", {
 
   expect_s3_class(result$date, "Date")
   expect_equal(result$CAD.rate, 1.25)
+})
+
+test_that("USD2CAD_crypto2 reuses cached package rates without refetching", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cached_rates <- data.frame(
+      date2 = as.Date("2021-01-01"),
+      CAD.rate = 1.25
+    )
+    cryptoTax:::.set_cached_pricing_object("USD2CAD.table", cached_rates)
+
+    input <- data.frame(
+      date = as.Date("2021-01-01")
+    )
+
+    testthat::local_mocked_bindings(
+      .package = "cryptoTax",
+      .fetch_usd2cad_crypto2_table = function(...) {
+        stop("should not refetch")
+      }
+    )
+
+    expect_message(
+      result <- USD2CAD_crypto2(input, force = FALSE),
+      "Using cached 'USD2CAD.table'"
+    )
+
+    expect_equal(result$CAD.rate, 1.25)
+  })
+})
+
+test_that("USD2CAD_priceR reuses cached package rates without refetching", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cached_rates <- data.frame(
+      date = as.Date("2021-01-01"),
+      CAD.rate = 1.25
+    )
+    cryptoTax:::.set_cached_pricing_object("USD2CAD.table", cached_rates)
+
+    input <- data.frame(
+      date = as.Date("2021-01-01")
+    )
+
+    testthat::local_mocked_bindings(
+      .package = "curl",
+      has_internet = function() TRUE
+    )
+
+    testthat::local_mocked_bindings(
+      .package = "cryptoTax",
+      .fetch_usd2cad_pricer_table = function(...) {
+        stop("should not refetch")
+      }
+    )
+
+    result <- expect_no_message(USD2CAD_priceR(input))
+
+    expect_equal(result$CAD.rate, 1.25)
+  })
 })
 
 test_that("requires_online_prices is FALSE when explicit price inputs are provided", {
@@ -836,6 +951,26 @@ test_that("pricing cache helpers can fall back to legacy global cache objects", 
       cryptoTax:::.get_cached_pricing_object(cache_name),
       legacy_value
     )
+  })
+})
+
+test_that("reuse_cached_pricing_object validates cached values before reusing them", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cryptoTax:::.set_cached_pricing_object(
+      "list.prices",
+      data.frame(date = as.Date("2021-01-01"))
+    )
+
+    result <- cryptoTax:::.reuse_cached_pricing_object(
+      name = "list.prices",
+      validator = cryptoTax:::.is_valid_list_prices_table,
+      verbose = TRUE
+    )
+
+    expect_null(result)
   })
 })
 

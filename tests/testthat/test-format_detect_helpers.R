@@ -59,12 +59,19 @@ test_that("format_detect_registry_row returns the matching registry entry", {
 })
 
 test_that("format_detect registry helpers expose formatter names and price usage", {
+  registry <- cryptoTax:::.format_detect_registry()
+
   expect_equal(
     cryptoTax:::.format_detect_formatter_name("shakepay"),
     "format_shakepay"
   )
   expect_false(cryptoTax:::.format_detect_uses_prices("shakepay"))
   expect_true(cryptoTax:::.format_detect_uses_prices("exodus"))
+  expect_true(cryptoTax:::.format_detect_uses_usd2cad("CDC"))
+  expect_true(cryptoTax:::.format_detect_uses_usd2cad("celsius"))
+  expect_false(cryptoTax:::.format_detect_uses_usd2cad("shakepay"))
+  expect_true(all(c("exchange", "formatter", "uses_prices", "uses_usd2cad") %in% names(registry)))
+  expect_equal(nrow(registry), length(unique(registry$exchange)))
 })
 
 test_that("format_detect registry validation errors cleanly for unknown exchanges", {
@@ -376,11 +383,35 @@ test_that("format_detect.data.frame rejects malformed explicit prices for exchan
   expect_null(result)
 })
 
+test_that("format_detect.data.frame rejects malformed explicit USD2CAD.table for exchanges that require it", {
+  expect_message(
+    result <- format_detect(
+      data_CDC,
+      USD2CAD.table = data.frame(date = as.Date("2021-01-01"))
+    ),
+    "Could not use 'USD2CAD.table' because it must contain 'date' and 'USD'."
+  )
+
+  expect_null(result)
+})
+
 test_that("format_detect_many still allows malformed explicit prices for exchanges that do not need pricing", {
   result <- suppressMessages(
     cryptoTax:::.format_detect_many(
       list(data_shakepay, data_newton),
       list.prices = data.frame(date2 = as.Date("2021-01-01"))
+    )
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_true(all(c("shakepay", "newton") %in% result$exchange))
+})
+
+test_that("format_detect_many still allows malformed explicit USD2CAD.table for exchanges that do not need it", {
+  result <- suppressMessages(
+    cryptoTax:::.format_detect_many(
+      list(data_shakepay, data_newton),
+      USD2CAD.table = data.frame(date = as.Date("2021-01-01"))
     )
   )
 
@@ -484,34 +515,34 @@ test_that("run_format_detect_formatter validates formatter outputs against the c
   )
 })
 
-test_that("representative formatter outputs satisfy the canonical transaction schema", {
-  list.prices <- list_prices_example
-
-  representative_outputs <- list(
-    shakepay = format_shakepay(data_shakepay),
-    newton = format_newton(data_newton),
-    pooltool = format_pooltool(data_pooltool),
-    CDC = suppressMessages(format_CDC(data_CDC)),
-    generic = format_generic(data_generic1),
-    blockfi = format_blockfi(data_blockfi, list.prices = list.prices),
-    binance = format_binance(data_binance, list.prices = list.prices),
-    binance_withdrawals = format_binance_withdrawals(
-      data_binance_withdrawals,
-      list.prices = list.prices
-    ),
-    CDC_exchange_trades = format_CDC_exchange_trades(
-      data_CDC_exchange_trades,
-      list.prices = list.prices
-    ),
-    coinsmart = format_coinsmart(data_coinsmart, list.prices = list.prices),
-    exodus = format_exodus(data_exodus, list.prices = list.prices),
-    gemini = format_gemini(data_gemini, list.prices = list.prices)
-  )
-
+test_that("registry example formatter outputs satisfy the canonical transaction schema", {
+  registry <- cryptoTax:::.format_detect_registry()
+  explicit_list_prices <- list_prices_example
+  explicit_usd2cad_table <- .test_usd2cad_table()
   required_columns <- cryptoTax:::.formatted_transaction_required_columns()
 
-  for (exchange_name in names(representative_outputs)) {
-    output <- representative_outputs[[exchange_name]]
+  for (i in seq_len(nrow(registry))) {
+    exchange_name <- registry$exchange[[i]]
+    formatter_name <- registry$formatter[[i]]
+    formatter <- get(formatter_name, mode = "function")
+    formatter_args <- list(
+      data = .test_exchange_data_by_name(exchange_name)
+    )
+
+    if (isTRUE(registry$uses_prices[[i]])) {
+      formatter_args$list.prices <- explicit_list_prices
+      formatter_args$force <- FALSE
+    }
+
+    if (isTRUE(registry$uses_usd2cad[[i]])) {
+      formatter_args$USD2CAD.table <- explicit_usd2cad_table
+    }
+
+    output <- suppressWarnings(
+      suppressMessages(
+        do.call(formatter, formatter_args)
+      )
+    )
 
     expect_true(is.data.frame(output), info = exchange_name)
     expect_true(
@@ -527,6 +558,16 @@ test_that("representative formatter outputs satisfy the canonical transaction sc
       info = exchange_name
     )
   }
+
+  generic_output <- format_generic(data_generic1)
+  expect_true(all(required_columns %in% names(generic_output)))
+  expect_identical(
+    cryptoTax:::.validate_formatted_transaction_schema(
+      generic_output,
+      what = "formatter output for exchange 'generic'"
+    ),
+    generic_output
+  )
 })
 
 test_that("format_detect.list preserves already formatted entries in mixed lists", {
@@ -568,4 +609,66 @@ test_that("format_exchanges accepts multiple exchange inputs directly", {
 
   expect_s3_class(result, "data.frame")
   expect_true(all(c("shakepay", "newton") %in% result$exchange))
+})
+
+test_that("run_format_detect_formatter forwards explicit USD2CAD.table to USD-converting formatters", {
+  explicit_fx <- data.frame(
+    date = as.Date("2021-01-01"),
+    USD = 1.25,
+    CAD = 1
+  )
+
+  testthat::local_mocked_bindings(
+    format_CDC = function(data, USD2CAD.table = NULL) {
+      expect_identical(USD2CAD.table, explicit_fx)
+      data.frame(
+        date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+        currency = "BTC",
+        quantity = 1,
+        total.price = 100,
+        spot.rate = 100,
+        transaction = "buy",
+        exchange = "CDC"
+      )
+    },
+    .package = "cryptoTax"
+  )
+
+  result <- cryptoTax:::.run_format_detect_formatter(
+    exchange = "CDC",
+    data = data_CDC,
+    USD2CAD.table = explicit_fx
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_identical(result$exchange, "CDC")
+})
+
+test_that("format_exchanges forwards explicit USD2CAD.table through the public path", {
+  explicit_fx <- data.frame(
+    date = as.Date("2021-01-01"),
+    USD = 1.25,
+    CAD = 1
+  )
+
+  testthat::local_mocked_bindings(
+    format_CDC = function(data, USD2CAD.table = NULL) {
+      expect_identical(USD2CAD.table, explicit_fx)
+      data.frame(
+        date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+        currency = "BTC",
+        quantity = 1,
+        total.price = 100,
+        spot.rate = 100,
+        transaction = "buy",
+        exchange = "CDC"
+      )
+    },
+    .package = "cryptoTax"
+  )
+
+  result <- format_exchanges(data_CDC, USD2CAD.table = explicit_fx)
+
+  expect_s3_class(result, "data.frame")
+  expect_identical(result$exchange, "CDC")
 })

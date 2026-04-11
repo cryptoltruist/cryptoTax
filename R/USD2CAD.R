@@ -9,32 +9,21 @@
     return(USD2CAD.table)
   }
 
-  if (!.can_reuse_cached_pricing_object("USD2CAD.table", force = force, allow_null = TRUE)) {
-    return(cur2CAD_table())
+  cached_table <- .reuse_cached_pricing_object(
+    name = "USD2CAD.table",
+    force = force,
+    verbose = TRUE,
+    allow_null = TRUE,
+    validator = function(table) {
+      .usd2cad_table_has_conversion(table, conversion = conversion)
+    }
+  )
+
+  if (!is.null(cached_table)) {
+    return(cached_table)
   }
 
-  cached_table <- .get_cached_pricing_object("USD2CAD.table")
-  cache_source <- .cached_pricing_object_source("USD2CAD.table", allow_null = TRUE)
-
-  if (!.usd2cad_table_has_conversion(cached_table, conversion = conversion)) {
-    return(cur2CAD_table())
-  }
-
-  if (identical(cache_source, "legacy")) {
-    message(
-      "Using deprecated legacy '.GlobalEnv' cache for 'USD2CAD.table'. ",
-      "This compatibility path may be removed in a future release; ",
-      "prefer `pricing_cache()` or pass `USD2CAD.table` explicitly. ",
-      "To force a fresh download, use argument 'force = TRUE'."
-    )
-  } else {
-    message(
-      "Using cached 'USD2CAD.table'. ",
-      "To force a fresh download, use argument 'force = TRUE'."
-    )
-  }
-
-  cached_table
+  cur2CAD_table()
 }
 
 .cache_usd2cad_table <- function(USD2CAD.table) {
@@ -299,7 +288,15 @@ USD2CAD_crypto2 <- function(data,
     return(NULL)
   }
 
-  if (!.can_reuse_cached_pricing_object("USD2CAD.table", force = force, allow_null = TRUE)) {
+  USD2CAD.table <- .reuse_cached_pricing_object(
+    name = "USD2CAD.table",
+    force = force,
+    verbose = TRUE,
+    allow_null = TRUE,
+    validator = .is_valid_usd2cad_crypto2_table
+  )
+
+  if (is.null(USD2CAD.table)) {
     USD2CAD.table <- .fetch_usd2cad_crypto2_table(
       start.date = start.date,
       force = TRUE
@@ -310,22 +307,6 @@ USD2CAD_crypto2 <- function(data,
     }
 
     USD2CAD.table <- .cache_usd2cad_table(USD2CAD.table)
-  } else {
-    cache_source <- .cached_pricing_object_source("USD2CAD.table", allow_null = TRUE)
-
-    if (identical(cache_source, "legacy")) {
-      message(
-        "Using deprecated legacy '.GlobalEnv' cache for 'USD2CAD.table'. ",
-        "This compatibility path may be removed in a future release; ",
-        "prefer `pricing_cache()` or pass `USD2CAD.table` explicitly. ",
-        "To force a fresh download, use argument 'force = TRUE'."
-      )
-    } else {
-      message(
-        "Using cached 'USD2CAD.table'. ",
-        "To force a fresh download, use argument 'force = TRUE'."
-      )
-    }
   }
 
   USD2CAD.table_short <- USD2CAD.table %>%
@@ -362,7 +343,15 @@ USD2CAD_priceR <- function(data, conversion = "USD", currency = "CAD") {
     return(NULL)
   }
 
-  if (!.has_cached_pricing_object("USD2CAD.table", allow_null = TRUE)) {
+  USD2CAD.table <- .reuse_cached_pricing_object(
+    name = "USD2CAD.table",
+    force = FALSE,
+    verbose = FALSE,
+    allow_null = TRUE,
+    validator = .is_valid_usd2cad_pricer_cache
+  )
+
+  if (is.null(USD2CAD.table)) {
     USD2CAD.table <- .fetch_usd2cad_pricer_table(
       conversion = conversion,
       currency = currency

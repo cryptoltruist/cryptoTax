@@ -172,23 +172,5 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_uphold_apply_sell_prices <- function(data) {
-  coin.prices <- data %>%
-    filter(.data$transaction %in% c("buy")) %>%
-    mutate(transaction = "sell")
-  sell <- data %>%
-    filter(.data$transaction %in% c("sell"))
-
-  match_index <- which(sell$date %in% coin.prices$date)
-  if (!length(match_index)) {
-    return(data)
-  }
-
-  sell[match_index, "total.price"] <- coin.prices[which(
-    coin.prices$date %in% sell$date
-  ), "total.price"]
-  sell <- sell %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-  sell[match_index, "rate.source"] <- "coinmarketcap (buy price)"
-  data[which(data$transaction == "sell"), ] <- sell
-  data
+  .reuse_buy_total_prices_for_sells(data)
 }

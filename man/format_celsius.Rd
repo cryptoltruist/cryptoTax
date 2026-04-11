@@ -4,10 +4,13 @@
 \alias{format_celsius}
 \title{Format Celsius file}
 \usage{
-format_celsius(data)
+format_celsius(data, USD2CAD.table = NULL)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{USD2CAD.table}{Optional explicit USD/CAD rate table to use instead of
+relying on session cache or network access for USD conversions.}
 }
 \value{
 A data frame of exchange transactions, formatted for further processing.

@@ -58,6 +58,11 @@
   isTRUE(.format_detect_registry_row(exchange)$uses_prices[[1]])
 }
 
+.format_detect_uses_usd2cad <- function(exchange) {
+  exchange <- .validate_format_detect_exchange(exchange)
+  isTRUE(.format_detect_registry_row(exchange)$uses_usd2cad[[1]])
+}
+
 .format_detect_is_valid_input <- function(x) {
   is.null(x) || is.data.frame(x) || .format_detect_is_valid_input_list(x)
 }
@@ -165,6 +170,22 @@
   FALSE
 }
 
+.validate_format_detect_usd2cad_table_for_exchange <- function(exchange, USD2CAD.table = NULL) {
+  if (is.null(USD2CAD.table) || .usd2cad_table_has_conversion(USD2CAD.table, conversion = "USD")) {
+    return(TRUE)
+  }
+
+  if (!.format_detect_uses_usd2cad(exchange)) {
+    return(TRUE)
+  }
+
+  message(
+    "Could not use 'USD2CAD.table' because it must contain ",
+    "'date' and 'USD'."
+  )
+  FALSE
+}
+
 .drop_empty_format_detect_inputs <- function(data) {
   out <- lapply(data, function(x) {
     if (is.null(x) || .format_detect_is_empty_input(x)) {
@@ -232,6 +253,9 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' When supplied explicitly, it must contain at least `currency`,
 #' `spot.rate2`, and `date2` for exchanges that require external pricing.
+#' @param USD2CAD.table Optional explicit USD/CAD rate table to use for
+#' exchanges that convert USD-denominated values to CAD. When supplied
+#' explicitly, it must contain at least `date` and `USD`.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param ... Used for other methods.
@@ -314,6 +338,25 @@ format_detect <- function(data, ...) {
       FALSE,
       TRUE
     ),
+    uses_usd2cad = c(
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      TRUE,
+      FALSE,
+      FALSE,
+      FALSE,
+      TRUE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE
+    ),
     stringsAsFactors = FALSE
   )
 }
@@ -352,18 +395,33 @@ format_detect <- function(data, ...) {
   condition
 }
 
-.run_format_detect_formatter <- function(exchange, data, list.prices = NULL, force = FALSE) {
+.run_format_detect_formatter <- function(exchange,
+                                         data,
+                                         list.prices = NULL,
+                                         USD2CAD.table = NULL,
+                                         force = FALSE) {
   formatter <- get(.format_detect_formatter_name(exchange), mode = "function")
 
   if (!.validate_format_detect_prices_for_exchange(exchange, list.prices = list.prices)) {
     return(NULL)
   }
 
-  formatted_data <- if (.format_detect_uses_prices(exchange)) {
-    formatter(data, list.prices = list.prices, force = force)
-  } else {
-    formatter(data)
+  if (!.validate_format_detect_usd2cad_table_for_exchange(exchange, USD2CAD.table = USD2CAD.table)) {
+    return(NULL)
   }
+
+  formatter_args <- list(data = data)
+
+  if (.format_detect_uses_prices(exchange)) {
+    formatter_args$list.prices <- list.prices
+    formatter_args$force <- force
+  }
+
+  if (.format_detect_uses_usd2cad(exchange)) {
+    formatter_args$USD2CAD.table <- USD2CAD.table
+  }
+
+  formatted_data <- do.call(formatter, formatter_args)
 
   if (is.null(formatted_data) || .format_detect_is_empty_input(formatted_data)) {
     return(formatted_data)
@@ -375,7 +433,10 @@ format_detect <- function(data, ...) {
   )
 }
 
-.format_detect_formatted_list <- function(data, list.prices = NULL, force = FALSE) {
+.format_detect_formatted_list <- function(data,
+                                         list.prices = NULL,
+                                         USD2CAD.table = NULL,
+                                         force = FALSE) {
   data <- .validate_format_detect_list_input(data)
   data <- .drop_empty_format_detect_inputs(data)
 
@@ -395,11 +456,16 @@ format_detect <- function(data, ...) {
       )
     }
 
-    format_detect(x, list.prices = list.prices, force = force)
+    format_detect(
+      x,
+      list.prices = list.prices,
+      USD2CAD.table = USD2CAD.table,
+      force = force
+    )
   })
 }
 
-.format_detect_many <- function(data, list.prices = NULL, force = FALSE) {
+.format_detect_many <- function(data, list.prices = NULL, USD2CAD.table = NULL, force = FALSE) {
   if (!.validate_format_detect_list_prices(data, list.prices = list.prices)) {
     return(NULL)
   }
@@ -407,6 +473,7 @@ format_detect <- function(data, ...) {
   formatted.data <- .format_detect_formatted_list(
     data,
     list.prices = list.prices,
+    USD2CAD.table = USD2CAD.table,
     force = force
   )
   merge_exchanges(formatted.data)
@@ -414,7 +481,7 @@ format_detect <- function(data, ...) {
 
 #' @rdname format_detect
 #' @export
-format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
+format_detect.data.frame <- function(data, list.prices = NULL, USD2CAD.table = NULL, force = FALSE, ...) {
   if (.format_detect_is_formatted_input(data)) {
     return(data)
   }
@@ -432,6 +499,7 @@ format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ..
     exchange = condition,
     data = data,
     list.prices = list.prices,
+    USD2CAD.table = USD2CAD.table,
     force = force
   )
 
@@ -442,6 +510,11 @@ format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ..
 
 #' @rdname format_detect
 #' @export
-format_detect.list <- function(data, list.prices = NULL, force = FALSE, ...) {
-  .format_detect_many(data, list.prices = list.prices, force = force)
+format_detect.list <- function(data, list.prices = NULL, USD2CAD.table = NULL, force = FALSE, ...) {
+  .format_detect_many(
+    data,
+    list.prices = list.prices,
+    USD2CAD.table = USD2CAD.table,
+    force = force
+  )
 }

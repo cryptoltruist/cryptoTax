@@ -4,7 +4,13 @@
 \alias{format_exchanges}
 \title{Format One or More Exchange Files}
 \usage{
-format_exchanges(data, ..., list.prices = NULL, force = FALSE)
+format_exchanges(
+  data,
+  ...,
+  list.prices = NULL,
+  USD2CAD.table = NULL,
+  force = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame, or a (possibly nested) list of exchange data
@@ -15,6 +21,10 @@ frames and/or already formatted transaction tables.}
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
 When supplied explicitly, it must contain at least \code{currency},
 \code{spot.rate2}, and \code{date2}.}
+
+\item{USD2CAD.table}{Optional explicit USD/CAD rate table to use for
+exchanges that convert USD-denominated values to CAD. When supplied
+explicitly, it must contain at least \code{date} and \code{USD}.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

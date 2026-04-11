@@ -4,10 +4,13 @@
 \alias{format_CDC}
 \title{Format Crypto.com App file}
 \usage{
-format_CDC(data)
+format_CDC(data, USD2CAD.table = NULL)
 }
 \arguments{
 \item{data}{The dataframe}
+
+\item{USD2CAD.table}{Optional explicit USD/CAD rate table to use instead of
+relying on session cache or network access for USD conversions.}
 }
 \value{
 A data frame of exchange transactions, formatted for further processing.

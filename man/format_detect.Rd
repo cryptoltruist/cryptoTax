@@ -8,9 +8,21 @@
 \usage{
 format_detect(data, ...)
 
-\method{format_detect}{data.frame}(data, list.prices = NULL, force = FALSE, ...)
+\method{format_detect}{data.frame}(
+  data,
+  list.prices = NULL,
+  USD2CAD.table = NULL,
+  force = FALSE,
+  ...
+)
 
-\method{format_detect}{list}(data, list.prices = NULL, force = FALSE, ...)
+\method{format_detect}{list}(
+  data,
+  list.prices = NULL,
+  USD2CAD.table = NULL,
+  force = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{The dataframe}
@@ -20,6 +32,10 @@ format_detect(data, ...)
 \item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
 When supplied explicitly, it must contain at least \code{currency},
 \code{spot.rate2}, and \code{date2} for exchanges that require external pricing.}
+
+\item{USD2CAD.table}{Optional explicit USD/CAD rate table to use for
+exchanges that convert USD-denominated values to CAD. When supplied
+explicitly, it must contain at least \code{date} and \code{USD}.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

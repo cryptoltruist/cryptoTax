@@ -57,11 +57,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   )
 
   if (is.null(data.fees)) {
-    return(.handle_formatted_pricing_failure(list.prices))
-  }
-
-  if (any(is.na(data$spot.rate))) {
-    warning("Could not calculate spot rate. Use `force = TRUE`.")
+    return(NULL)
   }
 
   data$fees <- data.fees$fees.quantity * data.fees$spot.rate
@@ -78,17 +74,18 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   )
 
   # Determine spot rate and value of coins
-  data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
+  data <- .resolve_formatted_prices(
+    data,
+    list.prices = list.prices,
+    force = force,
+    warn_on_missing_spot = TRUE
+  )
 
   if (is.null(data)) {
-    return(.handle_formatted_pricing_failure(list.prices))
+    return(NULL)
   }
 
-  data <- data %>%
-    mutate(total.price = ifelse(is.na(.data$total.price),
-      .data$quantity * .data$spot.rate,
-      .data$total.price
-    ))
+  data <- .fill_missing_total_price_from_spot(data)
 
   data <- .format_cdc_exchange_trades_apply_sell_prices(data)
 
@@ -152,7 +149,11 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
 .format_cdc_exchange_trades_fee_prices <- function(data, list.prices, force) {
   data %>%
     mutate(currency = .data$fees.currency) %>%
-    cryptoTax::match_prices(list.prices = list.prices, force = force)
+    .resolve_formatted_prices(
+      list.prices = list.prices,
+      force = force,
+      warn_on_missing_spot = TRUE
+    )
 }
 
 .format_cdc_exchange_trades_buy <- function(data) {
@@ -243,31 +244,10 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
 }
 
 .format_cdc_exchange_trades_apply_sell_prices <- function(data) {
-  coin.prices <- data %>%
-    filter(.data$transaction %in% c("buy")) %>%
-    mutate(transaction = "sell")
-  sell <- data %>%
-    filter(
-      .data$transaction %in% c("sell"),
-      !grepl("Trading fee paid with", .data$description)
-    )
-
-  match_index <- which(sell$date %in% coin.prices$date)
-  if (!length(match_index)) {
-    return(data)
-  }
-
-  sell[match_index, "total.price"] <- coin.prices[which(
-    coin.prices$date %in% sell$date
-  ), "total.price"]
-  sell <- sell %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-  sell[match_index, "rate.source"] <- "coinmarketcap (buy price)"
-
-  trading.fees <- data %>%
-    filter(grepl("Trading fee paid with", .data$description))
-  data <- data %>%
-    filter(!grepl("Trading fee paid with", .data$description))
-  data[which(data$transaction == "sell"), ] <- sell
-  bind_rows(data, trading.fees)
+  .reuse_buy_total_prices_for_sells(
+    data,
+    sell_mask = data$transaction %in% "sell" &
+      !grepl("Trading fee paid with", data$description),
+    preserve_mask = grepl("Trading fee paid with", data$description)
+  )
 }

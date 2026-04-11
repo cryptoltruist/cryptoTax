@@ -19,14 +19,14 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- .format_coinsmart_prepare_input(data, known.transactions)
 
-  data <- match_prices(data, list.prices = list.prices, force = force)
-
+  data <- .resolve_formatted_prices(
+    data,
+    list.prices = list.prices,
+    force = force,
+    warn_on_missing_spot = TRUE
+  )
   if (is.null(data)) {
-    return(.handle_formatted_pricing_failure(list.prices))
-  }
-
-  if (any(is.na(data$spot.rate))) {
-    warning("Could not calculate spot rate. Use `force = TRUE`.")
+    return(NULL)
   }
 
   # Add total.price

@@ -78,6 +78,84 @@ test_that("fill_missing_total_price_from_spot fills only missing totals", {
   expect_equal(result$total.price, c(10, 10))
 })
 
+test_that("apply_buy_price_reference copies matching buy totals onto sell rows", {
+  target_rows <- data.frame(
+    date = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-03 00:00:00"), tz = "UTC"),
+    quantity = c(2, 4),
+    total.price = c(NA, NA),
+    spot.rate = c(NA, NA),
+    rate.source = c(NA, NA)
+  )
+  reference_rows <- data.frame(
+    date = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00"), tz = "UTC"),
+    total.price = c(10, 20)
+  )
+
+  result <- cryptoTax:::.apply_buy_price_reference(target_rows, reference_rows)
+
+  expect_equal(result$total.price, c(10, NA))
+  expect_equal(result$spot.rate, c(5, NA))
+  expect_equal(result$rate.source, c("coinmarketcap (buy price)", NA))
+})
+
+test_that("reuse_buy_total_prices_for_sells updates sell rows and preserves others", {
+  input <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "revenue"),
+    quantity = c(2, 2, 1),
+    total.price = c(10, NA, 3),
+    spot.rate = c(5, NA, 3),
+    description = c("buy", "sell", "reward"),
+    rate.source = c("coinmarketcap", NA, "exchange"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.reuse_buy_total_prices_for_sells(input)
+  sell_row <- result[result$transaction == "sell", ]
+  revenue_row <- result[result$transaction == "revenue", ]
+
+  expect_equal(sell_row$total.price, 10)
+  expect_equal(sell_row$spot.rate, 5)
+  expect_equal(sell_row$rate.source, "coinmarketcap (buy price)")
+  expect_equal(revenue_row$total.price, 3)
+})
+
+test_that("reuse_buy_total_prices_for_sells can preserve excluded rows separately", {
+  input <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-01 00:00:00",
+      "2021-01-01 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "sell"),
+    quantity = c(2, 2, 1),
+    total.price = c(10, NA, 1),
+    spot.rate = c(5, NA, 1),
+    description = c("buy", "paired sell", "Trading fee paid with CRO"),
+    rate.source = c("coinmarketcap", NA, "exchange"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.reuse_buy_total_prices_for_sells(
+    input,
+    sell_mask = input$transaction %in% "sell" &
+      !grepl("Trading fee paid with", input$description),
+    preserve_mask = grepl("Trading fee paid with", input$description)
+  )
+
+  paired_sell <- result[result$description == "paired sell", ]
+  fee_sell <- result[result$description == "Trading fee paid with CRO", ]
+
+  expect_equal(paired_sell$total.price, 10)
+  expect_equal(paired_sell$rate.source, "coinmarketcap (buy price)")
+  expect_equal(fee_sell$total.price, 1)
+  expect_equal(fee_sell$rate.source, "exchange")
+})
+
 test_that("generic pricing failure helper only surfaces API messages for reusable prices", {
   expect_true(cryptoTax:::.should_surface_generic_pricing_failure(NULL))
   expect_true(cryptoTax:::.should_surface_generic_pricing_failure(
@@ -164,4 +242,25 @@ test_that("format_CDC_exchange_trades surfaces malformed explicit prices without
     messages,
     fixed = TRUE
   )))
+})
+
+test_that("formatter sell-price helpers all use the shared buy-price propagation behavior", {
+  input <- data.frame(
+    date = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-01 00:00:00"), tz = "UTC"),
+    transaction = c("buy", "sell"),
+    quantity = c(2, 2),
+    total.price = c(10, NA),
+    spot.rate = c(5, NA),
+    description = c("trade", "trade"),
+    rate.source = c("coinmarketcap", NA),
+    stringsAsFactors = FALSE
+  )
+
+  blockfi <- cryptoTax:::.format_blockfi_apply_sell_prices(input)
+  gemini <- cryptoTax:::.format_gemini_apply_sell_prices(input)
+  uphold <- cryptoTax:::.format_uphold_apply_sell_prices(input)
+
+  expect_equal(blockfi[blockfi$transaction == "sell", "total.price"], 10)
+  expect_equal(gemini[gemini$transaction == "sell", "total.price"], 10)
+  expect_equal(uphold[uphold$transaction == "sell", "total.price"], 10)
 })

@@ -11,9 +11,9 @@
 }
 
 #' @noRd
-.format_celsius_add_cad_prices <- function(data) {
+.format_celsius_add_cad_prices <- function(data, USD2CAD.table = NULL) {
   data.tmp <- data %>%
-    cryptoTax::USD2CAD()
+    cryptoTax::USD2CAD(USD2CAD.table = USD2CAD.table)
 
   if (is.null(data.tmp)) {
     message("Could not fetch exchange rates from the exchange rate API.")
@@ -68,6 +68,8 @@
 #'
 #' @description Format a .csv transaction history file from Celsius for later ACB processing.
 #' @param data The dataframe
+#' @param USD2CAD.table Optional explicit USD/CAD rate table to use instead of
+#' relying on session cache or network access for USD conversions.
 #' @return A data frame of exchange transactions, formatted for further processing.
 #' @export
 #' @examples
@@ -75,7 +77,7 @@
 #' @importFrom dplyr %>% rename mutate rowwise filter select arrange
 #' @importFrom rlang .data
 
-format_celsius <- function(data) {
+format_celsius <- function(data, USD2CAD.table = NULL) {
   known.transactions <- c(
     "Reward", "Transfer", "Withdrawal", "Promo Code Reward",
     "Referrer Award", "Referred Award"
@@ -89,7 +91,7 @@ format_celsius <- function(data) {
     transactions.col = "description"
   )
 
-  data <- .format_celsius_add_cad_prices(data)
+  data <- .format_celsius_add_cad_prices(data, USD2CAD.table = USD2CAD.table)
   if (is.null(data)) {
     return(NULL)
   }

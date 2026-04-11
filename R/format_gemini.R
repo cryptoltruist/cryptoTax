@@ -53,7 +53,7 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   fee <- .format_gemini_fee_prices(fee, list.prices = list.prices, force = force)
 
   if (is.null(fee)) {
-    return(.handle_formatted_pricing_failure(list.prices))
+    return(NULL)
   }
 
   # Rename Fee column and make it positive.
@@ -156,7 +156,12 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_gemini_fee_prices <- function(fee, list.prices, force) {
-  fee <- cryptoTax::match_prices(fee, list.prices = list.prices, force = force)
+  fee <- .resolve_formatted_prices(
+    fee,
+    list.prices = list.prices,
+    force = force,
+    warn_on_missing_spot = TRUE
+  )
   if (is.null(fee)) {
     return(NULL)
   }
@@ -242,23 +247,5 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_gemini_apply_sell_prices <- function(data) {
-  coin.prices <- data %>%
-    filter(.data$transaction %in% c("buy")) %>%
-    mutate(transaction = "sell")
-  sell <- data %>%
-    filter(.data$transaction %in% c("sell"))
-
-  match_index <- which(sell$date %in% coin.prices$date)
-  if (!length(match_index)) {
-    return(data)
-  }
-
-  sell[match_index, "total.price"] <- coin.prices[which(
-    coin.prices$date %in% sell$date
-  ), "total.price"]
-  sell <- sell %>%
-    mutate(spot.rate = .data$total.price / .data$quantity)
-  sell[match_index, "rate.source"] <- "coinmarketcap (buy price)"
-  data[which(data$transaction == "sell"), ] <- sell
-  data
+  .reuse_buy_total_prices_for_sells(data)
 }
