@@ -131,6 +131,8 @@
 #' @param tax.year Which tax year(s) to include.
 #' @param local.timezone Which time zone to use for the date of the report.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' For `today.data = TRUE`, it must contain at least `currency`,
+#' `spot.rate2`, and `date2`.
 #' @param slug Optional explicit slug vector used when preparing prices.
 #' @param start.date Optional explicit start date used when preparing prices.
 #' @param verbose Logical; whether to print progress messages.

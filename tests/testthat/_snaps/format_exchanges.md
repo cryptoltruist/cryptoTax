@@ -133,17 +133,89 @@
     Code
       suppressMessages(format_CDC(data_CDC))
     Output
-      NULL
+                        date currency       quantity total.price     spot.rate
+      1  2021-05-03 22:05:50      BTC   0.0007333710     51.2500 69882.7777778
+      2  2021-05-07 23:06:50      ETH   0.0205920059     54.2100  2632.5750000
+      3  2021-05-15 18:07:10      CRO 182.4360090842     53.4200     0.2928150
+      4  2021-05-23 22:09:39      CRO 117.9468230300     30.1525     0.2556449
+      5  2021-05-29 23:10:59      CRO   6.4039544538      1.1300     0.1764535
+      6  2021-06-02 19:11:52      CRO  53.6136687700     10.9900     0.2049850
+      7  2021-06-10 23:12:24      CRO  86.3572366500     16.9400     0.1961619
+      8  2021-06-11 19:13:58      CRO  17.3688994200      9.1900     0.5291066
+      9  2021-06-16 20:14:29      CRO  22.5041772606     11.6500     0.5176817
+      10 2021-06-18 21:15:51      ETH   0.0000137750      0.0500  3629.7640653
+      11 2021-06-19 21:16:30      CRO   8.4526209677      1.2500     0.1478831
+      12 2021-06-27 21:17:50      ETH   0.0007632668      3.1200  4087.6923838
+      13 2021-07-06 22:18:40      CRO   0.3207992131      0.2600     0.8104758
+      14 2021-07-11 20:19:55     ETHW   0.3558067180      3.2000     8.9936469
+      15 2021-07-14 18:20:27      CRO   2.4761904762      1.2000     0.4846154
+      16 2021-07-23 17:21:19      CRO  37.1602562661      6.9800     0.1878351
+      17 2021-07-25 18:22:02      BTC   0.0005320542     35.0000 65782.7775510
+      18 2021-07-28 23:23:04      ETH   0.0099636548     35.0000  3512.7672130
+         transaction                         description                   comment
+      1          buy                     crypto_purchase                   Buy BTC
+      2          buy                     crypto_purchase                   Buy ETH
+      3          buy                     crypto_purchase                   Buy CRO
+      4      revenue                       referral_gift    Sign-up Bonus Unlocked
+      5      revenue              referral_card_cashback             Card Cashback
+      6      revenue                       reimbursement      Card Rebate: Spotify
+      7      revenue                       reimbursement      Card Rebate: Netflix
+      8      revenue                       reimbursement Card Rebate: Amazon Prime
+      9      revenue                       reimbursement      Card Rebate: Expedia
+      10     revenue supercharger_reward_to_app_credited       Supercharger Reward
+      11     revenue                 pay_checkout_reward               Pay Rewards
+      12     revenue           crypto_earn_interest_paid               Crypto Earn
+      13     revenue     crypto_earn_extra_interest_paid       Crypto Earn (Extra)
+      14     revenue               admin_wallet_credited       Adjustment (Credit)
+      15     revenue   rewards_platform_deposit_credited   Mission Rewards Deposit
+      16     revenue                    mco_stake_reward         CRO Stake Rewards
+      17        sell               crypto_viban_exchange                BTC -> CAD
+      18        sell               crypto_viban_exchange                ETH -> CAD
+         revenue.type exchange               rate.source
+      1          <NA>      CDC                  exchange
+      2          <NA>      CDC                  exchange
+      3          <NA>      CDC                  exchange
+      4     referrals      CDC exchange (USD conversion)
+      5       rebates      CDC                  exchange
+      6       rebates      CDC                  exchange
+      7       rebates      CDC                  exchange
+      8       rebates      CDC                  exchange
+      9       rebates      CDC                  exchange
+      10    interests      CDC                  exchange
+      11      rebates      CDC                  exchange
+      12    interests      CDC                  exchange
+      13    interests      CDC                  exchange
+      14        forks      CDC                  exchange
+      15      rewards      CDC                  exchange
+      16    interests      CDC                  exchange
+      17         <NA>      CDC                  exchange
+      18         <NA>      CDC                  exchange
 
 # celsius
 
     Code
       format_celsius(data_celsius)
-    Message
-      Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
-      Could not fetch exchange rates from the exchange rate API.
     Output
-      NULL
+                       date currency       quantity total.price  spot.rate
+      1 2021-03-03 21:11:00      BTC 0.000707598916  50.5240000  71402.031
+      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1366256   5413.514
+      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7267146   8910.052
+      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5977123 162286.762
+      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5849814  12462.217
+      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6447880  12453.505
+      7 2021-04-08 22:18:00      BTC 0.000733082450  50.3160000  68636.209
+      8 2021-05-06 10:32:00      BTC 0.001409023441  61.0000000  43292.395
+      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4162554   6531.885
+        transaction       description revenue.type exchange               rate.source
+      1     revenue Promo Code Reward       promos  celsius exchange (USD conversion)
+      2     revenue            Reward    interests  celsius exchange (USD conversion)
+      3     revenue            Reward    interests  celsius exchange (USD conversion)
+      4     revenue            Reward    interests  celsius exchange (USD conversion)
+      5     revenue            Reward    interests  celsius exchange (USD conversion)
+      6     revenue            Reward    interests  celsius exchange (USD conversion)
+      7     revenue    Referred Award    referrals  celsius exchange (USD conversion)
+      8     revenue Promo Code Reward       promos  celsius exchange (USD conversion)
+      9     revenue            Reward    interests  celsius exchange (USD conversion)
 
 # adalite
 
@@ -643,22 +715,93 @@
     Code
       format_detect(data_CDC)
     Message
-      Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
-      Could not fetch exchange rates from coinmarketcap.
       Exchange detected: CDC
     Output
-      NULL
+                        date currency       quantity total.price     spot.rate
+      1  2021-05-03 22:05:50      BTC   0.0007333710     51.2500 69882.7777778
+      2  2021-05-07 23:06:50      ETH   0.0205920059     54.2100  2632.5750000
+      3  2021-05-15 18:07:10      CRO 182.4360090842     53.4200     0.2928150
+      4  2021-05-23 22:09:39      CRO 117.9468230300     30.1525     0.2556449
+      5  2021-05-29 23:10:59      CRO   6.4039544538      1.1300     0.1764535
+      6  2021-06-02 19:11:52      CRO  53.6136687700     10.9900     0.2049850
+      7  2021-06-10 23:12:24      CRO  86.3572366500     16.9400     0.1961619
+      8  2021-06-11 19:13:58      CRO  17.3688994200      9.1900     0.5291066
+      9  2021-06-16 20:14:29      CRO  22.5041772606     11.6500     0.5176817
+      10 2021-06-18 21:15:51      ETH   0.0000137750      0.0500  3629.7640653
+      11 2021-06-19 21:16:30      CRO   8.4526209677      1.2500     0.1478831
+      12 2021-06-27 21:17:50      ETH   0.0007632668      3.1200  4087.6923838
+      13 2021-07-06 22:18:40      CRO   0.3207992131      0.2600     0.8104758
+      14 2021-07-11 20:19:55     ETHW   0.3558067180      3.2000     8.9936469
+      15 2021-07-14 18:20:27      CRO   2.4761904762      1.2000     0.4846154
+      16 2021-07-23 17:21:19      CRO  37.1602562661      6.9800     0.1878351
+      17 2021-07-25 18:22:02      BTC   0.0005320542     35.0000 65782.7775510
+      18 2021-07-28 23:23:04      ETH   0.0099636548     35.0000  3512.7672130
+         transaction                         description                   comment
+      1          buy                     crypto_purchase                   Buy BTC
+      2          buy                     crypto_purchase                   Buy ETH
+      3          buy                     crypto_purchase                   Buy CRO
+      4      revenue                       referral_gift    Sign-up Bonus Unlocked
+      5      revenue              referral_card_cashback             Card Cashback
+      6      revenue                       reimbursement      Card Rebate: Spotify
+      7      revenue                       reimbursement      Card Rebate: Netflix
+      8      revenue                       reimbursement Card Rebate: Amazon Prime
+      9      revenue                       reimbursement      Card Rebate: Expedia
+      10     revenue supercharger_reward_to_app_credited       Supercharger Reward
+      11     revenue                 pay_checkout_reward               Pay Rewards
+      12     revenue           crypto_earn_interest_paid               Crypto Earn
+      13     revenue     crypto_earn_extra_interest_paid       Crypto Earn (Extra)
+      14     revenue               admin_wallet_credited       Adjustment (Credit)
+      15     revenue   rewards_platform_deposit_credited   Mission Rewards Deposit
+      16     revenue                    mco_stake_reward         CRO Stake Rewards
+      17        sell               crypto_viban_exchange                BTC -> CAD
+      18        sell               crypto_viban_exchange                ETH -> CAD
+         revenue.type exchange               rate.source
+      1          <NA>      CDC                  exchange
+      2          <NA>      CDC                  exchange
+      3          <NA>      CDC                  exchange
+      4     referrals      CDC exchange (USD conversion)
+      5       rebates      CDC                  exchange
+      6       rebates      CDC                  exchange
+      7       rebates      CDC                  exchange
+      8       rebates      CDC                  exchange
+      9       rebates      CDC                  exchange
+      10    interests      CDC                  exchange
+      11      rebates      CDC                  exchange
+      12    interests      CDC                  exchange
+      13    interests      CDC                  exchange
+      14        forks      CDC                  exchange
+      15      rewards      CDC                  exchange
+      16    interests      CDC                  exchange
+      17         <NA>      CDC                  exchange
+      18         <NA>      CDC                  exchange
 
 ---
 
     Code
       format_detect(data_celsius)
     Message
-      Object 'USD2CAD.table' already exists. Reusing 'USD2CAD.table'. To force a fresh download, use argument 'force = TRUE'.
-      Could not fetch exchange rates from the exchange rate API.
       Exchange detected: celsius
     Output
-      NULL
+                       date currency       quantity total.price  spot.rate
+      1 2021-03-03 21:11:00      BTC 0.000707598916  50.5240000  71402.031
+      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1366256   5413.514
+      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7267146   8910.052
+      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5977123 162286.762
+      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5849814  12462.217
+      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6447880  12453.505
+      7 2021-04-08 22:18:00      BTC 0.000733082450  50.3160000  68636.209
+      8 2021-05-06 10:32:00      BTC 0.001409023441  61.0000000  43292.395
+      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4162554   6531.885
+        transaction       description revenue.type exchange               rate.source
+      1     revenue Promo Code Reward       promos  celsius exchange (USD conversion)
+      2     revenue            Reward    interests  celsius exchange (USD conversion)
+      3     revenue            Reward    interests  celsius exchange (USD conversion)
+      4     revenue            Reward    interests  celsius exchange (USD conversion)
+      5     revenue            Reward    interests  celsius exchange (USD conversion)
+      6     revenue            Reward    interests  celsius exchange (USD conversion)
+      7     revenue    Referred Award    referrals  celsius exchange (USD conversion)
+      8     revenue Promo Code Reward       promos  celsius exchange (USD conversion)
+      9     revenue            Reward    interests  celsius exchange (USD conversion)
 
 ---
 

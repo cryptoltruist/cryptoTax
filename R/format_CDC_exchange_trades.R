@@ -32,7 +32,9 @@
 #' calculate prices with CoinMarketCap and later capital gains and so on.
 #'
 #' @param data The dataframe
-#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param list.prices An optional explicit `list.prices` object from which to
+#' fetch coin prices. For exchanges that require external pricing, it must
+#' contain at least `currency`, `spot.rate2`, and `date2`.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame of exchange transactions, formatted for further processing.
@@ -55,8 +57,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   )
 
   if (is.null(data.fees)) {
-    message("Could not reach the CoinMarketCap API at this time")
-    return(NULL)
+    return(.handle_formatted_pricing_failure(list.prices))
   }
 
   if (any(is.na(data$spot.rate))) {
@@ -80,8 +81,7 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   data <- cryptoTax::match_prices(data, list.prices = list.prices, force = force)
 
   if (is.null(data)) {
-    message("Could not reach the CoinMarketCap API at this time")
-    return(NULL)
+    return(.handle_formatted_pricing_failure(list.prices))
   }
 
   data <- data %>%

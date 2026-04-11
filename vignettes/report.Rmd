@@ -17,41 +17,25 @@ library(cryptoTax)
 
 It is possible to generate a full tax report with `cryptoTax`. This vignette shows how.
 
+To keep the workflow reproducible and easy to run without internet access, the
+examples below use the built-in `list_prices_example` fixture.
+
 # Preparing your list of coins
 
-First, you want to fetch the price information for all your coins.
+First, you want price information for all your coins.
 
-> *Note*: Some exchanges don't require fetching this information from coinmarketcap because they already give the CAD value of your trades or revenues. However, this is still necessary to get the current value, and therefore your unrealized gains and losses.
+> *Note*: Some exchanges don't require external pricing for their raw formatting
+> because they already include CAD values. However, price data is still useful
+> for current-value reporting, and therefore your unrealized gains and losses.
 
 ```{r list.prices_prep, include=FALSE, message=FALSE, echo=FALSE}
 library(cryptoTax)
-
-my.coins <- c(
-  "bitcoin", "ethereum", "cardano", "cronos", "litecoin",
-  "usd-coin", "binance-usd", "celsius", "presearch",
-  "ethereum-pow", "basic-attention-token"
-)
-
-USD2CAD.table <- cur2CAD_table()
-
-list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")
-if (is.null(list.prices)) {
-  knitr::knit_exit()
-}
+list.prices <- list_prices_example
 ```
 
 ```{r list.prices, eval=FALSE}
 library(cryptoTax)
-
-my.coins <- c(
-  "bitcoin", "ethereum", "cardano", "cronos", "litecoin",
-  "usd-coin", "binance-usd", "celsius", "presearch",
-  "ethereum-pow", "basic-attention-token"
-)
-
-USD2CAD.table <- cur2CAD_table()
-
-list.prices <- prepare_list_prices(slug = my.coins, start.date = "2021-01-01")`r`nif (is.null(list.prices)) {`r`n  knitr::knit_exit()`r`n}
+list.prices <- list_prices_example
 ```
 
 # Formatting your data

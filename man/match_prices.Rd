@@ -24,7 +24,9 @@ not the ticker, see \code{\link[=prepare_list_prices]{prepare_list_prices()}} fo
 
 \item{start.date}{What date to start reporting prices for.}
 
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
+When supplied explicitly, it must contain at least \code{currency},
+\code{spot.rate2}, and \code{date2}.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

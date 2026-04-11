@@ -346,6 +346,48 @@ test_that("format_detect_many handles nested lists of exchange files", {
   expect_true(nrow(result) > 0)
 })
 
+test_that("format_detect helpers detect when nested inputs require prices", {
+  expect_false(cryptoTax:::.format_detect_requires_prices_input(data_shakepay))
+  expect_true(cryptoTax:::.format_detect_requires_prices_input(data_coinsmart))
+  expect_true(cryptoTax:::.format_detect_requires_prices_input(list(data_shakepay, data_coinsmart)))
+})
+
+test_that("format_detect_many rejects malformed explicit prices when any input requires pricing", {
+  expect_message(
+    result <- cryptoTax:::.format_detect_many(
+      list(data_shakepay, data_coinsmart),
+      list.prices = data.frame(date2 = as.Date("2021-01-01"))
+    ),
+    "Could not use 'list.prices' because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_null(result)
+})
+
+test_that("format_detect.data.frame rejects malformed explicit prices for exchanges that require pricing", {
+  expect_message(
+    result <- format_detect(
+      data_coinsmart,
+      list.prices = data.frame(date2 = as.Date("2021-01-01"))
+    ),
+    "Could not use 'list.prices' because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_null(result)
+})
+
+test_that("format_detect_many still allows malformed explicit prices for exchanges that do not need pricing", {
+  result <- suppressMessages(
+    cryptoTax:::.format_detect_many(
+      list(data_shakepay, data_newton),
+      list.prices = data.frame(date2 = as.Date("2021-01-01"))
+    )
+  )
+
+  expect_s3_class(result, "data.frame")
+  expect_true(all(c("shakepay", "newton") %in% result$exchange))
+})
+
 test_that("format_detect helpers recognize already formatted transaction data", {
   formatted <- data.frame(
     date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),

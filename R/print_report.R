@@ -75,6 +75,8 @@
 #' @description Will output a full crypto tax report in HTML format, which can then be printed or saved as PDF.
 #' @param formatted.ACB The `formatted.ACB` object.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' For current-price reporting, it must contain at least `currency`,
+#' `spot.rate2`, and `date2`.
 #' @return A list, containing the following objects: report.overview,
 #' report.summary, proceeds, sup.losses, table.revenues, tax.box,
 #' pie_exchange, pie_revenue.
@@ -88,7 +90,7 @@
 #' list.prices <- list_prices_example
 #' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-#' if (!is.null(list.prices) && !is.null(list.prices$date2)) {
+#' if (is.data.frame(list.prices)) {
 #'   print_report(formatted.ACB,
 #'     list.prices = list.prices,
 #'     tax.year = 2021, name = "Mr. Cryptoltruist"

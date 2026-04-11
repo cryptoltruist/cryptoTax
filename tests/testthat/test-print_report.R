@@ -1,6 +1,10 @@
 test_that("build_print_report_env stores report inputs in a package-backed env", {
   report.info <- list(ok = TRUE)
-  list.prices <- list(date2 = as.Date("2021-01-01"))
+  list.prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 100,
+    date2 = as.Date("2021-01-01")
+  )
   render.context <- list(
     person.name = "Name: Test",
     out.name = "full_report_2021.html"
@@ -22,7 +26,11 @@ test_that("build_print_report_env stores report inputs in a package-backed env",
 test_that("print_report passes an explicit render env to the renderer", {
   render.result <- NULL
   report.info <- list(ok = TRUE)
-  list.prices <- list(date2 = as.Date("2021-01-01"))
+  list.prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 100,
+    date2 = as.Date("2021-01-01")
+  )
 
   testthat::local_mocked_bindings(
     prepare_report = function(...) report.info,

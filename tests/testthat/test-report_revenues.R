@@ -96,6 +96,31 @@ test_that("report_summary uses explicit list.prices even without internet", {
   expect_equal(summary_table$Amount[summary_table$Type == "unrealized.net"], "50.00")
 })
 
+test_that("report_summary disables today.data cleanly for malformed explicit prices", {
+  formatted.ACB <- data.frame(
+    date = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00"), tz = "UTC"),
+    currency = c("BTC", "BTC"),
+    total.quantity = c(1, 1),
+    ACB.share = c(100, 100),
+    ACB = c(100, 100),
+    gains = c(NA_real_, 25),
+    transaction = c("buy", "sell"),
+    value = c(0, 0)
+  )
+
+  expect_message(
+    summary_table <- report_summary(
+      formatted.ACB,
+      today.data = TRUE,
+      list.prices = data.frame(date2 = as.Date("2021-01-05"))
+    ),
+    "Could not use 'list.prices' for today.data because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_false(any(summary_table$Type %in% c("value.today", "unrealized.net")))
+  expect_equal(summary_table$Amount[summary_table$Type == "net"], "25.00")
+})
+
 test_that("report_summary_static_metrics summarizes realized and revenue totals", {
   formatted.ACB.year <- data.frame(
     gains = c(10, -5, 0),
@@ -177,4 +202,30 @@ test_that("report_overview_total_row adds a Total row for current and historic p
   expect_equal(utils::tail(current.total$currency, 1), "Total")
   expect_equal(utils::tail(current.total$value.today, 1), 120)
   expect_equal(utils::tail(current.total$unrealized.net, 1), 20)
+})
+
+test_that("report_overview disables today.data cleanly for malformed explicit prices", {
+  formatted.ACB <- data.frame(
+    date = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00"), tz = "UTC"),
+    currency = c("BTC", "BTC"),
+    total.quantity = c(1, 1),
+    ACB.share = c(100, 100),
+    ACB = c(100, 100),
+    gains = c(NA_real_, 25),
+    transaction = c("buy", "sell"),
+    value = c(0, 0)
+  )
+
+  expect_message(
+    overview <- report_overview(
+      formatted.ACB,
+      today.data = TRUE,
+      list.prices = data.frame(date2 = as.Date("2021-01-05")),
+      verbose = TRUE
+    ),
+    "Could not use 'list.prices' for today.data because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_false(any(c("value.today", "unrealized.net") %in% names(overview)))
+  expect_equal(utils::tail(overview$currency, 1), "Total")
 })

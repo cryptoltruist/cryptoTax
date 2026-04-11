@@ -164,14 +164,205 @@
     Code
       formatted.CDC
     Output
-      data frame with 0 columns and 0 rows
+                        date currency       quantity total.price     spot.rate
+      1  2021-05-03 22:05:50      BTC   0.0007333710       51.25 69882.7777778
+      2  2021-05-07 23:06:50      ETH   0.0205920059       54.21  2632.5750000
+      3  2021-05-15 18:07:10      CRO 182.4360090842       53.42     0.2928150
+      4  2021-05-23 22:09:39      CRO 117.9468230300        0.00     0.2556449
+      5  2021-05-29 23:10:59      CRO   6.4039544538        0.00     0.1764535
+      6  2021-06-02 19:11:52      CRO  53.6136687700        0.00     0.2049850
+      7  2021-06-10 23:12:24      CRO  86.3572366500        0.00     0.1961619
+      8  2021-06-11 19:13:58      CRO  17.3688994200        0.00     0.5291066
+      9  2021-06-16 20:14:29      CRO  22.5041772606        0.00     0.5176817
+      10 2021-06-18 21:15:51      ETH   0.0000137750        0.05  3629.7640653
+      11 2021-06-19 21:16:30      CRO   8.4526209677        0.00     0.1478831
+      12 2021-06-27 21:17:50      ETH   0.0007632668        3.12  4087.6923838
+      13 2021-07-06 22:18:40      CRO   0.3207992131        0.26     0.8104758
+      14 2021-07-11 20:19:55     ETHW   0.3558067180        3.20     8.9936469
+      15 2021-07-14 18:20:27      CRO   2.4761904762        0.00     0.4846154
+      16 2021-07-23 17:21:19      CRO  37.1602562661        6.98     0.1878351
+      17 2021-07-25 18:22:02      BTC   0.0005320542       35.00 65782.7775510
+      18 2021-07-28 23:23:04      ETH   0.0099636548       35.00  3512.7672130
+         transaction fees                         description
+      1          buy    0                     crypto_purchase
+      2          buy    0                     crypto_purchase
+      3          buy    0                     crypto_purchase
+      4      revenue    0                       referral_gift
+      5      revenue    0              referral_card_cashback
+      6      revenue    0                       reimbursement
+      7      revenue    0                       reimbursement
+      8      revenue    0                       reimbursement
+      9      revenue    0                       reimbursement
+      10     revenue    0 supercharger_reward_to_app_credited
+      11     revenue    0                 pay_checkout_reward
+      12     revenue    0           crypto_earn_interest_paid
+      13     revenue    0     crypto_earn_extra_interest_paid
+      14     revenue    0               admin_wallet_credited
+      15     revenue    0   rewards_platform_deposit_credited
+      16     revenue    0                    mco_stake_reward
+      17        sell    0               crypto_viban_exchange
+      18        sell    0               crypto_viban_exchange
+                           comment revenue.type   value exchange
+      1                    Buy BTC         <NA> 51.2500      CDC
+      2                    Buy ETH         <NA> 54.2100      CDC
+      3                    Buy CRO         <NA> 53.4200      CDC
+      4     Sign-up Bonus Unlocked    referrals 30.1525      CDC
+      5              Card Cashback      rebates  1.1300      CDC
+      6       Card Rebate: Spotify      rebates 10.9900      CDC
+      7       Card Rebate: Netflix      rebates 16.9400      CDC
+      8  Card Rebate: Amazon Prime      rebates  9.1900      CDC
+      9       Card Rebate: Expedia      rebates 11.6500      CDC
+      10       Supercharger Reward    interests  0.0500      CDC
+      11               Pay Rewards      rebates  1.2500      CDC
+      12               Crypto Earn    interests  3.1200      CDC
+      13       Crypto Earn (Extra)    interests  0.2600      CDC
+      14       Adjustment (Credit)        forks  3.2000      CDC
+      15   Mission Rewards Deposit      rewards  1.2000      CDC
+      16         CRO Stake Rewards    interests  6.9800      CDC
+      17                BTC -> CAD         <NA> 35.0000      CDC
+      18                ETH -> CAD         <NA> 35.0000      CDC
+                       rate.source currency2 total.quantity
+      1                   exchange       BTC   0.0007333710
+      2                   exchange       ETH   0.0205920059
+      3                   exchange       CRO 182.4360090842
+      4  exchange (USD conversion)       CRO 300.3828321142
+      5                   exchange       CRO 306.7867865680
+      6                   exchange       CRO 360.4004553380
+      7                   exchange       CRO 446.7576919880
+      8                   exchange       CRO 464.1265914080
+      9                   exchange       CRO 486.6307686686
+      10                  exchange       ETH   0.0206057809
+      11                  exchange       CRO 495.0833896363
+      12                  exchange       ETH   0.0213690478
+      13                  exchange       CRO 495.4041888495
+      14                  exchange      ETHW   0.3558067180
+      15                  exchange       CRO 497.8803793257
+      16                  exchange       CRO 535.0406355918
+      17                  exchange       BTC   0.0002013168
+      18                  exchange       ETH   0.0114053929
+                                            suploss.range quantity.60days
+      1  2021-04-03 22:05:50 UTC--2021-06-02 22:05:50 UTC     0.000733371
+      2  2021-04-07 23:06:50 UTC--2021-06-06 23:06:50 UTC     0.020592006
+      3  2021-04-15 18:07:10 UTC--2021-06-14 18:07:10 UTC   182.436009084
+      4  2021-04-23 22:09:39 UTC--2021-06-22 22:09:39 UTC   182.436009084
+      5  2021-04-29 23:10:59 UTC--2021-06-28 23:10:59 UTC   182.436009084
+      6  2021-05-03 19:11:52 UTC--2021-07-02 19:11:52 UTC   182.436009084
+      7  2021-05-11 23:12:24 UTC--2021-07-10 23:12:24 UTC   182.436009084
+      8  2021-05-12 19:13:58 UTC--2021-07-11 19:13:58 UTC   182.436009084
+      9  2021-05-17 20:14:29 UTC--2021-07-16 20:14:29 UTC     0.000000000
+      10 2021-05-19 21:15:51 UTC--2021-07-18 21:15:51 UTC     0.000000000
+      11 2021-05-20 21:16:30 UTC--2021-07-19 21:16:30 UTC     0.000000000
+      12 2021-05-28 21:17:50 UTC--2021-07-27 21:17:50 UTC     0.000000000
+      13 2021-06-06 22:18:40 UTC--2021-08-05 22:18:40 UTC     0.000000000
+      14 2021-06-11 20:19:55 UTC--2021-08-10 20:19:55 UTC     0.000000000
+      15 2021-06-14 18:20:27 UTC--2021-08-13 18:20:27 UTC     0.000000000
+      16 2021-06-23 17:21:19 UTC--2021-08-22 17:21:19 UTC     0.000000000
+      17 2021-06-25 18:22:02 UTC--2021-08-24 18:22:02 UTC     0.000000000
+      18 2021-06-28 23:23:04 UTC--2021-08-27 23:23:04 UTC     0.000000000
+           share.left60 sup.loss.quantity sup.loss gains.uncorrected gains.sup
+      1    0.0007333710                 0    FALSE          0.000000        NA
+      2    0.0205920059                 0    FALSE          0.000000        NA
+      3  464.1265914080                 0    FALSE          0.000000        NA
+      4  495.0833896363                 0    FALSE          0.000000        NA
+      5  495.0833896363                 0    FALSE          0.000000        NA
+      6  495.0833896363                 0    FALSE          0.000000        NA
+      7  495.4041888495                 0    FALSE          0.000000        NA
+      8  495.4041888495                 0    FALSE          0.000000        NA
+      9  497.8803793257                 0    FALSE          0.000000        NA
+      10   0.0213690478                 0    FALSE          0.000000        NA
+      11 497.8803793257                 0    FALSE          0.000000        NA
+      12   0.0213690478                 0    FALSE          0.000000        NA
+      13 535.0406355918                 0    FALSE          0.000000        NA
+      14   0.3558067180                 0    FALSE          0.000000        NA
+      15 535.0406355918                 0    FALSE          0.000000        NA
+      16 535.0406355918                 0    FALSE          0.000000        NA
+      17   0.0002013168                 0    FALSE         -2.181422        NA
+      18   0.0114053929                 0    FALSE          8.245672        NA
+         gains.excess     gains      ACB     ACB.share
+      1            NA        NA 51.25000 69882.7777778
+      2            NA        NA 54.21000  2632.5750000
+      3            NA        NA 53.42000     0.2928150
+      4            NA        NA 53.42000     0.1778397
+      5            NA        NA 53.42000     0.1741274
+      6            NA        NA 53.42000     0.1482240
+      7            NA        NA 53.42000     0.1195726
+      8            NA        NA 53.42000     0.1150979
+      9            NA        NA 53.42000     0.1097752
+      10           NA        NA 54.26000  2633.2416226
+      11           NA        NA 53.42000     0.1079010
+      12           NA        NA 57.38000  2685.1921836
+      13           NA        NA 53.68000     0.1083560
+      14           NA        NA  3.20000     8.9936469
+      15           NA        NA 53.68000     0.1078171
+      16           NA        NA 60.66000     0.1133746
+      17           NA -2.181422 14.06858 69882.7777778
+      18           NA  8.245672 30.62567  2685.1921836
 
 # celsius
 
     Code
       formatted.celsius
     Output
-      data frame with 0 columns and 0 rows
+                       date currency       quantity total.price  spot.rate
+      1 2021-03-03 21:11:00      BTC 0.000707598916   0.0000000  71402.031
+      2 2021-03-07 05:00:00      BTC 0.000025237883   0.1366256   5413.514
+      3 2021-03-19 05:00:00      BTC 0.000081561209   0.7267146   8910.052
+      4 2021-03-28 05:00:00      BTC 0.000003683063   0.5977123 162286.762
+      5 2021-04-05 05:00:00      BTC 0.000046940391   0.5849814  12462.217
+      6 2021-04-08 05:00:00      BTC 0.000051775622   0.6447880  12453.505
+      7 2021-04-08 22:18:00      BTC 0.000733082450   0.0000000  68636.209
+      8 2021-05-06 10:32:00      BTC 0.001409023441   0.0000000  43292.395
+      9 2021-05-23 05:00:00      BTC 0.000063726694   0.4162554   6531.885
+        transaction fees       description revenue.type      value exchange
+      1     revenue    0 Promo Code Reward       promos 50.5240000  celsius
+      2     revenue    0            Reward    interests  0.1366256  celsius
+      3     revenue    0            Reward    interests  0.7267146  celsius
+      4     revenue    0            Reward    interests  0.5977123  celsius
+      5     revenue    0            Reward    interests  0.5849814  celsius
+      6     revenue    0            Reward    interests  0.6447880  celsius
+      7     revenue    0    Referred Award    referrals 50.3160000  celsius
+      8     revenue    0 Promo Code Reward       promos 61.0000000  celsius
+      9     revenue    0            Reward    interests  0.4162554  celsius
+                      rate.source currency2 total.quantity
+      1 exchange (USD conversion)       BTC   0.0007075989
+      2 exchange (USD conversion)       BTC   0.0007328368
+      3 exchange (USD conversion)       BTC   0.0008143980
+      4 exchange (USD conversion)       BTC   0.0008180811
+      5 exchange (USD conversion)       BTC   0.0008650215
+      6 exchange (USD conversion)       BTC   0.0009167971
+      7 exchange (USD conversion)       BTC   0.0016498795
+      8 exchange (USD conversion)       BTC   0.0030589030
+      9 exchange (USD conversion)       BTC   0.0031226297
+                                           suploss.range quantity.60days share.left60
+      1 2021-02-01 21:11:00 UTC--2021-04-02 21:11:00 UTC               0 0.0008180811
+      2 2021-02-05 05:00:00 UTC--2021-04-06 05:00:00 UTC               0 0.0008650215
+      3 2021-02-17 05:00:00 UTC--2021-04-18 05:00:00 UTC               0 0.0016498795
+      4 2021-02-26 05:00:00 UTC--2021-04-27 05:00:00 UTC               0 0.0016498795
+      5 2021-03-06 05:00:00 UTC--2021-05-05 05:00:00 UTC               0 0.0016498795
+      6 2021-03-09 05:00:00 UTC--2021-05-08 05:00:00 UTC               0 0.0030589030
+      7 2021-03-09 22:18:00 UTC--2021-05-08 22:18:00 UTC               0 0.0030589030
+      8 2021-04-06 10:32:00 UTC--2021-06-05 10:32:00 UTC               0 0.0031226297
+      9 2021-04-23 05:00:00 UTC--2021-06-22 05:00:00 UTC               0 0.0031226297
+        sup.loss.quantity sup.loss gains.uncorrected gains.sup gains.excess gains
+      1                 0    FALSE                 0        NA           NA    NA
+      2                 0    FALSE                 0        NA           NA    NA
+      3                 0    FALSE                 0        NA           NA    NA
+      4                 0    FALSE                 0        NA           NA    NA
+      5                 0    FALSE                 0        NA           NA    NA
+      6                 0    FALSE                 0        NA           NA    NA
+      7                 0    FALSE                 0        NA           NA    NA
+      8                 0    FALSE                 0        NA           NA    NA
+      9                 0    FALSE                 0        NA           NA    NA
+              ACB ACB.share
+      1 0.0000000    0.0000
+      2 0.1366256  186.4339
+      3 0.8633402 1060.0961
+      4 1.4610525 1785.9508
+      5 2.0460339 2365.2984
+      6 2.6908219 2935.0245
+      7 2.6908219 1630.9202
+      8 2.6908219  879.6689
+      9 3.1070773  995.0195
 
 # blockfi
 

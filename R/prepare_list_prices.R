@@ -3,8 +3,8 @@
     return(coins.list)
   }
 
-  if (!isTRUE(force) && exists("coins.list")) {
-    return(get("coins.list", inherits = TRUE))
+  if (.can_reuse_cached_pricing_object("coins.list", force = force, allow_null = TRUE)) {
+    return(.get_cached_pricing_object("coins.list"))
   }
 
   if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
@@ -30,9 +30,7 @@
     return(NULL)
   }
 
-  coins.list <<- fetched_coins
-
-  fetched_coins
+  .set_cached_pricing_object("coins.list", fetched_coins)
 }
 
 .resolve_list_prices <- function(force = FALSE, list.prices = NULL, verbose = TRUE) {
@@ -40,7 +38,13 @@
     return(list.prices)
   }
 
-  if (isTRUE(force) || !exists("list.prices") || is.null(get("list.prices", inherits = TRUE))) {
+  if (!.can_reuse_cached_pricing_object("list.prices", force = force)) {
+    return(NULL)
+  }
+
+  cached_list_prices <- .get_cached_pricing_object("list.prices")
+
+  if (!.is_valid_list_prices_table(cached_list_prices)) {
     return(NULL)
   }
 
@@ -51,7 +55,7 @@
     )
   }
 
-  get("list.prices", inherits = TRUE)
+  cached_list_prices
 }
 
 .format_prepare_price_date <- function(x) {
@@ -98,7 +102,7 @@
 
 .maybe_cache_list_prices <- function(list.prices, cache = TRUE) {
   if (isTRUE(cache) && !is.null(list.prices)) {
-    list.prices <<- list.prices
+    .set_cached_pricing_object("list.prices", list.prices)
   }
 
   list.prices

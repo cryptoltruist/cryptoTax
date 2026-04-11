@@ -25,7 +25,9 @@ report_overview(
 
 \item{local.timezone}{Which time zone to use for the date of the report.}
 
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
+For \code{today.data = TRUE}, it must contain at least \code{currency},
+\code{spot.rate2}, and \code{date2}.}
 
 \item{slug}{Optional explicit slug vector used when preparing prices.}
 

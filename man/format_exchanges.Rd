@@ -12,7 +12,9 @@ frames and/or already formatted transaction tables.}
 
 \item{...}{Additional exchange data frames or nested lists to format.}
 
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
+When supplied explicitly, it must contain at least \code{currency},
+\code{spot.rate2}, and \code{date2}.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

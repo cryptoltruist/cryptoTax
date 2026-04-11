@@ -1,9 +1,21 @@
-.resolve_usd2cad_table <- function(force = FALSE, USD2CAD.table = NULL) {
+.usd2cad_table_has_conversion <- function(USD2CAD.table, conversion = "USD") {
+  is.data.frame(USD2CAD.table) &&
+    "date" %in% names(USD2CAD.table) &&
+    conversion %in% names(USD2CAD.table)
+}
+
+.resolve_usd2cad_table <- function(force = FALSE, USD2CAD.table = NULL, conversion = "USD") {
   if (!is.null(USD2CAD.table)) {
     return(USD2CAD.table)
   }
 
-  if (isTRUE(force) || !exists("USD2CAD.table")) {
+  if (!.can_reuse_cached_pricing_object("USD2CAD.table", force = force, allow_null = TRUE)) {
+    return(cur2CAD_table())
+  }
+
+  cached_table <- .get_cached_pricing_object("USD2CAD.table")
+
+  if (!.usd2cad_table_has_conversion(cached_table, conversion = conversion)) {
     return(cur2CAD_table())
   }
 
@@ -12,12 +24,12 @@
     "To force a fresh download, use argument 'force = TRUE'."
   )
 
-  get("USD2CAD.table", inherits = TRUE)
+  cached_table
 }
 
 .cache_usd2cad_table <- function(USD2CAD.table) {
   if (!is.null(USD2CAD.table)) {
-    USD2CAD.table <<- USD2CAD.table
+    .set_cached_pricing_object("USD2CAD.table", USD2CAD.table)
   }
 
   USD2CAD.table
@@ -165,7 +177,8 @@ USD2CAD <- function(data,
                     USD2CAD.table = NULL) {
   USD2CAD.table <- .resolve_usd2cad_table(
     force = force,
-    USD2CAD.table = USD2CAD.table
+    USD2CAD.table = USD2CAD.table,
+    conversion = conversion
   )
 
   if (is.null(USD2CAD.table)) {
@@ -189,6 +202,8 @@ USD2CAD <- function(data,
 #' @importFrom rlang .data
 
 cur2CAD_table <- function() {
+  USD2CAD.table <- NULL
+
   if (isFALSE(curl::has_internet())) {
     message("This function requires Internet access.")
     return(NULL)
@@ -200,6 +215,7 @@ cur2CAD_table <- function() {
   tryCatch(
     expr = {
       USD2CAD.table <- utils::read.csv(BOC_url, header = TRUE, skip = 39)
+      USD2CAD.table
     },
     error = function(e) {
       message("Could not fetch exchange rates from Bank of Canada")
@@ -210,7 +226,7 @@ cur2CAD_table <- function() {
     }
   )
 
-  if (!exists("USD2CAD.table")) {
+  if (is.null(USD2CAD.table)) {
     message("Could not fetch exchange rates from Bank of Canada")
     return(NULL)
   }
@@ -273,7 +289,7 @@ USD2CAD_crypto2 <- function(data,
     return(NULL)
   }
 
-  if (isTRUE(force) || !exists("USD2CAD.table")) {
+  if (!.can_reuse_cached_pricing_object("USD2CAD.table", force = force, allow_null = TRUE)) {
     USD2CAD.table <- .fetch_usd2cad_crypto2_table(
       start.date = start.date,
       force = TRUE
@@ -325,7 +341,7 @@ USD2CAD_priceR <- function(data, conversion = "USD", currency = "CAD") {
     return(NULL)
   }
 
-  if (!exists("USD2CAD.table")) {
+  if (!.has_cached_pricing_object("USD2CAD.table", allow_null = TRUE)) {
     USD2CAD.table <- .fetch_usd2cad_pricer_table(
       conversion = conversion,
       currency = currency

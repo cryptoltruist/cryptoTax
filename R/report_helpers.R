@@ -11,6 +11,19 @@
   formatted.ACB.year
 }
 
+.can_use_report_today_prices <- function(list.prices) {
+  .is_valid_list_prices_table(list.prices) &&
+    !is.null(list.prices$date2)
+}
+
+.report_current_price_date <- function(list.prices) {
+  if (!.can_use_report_today_prices(list.prices)) {
+    return(NULL)
+  }
+
+  dplyr::last(list.prices$date2)
+}
+
 .resolve_report_today_data <- function(formatted.ACB,
                                        today.data,
                                        list.prices,
@@ -36,7 +49,17 @@
     )
   }
 
-  if (isTRUE(today.data) && (is.null(list.prices) || is.null(list.prices$date2))) {
+  if (isTRUE(today.data) && !is.null(list.prices) && !.can_use_report_today_prices(list.prices)) {
+    if (isTRUE(verbose)) {
+      message(
+        "Could not use 'list.prices' for today.data because it must contain ",
+        "'currency', 'spot.rate2', and 'date2'. The today.data argument has been set to `FALSE` automatically."
+      )
+    }
+    today.data <- FALSE
+  }
+
+  if (isTRUE(today.data) && is.null(.report_current_price_date(list.prices))) {
     if (isTRUE(verbose)) {
       message("Could not reach pricing data at this time. The today.data argument has been set to `FALSE` automatically.")
     }
@@ -80,11 +103,12 @@
 .prepare_report_current_rates <- function(ACB.list, list.prices, force, verbose = TRUE, signal = c("message", "warning")) {
   signal <- match.arg(signal)
   .report_current_price_notes(ACB.list, signal = signal, verbose = verbose)
+  current.price.date <- .report_current_price_date(list.prices)
 
   rates <- .report_current_price_assets(ACB.list) %>%
     dplyr::mutate(
       date.temp = .data$date,
-      date = dplyr::last(list.prices$date2)
+      date = current.price.date
     )
 
   rates <- cryptoTax::match_prices(
@@ -95,7 +119,7 @@
   )
 
   if (isTRUE(verbose)) {
-    message("Date of current prices: ", dplyr::last(list.prices$date2))
+    message("Date of current prices: ", current.price.date)
   }
 
   rates

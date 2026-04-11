@@ -14,7 +14,9 @@ prepare_report(
 \arguments{
 \item{formatted.ACB}{The \code{formatted.ACB} object.}
 
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
+For \code{today.data} reporting paths, it must contain at least \code{currency},
+\code{spot.rate2}, and \code{date2}.}
 
 \item{tax.year}{The tax year desired.}
 
@@ -32,7 +34,7 @@ Prepare all required information for a full crypto tax report.
 list.prices <- list_prices_example
 all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-if (!is.null(list.prices)) {
+if (is.data.frame(list.prices)) {
   x <- prepare_report(formatted.ACB, list.prices = list.prices)
   x$proceeds
 }

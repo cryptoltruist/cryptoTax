@@ -15,7 +15,9 @@ print_report(
 \arguments{
 \item{formatted.ACB}{The \code{formatted.ACB} object.}
 
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.
+For current-price reporting, it must contain at least \code{currency},
+\code{spot.rate2}, and \code{date2}.}
 
 \item{tax.year}{The tax year desired.}
 
@@ -38,7 +40,7 @@ Will output a full crypto tax report in HTML format, which can then be printed o
 list.prices <- list_prices_example
 all.data <- format_exchanges(data_shakepay)
 formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-if (!is.null(list.prices) && !is.null(list.prices$date2)) {
+if (is.data.frame(list.prices)) {
   print_report(formatted.ACB,
     list.prices = list.prices,
     tax.year = 2021, name = "Mr. Cryptoltruist"

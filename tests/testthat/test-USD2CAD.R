@@ -215,6 +215,20 @@ test_that("resolve_list_prices prefers explicit input over cached state", {
   })
 })
 
+test_that("resolve_list_prices ignores cached objects with the wrong schema", {
+  local({
+    list.prices <<- data.frame(date = as.Date("2021-01-01"), CAD.rate = 1.25)
+
+    result <- cryptoTax:::.resolve_list_prices(
+      force = FALSE,
+      list.prices = NULL,
+      verbose = TRUE
+    )
+
+    expect_null(result)
+  })
+})
+
 test_that("build_list_prices_from_history appends USD rows for each date", {
   coin_hist <- data.frame(
     timestamp = as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00"), tz = "UTC"),
@@ -321,6 +335,34 @@ test_that("resolve_usd2cad_table prefers explicit rates", {
   )
 
   expect_identical(result, explicit_rates)
+})
+
+test_that("resolve_usd2cad_table refetches when cached rates lack the requested conversion column", {
+  refreshed_rates <- data.frame(
+    date = as.Date("2021-01-01"),
+    USD = 1.25,
+    CAD = 1
+  )
+
+  local({
+    USD2CAD.table <<- data.frame(
+      date = as.Date("2021-01-01"),
+      CAD.rate = 1.25
+    )
+
+    testthat::local_mocked_bindings(
+      cur2CAD_table = function() refreshed_rates,
+      .package = "cryptoTax"
+    )
+
+    result <- cryptoTax:::.resolve_usd2cad_table(
+      force = FALSE,
+      USD2CAD.table = NULL,
+      conversion = "USD"
+    )
+
+    expect_identical(result, refreshed_rates)
+  })
 })
 
 test_that("build_usd2cad_crypto2_table derives CAD rates from USD and CAD rows", {
@@ -493,6 +535,33 @@ test_that("handle_missing_list_prices emits one message when prices are missing"
   expect_null(result)
 })
 
+test_that("handle_invalid_match_prices returns prices unchanged when join columns are available", {
+  explicit_list_prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 123.45,
+    date2 = as.Date("2021-01-01")
+  )
+
+  result <- cryptoTax:::.handle_invalid_match_prices(
+    explicit_list_prices,
+    verbose = TRUE
+  )
+
+  expect_identical(result, explicit_list_prices)
+})
+
+test_that("handle_invalid_match_prices emits one message when join columns are missing", {
+  expect_message(
+    result <- cryptoTax:::.handle_invalid_match_prices(
+      data.frame(currency = "BTC"),
+      verbose = TRUE
+    ),
+    "Could not use 'list.prices' because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_null(result)
+})
+
 test_that("prepare_list_prices_slugs surfaces missing list.prices through the shared handler", {
   testthat::local_mocked_bindings(
     prepare_list_prices = function(...) NULL,
@@ -531,6 +600,139 @@ test_that("match_prices surfaces missing list.prices through the shared handler"
       verbose = TRUE
     ),
     "Could not reach the CoinMarketCap API at this time"
+  )
+
+  expect_null(result)
+})
+
+test_that("match_prices rejects explicit list.prices tables that are not joinable", {
+  tx <- data.frame(
+    date = as.POSIXct("2021-01-01 10:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1
+  )
+
+  expect_message(
+    result <- match_prices(
+      tx,
+      list.prices = data.frame(currency = "BTC"),
+      verbose = TRUE
+    ),
+    "Could not use 'list.prices' because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_null(result)
+})
+
+test_that("pricing cache helpers detect and reuse cached objects safely", {
+  local({
+    cache_name <- "pricing.cache.helper.test"
+
+    expect_false(cryptoTax:::.has_cached_pricing_object(cache_name))
+    expect_false(cryptoTax:::.can_reuse_cached_pricing_object(cache_name))
+
+    assign(cache_name, data.frame(
+      currency = "BTC",
+      spot.rate2 = 1,
+      date2 = as.Date("2021-01-01")
+    ), envir = .GlobalEnv)
+    on.exit(rm(list = cache_name, envir = .GlobalEnv), add = TRUE)
+
+    expect_true(cryptoTax:::.has_cached_pricing_object(cache_name))
+    expect_true(cryptoTax:::.can_reuse_cached_pricing_object(cache_name))
+    expect_false(cryptoTax:::.can_reuse_cached_pricing_object(cache_name, force = TRUE))
+    expect_identical(
+      cryptoTax:::.get_cached_pricing_object(cache_name),
+      get(cache_name, envir = .GlobalEnv)
+    )
+  })
+})
+
+test_that("pricing cache helpers can treat NULL caches as present when requested", {
+  local({
+    cache_name <- "pricing.cache.helper.null.test"
+    assign(cache_name, NULL, envir = .GlobalEnv)
+    on.exit(rm(list = cache_name, envir = .GlobalEnv), add = TRUE)
+
+    expect_false(cryptoTax:::.has_cached_pricing_object(cache_name))
+    expect_true(cryptoTax:::.has_cached_pricing_object(cache_name, allow_null = TRUE))
+    expect_true(cryptoTax:::.can_reuse_cached_pricing_object(cache_name, allow_null = TRUE))
+  })
+})
+
+test_that("pricing cache helpers only read from the global cache environment", {
+  local({
+    cache_name <- "pricing.cache.helper.scope.test"
+    cache_env <- cryptoTax:::.pricing_cache_env()
+
+    on.exit(rm(list = cache_name, envir = cache_env), add = TRUE)
+
+    expect_false(exists(cache_name, envir = cache_env, inherits = FALSE))
+
+    local_value <- data.frame(
+      currency = "BTC",
+      spot.rate2 = 1,
+      date2 = as.Date("2021-01-01")
+    )
+    assign(cache_name, local_value, envir = environment())
+
+    expect_false(cryptoTax:::.has_cached_pricing_object(cache_name))
+
+    cached_value <- data.frame(
+      currency = "ETH",
+      spot.rate2 = 2,
+      date2 = as.Date("2021-01-02")
+    )
+    cryptoTax:::.set_cached_pricing_object(cache_name, cached_value)
+
+    expect_true(cryptoTax:::.has_cached_pricing_object(cache_name))
+    expect_identical(
+      cryptoTax:::.get_cached_pricing_object(cache_name),
+      cached_value
+    )
+    expect_identical(get(cache_name, envir = environment()), local_value)
+  })
+})
+
+test_that("match_prices ignores cached list.prices objects with the wrong schema", {
+  local({
+    list.prices <<- data.frame(date = as.Date("2021-01-01"), CAD.rate = 1.25)
+    on.exit(rm(list = "list.prices", envir = .GlobalEnv), add = TRUE)
+
+    testthat::local_mocked_bindings(
+      has_internet = function() FALSE,
+      .package = "curl"
+    )
+
+    tx <- data.frame(
+      date = as.POSIXct("2021-01-01 10:00:00", tz = "UTC"),
+      currency = "BTC",
+      quantity = 1
+    )
+
+    expect_message(
+      result <- match_prices(tx, verbose = TRUE),
+      "This function requires Internet access."
+    )
+
+    expect_null(result)
+  })
+})
+
+test_that("cur2CAD_table returns NULL cleanly when the Bank of Canada fetch fails", {
+  testthat::local_mocked_bindings(
+    .package = "curl",
+    has_internet = function() TRUE
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "utils",
+    read.csv = function(...) stop("fetch failed")
+  )
+
+  expect_message(
+    result <- cur2CAD_table(),
+    "Could not fetch exchange rates from Bank of Canada"
   )
 
   expect_null(result)

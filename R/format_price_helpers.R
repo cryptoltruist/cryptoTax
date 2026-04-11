@@ -1,3 +1,15 @@
+.should_surface_generic_pricing_failure <- function(list.prices = NULL) {
+  is.null(list.prices) || .is_valid_list_prices_table(list.prices)
+}
+
+.handle_formatted_pricing_failure <- function(list.prices = NULL) {
+  if (.should_surface_generic_pricing_failure(list.prices)) {
+    message("Could not reach the CoinMarketCap API at this time")
+  }
+
+  NULL
+}
+
 .resolve_formatted_prices <- function(data,
                                      list.prices = NULL,
                                      force = FALSE,
@@ -5,8 +17,7 @@
   data <- match_prices(data, list.prices = list.prices, force = force)
 
   if (is.null(data)) {
-    message("Could not reach the CoinMarketCap API at this time")
-    return(NULL)
+    return(.handle_formatted_pricing_failure(list.prices))
   }
 
   if (isTRUE(warn_on_missing_spot) && any(is.na(data$spot.rate))) {

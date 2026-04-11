@@ -95,10 +95,16 @@ test_that("resolve_report_today_data reuses explicit prices offline", {
     prepare_list_prices_slugs = function(...) stop("should not prepare prices")
   )
 
+  explicit_list_prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 123.45,
+    date2 = as.Date("2021-01-01")
+  )
+
   price.state <- cryptoTax:::.resolve_report_today_data(
     formatted.ACB = data.frame(currency = "BTC"),
     today.data = TRUE,
-    list.prices = list(date2 = as.Date("2021-01-01")),
+    list.prices = explicit_list_prices,
     slug = NULL,
     start.date = NULL,
     force = FALSE,
@@ -106,7 +112,82 @@ test_that("resolve_report_today_data reuses explicit prices offline", {
   )
 
   expect_true(price.state$today.data)
-  expect_equal(price.state$list.prices$date2, as.Date("2021-01-01"))
+  expect_identical(price.state$list.prices, explicit_list_prices)
+})
+
+test_that("resolve_report_today_data disables today.data for non-joinable explicit prices", {
+  expect_message(
+    price.state <- cryptoTax:::.resolve_report_today_data(
+      formatted.ACB = data.frame(currency = "BTC"),
+      today.data = TRUE,
+      list.prices = data.frame(date2 = as.Date("2021-01-01")),
+      slug = NULL,
+      start.date = NULL,
+      force = FALSE,
+      verbose = TRUE
+    ),
+    "Could not use 'list.prices' for today.data because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_false(price.state$today.data)
+})
+
+test_that("report_current_price_date returns the last date only for joinable prices", {
+  valid_list_prices <- data.frame(
+    currency = c("BTC", "ETH"),
+    spot.rate2 = c(100, 200),
+    date2 = as.Date(c("2021-01-01", "2021-01-02"))
+  )
+
+  expect_equal(
+    cryptoTax:::.report_current_price_date(valid_list_prices),
+    as.Date("2021-01-02")
+  )
+  expect_null(
+    cryptoTax:::.report_current_price_date(data.frame(date2 = as.Date("2021-01-01")))
+  )
+  expect_null(cryptoTax:::.report_current_price_date(NULL))
+})
+
+test_that("prepare_report_outputs leaves current.price.date unset for malformed prices", {
+  report.info <- list(
+    report.summary = data.frame(Type = character(), Amount = character()),
+    sup.losses = data.frame(currency = character(), sup.loss = numeric()),
+    table.revenues = data.frame(exchange = character(), revenue.type = character()),
+    proceeds = data.frame(type = character(), proceeds = numeric(), ACB.total = numeric(), gains = numeric()),
+    list.prices = data.frame(date2 = as.Date("2021-01-01"))
+  )
+
+  testthat::local_mocked_bindings(
+    tax_box = function(...) data.frame(ok = TRUE),
+    crypto_pie = function(...) structure(list(), class = "ggplot"),
+    .package = "cryptoTax"
+  )
+
+  result <- cryptoTax:::.prepare_report_outputs(report.info, local.timezone = "America/Toronto")
+
+  expect_null(result$current.price.date)
+  expect_false("list.prices" %in% names(result))
+})
+
+test_that("prepare_report disables current-price reporting cleanly for malformed explicit prices", {
+  formatted.ACB <- format_ACB(
+    suppressMessages(format_exchanges(data_shakepay)),
+    verbose = FALSE
+  )
+
+  expect_message(
+    result <- prepare_report(
+      formatted.ACB,
+      list.prices = data.frame(date2 = as.Date("2021-01-01")),
+      tax.year = "all",
+      local.timezone = "America/Toronto"
+    ),
+    "Could not use 'list.prices' for today.data because it must contain 'currency', 'spot.rate2', and 'date2'."
+  )
+
+  expect_type(result, "list")
+  expect_null(result$current.price.date)
 })
 
 test_that("resolve_report_today_data disables today.data when offline with no prices", {
@@ -139,7 +220,11 @@ test_that("prepare_report_current_rates emits the requested signal style", {
     total.quantity = c(1, 1),
     ACB = c(10, 20)
   )
-  list.prices <- list(date2 = as.Date("2021-01-02"))
+  list.prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 42,
+    date2 = as.Date("2021-01-02")
+  )
 
   testthat::local_mocked_bindings(
     .package = "cryptoTax",

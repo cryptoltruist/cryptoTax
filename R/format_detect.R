@@ -87,6 +87,58 @@
   all(vapply(x, .format_detect_is_valid_input, logical(1)))
 }
 
+.format_detect_requires_prices_input <- function(x) {
+  if (is.null(x) || .format_detect_is_empty_input(x)) {
+    return(FALSE)
+  }
+
+  if (.format_detect_is_formatted_input(x)) {
+    return(FALSE)
+  }
+
+  if (is.data.frame(x)) {
+    return(.format_detect_uses_prices(.format_detect_exchange(x)))
+  }
+
+  if (is.list(x)) {
+    return(any(vapply(x, .format_detect_requires_prices_input, logical(1))))
+  }
+
+  FALSE
+}
+
+.validate_format_detect_list_prices <- function(data, list.prices = NULL) {
+  if (is.null(list.prices) || .is_valid_list_prices_table(list.prices)) {
+    return(TRUE)
+  }
+
+  if (!.format_detect_requires_prices_input(data)) {
+    return(TRUE)
+  }
+
+  message(
+    "Could not use 'list.prices' because it must contain ",
+    "'currency', 'spot.rate2', and 'date2'."
+  )
+  FALSE
+}
+
+.validate_format_detect_prices_for_exchange <- function(exchange, list.prices = NULL) {
+  if (is.null(list.prices) || .is_valid_list_prices_table(list.prices)) {
+    return(TRUE)
+  }
+
+  if (!.format_detect_uses_prices(exchange)) {
+    return(TRUE)
+  }
+
+  message(
+    "Could not use 'list.prices' because it must contain ",
+    "'currency', 'spot.rate2', and 'date2'."
+  )
+  FALSE
+}
+
 .drop_empty_format_detect_inputs <- function(data) {
   out <- lapply(data, function(x) {
     if (is.null(x) || .format_detect_is_empty_input(x)) {
@@ -152,6 +204,8 @@
 #' already formatted tables are passed through unchanged.
 #' @param data The dataframe
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' When supplied explicitly, it must contain at least `currency`,
+#' `spot.rate2`, and `date2` for exchanges that require external pricing.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param ... Used for other methods.
@@ -271,6 +325,10 @@ format_detect <- function(data, ...) {
 .run_format_detect_formatter <- function(exchange, data, list.prices = NULL, force = FALSE) {
   formatter <- get(.format_detect_formatter_name(exchange), mode = "function")
 
+  if (!.validate_format_detect_prices_for_exchange(exchange, list.prices = list.prices)) {
+    return(NULL)
+  }
+
   if (.format_detect_uses_prices(exchange)) {
     return(formatter(data, list.prices = list.prices, force = force))
   }
@@ -296,6 +354,10 @@ format_detect <- function(data, ...) {
 }
 
 .format_detect_many <- function(data, list.prices = NULL, force = FALSE) {
+  if (!.validate_format_detect_list_prices(data, list.prices = list.prices)) {
+    return(NULL)
+  }
+
   formatted.data <- .format_detect_formatted_list(
     data,
     list.prices = list.prices,

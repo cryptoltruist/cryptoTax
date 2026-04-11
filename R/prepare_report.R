@@ -41,11 +41,7 @@
   )
   report.info$pie_exchange <- crypto_pie(report.info$table.revenues)
   report.info$pie_revenue <- crypto_pie(report.info$table.revenues, by = "revenue.type")
-  report.info$current.price.date <- if (!is.null(report.info$list.prices) && !is.null(report.info$list.prices$date2)) {
-    dplyr::last(report.info$list.prices$date2)
-  } else {
-    NULL
-  }
+  report.info$current.price.date <- .report_current_price_date(report.info$list.prices)
   report.info$list.prices <- NULL
   report.info$local.timezone <- local.timezone
   report.info
@@ -56,6 +52,8 @@
 #' @description Prepare all required information for a full crypto tax report.
 #' @param formatted.ACB The `formatted.ACB` object.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' For `today.data` reporting paths, it must contain at least `currency`,
+#' `spot.rate2`, and `date2`.
 #' @return A list, containing the following objects: report.overview,
 #' report.summary, proceeds, sup.losses, table.revenues, tax.box,
 #' pie_exchange, pie_revenue.
@@ -66,7 +64,7 @@
 #' list.prices <- list_prices_example
 #' all.data <- format_exchanges(data_shakepay)
 #' formatted.ACB <- format_ACB(all.data, verbose = FALSE)
-#' if (!is.null(list.prices)) {
+#' if (is.data.frame(list.prices)) {
 #'   x <- prepare_report(formatted.ACB, list.prices = list.prices)
 #'   x$proceeds
 #' }

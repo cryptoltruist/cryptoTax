@@ -30,6 +30,21 @@
   FALSE
 }
 
+.handle_invalid_match_prices <- function(list.prices, verbose = TRUE) {
+  if (.is_valid_list_prices_table(list.prices)) {
+    return(list.prices)
+  }
+
+  if (isTRUE(verbose)) {
+    message(
+      "Could not use 'list.prices' because it must contain ",
+      "'currency', 'spot.rate2', and 'date2'."
+    )
+  }
+
+  NULL
+}
+
 .join_match_prices <- function(data, list.prices) {
   data %>%
     mutate(date2 = lubridate::as_date(.data$date)) %>%
@@ -84,6 +99,8 @@
 #' not the ticker, see [prepare_list_prices()] for more details.
 #' @param start.date What date to start reporting prices for.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' When supplied explicitly, it must contain at least `currency`,
+#' `spot.rate2`, and `date2`.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param verbose Logical; whether to print progress messages.
@@ -132,6 +149,11 @@ match_prices <- function(data,
   )
 
   list.prices <- .handle_missing_list_prices(list.prices, verbose = verbose)
+  if (is.null(list.prices)) {
+    return(NULL)
+  }
+
+  list.prices <- .handle_invalid_match_prices(list.prices, verbose = verbose)
   if (is.null(list.prices)) {
     return(NULL)
   }

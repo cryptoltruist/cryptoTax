@@ -26,7 +26,9 @@
 #' rewards. However, transactions before November 1st, 2022, can only be
 #' accessed through the Archive section. For this, see [format_CDC_exchange].
 #' @param data The dataframe
-#' @param list.prices A `list.prices` object from which to fetch coin prices.
+#' @param list.prices An optional explicit `list.prices` object from which to
+#' fetch coin prices. For exchanges that require external pricing, it must
+#' contain at least `currency`, `spot.rate2`, and `date2`.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame of exchange transactions, formatted for further processing.

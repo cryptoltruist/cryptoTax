@@ -9,7 +9,9 @@ format_gemini(data, list.prices = NULL, force = FALSE)
 \arguments{
 \item{data}{The dataframe}
 
-\item{list.prices}{A \code{list.prices} object from which to fetch coin prices.}
+\item{list.prices}{An optional explicit \code{list.prices} object from which to
+fetch coin prices. For exchanges that require external pricing, it must
+contain at least \code{currency}, \code{spot.rate2}, and \code{date2}.}
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}

@@ -161,5 +161,43 @@ test_that("format_exchanges mixed public wrapper", {
   ))
 })
 
+test_that("format_exchanges surfaces malformed explicit prices without relabeling them as API failures", {
+  messages <- testthat::capture_messages(
+    result <- format_exchanges(
+      data_coinsmart,
+      list.prices = data.frame(date2 = as.Date("2021-01-01"))
+    )
+  )
+
+  expect_null(result)
+  expect_true(any(grepl(
+    "Could not use 'list.prices' because it must contain 'currency', 'spot.rate2', and 'date2'.",
+    messages,
+    fixed = TRUE
+  )))
+  expect_false(any(grepl(
+    "Could not reach the CoinMarketCap API at this time",
+    messages,
+    fixed = TRUE
+  )))
+})
+
+test_that("format_exchanges does not silently return partial results for malformed prices in mixed inputs", {
+  messages <- testthat::capture_messages(
+    result <- format_exchanges(
+      data_shakepay,
+      data_coinsmart,
+      list.prices = data.frame(date2 = as.Date("2021-01-01"))
+    )
+  )
+
+  expect_null(result)
+  expect_true(any(grepl(
+    "Could not use 'list.prices' because it must contain 'currency', 'spot.rate2', and 'date2'.",
+    messages,
+    fixed = TRUE
+  )))
+})
+
 # Add test: timezone!
 
