@@ -413,6 +413,122 @@ test_that("format_detect helpers recognize already formatted transaction data", 
   expect_false(cryptoTax:::.format_detect_is_formatted_input(raw_like))
 })
 
+test_that("format_detect helpers expose the canonical formatted-transaction schema", {
+  expect_equal(
+    cryptoTax:::.formatted_transaction_required_columns(),
+    c("date", "currency", "quantity", "total.price", "spot.rate", "transaction", "exchange")
+  )
+
+  expect_true(cryptoTax:::.format_detect_is_formatted_candidate(
+    data.frame(
+      date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+      currency = "BTC",
+      quantity = 1,
+      transaction = "buy"
+    )
+  ))
+})
+
+test_that("format_detect rejects invalid formatted transaction inputs with a schema error", {
+  invalid_formatted <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    transaction = "buy",
+    total.price = 100,
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    format_detect(invalid_formatted),
+    "Invalid formatted transaction input. Missing required columns: spot.rate, exchange."
+  )
+})
+
+test_that("format_detect.list rejects invalid formatted inputs in mixed lists", {
+  invalid_formatted <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    transaction = "buy",
+    total.price = 100,
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    format_detect(list(invalid_formatted, data_newton)),
+    "Invalid formatted transaction input. Missing required columns: spot.rate, exchange."
+  )
+})
+
+test_that("run_format_detect_formatter validates formatter outputs against the canonical schema", {
+  testthat::local_mocked_bindings(
+    format_shakepay = function(...) {
+      data.frame(
+        date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+        currency = "BTC",
+        quantity = 1,
+        transaction = "buy",
+        total.price = 100
+      )
+    },
+    .package = "cryptoTax"
+  )
+
+  expect_error(
+    cryptoTax:::.run_format_detect_formatter(
+      exchange = "shakepay",
+      data = data_shakepay
+    ),
+    "Invalid formatter output for exchange 'shakepay'. Missing required columns: spot.rate, exchange."
+  )
+})
+
+test_that("representative formatter outputs satisfy the canonical transaction schema", {
+  list.prices <- list_prices_example
+
+  representative_outputs <- list(
+    shakepay = format_shakepay(data_shakepay),
+    newton = format_newton(data_newton),
+    pooltool = format_pooltool(data_pooltool),
+    CDC = suppressMessages(format_CDC(data_CDC)),
+    generic = format_generic(data_generic1),
+    blockfi = format_blockfi(data_blockfi, list.prices = list.prices),
+    binance = format_binance(data_binance, list.prices = list.prices),
+    binance_withdrawals = format_binance_withdrawals(
+      data_binance_withdrawals,
+      list.prices = list.prices
+    ),
+    CDC_exchange_trades = format_CDC_exchange_trades(
+      data_CDC_exchange_trades,
+      list.prices = list.prices
+    ),
+    coinsmart = format_coinsmart(data_coinsmart, list.prices = list.prices),
+    exodus = format_exodus(data_exodus, list.prices = list.prices),
+    gemini = format_gemini(data_gemini, list.prices = list.prices)
+  )
+
+  required_columns <- cryptoTax:::.formatted_transaction_required_columns()
+
+  for (exchange_name in names(representative_outputs)) {
+    output <- representative_outputs[[exchange_name]]
+
+    expect_true(is.data.frame(output), info = exchange_name)
+    expect_true(
+      all(required_columns %in% names(output)),
+      info = exchange_name
+    )
+    expect_identical(
+      cryptoTax:::.validate_formatted_transaction_schema(
+        output,
+        what = paste0("formatter output for exchange '", exchange_name, "'")
+      ),
+      output,
+      info = exchange_name
+    )
+  }
+})
+
 test_that("format_detect.list preserves already formatted entries in mixed lists", {
   formatted <- data.frame(
     date = as.POSIXct("2021-01-01 12:00:00", tz = "UTC"),

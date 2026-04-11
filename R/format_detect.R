@@ -66,17 +66,43 @@
   is.data.frame(x) && nrow(x) == 0
 }
 
+.formatted_transaction_required_columns <- function() {
+  c("date", "currency", "quantity", "total.price", "spot.rate", "transaction", "exchange")
+}
+
+.formatted_transaction_candidate_columns <- function() {
+  c("date", "currency", "quantity", "transaction")
+}
+
+.formatted_transaction_missing_columns <- function(data) {
+  setdiff(.formatted_transaction_required_columns(), names(data))
+}
+
+.format_detect_is_formatted_candidate <- function(x) {
+  is.data.frame(x) &&
+    all(.formatted_transaction_candidate_columns() %in% names(x))
+}
+
+.validate_formatted_transaction_schema <- function(data, what = "formatted transaction data") {
+  missing_columns <- .formatted_transaction_missing_columns(data)
+
+  if (length(missing_columns) == 0) {
+    return(data)
+  }
+
+  stop(
+    "Invalid ", what, ". Missing required columns: ",
+    paste(missing_columns, collapse = ", "),
+    "."
+  )
+}
+
 .format_detect_is_formatted_input <- function(x) {
   if (!is.data.frame(x)) {
     return(FALSE)
   }
 
-  required_columns <- c("date", "currency", "quantity", "transaction")
-  has_required_columns <- all(required_columns %in% names(x))
-  has_price_columns <- any(c("total.price", "spot.rate") %in% names(x))
-  has_origin_columns <- any(c("exchange", "rate.source") %in% names(x))
-
-  has_required_columns && has_price_columns && has_origin_columns
+  length(.formatted_transaction_missing_columns(x)) == 0
 }
 
 .format_detect_is_valid_input_list <- function(x) {
@@ -209,7 +235,11 @@
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param ... Used for other methods.
-#' @return A data frame of exchange transactions, formatted for further processing.
+#' @return A data frame of exchange transactions, formatted for further
+#'   processing with the canonical columns `date`, `currency`, `quantity`,
+#'   `total.price`, `spot.rate`, `transaction`, and `exchange`, plus optional
+#'   descriptive columns such as `fees`, `description`, `comment`,
+#'   `revenue.type`, and `rate.source`.
 #' @examples
 #' format_detect(data_shakepay)
 #' format_detect(data_newton)
@@ -329,11 +359,20 @@ format_detect <- function(data, ...) {
     return(NULL)
   }
 
-  if (.format_detect_uses_prices(exchange)) {
-    return(formatter(data, list.prices = list.prices, force = force))
+  formatted_data <- if (.format_detect_uses_prices(exchange)) {
+    formatter(data, list.prices = list.prices, force = force)
+  } else {
+    formatter(data)
   }
 
-  formatter(data)
+  if (is.null(formatted_data) || .format_detect_is_empty_input(formatted_data)) {
+    return(formatted_data)
+  }
+
+  .validate_formatted_transaction_schema(
+    formatted_data,
+    what = paste0("formatter output for exchange '", exchange, "'")
+  )
 }
 
 .format_detect_formatted_list <- function(data, list.prices = NULL, force = FALSE) {
@@ -347,6 +386,13 @@ format_detect <- function(data, ...) {
   lapply(data, function(x) {
     if (is.data.frame(x) && .format_detect_is_formatted_input(x)) {
       return(x)
+    }
+
+    if (is.data.frame(x) && .format_detect_is_formatted_candidate(x)) {
+      .validate_formatted_transaction_schema(
+        x,
+        what = "formatted transaction input"
+      )
     }
 
     format_detect(x, list.prices = list.prices, force = force)
@@ -369,6 +415,17 @@ format_detect <- function(data, ...) {
 #' @rdname format_detect
 #' @export
 format_detect.data.frame <- function(data, list.prices = NULL, force = FALSE, ...) {
+  if (.format_detect_is_formatted_input(data)) {
+    return(data)
+  }
+
+  if (.format_detect_is_formatted_candidate(data)) {
+    .validate_formatted_transaction_schema(
+      data,
+      what = "formatted transaction input"
+    )
+  }
+
   condition <- .format_detect_exchange(data)
 
   formatted.data <- .run_format_detect_formatter(

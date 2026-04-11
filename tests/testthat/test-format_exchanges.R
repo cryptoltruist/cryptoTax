@@ -199,5 +199,21 @@ test_that("format_exchanges does not silently return partial results for malform
   )))
 })
 
+test_that("format_exchanges rejects malformed already formatted inputs with a schema error", {
+  invalid_formatted <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    transaction = "buy",
+    total.price = 100,
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    format_exchanges(list(invalid_formatted, data_newton)),
+    "Invalid formatted transaction input. Missing required columns: spot.rate, exchange."
+  )
+})
+
 # Add test: timezone!
 

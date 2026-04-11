@@ -7,6 +7,7 @@
 - Tightened session-cache behavior by validating cached pricing/FX tables before reuse, scoping cache reads explicitly to `.GlobalEnv`, and removing a lingering `exists()`-driven Bank of Canada FX fetch pattern.
 - Moved normal in-session pricing cache writes into a package-owned cache with new `pricing_cache()` and `clear_pricing_cache()` helpers, while keeping `.GlobalEnv` reuse as a deprecated compatibility fallback with explicit migration messaging.
 - Converted the full report vignette to the built-in offline `list_prices_example` fixture and standardized formatter/report documentation so the public `list.prices` contract is clearer and more reproducible.
+- Added canonical formatted-transaction schema validation at the `format_detect()` / `format_exchanges()` boundary and expanded representative formatter tests so malformed formatted inputs or malformed formatter outputs fail early with direct schema errors.
 - Expanded focused regressions around malformed explicit pricing inputs, cache-reuse behavior, FX fallback behavior, formatter orchestration, report helpers, and the public report-preparation path.
 
 # cryptoTax 0.1.0.19

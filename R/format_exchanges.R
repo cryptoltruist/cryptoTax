@@ -18,7 +18,10 @@
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame of exchange transactions, formatted for further
-#' processing.
+#'   processing with the canonical columns `date`, `currency`, `quantity`,
+#'   `total.price`, `spot.rate`, `transaction`, and `exchange`, plus optional
+#'   descriptive columns such as `fees`, `description`, `comment`,
+#'   `revenue.type`, and `rate.source`.
 #' @export
 #' @examples
 #' format_exchanges(data_shakepay)

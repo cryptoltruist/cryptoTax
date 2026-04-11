@@ -21,7 +21,10 @@ it already exists (e.g., if you added new coins or new dates).}
 }
 \value{
 A data frame of exchange transactions, formatted for further
-processing.
+processing with the canonical columns \code{date}, \code{currency}, \code{quantity},
+\code{total.price}, \code{spot.rate}, \code{transaction}, and \code{exchange}, plus optional
+descriptive columns such as \code{fees}, \code{description}, \code{comment},
+\code{revenue.type}, and \code{rate.source}.
 }
 \description{
 Format one or more exchange transaction files into the
