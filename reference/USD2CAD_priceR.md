@@ -11,7 +11,12 @@ in the following, and run once per R session."
 ## Usage
 
 ``` r
-USD2CAD_priceR(data, conversion = "USD", currency = "CAD")
+USD2CAD_priceR(
+  data,
+  conversion = "USD",
+  currency = "CAD",
+  USD2CAD.table = NULL
+)
 ```
 
 ## Arguments
@@ -27,6 +32,11 @@ USD2CAD_priceR(data, conversion = "USD", currency = "CAD")
 - currency:
 
   What to convert from
+
+- USD2CAD.table:
+
+  Optional explicit exchange-rate table to use instead of relying on
+  cache or network fetches.
 
 ## Value
 

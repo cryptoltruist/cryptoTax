@@ -1,5 +1,32 @@
 # Changelog
 
+## cryptoTax 0.1.0.22
+
+**Improvements:**
+
+- Continued a broader deterministic-pricing and reporting cleanup across
+  [`USD2CAD()`](https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD.md),
+  [`USD2CAD_crypto2()`](https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD_crypto2.md),
+  [`USD2CAD_priceR()`](https://cryptoltruist.github.io/cryptoTax/reference/USD2CAD_priceR.md),
+  [`pricing_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/pricing_cache.md),
+  [`prepare_list_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md),
+  [`prepare_list_prices_slugs()`](https://cryptoltruist.github.io/cryptoTax/reference/prepare_list_prices.md),
+  [`match_prices()`](https://cryptoltruist.github.io/cryptoTax/reference/match_prices.md),
+  [`report_summary()`](https://cryptoltruist.github.io/cryptoTax/reference/report_summary.md),
+  and
+  [`report_overview()`](https://cryptoltruist.github.io/cryptoTax/reference/report_overview.md)
+  so explicit inputs and valid cached tables behave more consistently as
+  first-class offline paths instead of falling through to unnecessary
+  network failures.
+- Hardened cache reuse by allowing valid legacy compatibility caches to
+  survive malformed package-cache entries during the transition away
+  from workspace state, and by making cached `list.prices` reusable
+  earlier in both direct price matching and current-price report
+  generation.
+- Expanded focused regressions around cached pricing reuse, offline
+  report-price resolution, slug-preparation shortcuts, and explicit
+  FX-table support for the remaining USD/CAD helper paths.
+
 ## cryptoTax 0.1.0.21
 
 **Improvements:**

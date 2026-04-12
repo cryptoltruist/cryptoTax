@@ -17,7 +17,8 @@ USD2CAD_crypto2(
   end.date = lubridate::now("UTC"),
   conversion = "USD",
   currency = "CAD",
-  force = FALSE
+  force = FALSE,
+  USD2CAD.table = NULL
 )
 ```
 
@@ -47,6 +48,11 @@ USD2CAD_crypto2(
 
   Whether to force recreating `list.prices` even though it already
   exists (e.g., if you added new coins or new dates).
+
+- USD2CAD.table:
+
+  Optional explicit exchange-rate table to use instead of relying on
+  cache or network fetches.
 
 ## Value
 

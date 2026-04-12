@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.21</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.22</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.22" id="cryptotax-01022">cryptoTax 0.1.0.22<a class="anchor" aria-label="anchor" href="#cryptotax-01022"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader deterministic-pricing and reporting cleanup across <code><a href="../reference/USD2CAD.html">USD2CAD()</a></code>, <code><a href="../reference/USD2CAD_crypto2.html">USD2CAD_crypto2()</a></code>, <code><a href="../reference/USD2CAD_priceR.html">USD2CAD_priceR()</a></code>, <code><a href="../reference/pricing_cache.html">pricing_cache()</a></code>, <code><a href="../reference/prepare_list_prices.html">prepare_list_prices()</a></code>, <code><a href="../reference/prepare_list_prices.html">prepare_list_prices_slugs()</a></code>, <code><a href="../reference/match_prices.html">match_prices()</a></code>, <code><a href="../reference/report_summary.html">report_summary()</a></code>, and <code><a href="../reference/report_overview.html">report_overview()</a></code> so explicit inputs and valid cached tables behave more consistently as first-class offline paths instead of falling through to unnecessary network failures.</li>
+<li>Hardened cache reuse by allowing valid legacy compatibility caches to survive malformed package-cache entries during the transition away from workspace state, and by making cached <code>list.prices</code> reusable earlier in both direct price matching and current-price report generation.</li>
+<li>Expanded focused regressions around cached pricing reuse, offline report-price resolution, slug-preparation shortcuts, and explicit FX-table support for the remaining USD/CAD helper paths.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.21" id="cryptotax-01021">cryptoTax 0.1.0.21<a class="anchor" aria-label="anchor" href="#cryptotax-01021"></a></h2>
 <p><strong>Improvements:</strong></p>
