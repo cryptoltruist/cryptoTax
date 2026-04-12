@@ -302,6 +302,80 @@ test_that("ACB can deny a superficial loss based on pre-existing replacement sha
   expect_equal(result$ACB.share[3], 16.33333, tolerance = 1e-5)
 })
 
+test_that("ACB does not deny a loss when reacquired replacement shares are fully disposed before the window ends", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00",
+      "2021-01-25 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "buy", "sell"),
+    quantity = c(10, 10, 10, 10),
+    total.price = c(100, 50, 60, 70),
+    spot.rate = c(10, 5, 6, 7),
+    fees = c(0, 0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$sup.loss, c(FALSE, FALSE, FALSE, FALSE))
+  expect_true(all(is.na(result$gains.sup)))
+  expect_true(all(is.na(result$gains.excess)))
+  expect_equal(result$gains.uncorrected[c(2, 4)], c(-50, 10))
+  expect_equal(result$gains[c(2, 4)], c(-50, 10))
+  expect_equal(result$ACB, c(100, 0, 60, 0))
+  expect_equal(result$ACB.share, c(10, 0, 6, 0))
+})
+
+test_that("ACB allows a first-row non-taxable revenue lot with zero opening cost base", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("revenue", "sell"),
+    quantity = c(2, 1),
+    total.price = c(20, 15),
+    spot.rate = c(10, 15),
+    revenue.type = c("promos", NA),
+    fees = c(0, 0)
+  )
+
+  result <- ACB(data, sup.loss = FALSE, verbose = FALSE)
+
+  expect_equal(result$value, c(20, 15))
+  expect_equal(result$total.price, c(0, 15))
+  expect_equal(result$total.quantity, c(2, 1))
+  expect_equal(result$ACB, c(0, 0))
+  expect_equal(result$ACB.share, c(0, 0))
+  expect_equal(result$gains, c(NA, 15))
+})
+
+test_that("ACB allows a first-row taxable revenue lot as the opening cost base", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("revenue", "sell"),
+    quantity = c(2, 1),
+    total.price = c(20, 15),
+    spot.rate = c(10, 15),
+    revenue.type = c("staking", NA),
+    fees = c(0, 0)
+  )
+
+  result <- ACB(data, sup.loss = FALSE, verbose = FALSE)
+
+  expect_equal(result$value, c(20, 15))
+  expect_equal(result$total.price, c(20, 15))
+  expect_equal(result$total.quantity, c(2, 1))
+  expect_equal(result$ACB, c(20, 10))
+  expect_equal(result$ACB.share, c(10, 10))
+  expect_equal(result$gains, c(NA, 5))
+})
+
 test_that("ACB keeps non-taxable crypto revenue out of cost base while still increasing quantity", {
   data <- data.frame(
     date = as.POSIXct(c(
@@ -395,4 +469,55 @@ test_that("ACB incorporates buy and sell fees into cost base and realized gains"
   expect_equal(result$ACB.share[1], 10.5)
   expect_equal(result$gains[2], 13)
   expect_equal(result$ACB[2], 0)
+})
+
+test_that("ACB applies partial superficial losses using fee-adjusted gains and reacquisition cost base", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "buy"),
+    quantity = c(10, 10, 4),
+    total.price = c(100, 50, 24),
+    spot.rate = c(10, 5, 6),
+    fees = c(5, 2, 1)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$sup.loss, c(FALSE, TRUE, FALSE))
+  expect_equal(result$gains.uncorrected[2], -57)
+  expect_equal(result$gains.sup[2], -22.8, tolerance = 1e-6)
+  expect_equal(result$gains.excess[2], -34.2, tolerance = 1e-6)
+  expect_equal(result$gains[2], -34.2, tolerance = 1e-6)
+  expect_equal(result$ACB, c(105, 0, 47.8), tolerance = 1e-6)
+  expect_equal(result$ACB.share, c(10.5, 0, 11.95), tolerance = 1e-6)
+})
+
+test_that("ACB limits a day-30 superficial-loss denial to replacement shares still held at the end of the window", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-02-09 00:00:00",
+      "2021-02-15 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "buy", "sell"),
+    quantity = c(10, 10, 4, 4),
+    total.price = c(100, 50, 24, 28),
+    spot.rate = c(10, 5, 6, 7),
+    fees = c(0, 0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$sup.loss, c(FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result$gains.uncorrected[c(2, 4)], c(-50, -16))
+  expect_equal(result$gains.sup[2], -20)
+  expect_equal(result$gains.excess[2], -30)
+  expect_equal(result$gains[c(2, 4)], c(-30, -16))
+  expect_equal(result$ACB, c(100, 0, 44, 0))
+  expect_equal(result$ACB.share, c(10, 0, 11, 0))
 })

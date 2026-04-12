@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.23
+
+**Improvements:**
+
+- Continued a broader ACB and superficial-loss correctness hardening pass across `ACB()` and `format_ACB()` with direct numeric regressions for revenue-first opening lots, fee-adjusted superficial-loss calculations, replacement shares reacquired on the day-30 boundary, and cases where reacquired shares are later fully disposed before the superficial-loss window ends.
+- Expanded package-level mixed multi-asset coverage so BTC superficial-loss corrections, fee-adjusted denied-loss amounts, and replacement-share timing all remain isolated to the affected currency pool while unrelated ETH gains and staking revenue continue to behave independently.
+- Strengthened the correctness-validation bank with more direct worked edge cases around zero cost base, zero remaining replacement shares, and deductible excess-loss handling, reducing reliance on snapshots alone for the hardest ACB paths.
+
 # cryptoTax 0.1.0.22
 
 **Improvements:**
