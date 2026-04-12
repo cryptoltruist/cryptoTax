@@ -427,3 +427,96 @@ test_that("format_ACB limits day-30 superficial-loss denial to replacement share
   expect_equal(eth$ACB.share, c(200, 0))
 })
 
+test_that("format_ACB limits superficial-loss denial to replacement shares still held after partial replacement disposals", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00",
+      "2021-01-25 00:00:00",
+      "2021-01-26 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "BTC", "ETH"),
+    quantity = c(10, 1, 10, 6, 4, 1),
+    total.price = c(100, 200, 50, 36, 40, 240),
+    spot.rate = c(10, 200, 5, 6, 10, 240),
+    transaction = c("buy", "buy", "sell", "buy", "sell", "sell"),
+    revenue.type = c(NA, NA, NA, NA, NA, NA),
+    description = c(
+      "buy btc",
+      "buy eth",
+      "sell btc at loss",
+      "reacquire btc",
+      "sell some replacement btc",
+      "sell eth at gain"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$sup.loss, c(FALSE, TRUE, FALSE, FALSE))
+  expect_equal(btc$gains.uncorrected[c(2, 4)], c(-50, 9.333333), tolerance = 1e-6)
+  expect_equal(btc$gains.sup[2], -10)
+  expect_equal(btc$gains.excess[2], -40)
+  expect_equal(btc$gains[c(2, 4)], c(-40, 9.333333), tolerance = 1e-6)
+  expect_equal(btc$ACB, c(100, 0, 46, 15.333333), tolerance = 1e-6)
+  expect_equal(btc$ACB.share, c(10, 0, 7.666667, 7.666667), tolerance = 1e-6)
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40))
+  expect_equal(eth$ACB, c(200, 0))
+  expect_equal(eth$ACB.share, c(200, 0))
+})
+
+test_that("format_ACB never applies superficial-loss treatment to a gain just because replacement shares are later acquired", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00",
+      "2021-01-25 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "ETH"),
+    quantity = c(10, 1, 10, 4, 1),
+    total.price = c(100, 200, 150, 48, 240),
+    spot.rate = c(10, 200, 15, 12, 240),
+    transaction = c("buy", "buy", "sell", "buy", "sell"),
+    revenue.type = c(NA, NA, NA, NA, NA),
+    description = c(
+      "buy btc",
+      "buy eth",
+      "sell btc at gain",
+      "reacquire btc after gain",
+      "sell eth at gain"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_true(all(is.na(btc$gains.sup)))
+  expect_true(all(is.na(btc$gains.excess)))
+  expect_equal(btc$gains, c(NA, 50, NA))
+  expect_equal(btc$ACB, c(100, 0, 48))
+  expect_equal(btc$ACB.share, c(10, 0, 12))
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40))
+  expect_equal(eth$ACB, c(200, 0))
+  expect_equal(eth$ACB.share, c(200, 0))
+})
+

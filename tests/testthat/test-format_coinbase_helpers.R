@@ -40,6 +40,7 @@ test_that("format_coinbase_buy derives converted asset and spot rate", {
   expect_equal(result$currency, "BTC")
   expect_equal(result$quantity, 1)
   expect_equal(result$spot.rate, 100)
+  expect_equal(result$fees, 0)
 })
 
 test_that("format_coinbase_finalize annotates merged output", {
@@ -67,4 +68,12 @@ test_that("format_coinbase_finalize annotates merged output", {
   expect_equal(result$exchange, "coinbase")
   expect_equal(result$rate.source, "exchange")
   expect_true(all(c("fees", "description", "comment") %in% names(result)))
+})
+
+test_that("format_coinbase zeroes buy-side fees when Coinbase total.price is already inclusive of fees", {
+  formatted <- format_coinbase(data_coinbase)
+  buy.rows <- formatted[formatted$transaction == "buy" & formatted$description == "Convert", ]
+
+  expect_true(nrow(buy.rows) > 0)
+  expect_true(all(buy.rows$fees == 0))
 })

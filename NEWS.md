@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.24
+
+**Improvements:**
+
+- Continued the accounting-hardening pass across `format_coinbase()`, `ACB()`, and `format_ACB()` by making fee handling more explicit: Coinbase convert buys are now treated as fee-inclusive acquisitions, while representative exchange and wallet paths now have direct regressions documenting when fees stay separate or are modeled as separate disposition rows instead.
+- Expanded the fiscal-validation bank with more direct numeric superficial-loss edge cases, including partial replacement-share survival through the 30-day window and an explicit guard that nearby reacquisitions do not trigger superficial-loss treatment when the original sale realized a gain.
+- Mirrored those new rule checks at the package level in `format_ACB()` so the full formatter-to-tax-engine path now validates the same replacement-share and gain-versus-loss boundaries as the lower-level `ACB()` tests.
+
 # cryptoTax 0.1.0.23
 
 **Improvements:**

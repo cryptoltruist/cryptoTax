@@ -58,7 +58,10 @@ format_coinbase <- function(data) {
       transaction = "buy",
       currency = stringr::word(.data$comment, -1),
       quantity = as.numeric(stringr::word(.data$comment, -2)),
-      spot.rate = .data$total.price / .data$quantity
+      spot.rate = .data$total.price / .data$quantity,
+      # Coinbase reports this total as inclusive of fees/spread, so leaving the
+      # fee here would double-count it later in ACB().
+      fees = 0
     )
 }
 
