@@ -31,14 +31,14 @@ format_coinbase(data_coinbase)
 #> 5 2024-04-02 11:03:55      ETH  0.00844271       32.59 4.752220e+03        sell
 #> 6 2024-04-02 11:03:55      ADA 40.71252100       32.59 8.004908e-01         buy
 #> 7 2024-04-02 14:07:05      ADA  0.00000000        0.00 7.600000e-01        sell
-#>    fees             description
-#> 1  0.00 bankruptcy distribution
-#> 2  0.00 bankruptcy distribution
-#> 3  0.00                 Convert
-#> 4 12.14                 Convert
-#> 5  0.00                 Convert
-#> 6  9.52                 Convert
-#> 7  0.00                    Send
+#>   fees             description
+#> 1    0 bankruptcy distribution
+#> 2    0 bankruptcy distribution
+#> 3    0                 Convert
+#> 4    0                 Convert
+#> 5    0                 Convert
+#> 6    0                 Convert
+#> 7    0                    Send
 #>                                                         comment revenue.type
 #> 1 Received 0.00844271 ETH from Celsius Network LLC Crypto Di...     interest
 #> 2 Received 0.00042515 BTC from Celsius Network LLC Crypto Di...     interest

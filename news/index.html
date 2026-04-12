@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.23</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.24</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.24" id="cryptotax-01024">cryptoTax 0.1.0.24<a class="anchor" aria-label="anchor" href="#cryptotax-01024"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued the accounting-hardening pass across <code><a href="../reference/format_coinbase.html">format_coinbase()</a></code>, <code><a href="../reference/ACB.html">ACB()</a></code>, and <code><a href="../reference/format_ACB.html">format_ACB()</a></code> by making fee handling more explicit: Coinbase convert buys are now treated as fee-inclusive acquisitions, while representative exchange and wallet paths now have direct regressions documenting when fees stay separate or are modeled as separate disposition rows instead.</li>
+<li>Expanded the fiscal-validation bank with more direct numeric superficial-loss edge cases, including partial replacement-share survival through the 30-day window and an explicit guard that nearby reacquisitions do not trigger superficial-loss treatment when the original sale realized a gain.</li>
+<li>Mirrored those new rule checks at the package level in <code><a href="../reference/format_ACB.html">format_ACB()</a></code> so the full formatter-to-tax-engine path now validates the same replacement-share and gain-versus-loss boundaries as the lower-level <code><a href="../reference/ACB.html">ACB()</a></code> tests.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.23" id="cryptotax-01023">cryptoTax 0.1.0.23<a class="anchor" aria-label="anchor" href="#cryptotax-01023"></a></h2>
 <p><strong>Improvements:</strong></p>
