@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.23</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.23" id="cryptotax-01023">cryptoTax 0.1.0.23<a class="anchor" aria-label="anchor" href="#cryptotax-01023"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued a broader ACB and superficial-loss correctness hardening pass across <code><a href="../reference/ACB.html">ACB()</a></code> and <code><a href="../reference/format_ACB.html">format_ACB()</a></code> with direct numeric regressions for revenue-first opening lots, fee-adjusted superficial-loss calculations, replacement shares reacquired on the day-30 boundary, and cases where reacquired shares are later fully disposed before the superficial-loss window ends.</li>
+<li>Expanded package-level mixed multi-asset coverage so BTC superficial-loss corrections, fee-adjusted denied-loss amounts, and replacement-share timing all remain isolated to the affected currency pool while unrelated ETH gains and staking revenue continue to behave independently.</li>
+<li>Strengthened the correctness-validation bank with more direct worked edge cases around zero cost base, zero remaining replacement shares, and deductible excess-loss handling, reducing reliance on snapshots alone for the hardest ACB paths.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.22" id="cryptotax-01022">cryptoTax 0.1.0.22<a class="anchor" aria-label="anchor" href="#cryptotax-01022"></a></h2>
 <p><strong>Improvements:</strong></p>
