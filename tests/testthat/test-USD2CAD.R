@@ -112,6 +112,34 @@ test_that("prepare_list_prices_slugs returns explicit list.prices unchanged", {
   expect_identical(result, explicit_list_prices)
 })
 
+test_that("prepare_list_prices_slugs can reuse cached list.prices before inspecting transaction inputs", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cached_list_prices <- data.frame(
+      currency = "BTC",
+      spot.rate2 = 123.45,
+      date2 = as.Date("2021-01-01")
+    )
+    cryptoTax:::.set_cached_pricing_object("list.prices", cached_list_prices)
+
+    input <- data.frame(currency = "BTC")
+
+    expect_message(
+      result <- prepare_list_prices_slugs(
+        input,
+        list.prices = NULL,
+        force = FALSE,
+        verbose = TRUE
+      ),
+      "Using cached 'list.prices'"
+    )
+
+    expect_identical(result, cached_list_prices)
+  })
+})
+
 test_that("prepare_list_prices returns explicit list.prices unchanged even when forced", {
   explicit_list_prices <- data.frame(
     currency = "BTC",
@@ -690,6 +718,62 @@ test_that("USD2CAD_priceR reuses cached package rates without refetching", {
   })
 })
 
+test_that("USD2CAD_crypto2 uses an explicit crypto2-style rate table without cache or internet", {
+  explicit_rates <- data.frame(
+    date2 = as.Date("2021-01-01"),
+    CAD.rate = 1.25
+  )
+  input <- data.frame(
+    date = as.Date("2021-01-01")
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "curl",
+    has_internet = function() FALSE
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "cryptoTax",
+    .fetch_usd2cad_crypto2_table = function(...) {
+      stop("should not refetch")
+    }
+  )
+
+  result <- expect_no_message(
+    USD2CAD_crypto2(input, USD2CAD.table = explicit_rates)
+  )
+
+  expect_equal(result$CAD.rate, 1.25)
+})
+
+test_that("USD2CAD_priceR uses an explicit priceR-style rate table without cache or internet", {
+  explicit_rates <- data.frame(
+    date = as.Date("2021-01-01"),
+    CAD.rate = 1.25
+  )
+  input <- data.frame(
+    date = as.Date("2021-01-01")
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "curl",
+    has_internet = function() FALSE
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "cryptoTax",
+    .fetch_usd2cad_pricer_table = function(...) {
+      stop("should not refetch")
+    }
+  )
+
+  result <- expect_no_message(
+    USD2CAD_priceR(input, USD2CAD.table = explicit_rates)
+  )
+
+  expect_equal(result$CAD.rate, 1.25)
+})
+
 test_that("requires_online_prices is FALSE when explicit price inputs are provided", {
   expect_false(cryptoTax:::.requires_online_prices(
     list.prices = data.frame(currency = "BTC"),
@@ -718,6 +802,34 @@ test_that("requires_online_prices returns TRUE offline when no price inputs are 
   )
 
   expect_true(result)
+})
+
+test_that("requires_online_prices is FALSE offline when reusable cached list.prices exists", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cryptoTax:::.set_cached_pricing_object(
+      "list.prices",
+      data.frame(
+        currency = "BTC",
+        spot.rate2 = 123.45,
+        date2 = as.Date("2021-01-01")
+      )
+    )
+
+    testthat::local_mocked_bindings(
+      has_internet = function() FALSE,
+      .package = "curl"
+    )
+
+    expect_false(cryptoTax:::.requires_online_prices(
+      list.prices = NULL,
+      coin_hist = NULL,
+      force = FALSE,
+      verbose = TRUE
+    ))
+  })
 })
 
 test_that("resolve_match_prices delegates to prepare_list_prices_slugs", {
@@ -974,6 +1086,37 @@ test_that("reuse_cached_pricing_object validates cached values before reusing th
   })
 })
 
+test_that("reuse_cached_pricing_object can fall back from an invalid package cache to a valid legacy cache", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cryptoTax:::.set_cached_pricing_object(
+      "list.prices",
+      data.frame(date = as.Date("2021-01-01"))
+    )
+
+    legacy_value <- data.frame(
+      currency = "BTC",
+      spot.rate2 = 5,
+      date2 = as.Date("2021-01-03")
+    )
+    assign("list.prices", legacy_value, envir = .GlobalEnv)
+    on.exit(rm(list = "list.prices", envir = .GlobalEnv), add = TRUE)
+
+    expect_message(
+      result <- cryptoTax:::.reuse_cached_pricing_object(
+        name = "list.prices",
+        validator = cryptoTax:::.is_valid_list_prices_table,
+        verbose = TRUE
+      ),
+      "Using deprecated legacy '.GlobalEnv' cache for 'list.prices'"
+    )
+
+    expect_identical(result, legacy_value)
+  })
+})
+
 test_that("pricing_cache inspects the package-owned cache and legacy fallback", {
   local({
     clear_pricing_cache()
@@ -1040,6 +1183,41 @@ test_that("match_prices ignores cached list.prices objects with the wrong schema
     )
 
     expect_null(result)
+  })
+})
+
+test_that("match_prices can reuse cached list.prices offline", {
+  local({
+    clear_pricing_cache()
+    on.exit(clear_pricing_cache(), add = TRUE)
+
+    cryptoTax:::.set_cached_pricing_object(
+      "list.prices",
+      data.frame(
+        currency = "BTC",
+        spot.rate2 = 123.45,
+        date2 = as.Date("2021-01-01")
+      )
+    )
+
+    testthat::local_mocked_bindings(
+      has_internet = function() FALSE,
+      .package = "curl"
+    )
+
+    tx <- data.frame(
+      date = as.POSIXct("2021-01-01 10:00:00", tz = "UTC"),
+      currency = "BTC",
+      quantity = 1
+    )
+
+    expect_message(
+      result <- match_prices(tx, verbose = TRUE),
+      "Using cached 'list.prices'"
+    )
+
+    expect_equal(result$spot.rate, 123.45)
+    expect_equal(result$rate.source, "coinmarketcap")
   })
 })
 

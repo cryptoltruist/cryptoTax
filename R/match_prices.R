@@ -15,8 +15,21 @@
     mutate(spot.rate = ifelse(.data$currency %in% c("TCAD", "CAD"), 1, .data$spot.rate))
 }
 
-.requires_online_prices <- function(list.prices = NULL, coin_hist = NULL, verbose = TRUE) {
+.requires_online_prices <- function(list.prices = NULL,
+                                    coin_hist = NULL,
+                                    force = FALSE,
+                                    verbose = TRUE) {
   if (!is.null(list.prices) || !is.null(coin_hist)) {
+    return(FALSE)
+  }
+
+  cached_list_prices <- .reuse_cached_pricing_object(
+    name = "list.prices",
+    force = force,
+    verbose = FALSE,
+    validator = .is_valid_list_prices_table
+  )
+  if (!is.null(cached_list_prices)) {
     return(FALSE)
   }
 
@@ -129,6 +142,7 @@ match_prices <- function(data,
   if (.requires_online_prices(
     list.prices = list.prices,
     coin_hist = coin_hist,
+    force = force,
     verbose = verbose
   )) {
     return(NULL)

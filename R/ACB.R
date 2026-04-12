@@ -124,6 +124,30 @@
   data
 }
 
+.superficial_loss_denied_quantity <- function(data, i) {
+  denied.quantity <- min(
+    as.numeric(data[i, "quantity.60days"]),
+    as.numeric(data[i, "sup.loss.quantity"]),
+    as.numeric(data[i, "share.left60"]),
+    na.rm = TRUE
+  )
+
+  if (!is.finite(denied.quantity)) {
+    return(0)
+  }
+
+  denied.quantity
+}
+
+.acb_scalar <- function(data, i, column) {
+  data[[column]][[i]]
+}
+
+.set_acb_scalar <- function(data, i, column, value) {
+  data[[column]][[i]] <- value
+  data
+}
+
 #' @title Calculate capital gains from realized gain transactions
 #'
 #' @description Calculate realized and unrealized capital gains/losses
@@ -274,38 +298,54 @@ ACB <- function(data,
 
     if (isTRUE(sup.loss)) {
       # Keep track of uncorrected gains
-      data[i, "gains.uncorrected"] <- data[i, "gains"]
+      data <- .set_acb_scalar(
+        data,
+        i,
+        "gains.uncorrected",
+        .acb_scalar(data, i, "gains")
+      )
 
       # Change sup.loss to FALSE if the gain is positive!
-      if (i > 1 && isTRUE(data[[i, "sup.loss"]])) {
-        data[i, "sup.loss"] <- ifelse(data[i, "gains"] >= 0,
-          FALSE,
-          data[i, "sup.loss"]
-        )
+      if (i > 1 && isTRUE(.acb_scalar(data, i, "sup.loss"))) {
+        if (.acb_scalar(data, i, "gains") >= 0) {
+          data <- .set_acb_scalar(data, i, "sup.loss", FALSE)
+        }
       }
 
       # After first row: calculate superficial capital gains and losses
-      if (i > 1 && is_sell_transaction && isTRUE(data[[i, "sup.loss"]])) {
-        data[i, "gains.sup"] <- data[i, "gains"] * (min(
-          data[i, "quantity.60days"],
-          data[i, "sup.loss.quantity"],
-          data[i, "share.left60"]
-        ) / data[i, "sup.loss.quantity"])
-        if (is.na(data[i, "gains.sup"]) && data[i, "sup.loss.quantity"] == 0) {
-          data[i, "gains.sup"] <- 0
+      if (i > 1 && is_sell_transaction && isTRUE(.acb_scalar(data, i, "sup.loss"))) {
+        denied.quantity <- .superficial_loss_denied_quantity(data, i)
+
+        if (denied.quantity <= 0) {
+          data <- .set_acb_scalar(data, i, "sup.loss", FALSE)
+          data <- .set_acb_scalar(data, i, "gains.sup", 0)
+        } else {
+          data <- .set_acb_scalar(
+            data,
+            i,
+            "gains.sup",
+            .acb_scalar(data, i, "gains") *
+              (denied.quantity / .acb_scalar(data, i, "sup.loss.quantity"))
+          )
         }
       }
 
       # Correct gains.sup for actual gains
-      data[i, "gains.sup"] <- ifelse(isTRUE(data[[i, "sup.loss"]]),
-        data[i, "gains.sup"],
-        0
-      )
+      if (isTRUE(.acb_scalar(data, i, "sup.loss"))) {
+        data <- .set_acb_scalar(data, i, "gains.sup", .acb_scalar(data, i, "gains.sup"))
+      } else {
+        data <- .set_acb_scalar(data, i, "gains.sup", 0)
+      }
 
       # Preserve the deductible remainder whenever only part of the loss is superficial.
-      if (i > 1 && isTRUE(data[[i, "sup.loss"]]) &&
-        !is.na(data[i, "gains.sup"])) {
-        data[i, "gains.excess"] <- data[i, "gains"] - data[i, "gains.sup"]
+      if (i > 1 && isTRUE(.acb_scalar(data, i, "sup.loss")) &&
+        !is.na(.acb_scalar(data, i, "gains.sup"))) {
+        data <- .set_acb_scalar(
+          data,
+          i,
+          "gains.excess",
+          .acb_scalar(data, i, "gains") - .acb_scalar(data, i, "gains.sup")
+        )
       }
 
       # After first row: recalculate ACB for added quantities MINUS sup loss

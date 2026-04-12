@@ -10,7 +10,8 @@ USD2CAD_crypto2(
   end.date = lubridate::now("UTC"),
   conversion = "USD",
   currency = "CAD",
-  force = FALSE
+  force = FALSE,
+  USD2CAD.table = NULL
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ USD2CAD_crypto2(
 
 \item{force}{Whether to force recreating \code{list.prices} even though
 it already exists (e.g., if you added new coins or new dates).}
+
+\item{USD2CAD.table}{Optional explicit exchange-rate table to use instead
+of relying on cache or network fetches.}
 }
 \value{
 A data frame, with the following columns: date, CAD.rate.

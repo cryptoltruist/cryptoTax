@@ -360,8 +360,14 @@ prepare_list_prices_slugs <- function(data,
                                       coins.list = NULL,
                                       coin_hist = NULL,
                                       USD2CAD.table = NULL) {
-  if (!is.null(list.prices)) {
-    return(list.prices)
+  resolved_list_prices <- .resolve_list_prices(
+    force = force,
+    list.prices = list.prices,
+    verbose = verbose
+  )
+
+  if (!is.null(resolved_list_prices)) {
+    return(resolved_list_prices)
   }
 
   prepared_inputs <- .prepare_list_price_inputs(

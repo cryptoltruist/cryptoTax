@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.22
+
+**Improvements:**
+
+- Continued a broader deterministic-pricing and reporting cleanup across `USD2CAD()`, `USD2CAD_crypto2()`, `USD2CAD_priceR()`, `pricing_cache()`, `prepare_list_prices()`, `prepare_list_prices_slugs()`, `match_prices()`, `report_summary()`, and `report_overview()` so explicit inputs and valid cached tables behave more consistently as first-class offline paths instead of falling through to unnecessary network failures.
+- Hardened cache reuse by allowing valid legacy compatibility caches to survive malformed package-cache entries during the transition away from workspace state, and by making cached `list.prices` reusable earlier in both direct price matching and current-price report generation.
+- Expanded focused regressions around cached pricing reuse, offline report-price resolution, slug-preparation shortcuts, and explicit FX-table support for the remaining USD/CAD helper paths.
+
 # cryptoTax 0.1.0.21
 
 **Improvements:**

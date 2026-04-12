@@ -196,9 +196,17 @@ test_that("resolve_report_today_data disables today.data when offline with no pr
     has_internet = function() FALSE
   )
 
+  testthat::local_mocked_bindings(
+    .package = "cryptoTax",
+    prepare_list_prices_slugs = function(...) NULL
+  )
+
   expect_message(
     price.state <- cryptoTax:::.resolve_report_today_data(
-      formatted.ACB = data.frame(currency = "BTC"),
+      formatted.ACB = data.frame(
+        currency = "BTC",
+        date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC")
+      ),
       today.data = TRUE,
       list.prices = NULL,
       slug = NULL,
@@ -211,6 +219,37 @@ test_that("resolve_report_today_data disables today.data when offline with no pr
 
   expect_false(price.state$today.data)
   expect_null(price.state$list.prices)
+})
+
+test_that("resolve_report_today_data can reuse cached prices offline before disabling today.data", {
+  explicit_list_prices <- data.frame(
+    currency = "BTC",
+    spot.rate2 = 123.45,
+    date2 = as.Date("2021-01-01")
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "curl",
+    has_internet = function() FALSE
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "cryptoTax",
+    prepare_list_prices_slugs = function(...) explicit_list_prices
+  )
+
+  price.state <- cryptoTax:::.resolve_report_today_data(
+    formatted.ACB = data.frame(currency = "BTC"),
+    today.data = TRUE,
+    list.prices = NULL,
+    slug = NULL,
+    start.date = NULL,
+    force = FALSE,
+    verbose = TRUE
+  )
+
+  expect_true(price.state$today.data)
+  expect_identical(price.state$list.prices, explicit_list_prices)
 })
 
 test_that("prepare_report_current_rates emits the requested signal style", {

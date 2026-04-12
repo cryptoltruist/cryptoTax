@@ -33,6 +33,35 @@
   list(found = FALSE, value = NULL, env = NULL)
 }
 
+.find_reusable_cached_pricing_object <- function(name,
+                                                 allow_null = FALSE,
+                                                 validator = NULL) {
+  cache_envs <- list(
+    .pricing_cache_env(),
+    .legacy_pricing_cache_env()
+  )
+
+  for (cache_env in cache_envs) {
+    if (!exists(name, envir = cache_env, inherits = FALSE)) {
+      next
+    }
+
+    value <- get(name, envir = cache_env, inherits = FALSE)
+
+    if (!isTRUE(allow_null) && is.null(value)) {
+      next
+    }
+
+    if (is.function(validator) && !isTRUE(validator(value))) {
+      next
+    }
+
+    return(list(found = TRUE, value = value, env = cache_env))
+  }
+
+  list(found = FALSE, value = NULL, env = NULL)
+}
+
 .cached_pricing_object_source <- function(name, allow_null = FALSE) {
   cache_match <- .find_cached_pricing_object(name, allow_null = allow_null)
 
@@ -112,19 +141,29 @@
     return(NULL)
   }
 
-  cached_value <- .get_cached_pricing_object(name)
+  cache_match <- .find_reusable_cached_pricing_object(
+    name = name,
+    allow_null = allow_null,
+    validator = validator
+  )
 
-  if (is.function(validator) && !isTRUE(validator(cached_value))) {
+  if (!isTRUE(cache_match$found)) {
     return(NULL)
   }
 
   .message_cached_pricing_reuse(
     name = name,
-    source = .cached_pricing_object_source(name, allow_null = allow_null),
+    source = if (identical(cache_match$env, .pricing_cache_env())) {
+      "package"
+    } else if (identical(cache_match$env, .legacy_pricing_cache_env())) {
+      "legacy"
+    } else {
+      NULL
+    },
     verbose = verbose
   )
 
-  cached_value
+  cache_match$value
 }
 
 .is_valid_list_prices_table <- function(list.prices) {

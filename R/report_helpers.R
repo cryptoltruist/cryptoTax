@@ -31,13 +31,6 @@
                                        start.date,
                                        force,
                                        verbose = TRUE) {
-  if (isTRUE(today.data) && is.null(list.prices) && isFALSE(curl::has_internet())) {
-    if (isTRUE(verbose)) {
-      message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
-    }
-    return(list(today.data = FALSE, list.prices = list.prices))
-  }
-
   if (isTRUE(today.data) && is.null(list.prices)) {
     list.prices <- prepare_list_prices_slugs(
       formatted.ACB,
@@ -47,6 +40,13 @@
       force = force,
       verbose = verbose
     )
+  }
+
+  if (isTRUE(today.data) && is.null(list.prices) && isFALSE(curl::has_internet())) {
+    if (isTRUE(verbose)) {
+      message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
+    }
+    return(list(today.data = FALSE, list.prices = list.prices))
   }
 
   if (isTRUE(today.data) && !is.null(list.prices) && !.can_use_report_today_prices(list.prices)) {

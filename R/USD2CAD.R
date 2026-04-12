@@ -272,6 +272,8 @@ cur2CAD_table <- function() {
 #' @param currency What to convert from
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
+#' @param USD2CAD.table Optional explicit exchange-rate table to use instead
+#' of relying on cache or network fetches.
 #' @return A data frame, with the following columns: date, CAD.rate.
 #' @export
 #' @importFrom dplyr %>% filter pull inner_join
@@ -282,19 +284,22 @@ USD2CAD_crypto2 <- function(data,
                             end.date = lubridate::now("UTC"),
                             conversion = "USD",
                             currency = "CAD",
-                            force = FALSE) {
-  if (isFALSE(curl::has_internet())) {
+                            force = FALSE,
+                            USD2CAD.table = NULL) {
+  if (is.null(USD2CAD.table) && isFALSE(curl::has_internet())) {
     message("This function requires Internet access.")
     return(NULL)
   }
 
-  USD2CAD.table <- .reuse_cached_pricing_object(
-    name = "USD2CAD.table",
-    force = force,
-    verbose = TRUE,
-    allow_null = TRUE,
-    validator = .is_valid_usd2cad_crypto2_table
-  )
+  if (is.null(USD2CAD.table)) {
+    USD2CAD.table <- .reuse_cached_pricing_object(
+      name = "USD2CAD.table",
+      force = force,
+      verbose = TRUE,
+      allow_null = TRUE,
+      validator = .is_valid_usd2cad_crypto2_table
+    )
+  }
 
   if (is.null(USD2CAD.table)) {
     USD2CAD.table <- .fetch_usd2cad_crypto2_table(
@@ -332,24 +337,28 @@ USD2CAD_crypto2 <- function(data,
 #' @param data The data
 #' @param conversion What to convert to
 #' @param currency What to convert from
+#' @param USD2CAD.table Optional explicit exchange-rate table to use instead
+#' of relying on cache or network fetches.
 #' @return A data frame, with the following columns: date, CAD.rate.
 #' @export
 #' @importFrom dplyr %>% filter pull inner_join
 #' @importFrom rlang .data
 
-USD2CAD_priceR <- function(data, conversion = "USD", currency = "CAD") {
-  if (isFALSE(curl::has_internet())) {
+USD2CAD_priceR <- function(data, conversion = "USD", currency = "CAD", USD2CAD.table = NULL) {
+  if (is.null(USD2CAD.table) && isFALSE(curl::has_internet())) {
     message("This function requires Internet access.")
     return(NULL)
   }
 
-  USD2CAD.table <- .reuse_cached_pricing_object(
-    name = "USD2CAD.table",
-    force = FALSE,
-    verbose = FALSE,
-    allow_null = TRUE,
-    validator = .is_valid_usd2cad_pricer_cache
-  )
+  if (is.null(USD2CAD.table)) {
+    USD2CAD.table <- .reuse_cached_pricing_object(
+      name = "USD2CAD.table",
+      force = FALSE,
+      verbose = FALSE,
+      allow_null = TRUE,
+      validator = .is_valid_usd2cad_pricer_cache
+    )
+  }
 
   if (is.null(USD2CAD.table)) {
     USD2CAD.table <- .fetch_usd2cad_pricer_table(

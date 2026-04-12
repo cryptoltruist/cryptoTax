@@ -42,10 +42,16 @@
 }
 
 .finalize_format_acb_output <- function(capital.gains) {
-  capital.gains %>%
+  capital.gains <- capital.gains %>%
     arrange(.data$date) %>%
-    relocate("date", .before = "currency") %>%
-    relocate("fees", .before = "description")
+    relocate("date", .before = "currency")
+
+  if ("fees" %in% names(capital.gains) && "description" %in% names(capital.gains)) {
+    capital.gains <- capital.gains %>%
+      relocate("fees", .before = "description")
+  }
+
+  capital.gains
 }
 
 .report_format_acb_start <- function(verbose = TRUE) {

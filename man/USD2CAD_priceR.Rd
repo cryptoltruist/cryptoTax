@@ -4,7 +4,12 @@
 \alias{USD2CAD_priceR}
 \title{Convert USD to CAD (using \code{priceR})}
 \usage{
-USD2CAD_priceR(data, conversion = "USD", currency = "CAD")
+USD2CAD_priceR(
+  data,
+  conversion = "USD",
+  currency = "CAD",
+  USD2CAD.table = NULL
+)
 }
 \arguments{
 \item{data}{The data}
@@ -12,6 +17,9 @@ USD2CAD_priceR(data, conversion = "USD", currency = "CAD")
 \item{conversion}{What to convert to}
 
 \item{currency}{What to convert from}
+
+\item{USD2CAD.table}{Optional explicit exchange-rate table to use instead
+of relying on cache or network fetches.}
 }
 \value{
 A data frame, with the following columns: date, CAD.rate.

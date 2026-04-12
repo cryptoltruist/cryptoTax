@@ -142,3 +142,191 @@ test_that("CDC exchange trades", {
   expect_snapshot(formatted.CDC.exchange.trades)
 })
 
+test_that("format_ACB keeps currency pools separate across a mixed multi-asset history", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-04 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "ETH"),
+    quantity = c(1, 2, 0.4, 1),
+    total.price = c(100, 200, 60, 150),
+    spot.rate = c(100, 100, 150, 150),
+    transaction = c("buy", "buy", "sell", "sell"),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = FALSE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$total.quantity, c(1, 0.6))
+  expect_equal(btc$ACB, c(100, 60))
+  expect_equal(btc$ACB.share, c(100, 100))
+  expect_equal(btc$gains, c(NA, 20))
+
+  expect_equal(eth$total.quantity, c(2, 1))
+  expect_equal(eth$ACB, c(200, 100))
+  expect_equal(eth$ACB.share, c(100, 100))
+  expect_equal(eth$gains, c(NA, 50))
+})
+
+test_that("format_ACB treats fee-in-kind rows as dispositions of the fee currency only", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-02 00:00:00"
+    ), tz = "UTC"),
+    currency = c("CRO", "ETH", "CRO"),
+    quantity = c(10, 1, 0.5),
+    total.price = c(100, 200, 5),
+    spot.rate = c(10, 200, 10),
+    transaction = c("buy", "buy", "sell"),
+    description = c("seed cro", "buy eth", "trading fee paid with CRO"),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = FALSE, verbose = FALSE))
+
+  cro <- result[result$currency == "CRO", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(cro$total.quantity, c(10, 9.5))
+  expect_equal(cro$ACB, c(100, 95))
+  expect_equal(cro$ACB.share, c(10, 10))
+  expect_equal(cro$gains, c(NA, 0))
+
+  expect_equal(eth$total.quantity, 1)
+  expect_equal(eth$ACB, 200)
+  expect_equal(eth$ACB.share, 200)
+  expect_true(is.na(eth$gains))
+})
+
+test_that("format_ACB carries taxable revenue into later multi-asset gains while leaving fee-in-kind in its own pool", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-04 00:00:00"
+    ), tz = "UTC"),
+    currency = c("CRO", "ETH", "CRO", "ETH", "ETH"),
+    quantity = c(10, 1, 0.5, 0.2, 1),
+    total.price = c(100, 200, 5, 30, 250),
+    spot.rate = c(10, 200, 10, 150, 250),
+    transaction = c("buy", "buy", "sell", "revenue", "sell"),
+    revenue.type = c(NA, NA, NA, "staking", NA),
+    description = c("seed cro", "buy eth", "trading fee paid with CRO", "staking reward", "sell eth"),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = FALSE, verbose = FALSE))
+
+  cro <- result[result$currency == "CRO", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(cro$total.quantity, c(10, 9.5))
+  expect_equal(cro$gains, c(NA, 0))
+
+  expect_equal(eth$total.quantity, c(1, 1.2, 0.2))
+  expect_equal(eth$ACB, c(200, 230, 38.33333), tolerance = 1e-5)
+  expect_equal(eth$ACB.share, c(200, 191.66667, 191.66667), tolerance = 1e-5)
+  expect_equal(eth$gains, c(NA, NA, 58.33333), tolerance = 1e-5)
+})
+
+test_that("format_ACB keeps non-taxable revenue out of later multi-asset gains while leaving fee-in-kind in its own pool", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-04 00:00:00"
+    ), tz = "UTC"),
+    currency = c("CRO", "ETH", "CRO", "ETH", "ETH"),
+    quantity = c(10, 1, 0.5, 0.2, 1),
+    total.price = c(100, 200, 5, 30, 250),
+    spot.rate = c(10, 200, 10, 150, 250),
+    transaction = c("buy", "buy", "sell", "revenue", "sell"),
+    revenue.type = c(NA, NA, NA, "promos", NA),
+    description = c("seed cro", "buy eth", "trading fee paid with CRO", "promo reward", "sell eth"),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = FALSE, verbose = FALSE))
+
+  cro <- result[result$currency == "CRO", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(cro$total.quantity, c(10, 9.5))
+  expect_equal(cro$gains, c(NA, 0))
+
+  expect_equal(eth$total.quantity, c(1, 1.2, 0.2))
+  expect_equal(eth$ACB, c(200, 200, 33.33333), tolerance = 1e-5)
+  expect_equal(eth$ACB.share, c(200, 166.66667, 166.66667), tolerance = 1e-5)
+  expect_equal(eth$gains, c(NA, NA, 83.33333), tolerance = 1e-5)
+})
+
+test_that("format_ACB handles superficial-loss adjustments independently inside a mixed multi-asset history", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00",
+      "2021-01-25 00:00:00",
+      "2021-01-26 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "ETH", "ETH"),
+    quantity = c(10, 1, 10, 4, 1, 0.5),
+    total.price = c(100, 200, 50, 24, 240, 120),
+    spot.rate = c(10, 200, 5, 6, 240, 240),
+    transaction = c("buy", "buy", "sell", "buy", "sell", "revenue"),
+    revenue.type = c(NA, NA, NA, NA, NA, "staking"),
+    description = c(
+      "buy btc",
+      "buy eth",
+      "sell btc at loss",
+      "reacquire btc",
+      "sell eth at gain",
+      "eth staking"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$sup.loss, c(FALSE, TRUE, FALSE))
+  expect_equal(btc$gains.uncorrected, c(0, -50, 0))
+  expect_true(is.na(btc$gains.sup[1]))
+  expect_equal(btc$gains.sup[2], -20)
+  expect_true(is.na(btc$gains.sup[3]))
+  expect_equal(btc$gains.excess[2], -30)
+  expect_equal(btc$gains[2], -30)
+  expect_equal(btc$ACB, c(100, 0, 44))
+  expect_equal(btc$ACB.share, c(10, 0, 11))
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40, NA))
+  expect_equal(eth$ACB, c(200, 0, 120))
+  expect_equal(eth$ACB.share, c(200, 0, 240))
+})
+
