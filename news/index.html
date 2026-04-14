@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.26</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.27</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,13 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.27" id="cryptotax-01027">cryptoTax 0.1.0.27<a class="anchor" aria-label="anchor" href="#cryptotax-01027"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued the formatter cleanup pass by introducing shared internal helpers for common wallet/exchange formatting seams, including fee-amount-to-sell-row conversion, canonical exchange-output finalization, and the standard resolve-prices-plus-fill-missing-totals path.</li>
+<li>Reused those new helpers across multiple formatter families, including Adalite, Exodus, CDC wallet, Uphold, Celsius, Presearch, PoolTool, and Newton, reducing repeated formatter glue while preserving current output contracts and empty-data behavior.</li>
+<li>Added direct helper coverage for the new formatter seams and kept the broader formatter, pricing, and ACB regression suite fully green after the refactor.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.26" id="cryptotax-01026">cryptoTax 0.1.0.26<a class="anchor" aria-label="anchor" href="#cryptotax-01026"></a></h2>
 <p><strong>Improvements:</strong></p>

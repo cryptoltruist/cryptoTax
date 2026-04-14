@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.26</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.27</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,27 @@
 <li>Fourth, by calculating superficial losses as well, if desired.</li>
 </ol>
 <p>This is a work in progress. If you notice bugs, please report them: <a href="https://github.com/cryptoltruist/cryptoTax/issues" class="external-link uri">https://github.com/cryptoltruist/cryptoTax/issues</a>.</p>
+<div class="section level2">
+<h2 id="recommended-workflow">Recommended workflow<a class="anchor" aria-label="anchor" href="#recommended-workflow"></a>
+</h2>
+<p>For most users, the modern happy path is:</p>
+<ol style="list-style-type: decimal">
+<li>Format one or more exchange exports with <code><a href="reference/format_exchanges.html">format_exchanges()</a></code>
+</li>
+<li>Match or supply prices explicitly with bundled or cached <code>list.prices</code>
+</li>
+<li>Run <code><a href="reference/format_ACB.html">format_ACB()</a></code> on the normalized transaction table</li>
+<li>Generate summaries and reports from the formatted ACB output</li>
+</ol>
+<p>The package now works best when you pass explicit price inputs for offline and reproducible workflows.</p>
+</div>
+<div class="section level2">
+<h2 id="scope-note">Scope note<a class="anchor" aria-label="anchor" href="#scope-note"></a>
+</h2>
+<p><code>cryptoTax</code> currently implements capital-account style ACB, capital gain/loss, and superficial-loss mechanics.</p>
+<p>It does <strong>not</strong> decide whether your facts should instead be reported as business income, and it does not automatically decide difficult “identical property” questions across distinct crypto instruments such as wrapped, bridged, or staked variants.</p>
+<p>Those cases still need judgment outside the raw transaction math.</p>
+</div>
 </div>
 <div class="section level1">
 <h1 id="why-use-cryptotax">Why use <code>cryptoTax</code>?<a class="anchor" aria-label="anchor" href="#why-use-cryptotax"></a>
@@ -267,10 +288,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Format data with ACB</span></span>
-<span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Process started at 2026-04-07 20:14:08.896477. Please be patient as the transactions process.</span></span>
-<span><span class="co">#&gt; [Formatting ACB (progress bar repeats for each coin)...]</span></span>
-<span><span class="co">#&gt; Process ended at 2026-04-07 20:14:09.009207. Total time elapsed: 0 minutes</span></span>
+<span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Let's get a preview of the output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">formatted.ACB</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">19</span>, <span class="fl">20</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">7</span><span class="op">:</span><span class="fl">14</span>, <span class="fl">24</span><span class="op">:</span><span class="fl">26</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
