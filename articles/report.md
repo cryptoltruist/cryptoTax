@@ -51,10 +51,10 @@ with which we will be working for all future steps.
 
 ``` r
 formatted.ACB <- format_ACB(formatted.data)
-#> Process started at 2026-04-14 00:43:19.353336. Please be patient as the transactions process.
+#> Process started at 2026-04-14 01:37:15.663252. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
 #> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.
-#> Process ended at 2026-04-14 00:43:21.60509. Total time elapsed: 0.04 minutes
+#> Process ended at 2026-04-14 01:37:16.163893. Total time elapsed: 0.01 minutes
 ```
 
 > Per default,
@@ -171,7 +171,7 @@ print_report(formatted.ACB,
 
 Name: Mr. Cryptoltruist
 
-Date: Tue Apr 14 00:43:22 2026
+Date: Tue Apr 14 01:37:17 2026
 
 #### Summary
 

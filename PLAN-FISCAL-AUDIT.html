@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,8 +88,8 @@
 <h2 id="known-audit-gaps">Known audit gaps<a class="anchor" aria-label="anchor" href="#known-audit-gaps"></a></h2>
 <ul class="task-list"><li><label><input type="checkbox">Affiliated-person superficial-loss scenarios are not modeled explicitly. Current ACB logic works on one taxpayer transaction history and does not have a first-class concept of spouse, corporation, trust, or other affiliated owner.</label></li>
 <li><label><input type="checkbox">“Identical property” classification is not yet audited beyond same-symbol transaction pools. Edge cases like wrapped assets, bridged assets, liquid staking tokens, and exchange-specific synthetic assets need a policy decision.</label></li>
-<li><label><input type="checkbox">Business-income versus capital-account classification is out of scope for <code><a href="reference/ACB.html">ACB()</a></code> itself and still depends on user tax facts outside the transaction math.</label></li>
-<li><label><input type="checkbox">Network fees, withdrawal fees, and fee-in-kind treatment still need a policy note separating what is proven in the current implementation from what may still require professional review in ambiguous real-world exports.</label></li>
+<li><label><input type="checkbox" checked>Business-income versus capital-account classification is now explicitly documented as out of scope for <code><a href="reference/ACB.html">ACB()</a></code> itself and still dependent on user tax facts outside the transaction math.</label></li>
+<li><label><input type="checkbox" checked>Network fees, withdrawal fees, and fee-in-kind treatment now have a policy note separating what is proven in the current implementation from what may still require professional review in ambiguous real-world exports.</label></li>
 </ul></div>
 <div class="section level2">
 <h2 id="next-audit-slices">Next audit slices<a class="anchor" aria-label="anchor" href="#next-audit-slices"></a></h2>
@@ -97,6 +97,8 @@
 <li><label><input type="checkbox" checked>Add an explicit package-scope note that “identical property” judgments across distinct crypto instruments are not fully decided by the engine.</label></li>
 <li><label><input type="checkbox" checked>Decide and document the package stance on “identical property” for common crypto edge cases such as wrapped tokens and liquid staking derivatives. Current package stance: different <code>currency</code> values remain distinct pools by default; the package does not automatically merge wrapped, bridged, staked, or exchange-specific variants into the same superficial-loss pool as the underlying asset.</label></li>
 <li><label><input type="checkbox" checked>Add a short worked-example appendix showing the expected arithmetic for the current core superficial-loss scenarios outside of code, so the audit record does not live only inside tests.</label></li>
+<li><label><input type="checkbox" checked>Add a policy note distinguishing tested fee-in-kind behavior from more ambiguous withdrawal/network-fee export cases.</label></li>
+<li><label><input type="checkbox" checked>Add an explicit package-scope note that business-income versus capital-account classification is not decided by the ACB engine.</label></li>
 </ul></div>
 <div class="section level2">
 <h2 id="worked-example-appendix">Worked-example appendix<a class="anchor" aria-label="anchor" href="#worked-example-appendix"></a></h2>

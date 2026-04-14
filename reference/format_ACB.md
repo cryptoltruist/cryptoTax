@@ -54,6 +54,9 @@ does not independently model affiliated-person substitutions or decide
 difficult "identical property" questions across distinct crypto
 instruments. Different `currency` values are therefore kept in separate
 pools unless you normalize them yourself before calling `format_ACB()`.
+This wrapper also does not determine whether a user's crypto activity
+belongs on capital account or should instead be reported as business
+income under their facts.
 
 ## Examples
 

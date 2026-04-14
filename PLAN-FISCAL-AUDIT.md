@@ -122,12 +122,13 @@ same-symbol transaction pools. Edge cases like wrapped assets, bridged
 assets, liquid staking tokens, and exchange-specific synthetic assets
 need a policy decision.
 
-Business-income versus capital-account classification is out of scope
-for
+Business-income versus capital-account classification is now explicitly
+documented as out of scope for
 [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md)
-itself and still depends on user tax facts outside the transaction math.
+itself and still dependent on user tax facts outside the transaction
+math.
 
-Network fees, withdrawal fees, and fee-in-kind treatment still need a
+Network fees, withdrawal fees, and fee-in-kind treatment now have a
 policy note separating what is proven in the current implementation from
 what may still require professional review in ambiguous real-world
 exports.
@@ -150,6 +151,12 @@ superficial-loss pool as the underlying asset.
 Add a short worked-example appendix showing the expected arithmetic for
 the current core superficial-loss scenarios outside of code, so the
 audit record does not live only inside tests.
+
+Add a policy note distinguishing tested fee-in-kind behavior from more
+ambiguous withdrawal/network-fee export cases.
+
+Add an explicit package-scope note that business-income versus
+capital-account classification is not decided by the ACB engine.
 
 ## Worked-example appendix
 

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -269,6 +269,21 @@ require professional review.</p>
 <p>We adopt a <strong>conservative</strong> approach and treat network
 fees as a disposition at the fair market value of the coins at the time
 of the transaction (this triggers a capital gain/loss tax event).</p>
+<p>Current implementation notes:</p>
+<ul>
+<li>Fee-in-kind trading fees paid in a third asset (for example BNB or
+CRO) are modeled as dispositions of the fee asset, and the current test
+suite covers that behavior directly.</li>
+<li>Some formatter paths represent withdrawal or network fees as their
+own disposal rows rather than as a <code>fees</code> column attached to
+another transaction.</li>
+<li>Other exchange exports remain imperfect or ambiguous: some files
+omit withdrawal fees entirely, and some raw totals may or may not
+already include fees depending on the source. In those cases,
+<code>cryptoTax</code> aims for a conservative and internally consistent
+treatment, but manual review is still appropriate when the exchange
+export is incomplete or unclear.</li>
+</ul>
 <div class="section level3">
 <h3 id="documentation-3">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3"></a>
 </h3>
@@ -457,6 +472,19 @@ way</em>, it can be considered a business activity and will be taxed as
 such.</p>
 <p>(<a href="https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/compliance/digital-currency/cryptocurrency-guide.html" class="external-link uri">https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/compliance/digital-currency/cryptocurrency-guide.html</a>)</p>
 </blockquote>
+<p>Current package scope note:</p>
+<ul>
+<li>
+<code>cryptoTax</code> primarily implements capital-account style
+ACB, capital gain/loss, and superficial-loss mechanics.</li>
+<li>The package does <strong>not</strong> determine whether a user’s
+overall facts should instead be reported on income account as business
+income.</li>
+<li>CRA guidance now explicitly distinguishes those paths and notes that
+some crypto activities, especially sufficiently commercial trading and
+many mining/staking situations, may belong on income account
+instead.</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="koinly-1">Koinly<a class="anchor" aria-label="anchor" href="#koinly-1"></a>

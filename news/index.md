@@ -1,5 +1,25 @@
 # Changelog
 
+## cryptoTax 0.1.0.26
+
+**Improvements:**
+
+- Profiled the large-history
+  [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md)
+  path after the fiscal-audit hardening work and confirmed that
+  superficial-loss preparation, rather than the base cost-base loop, was
+  the dominant performance bottleneck on realistic synthetic histories.
+- Reworked the heaviest superficial-loss helper paths in
+  [`format_suploss()`](https://cryptoltruist.github.io/cryptoTax/reference/format_suploss.md)
+  to use lighter vector-based window summaries and buy-window checks
+  instead of repeated interval/data-frame filtering and per-row
+  flagging.
+- Cut synthetic `ACB(..., sup.loss = TRUE)` timings from roughly
+  `6.9s / 34.5s / 71.0s` down to about `1.1s / 5.6s / 11.8s` at 1k / 5k
+  / 10k rows while keeping the ACB,
+  [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md),
+  and superficial-loss helper correctness regressions green.
+
 ## cryptoTax 0.1.0.25
 
 **Improvements:**

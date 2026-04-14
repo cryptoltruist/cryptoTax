@@ -174,6 +174,21 @@ We adopt a **conservative** approach and treat network fees as a
 disposition at the fair market value of the coins at the time of the
 transaction (this triggers a capital gain/loss tax event).
 
+Current implementation notes:
+
+- Fee-in-kind trading fees paid in a third asset (for example BNB or
+  CRO) are modeled as dispositions of the fee asset, and the current
+  test suite covers that behavior directly.
+- Some formatter paths represent withdrawal or network fees as their own
+  disposal rows rather than as a `fees` column attached to another
+  transaction.
+- Other exchange exports remain imperfect or ambiguous: some files omit
+  withdrawal fees entirely, and some raw totals may or may not already
+  include fees depending on the source. In those cases, `cryptoTax` aims
+  for a conservative and internally consistent treatment, but manual
+  review is still appropriate when the exchange export is incomplete or
+  unclear.
+
 ### Documentation
 
 ### CoinTracking
@@ -333,6 +348,16 @@ Crypto.com:
 > be taxed as such.
 >
 > (<https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/compliance/digital-currency/cryptocurrency-guide.html>)
+
+Current package scope note:
+
+- `cryptoTax` primarily implements capital-account style ACB, capital
+  gain/loss, and superficial-loss mechanics.
+- The package does **not** determine whether a user’s overall facts
+  should instead be reported on income account as business income.
+- CRA guidance now explicitly distinguishes those paths and notes that
+  some crypto activities, especially sufficiently commercial trading and
+  many mining/staking situations, may belong on income account instead.
 
 ### Koinly
 
