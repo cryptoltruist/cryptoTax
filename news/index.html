@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.24</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.25</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,10 +37,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.25" id="cryptotax-01025">cryptoTax 0.1.0.25<a class="anchor" aria-label="anchor" href="#cryptotax-01025"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Started a dedicated fiscal-audit track in <code>PLAN-FISCAL-AUDIT.md</code>, tying the package’s superficial-loss and ACB behavior to named CRA-style rule scenarios and making the remaining audit gaps explicit instead of leaving them implicit across tests and comments.</li>
+<li>Documented the current fiscal scope of <code><a href="../reference/ACB.html">ACB()</a></code> and <code><a href="../reference/format_ACB.html">format_ACB()</a></code> more clearly: the engine audits same-pool replacement-property timing from the supplied transaction history, but it does not independently model affiliated-person substitutions or auto-decide difficult “identical property” questions across distinct crypto instruments.</li>
+<li>Added and documented a conservative package stance for crypto “identical property” edge cases, keeping different <code>currency</code> values in separate pools by default rather than automatically merging wrapped, bridged, staked, or exchange-specific variants into the same superficial-loss pool.</li>
+<li>Added a worked-example appendix to the fiscal-audit plan so full-loss, partial-loss, and partial-replacement-survival superficial-loss arithmetic can now be inspected outside the test suite.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.24" id="cryptotax-01024">cryptoTax 0.1.0.24<a class="anchor" aria-label="anchor" href="#cryptotax-01024"></a></h2>
 <p><strong>Improvements:</strong></p>
 <ul><li>Continued the accounting-hardening pass across <code><a href="../reference/format_coinbase.html">format_coinbase()</a></code>, <code><a href="../reference/ACB.html">ACB()</a></code>, and <code><a href="../reference/format_ACB.html">format_ACB()</a></code> by making fee handling more explicit: Coinbase convert buys are now treated as fee-inclusive acquisitions, while representative exchange and wallet paths now have direct regressions documenting when fees stay separate or are modeled as separate disposition rows instead.</li>
-<li>Expanded the fiscal-validation bank with more direct numeric superficial-loss edge cases, including partial replacement-share survival through the 30-day window and an explicit guard that nearby reacquisitions do not trigger superficial-loss treatment when the original sale realized a gain.</li>
+<li>Expanded the fiscal-validation bank with more direct numeric superficial-loss edge cases, including partial replacement-share survival through the 30-day window and an explicit guard that nearby replacement-share purchases do not trigger superficial-loss treatment when the original sale realized a gain.</li>
 <li>Mirrored those new rule checks at the package level in <code><a href="../reference/format_ACB.html">format_ACB()</a></code> so the full formatter-to-tax-engine path now validates the same replacement-share and gain-versus-loss boundaries as the lower-level <code><a href="../reference/ACB.html">ACB()</a></code> tests.</li>
 </ul></div>
     <div class="section level2">

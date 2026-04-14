@@ -143,6 +143,31 @@ There is no such thing as superficial gains.
 >
 > (<https://www.adjustedcostbase.ca/blog/what-is-the-superficial-loss-rule/>)
 
+## Identical property in crypto
+
+`cryptoTax` currently takes a conservative implementation stance here:
+
+- Different `currency` values are treated as different property pools by
+  default.
+- The package does **not** automatically assume that wrapped tokens,
+  liquid staking derivatives, bridged assets, or exchange-specific
+  wrappers are identical to their underlying asset for superficial-loss
+  purposes.
+- If you decide that two instruments should be treated as the same
+  property pool for your tax position, you should normalize that input
+  explicitly before calling
+  [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md)
+  and review the consequences carefully.
+
+This is an implementation policy, not a statement that those instruments
+are never identical property under Canadian tax law. We have not found
+CRA guidance specific enough to crypto wrappers or staking derivatives
+to encode a harder automatic rule with confidence. More generally, CRA
+guidance on identical property looks at the legal rights attached to
+property rather than economic similarity alone, so instruments with
+conversion, redemption, or substitute rights may still require
+professional review.
+
 ## Gas/network fees
 
 We adopt a **conservative** approach and treat network fees as a

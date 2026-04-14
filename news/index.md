@@ -1,5 +1,30 @@
 # Changelog
 
+## cryptoTax 0.1.0.25
+
+**Improvements:**
+
+- Started a dedicated fiscal-audit track in `PLAN-FISCAL-AUDIT.md`,
+  tying the package’s superficial-loss and ACB behavior to named
+  CRA-style rule scenarios and making the remaining audit gaps explicit
+  instead of leaving them implicit across tests and comments.
+- Documented the current fiscal scope of
+  [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md)
+  and
+  [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md)
+  more clearly: the engine audits same-pool replacement-property timing
+  from the supplied transaction history, but it does not independently
+  model affiliated-person substitutions or auto-decide difficult
+  “identical property” questions across distinct crypto instruments.
+- Added and documented a conservative package stance for crypto
+  “identical property” edge cases, keeping different `currency` values
+  in separate pools by default rather than automatically merging
+  wrapped, bridged, staked, or exchange-specific variants into the same
+  superficial-loss pool.
+- Added a worked-example appendix to the fiscal-audit plan so full-loss,
+  partial-loss, and partial-replacement-survival superficial-loss
+  arithmetic can now be inspected outside the test suite.
+
 ## cryptoTax 0.1.0.24
 
 **Improvements:**
@@ -16,8 +41,8 @@
 - Expanded the fiscal-validation bank with more direct numeric
   superficial-loss edge cases, including partial replacement-share
   survival through the 30-day window and an explicit guard that nearby
-  reacquisitions do not trigger superficial-loss treatment when the
-  original sale realized a gain.
+  replacement-share purchases do not trigger superficial-loss treatment
+  when the original sale realized a gain.
 - Mirrored those new rule checks at the package level in
   [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md)
   so the full formatter-to-tax-engine path now validates the same

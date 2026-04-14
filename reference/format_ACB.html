@@ -9,7 +9,7 @@ along with ACB per share and realized capital gains or losses."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.24</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.25</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,17 @@ to console.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame, formatted for the Adjusted Cost Base (ACB).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>This wrapper applies <code><a href="ACB.html">ACB()</a></code> separately by currency pool. As a
+result, the same fiscal scope notes apply here as well: the package can
+audit same-pool superficial-loss timing and ACB adjustments from the
+supplied transaction history, but it does not independently model
+affiliated-person substitutions or decide difficult "identical property"
+questions across distinct crypto instruments. Different <code>currency</code> values
+are therefore kept in separate pools unless you normalize them yourself
+before calling <code>format_ACB()</code>.</p>
     </div>
 
     <div class="section level2">
