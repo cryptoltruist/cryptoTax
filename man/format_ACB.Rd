@@ -28,6 +28,16 @@ to console.}
 \value{
 A data frame, formatted for the Adjusted Cost Base (ACB).
 }
+\details{
+This wrapper applies \code{\link[=ACB]{ACB()}} separately by currency pool. As a
+result, the same fiscal scope notes apply here as well: the package can
+audit same-pool superficial-loss timing and ACB adjustments from the
+supplied transaction history, but it does not independently model
+affiliated-person substitutions or decide difficult "identical property"
+questions across distinct crypto instruments. Different \code{currency} values
+are therefore kept in separate pools unless you normalize them yourself
+before calling \code{format_ACB()}.
+}
 \description{
 Formats transaction data with Adjusted Cost Base (ACB),
 along with ACB per share and realized capital gains or losses.

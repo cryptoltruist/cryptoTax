@@ -151,6 +151,16 @@
 #' @title Calculate capital gains from realized gain transactions
 #'
 #' @description Calculate realized and unrealized capital gains/losses
+#' @details The current superficial-loss implementation is scoped to the
+#' transaction history supplied for a single taxpayer-facing asset pool. It is
+#' intended to handle same-pool replacement-property timing and ACB adjustments.
+#' Different `currency` values are treated as different property pools by
+#' default. The function does not independently model affiliated-person
+#' acquisitions or make legal judgments about whether two different crypto
+#' instruments should be treated as "identical property". Cases involving
+#' spouses, corporations, trusts, wrapped assets, liquid staking derivatives,
+#' bridge assets, exchange-specific wrappers, or other substitute-property edge
+#' cases should still be reviewed carefully.
 #' @param data The dataframe
 #' @param transaction Name of transaction column
 #' @param price Name of price column

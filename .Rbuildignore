@@ -15,5 +15,6 @@
 ^CRAN-SUBMISSION$
 ^vignettes\report.Rmd$
 ^PLAN-REPO-IMPROVEMENTS\.md$
+^PLAN-FISCAL-AUDIT\.md$
 ^doc$
 ^Meta$

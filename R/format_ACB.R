@@ -102,6 +102,14 @@
 #'
 #' @description Formats transaction data with Adjusted Cost Base (ACB),
 #' along with ACB per share and realized capital gains or losses.
+#' @details This wrapper applies [ACB()] separately by currency pool. As a
+#' result, the same fiscal scope notes apply here as well: the package can
+#' audit same-pool superficial-loss timing and ACB adjustments from the
+#' supplied transaction history, but it does not independently model
+#' affiliated-person substitutions or decide difficult "identical property"
+#' questions across distinct crypto instruments. Different `currency` values
+#' are therefore kept in separate pools unless you normalize them yourself
+#' before calling `format_ACB()`.
 #' @param data The dataframe
 #' @param as.revenue Which should be treated as revenue, in list of
 #' `c("staking", "interests", "mining")`.
