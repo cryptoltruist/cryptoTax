@@ -30,7 +30,7 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
   #                              total.price))
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force
@@ -38,8 +38,6 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
   if (is.null(data)) {
     return(NULL)
   }
-
-  data <- .fill_missing_total_price_from_spot(data)
 
   # Reorder columns properly
   data <- data %>%
@@ -90,12 +88,11 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_exodus_withdrawals <- function(data) {
-  data %>%
-    filter(.data$description == "withdrawal") %>%
-    mutate(
-      quantity = .data$FEEAMOUNT * -1,
-      transaction = "sell"
-    ) %>%
+  .format_fee_sell_rows(
+    data,
+    filter_expr = .data$description == "withdrawal",
+    fee_col = "FEEAMOUNT"
+  ) %>%
     select(
       "date", "quantity", "currency", "transaction",
       "description"
@@ -103,14 +100,13 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_exodus_staking_fees <- function(data) {
-  data %>%
-    filter(.data$description == "deposit" & .data$FEEAMOUNT < 0) %>%
-    mutate(
-      quantity = .data$FEEAMOUNT * -1,
-      transaction = "sell",
-      description = "Initial staking fee",
-      total.price = 0
-    ) %>%
+  .format_fee_sell_rows(
+    data,
+    filter_expr = .data$description == "deposit" & .data$FEEAMOUNT < 0,
+    fee_col = "FEEAMOUNT",
+    description_value = "Initial staking fee",
+    total_price_value = 0
+  ) %>%
     select(
       "date", "quantity", "currency", "total.price", "transaction",
       "description"

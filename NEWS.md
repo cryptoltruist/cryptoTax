@@ -1,3 +1,11 @@
+# cryptoTax 0.1.0.27
+
+**Improvements:**
+
+- Continued the formatter cleanup pass by introducing shared internal helpers for common wallet/exchange formatting seams, including fee-amount-to-sell-row conversion, canonical exchange-output finalization, and the standard resolve-prices-plus-fill-missing-totals path.
+- Reused those new helpers across multiple formatter families, including Adalite, Exodus, CDC wallet, Uphold, Celsius, Presearch, PoolTool, and Newton, reducing repeated formatter glue while preserving current output contracts and empty-data behavior.
+- Added direct helper coverage for the new formatter seams and kept the broader formatter, pricing, and ACB regression suite fully green after the refactor.
+
 # cryptoTax 0.1.0.26
 
 **Improvements:**

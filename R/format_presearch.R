@@ -66,7 +66,7 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
   data <- .format_presearch_classify(data, rewards.names)
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force
@@ -77,8 +77,6 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- data %>%
     mutate(quantity = as.numeric(gsub(",", "", .data$quantity)))
-
-  data <- .fill_missing_total_price_from_spot(data)
 
   .format_presearch_finalize(data)
 }
@@ -123,10 +121,12 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
 
 #' @noRd
 .format_presearch_finalize <- function(data) {
-  merge_exchanges(data) %>%
-    mutate(exchange = "presearch") %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = "presearch",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
+  )
 }

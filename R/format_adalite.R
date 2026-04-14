@@ -24,7 +24,7 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   data <- .format_adalite_finalize(outputs)
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force,
@@ -33,8 +33,6 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   if (is.null(data)) {
     return(NULL)
   }
-
-  data <- .fill_missing_total_price_from_spot(data)
 
   # Actually correct network fees sold for zero!
   # data <- data %>%
@@ -94,13 +92,12 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
 
 #' @noRd
 .format_adalite_withdrawals <- function(data) {
-  data %>%
-    filter(.data$description == "Sent") %>%
-    mutate(
-      quantity = .data$Fee.amount,
-      transaction = "sell",
-      comment = "Withdrawal Fee"
-    ) %>%
+  .format_fee_sell_rows(
+    data,
+    filter_expr = .data$description == "Sent",
+    fee_col = "Fee.amount",
+    comment_value = "Withdrawal Fee"
+  ) %>%
     select(
       "date", "quantity", "currency", "transaction",
       "description", "comment"

@@ -115,10 +115,15 @@ format_newton <- function(data, filetype = "yearly") {
 
 #' @noRd
 .format_newton_finalize <- function(outputs) {
-  merge_exchanges(outputs$buy, outputs$sell, outputs$earn) %>%
-    mutate(exchange = "newton", rate.source = "exchange") %>%
-    select(
+  .finalize_formatted_exchange(
+    outputs$buy,
+    outputs$sell,
+    outputs$earn,
+    exchange = "newton",
+    rate_source = "exchange",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
+  )
 }

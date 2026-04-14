@@ -42,7 +42,7 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
     ))
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force
@@ -50,8 +50,6 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
   if (is.null(data)) {
     return(NULL)
   }
-
-  data <- .fill_missing_total_price_from_spot(data)
 
   data <- .format_uphold_apply_sell_prices(data)
 
@@ -134,13 +132,12 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_uphold_withdrawals <- function(data) {
-  data %>%
-    filter(.data$description == "out" & .data$Destination != "uphold") %>%
-    mutate(
-      quantity = .data$Fee.Amount,
-      transaction = "sell",
-      comment = "withdrawal fees"
-    ) %>%
+  .format_fee_sell_rows(
+    data,
+    filter_expr = .data$description == "out" & .data$Destination != "uphold",
+    fee_col = "Fee.Amount",
+    comment_value = "withdrawal fees"
+  ) %>%
     select(
       "date", "quantity", "currency", "transaction",
       "description", "comment"

@@ -28,6 +28,30 @@ Helps calculate crypto taxes in R.
 This is a work in progress. If you notice bugs, please report them:
 <https://github.com/cryptoltruist/cryptoTax/issues>.
 
+## Recommended workflow
+
+For most users, the modern happy path is:
+
+1.  Format one or more exchange exports with `format_exchanges()`
+2.  Match or supply prices explicitly with bundled or cached `list.prices`
+3.  Run `format_ACB()` on the normalized transaction table
+4.  Generate summaries and reports from the formatted ACB output
+
+The package now works best when you pass explicit price inputs for
+offline and reproducible workflows.
+
+## Scope note
+
+`cryptoTax` currently implements capital-account style ACB, capital
+gain/loss, and superficial-loss mechanics.
+
+It does **not** decide whether your facts should instead be reported as
+business income, and it does not automatically decide difficult
+"identical property" questions across distinct crypto instruments such
+as wrapped, bridged, or staked variants.
+
+Those cases still need judgment outside the raw transaction math.
+
 # Why use `cryptoTax`?
 
 What are the benefits of using an R package to do your crypto taxes as
@@ -131,10 +155,7 @@ all.data <- format_exchanges(list(data_shakepay, data_CDC),
 )
 
 # Format data with ACB
-formatted.ACB <- format_ACB(all.data)
-#> Process started at 2026-04-07 20:14:08.896477. Please be patient as the transactions process.
-#> [Formatting ACB (progress bar repeats for each coin)...]
-#> Process ended at 2026-04-07 20:14:09.009207. Total time elapsed: 0 minutes
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 
 # Let's get a preview of the output
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])

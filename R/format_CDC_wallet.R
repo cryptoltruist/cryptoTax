@@ -41,7 +41,7 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
     mutate(exchange = "CDC.wallet")
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force,
@@ -50,8 +50,6 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
   if (is.null(data)) {
     return(NULL)
   }
-
-  data <- .fill_missing_total_price_from_spot(data)
 
   # Reorder columns properly
   data <- data %>%
@@ -108,12 +106,11 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
 }
 
 .format_cdc_wallet_withdrawals <- function(data) {
-  data %>%
-    filter(.data$description == "Withdrawal") %>%
-    mutate(
-      quantity = .data$Fee.Amount,
-      transaction = "sell"
-    ) %>%
+  .format_fee_sell_rows(
+    data,
+    filter_expr = .data$description == "Withdrawal",
+    fee_col = "Fee.Amount"
+  ) %>%
     select(
       "date", "quantity", "currency", "transaction",
       "description", "comment"
