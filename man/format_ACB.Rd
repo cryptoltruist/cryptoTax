@@ -36,7 +36,9 @@ supplied transaction history, but it does not independently model
 affiliated-person substitutions or decide difficult "identical property"
 questions across distinct crypto instruments. Different \code{currency} values
 are therefore kept in separate pools unless you normalize them yourself
-before calling \code{format_ACB()}.
+before calling \code{format_ACB()}. This wrapper also does not determine whether a
+user's crypto activity belongs on capital account or should instead be
+reported as business income under their facts.
 }
 \description{
 Formats transaction data with Adjusted Cost Base (ACB),

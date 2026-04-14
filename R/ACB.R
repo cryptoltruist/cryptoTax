@@ -160,7 +160,10 @@
 #' instruments should be treated as "identical property". Cases involving
 #' spouses, corporations, trusts, wrapped assets, liquid staking derivatives,
 #' bridge assets, exchange-specific wrappers, or other substitute-property edge
-#' cases should still be reviewed carefully.
+#' cases should still be reviewed carefully. More broadly, [ACB()] implements a
+#' capital-account style cost-base and disposition workflow; it does not decide
+#' whether a user's facts should instead be reported on income account as
+#' business income.
 #' @param data The dataframe
 #' @param transaction Name of transaction column
 #' @param price Name of price column

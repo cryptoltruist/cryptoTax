@@ -109,7 +109,9 @@
 #' affiliated-person substitutions or decide difficult "identical property"
 #' questions across distinct crypto instruments. Different `currency` values
 #' are therefore kept in separate pools unless you normalize them yourself
-#' before calling `format_ACB()`.
+#' before calling `format_ACB()`. This wrapper also does not determine whether a
+#' user's crypto activity belongs on capital account or should instead be
+#' reported as business income under their facts.
 #' @param data The dataframe
 #' @param as.revenue Which should be treated as revenue, in list of
 #' `c("staking", "interests", "mining")`.
