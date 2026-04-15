@@ -77,14 +77,14 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
   buy_rows <- data[[transaction]] == "buy"
   quantities <- data[[quantity]]
   total_quantities <- data$total.quantity
+  window_starts <- dates - lubridate::days(30)
+  window_ends <- dates + lubridate::days(30)
 
   quantity.60days <- numeric(nrow(data))
   share.left60 <- numeric(nrow(data))
 
   for (i in seq_len(nrow(data))) {
-    window_start <- dates[[i]] - lubridate::days(30)
-    window_end <- dates[[i]] + lubridate::days(30)
-    in_window <- dates >= window_start & dates <= window_end
+    in_window <- dates >= window_starts[[i]] & dates <= window_ends[[i]]
     quantity.60days[[i]] <- sum(quantities[buy_rows & in_window], na.rm = TRUE)
 
     last_index <- utils::tail(which(in_window), 1)
@@ -137,7 +137,9 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
 .mark_superficial_losses <- function(data.range,
                                      transaction = "transaction",
                                      quantity = "quantity") {
-  buy_dates <- data.range$date[data.range[[transaction]] == "buy"]
+  date_values <- data.range$date
+  date_numeric <- as.numeric(date_values)
+  buy_dates <- date_numeric[data.range[[transaction]] == "buy"]
 
   if (!length(buy_dates)) {
     data.range$sup.loss <- FALSE
@@ -145,8 +147,14 @@ sup_loss_single_df <- function(data, transaction = "transaction", quantity = "qu
     return(data.range)
   }
 
-  in_buy_window <- vapply(data.range$date, function(x) {
-    any(abs(as.numeric(difftime(buy_dates, x, units = "days"))) <= 30)
+  day_scale <- if (inherits(date_values, "Date")) {
+    1
+  } else {
+    24 * 60 * 60
+  }
+
+  in_buy_window <- vapply(date_numeric, function(x) {
+    any(abs(as.numeric(buy_dates - x)) / day_scale <= 30)
   }, logical(1))
 
   data.range$sup.loss <- data.range[[transaction]] == "sell" & in_buy_window

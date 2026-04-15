@@ -19,6 +19,26 @@ knitr::opts_chunk$set(
 
 In this vignette, we will demonstrate that calculations of the adjusted cost base by `cryptoTax` closely follows those of https://www.adjustedcostbase.ca/.
 
+## Scope note
+
+This vignette focuses on transaction math for capital-account ACB and
+superficial-loss calculations.
+
+`cryptoTax` does **not** try to settle every legal or tax-classification
+question automatically. In particular:
+
+- different `currency` values are treated as different property pools by default
+- the package does **not** automatically decide whether wrapped tokens,
+  bridged assets, liquid staking derivatives, exchange wrappers, or similar
+  crypto variants should count as the same "identical property" for
+  superficial-loss purposes
+- the package does **not** decide whether your facts belong on income account
+  instead of capital account
+
+So the examples below are authoritative for the package's current transaction
+math, but they are not a substitute for professional judgment in ambiguous
+"identical property" cases.
+
 # Basic ACB
 
 To begin, we will replicate the basic ACB example showcased in https://www.adjustedcostbase.ca/blog/how-to-calculate-adjusted-cost-base-acb-and-capital-gains/

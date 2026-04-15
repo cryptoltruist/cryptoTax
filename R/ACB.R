@@ -148,6 +148,30 @@
   data
 }
 
+.acb_prior_sup_loss_carry <- function(data, i, transaction) {
+  if (i <= 1) {
+    return(0)
+  }
+
+  previous_transaction <- data[[transaction]][[i - 1]]
+  previous_sup_loss <- isTRUE(.acb_scalar(data, i - 1, "sup.loss"))
+  previous_quantity <- as.numeric(.acb_scalar(data, i - 1, "total.quantity"))
+
+  if (!identical(previous_transaction, "sell") ||
+    !previous_sup_loss ||
+    !identical(previous_quantity, 0)) {
+    return(0)
+  }
+
+  previous_gains_sup <- .acb_scalar(data, i - 1, "gains.sup")
+
+  if (is.na(previous_gains_sup)) {
+    return(0)
+  }
+
+  previous_gains_sup
+}
+
 #' @title Calculate capital gains from realized gain transactions
 #'
 #' @description Calculate realized and unrealized capital gains/losses
@@ -247,21 +271,21 @@ ACB <- function(data,
   # Setup progress bar
   currency <- .acb_currency_label(data)
 
-  pb <- progress::progress_bar$new(
-    format = paste(
-      currency,
-      "[:bar] :current/:total (:percent) [Elapsed: :elapsedfull || Remaining: :eta]"
-    ),
-    total = nrow(data),
-    complete = "=", # Completion bar character
-    incomplete = "-", # Incomplete bar character
-    current = ">", # Current bar character
-    clear = FALSE, # If TRUE, clears the bar when finish
-    show_after = 0, # Seconds necessary before showing progress bar
-    width = 100
-  ) # Width of the progress bar
-
   if (isTRUE(verbose)) {
+    pb <- progress::progress_bar$new(
+      format = paste(
+        currency,
+        "[:bar] :current/:total (:percent) [Elapsed: :elapsedfull || Remaining: :eta]"
+      ),
+      total = nrow(data),
+      complete = "=", # Completion bar character
+      incomplete = "-", # Incomplete bar character
+      current = ">", # Current bar character
+      clear = FALSE, # If TRUE, clears the bar when finish
+      show_after = 0, # Seconds necessary before showing progress bar
+      width = 100
+    ) # Width of the progress bar
+
     pb$tick(0)
   }
 
@@ -363,8 +387,14 @@ ACB <- function(data,
 
       # After first row: recalculate ACB for added quantities MINUS sup loss
       if (i > 1 && is_add_transaction) {
+        prior_sup_loss_carry <- .acb_prior_sup_loss_carry(
+          data,
+          i,
+          transaction = transaction
+        )
+
         data[i, "ACB"] <- data[i - 1, "ACB"] +
-          data[i, total.price] + data[i, fees] - data[i - 1, "gains.sup"]
+          data[i, total.price] + data[i, fees] - prior_sup_loss_carry
       }
 
       # After first row: calculate ACB for removed quantities MINUS sup loss

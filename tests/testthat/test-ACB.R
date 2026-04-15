@@ -198,14 +198,14 @@ test_that("ACB matches the worked chained superficial-loss example with a final 
   )
 
   expect_equal(result$sup.loss, c(FALSE, TRUE, FALSE, TRUE, TRUE))
-  expect_equal(result$gains.uncorrected[c(2, 4, 5)], c(-20, -12.22222, -103.52941), tolerance = 1e-5)
-  expect_equal(result$gains.sup[c(2, 4, 5)], c(-20, -12.22222, -64.70588), tolerance = 1e-5)
+  expect_equal(result$gains.uncorrected[c(2, 4, 5)], c(-20, -11.11111, -94.11765), tolerance = 1e-5)
+  expect_equal(result$gains.sup[c(2, 4, 5)], c(-20, -11.11111, -58.82353), tolerance = 1e-5)
   expect_true(all(is.na(result$gains.excess[c(2, 4)])))
-  expect_equal(result$gains.excess[5], -38.82353, tolerance = 1e-5)
+  expect_equal(result$gains.excess[5], -35.29412, tolerance = 1e-5)
   expect_true(all(is.na(result$gains[c(2, 4)])))
-  expect_equal(result$gains[5], -38.82353, tolerance = 1e-5)
-  expect_equal(result$ACB[c(2, 3, 4, 5)], c(410, 580, 560, 361.17647), tolerance = 1e-5)
-  expect_equal(result$ACB.share[c(2, 3, 4, 5)], c(3.153846, 3.222222, 3.294118, 4.013072), tolerance = 1e-6)
+  expect_equal(result$gains[5], -35.29412, tolerance = 1e-5)
+  expect_equal(result$ACB[c(2, 3, 4, 5)], c(410, 560, 540, 344.70588), tolerance = 1e-5)
+  expect_equal(result$ACB.share[c(2, 3, 4, 5)], c(3.153846, 3.111111, 3.176471, 3.830065), tolerance = 1e-6)
 })
 
 test_that("ACB does not deny a loss when no shares are reacquired or left after the superficial-loss window", {
@@ -300,6 +300,115 @@ test_that("ACB can deny a superficial loss based on pre-existing replacement sha
   expect_equal(result$gains[3], -28.33333, tolerance = 1e-5)
   expect_equal(result$ACB[3], 81.66667, tolerance = 1e-5)
   expect_equal(result$ACB.share[3], 16.33333, tolerance = 1e-5)
+})
+
+test_that("ACB can fully deny a partial-sale loss when pre-sale replacement shares are still held after the window", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell"),
+    quantity = c(20, 8),
+    total.price = c(200, 40),
+    spot.rate = c(10, 5),
+    fees = c(0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$total.quantity, c(20, 12))
+  expect_equal(result$sup.loss, c(FALSE, TRUE))
+  expect_equal(result$gains.uncorrected[2], -40)
+  expect_equal(result$gains.sup[2], -40)
+  expect_true(is.na(result$gains.excess[2]))
+  expect_true(is.na(result$gains[2]))
+  expect_equal(result$ACB[2], 160)
+  expect_equal(result$ACB.share[2], 13.333333, tolerance = 1e-6)
+})
+
+test_that("ACB does not double-count a denied loss when later buys follow a superficial-loss sale with remaining replacement shares", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-05 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "buy", "sell", "buy"),
+    quantity = c(10, 5, 10, 2),
+    total.price = c(100, 50, 50, 12),
+    spot.rate = c(10, 10, 5, 6),
+    fees = c(0, 0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$total.quantity, c(10, 15, 5, 7))
+  expect_equal(result$sup.loss, c(FALSE, FALSE, TRUE, FALSE))
+  expect_equal(result$gains.uncorrected[3], -50)
+  expect_equal(result$gains.sup[3], -35)
+  expect_equal(result$gains.excess[3], -15)
+  expect_equal(result$gains[3], -15)
+  expect_equal(result$ACB[3], 85)
+  expect_equal(result$ACB.share[3], 17)
+  expect_equal(result$ACB[4], 97)
+  expect_equal(result$ACB.share[4], 13.857143, tolerance = 1e-6)
+})
+
+test_that("ACB can apply repeated superficial-loss treatment across multiple partial sales while replacement shares remain in the pool", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-25 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "sell"),
+    quantity = c(20, 8, 4),
+    total.price = c(200, 40, 28),
+    spot.rate = c(10, 5, 7),
+    fees = c(0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$total.quantity, c(20, 12, 8))
+  expect_equal(result$sup.loss, c(FALSE, TRUE, TRUE))
+  expect_equal(result$gains.uncorrected[c(2, 3)], c(-40, -25.333333), tolerance = 1e-6)
+  expect_equal(result$gains.sup[c(2, 3)], c(-40, -25.333333), tolerance = 1e-6)
+  expect_true(all(is.na(result$gains.excess[c(2, 3)])))
+  expect_true(all(is.na(result$gains[c(2, 3)])))
+  expect_equal(result$ACB, c(200, 160, 132), tolerance = 1e-6)
+  expect_equal(result$ACB.share, c(10, 13.333333, 16.5), tolerance = 1e-6)
+})
+
+test_that("ACB returns to deductible losses once no replacement shares remain at the end of a later sale window", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-25 00:00:00",
+      "2021-02-15 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "sell", "sell"),
+    quantity = c(20, 8, 4, 8),
+    total.price = c(200, 40, 28, 48),
+    spot.rate = c(10, 5, 7, 6),
+    fees = c(0, 0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$total.quantity, c(20, 12, 8, 0))
+  expect_equal(result$sup.loss, c(FALSE, TRUE, FALSE, FALSE))
+  expect_equal(result$gains.uncorrected[c(2, 3, 4)], c(-40, -25.333333, -58.666667), tolerance = 1e-6)
+  expect_equal(result$gains.sup[2], -40)
+  expect_true(all(is.na(result$gains.sup[c(3, 4)])))
+  expect_true(all(is.na(result$gains.excess[c(2, 3, 4)])))
+  expect_equal(result$gains[c(3, 4)], c(-25.333333, -58.666667), tolerance = 1e-6)
+  expect_true(is.na(result$gains[2]))
+  expect_equal(result$ACB, c(200, 160, 106.666667, 0), tolerance = 1e-6)
+  expect_equal(result$ACB.share, c(10, 13.333333, 13.333333, 0), tolerance = 1e-6)
 })
 
 test_that("ACB does not deny a loss when reacquired replacement shares are fully disposed before the window ends", {

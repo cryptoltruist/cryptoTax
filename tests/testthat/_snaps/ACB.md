@@ -185,15 +185,15 @@
         sup.loss gains.uncorrected gains.sup gains.excess     gains      ACB
       1    FALSE           0.00000        NA           NA        NA 450.0000
       2     TRUE         -20.00000 -20.00000           NA        NA 410.0000
-      3    FALSE           0.00000        NA           NA        NA 580.0000
-      4     TRUE         -12.22222 -12.22222           NA        NA 560.0000
-      5     TRUE        -103.52941 -64.70588    -38.82353 -38.82353 361.1765
+      3    FALSE           0.00000        NA           NA        NA 560.0000
+      4     TRUE         -11.11111 -11.11111           NA        NA 540.0000
+      5     TRUE         -94.11765 -58.82353    -35.29412 -35.29412 344.7059
         ACB.share
       1  3.000000
       2  3.153846
-      3  3.222222
-      4  3.294118
-      5  4.013072
+      3  3.111111
+      4  3.176471
+      5  3.830065
 
 # Example #6 - CryptoTaxCalculator
 

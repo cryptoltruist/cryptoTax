@@ -1,3 +1,12 @@
+# cryptoTax 0.1.0.28
+
+**Improvements:**
+
+- Continued the fiscal-audit and ACB-hardening pass by expanding the direct and package-level correctness bank around superficial losses, including pre-sale replacement-share cases, repeated partial-loss chains, and the transition back to deductible losses once no substituted-property units remain at the end of a later sale window.
+- Fixed a superficial-loss carry bug in `ACB()` where a denied loss could be added twice when a loss sale already left substituted property in the pool and a later buy happened before the end of the superficial-loss window.
+- Continued the recent large-history performance work by trimming another layer of superficial-loss overhead and avoiding unnecessary progress-bar setup when `verbose = FALSE`, leaving the next meaningful ACB bottleneck in the row-wise core mutation path rather than the superficial-loss prep.
+- Strengthened user-facing fiscal scope documentation in the ACB vignette and README so the package's conservative "identical property" policy is clearer for wrapped, bridged, liquid-staked, and exchange-specific crypto variants.
+
 # cryptoTax 0.1.0.27
 
 **Improvements:**
