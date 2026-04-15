@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.27</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,14 @@
       <small>Source: <a href="https://github.com/cryptoltruist/cryptoTax/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.28" id="cryptotax-01028">cryptoTax 0.1.0.28<a class="anchor" aria-label="anchor" href="#cryptotax-01028"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued the fiscal-audit and ACB-hardening pass by expanding the direct and package-level correctness bank around superficial losses, including pre-sale replacement-share cases, repeated partial-loss chains, and the transition back to deductible losses once no substituted-property units remain at the end of a later sale window.</li>
+<li>Fixed a superficial-loss carry bug in <code><a href="../reference/ACB.html">ACB()</a></code> where a denied loss could be added twice when a loss sale already left substituted property in the pool and a later buy happened before the end of the superficial-loss window.</li>
+<li>Continued the recent large-history performance work by trimming another layer of superficial-loss overhead and avoiding unnecessary progress-bar setup when <code>verbose = FALSE</code>, leaving the next meaningful ACB bottleneck in the row-wise core mutation path rather than the superficial-loss prep.</li>
+<li>Strengthened user-facing fiscal scope documentation in the ACB vignette and README so the package’s conservative “identical property” policy is clearer for wrapped, bridged, liquid-staked, and exchange-specific crypto variants.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.27" id="cryptotax-01027">cryptoTax 0.1.0.27<a class="anchor" aria-label="anchor" href="#cryptotax-01027"></a></h2>
 <p><strong>Improvements:</strong></p>

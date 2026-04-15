@@ -51,10 +51,10 @@ with which we will be working for all future steps.
 
 ``` r
 formatted.ACB <- format_ACB(formatted.data)
-#> Process started at 2026-04-14 23:53:21.931661. Please be patient as the transactions process.
+#> Process started at 2026-04-15 01:20:59.797449. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
 #> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.
-#> Process ended at 2026-04-14 23:53:22.465731. Total time elapsed: 0.01 minutes
+#> Process ended at 2026-04-15 01:21:00.156571. Total time elapsed: 0.01 minutes
 ```
 
 > Per default,
@@ -171,23 +171,23 @@ print_report(formatted.ACB,
 
 Name: Mr. Cryptoltruist
 
-Date: Tue Apr 14 23:53:23 2026
+Date: Wed Apr 15 01:21:01 2026
 
 #### Summary
 
 | Type                | Amount    | currency |
 |---------------------|-----------|----------|
-| gains               | 3,970.17  | CAD      |
+| gains               | 3,970.20  | CAD      |
 | losses              | 0.00      | CAD      |
-| net                 | 3,970.17  | CAD      |
-| total.cost          | 7,887.33  | CAD      |
+| net                 | 3,970.20  | CAD      |
+| total.cost          | 7,887.31  | CAD      |
 | value.today         | 17,316.13 | CAD      |
-| unrealized.gains    | 9,428.81  | CAD      |
+| unrealized.gains    | 9,428.82  | CAD      |
 | unrealized.losses   | 0.00      | CAD      |
-| unrealized.net      | 9,428.81  | CAD      |
+| unrealized.net      | 9,428.82  | CAD      |
 | percentage.up       | 119.54%   | CAD      |
 | all.time.up         | 169.88%   | CAD      |
-| all.time.up.revenue | 176.22%   | CAD      |
+| all.time.up.revenue | 176.23%   | CAD      |
 | revenue             | 500.46    | CAD      |
 
     #> Warning: Date of value.today: 2023-12-31
@@ -197,7 +197,7 @@ Date: Tue Apr 14 23:53:23 2026
 | date.last           | currency | total.quantity | cost.share | total.cost | net      | currency2 |
 |---------------------|----------|----------------|------------|------------|----------|-----------|
 | 2021-12-24 15:34:45 | CRO      | 19,234.2928403 | 0.32       | 6,226.49   | 0.00     | CRO       |
-| 2021-10-24 04:29:23 | LTC      | 5.5542096      | 172.65     | 958.91     | 1,554.56 | LTC       |
+| 2021-10-24 04:29:23 | LTC      | 5.5542096      | 172.64     | 958.90     | 1,554.59 | LTC       |
 | 2021-12-24 15:34:45 | ETH      | 0.0761972      | 1,569.90   | 119.62     | 2,254.32 | ETH       |
 | 2021-08-07 21:43:44 | BTC      | 0.0048642      | 29,138.16  | 141.73     | 116.59   | BTC       |
 | 2021-06-06 22:14:11 | ADA      | 209.0297373    | 1.23       | 256.29     | 0.23     | ADA       |
@@ -206,14 +206,14 @@ Date: Tue Apr 14 23:53:23 2026
 | 2022-11-27 08:05:35 | USDC     | 49.2669990     | 1.26       | 62.31      | 0.00     | USDC      |
 | 2022-11-27 08:05:35 | BUSD     | 5.8763653      | 1.28       | 7.55       | 0.00     | BUSD      |
 | 2022-11-17 11:54:25 | ETHW     | 0.3559272      | 9.00       | 3.20       | 0.00     | ETHW      |
-| 2022-11-27 08:05:35 | Total    |                |            | 7,887.32   | 3,970.17 | Total     |
+| 2022-11-27 08:05:35 | Total    |                |            | 7,887.31   | 3,970.20 | Total     |
 
 #### Current Value
 
 | currency | cost.share | total.cost | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
 |----------|------------|------------|------------|-------------|------------------|-------------------|----------------|-----------|
 | CRO      | 0.32       | 6,226.49   | 0.70       | 13,406.30   | 7,179.81         |                   | 7,179.81       | CRO       |
-| LTC      | 172.65     | 958.91     | 314.10     | 1,744.58    | 785.67           |                   | 785.67         | LTC       |
+| LTC      | 172.64     | 958.90     | 314.10     | 1,744.58    | 785.68           |                   | 785.68         | LTC       |
 | ADA      | 1.23       | 256.29     | 3.39       | 708.19      | 451.90           |                   | 451.90         | ADA       |
 | PRE      | 0.02       | 62.60      | 0.16       | 479.79      | 417.19           |                   | 417.19         | PRE       |
 | ETH      | 1,569.90   | 119.62     | 5,629.00   | 428.91      | 309.29           |                   | 309.29         | ETH       |
@@ -222,7 +222,7 @@ Date: Tue Apr 14 23:53:23 2026
 | BAT      | 1.64       | 48.62      | 1.99       | 59.21       | 10.59            |                   | 10.59          | BAT       |
 | ETHW     | 9.00       | 3.20       | 33.88      | 12.06       | 8.86             |                   | 8.86           | ETHW      |
 | BUSD     | 1.28       | 7.55       | 1.30       | 7.67        | 0.12             |                   | 0.12           | BUSD      |
-| Total    |            | 7,887.32   |            | 17,316.13   | 9,428.81         | 0                 | 9,428.81       | Total     |
+| Total    |            | 7,887.31   |            | 17,316.13   | 9,428.82         | 0                 | 9,428.82       | Total     |
 | currency | cost.share | total.cost | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
 
     #> Warning: Date of value.today: 2023-12-31
@@ -268,8 +268,8 @@ Date: Tue Apr 14 23:53:23 2026
 
 #### Capital gains
 
-Your **capital gains** for 2021 are **\$3,970.17**, whereas your
-**capital losses** are **\$0.00** (net = **\$3,970.17**).
+Your **capital gains** for 2021 are **\$3,970.20**, whereas your
+**capital losses** are **\$0.00** (net = **\$3,970.20**).
 
 > Those are only taxed at 50%. Your **capital losses** are calculated as
 > **total capital losses** (**\$**) - **superficial losses** (**\$**) =
@@ -277,8 +277,8 @@ Your **capital gains** for 2021 are **\$3,970.17**, whereas your
 
 Your total “proceeds” *for the coins you sold at a **profit*** is:
 **\$10,069.79** (aggregated for all coins). Your total ACB *for the
-coins you sold at a profit* is: **\$6,099.62** (average of all coins).
-The difference between the two is your capital gains: **\$3,970.17**.
+coins you sold at a profit* is: **\$6,099.58** (average of all coins).
+The difference between the two is your capital gains: **\$3,970.20**.
 
 Your total “proceeds” (adjusted for superficial gains) *for the coins
 you sold at a **loss*** is: **\$0.00** (aggregated for all coins). Your
@@ -307,9 +307,9 @@ income.
 
 #### Total tax estimation
 
-In general, you can expect to pay tax on 50% (**\$1,985.09**) of your
+In general, you can expect to pay tax on 50% (**\$1,985.10**) of your
 net capital gains + 100% of your taxable income (**\$44.78**), for a
-total of **\$2,029.87**. This amount will be taxed based on your tax
+total of **\$2,029.88**. This amount will be taxed based on your tax
 bracket.
 
 > Note that if your capital gains are net negative for the current year,
@@ -320,7 +320,7 @@ bracket.
 #### Form T1135
 
 If your **total acquisition cost** has been greater than **\$100,000**
-at any point during 2021 (it is **\$7,887.33** at the time of this
+at any point during 2021 (it is **\$7,887.31** at the time of this
 report), you will need to fill **form T1135** (*Foreign Income
 Verification Statement*). Form T1135 is [available for
 download](https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t1135.html),
@@ -335,9 +335,9 @@ income tax:
 | Description            | Amount    | Comment                                                                    | Line                                          |
 |------------------------|-----------|----------------------------------------------------------------------------|-----------------------------------------------|
 | Gains proceeds         | 10,069.79 | Proceeds of sold coins (gains)                                             | Schedule 3, line 15199 column 2               |
-| Gains ACB              | 6,099.62  | ACB of sold coins (gains)                                                  | Schedule 3, line 15199 column 3               |
-| Gains                  | 3,970.17  | Proceeds - ACB (gains)                                                     | Schedule 3, lines 15199 column 5 & 15300      |
-| 50% of gains           | 1,985.08  | Half of gains                                                              | T1, line 12700; Schedule 3, line 15300, 19900 |
+| Gains ACB              | 6,099.58  | ACB of sold coins (gains)                                                  | Schedule 3, line 15199 column 3               |
+| Gains                  | 3,970.20  | Proceeds - ACB (gains)                                                     | Schedule 3, lines 15199 column 5 & 15300      |
+| 50% of gains           | 1,985.10  | Half of gains                                                              | T1, line 12700; Schedule 3, line 15300, 19900 |
 | Outlays of gains       | 0.00      | Expenses and trading fees (gains). Normally already integrated in the ACB  | Tax software                                  |
 | Losses proceeds        | 0.00      | Proceeds of sold coins (losses)                                            | Schedule 3, line 15199 column 2               |
 | Losses ACB             | 0.00      | ACB of sold coins (losses)                                                 | Schedule 3, line 15199 column 3               |
@@ -345,7 +345,7 @@ income tax:
 | 50% of losses          | 0.00      | Half of losses                                                             | T1, line 12700; Schedule 3, line 15300, 19900 |
 | Outlays of losses      | 0.00      | Expenses and trading fees (losses). Normally already integrated in the ACB | Tax software                                  |
 | Foreign income         | 44.78     | Income from crypto interest or staking is considered foreign income        | T1, line 13000, T1135                         |
-| Foreign gains (losses) | 3,970.17  | Capital gains from crypto is considered foreign capital gains              | T1135                                         |
+| Foreign gains (losses) | 3,970.20  | Capital gains from crypto is considered foreign capital gains              | T1135                                         |
 
 #### Other situations
 

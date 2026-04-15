@@ -4,6 +4,27 @@ In this vignette, we will demonstrate that calculations of the adjusted
 cost base by `cryptoTax` closely follows those of
 <https://www.adjustedcostbase.ca/>.
 
+### Scope note
+
+This vignette focuses on transaction math for capital-account ACB and
+superficial-loss calculations.
+
+`cryptoTax` does **not** try to settle every legal or tax-classification
+question automatically. In particular:
+
+- different `currency` values are treated as different property pools by
+  default
+- the package does **not** automatically decide whether wrapped tokens,
+  bridged assets, liquid staking derivatives, exchange wrappers, or
+  similar crypto variants should count as the same “identical property”
+  for superficial-loss purposes
+- the package does **not** decide whether your facts belong on income
+  account instead of capital account
+
+So the examples below are authoritative for the package’s current
+transaction math, but they are not a substitute for professional
+judgment in ambiguous “identical property” cases.
+
 ## Basic ACB
 
 To begin, we will replicate the basic ACB example showcased in
@@ -245,9 +266,9 @@ ACB(data, spot.rate = "price") %>%
 |:-----------|:------------|---------:|------:|---------------:|------------------------------:|:---------|------------------:|---------:|----------:|------------------:|----------:|-------------:|----------:|
 | 2015-04-09 | buy         |      150 |     3 |            150 | 2015-03-10 UTC–2015-05-09 UTC | FALSE    |                 0 | 450.0000 |  3.000000 |           0.00000 |        NA |           NA |        NA |
 | 2015-04-10 | sell        |       20 |     2 |            130 | 2015-03-11 UTC–2015-05-10 UTC | TRUE     |                20 | 410.0000 |  3.153846 |         -20.00000 | -20.00000 |           NA |        NA |
-| 2015-04-15 | buy         |       50 |     3 |            180 | 2015-03-16 UTC–2015-05-15 UTC | FALSE    |                 0 | 580.0000 |  3.222222 |           0.00000 |        NA |           NA |        NA |
-| 2015-04-20 | sell        |       10 |     2 |            170 | 2015-03-21 UTC–2015-05-20 UTC | TRUE     |                10 | 560.0000 |  3.294118 |         -12.22222 | -12.22222 |           NA |        NA |
-| 2015-05-15 | sell        |       80 |     2 |             90 | 2015-04-15 UTC–2015-06-14 UTC | TRUE     |                80 | 361.1765 |  4.013072 |        -103.52941 | -64.70588 |    -38.82353 | -38.82353 |
+| 2015-04-15 | buy         |       50 |     3 |            180 | 2015-03-16 UTC–2015-05-15 UTC | FALSE    |                 0 | 560.0000 |  3.111111 |           0.00000 |        NA |           NA |        NA |
+| 2015-04-20 | sell        |       10 |     2 |            170 | 2015-03-21 UTC–2015-05-20 UTC | TRUE     |                10 | 540.0000 |  3.176471 |         -11.11111 | -11.11111 |           NA |        NA |
+| 2015-05-15 | sell        |       80 |     2 |             90 | 2015-04-15 UTC–2015-06-14 UTC | TRUE     |                80 | 344.7059 |  3.830065 |         -94.11765 | -58.82353 |    -35.29412 | -35.29412 |
 
 ## Other examples from the internet
 

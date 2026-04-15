@@ -43,9 +43,18 @@ gain/loss, and superficial-loss mechanics.
 It does **not** decide whether your facts should instead be reported as
 business income, and it does not automatically decide difficult
 “identical property” questions across distinct crypto instruments such
-as wrapped, bridged, or staked variants.
+as wrapped, bridged, liquid-staked, or exchange-specific variants.
 
-Those cases still need judgment outside the raw transaction math.
+By default, different `currency` values stay in different pools. That is
+an implementation policy for safety and reproducibility, not a legal
+conclusion that two crypto variants can never be identical property
+under Canadian tax law.
+
+Those cases still need judgment outside the raw transaction math. For a
+fuller discussion of the package’s current superficial-loss and
+identical-property scope, see the vignettes at
+<https://cryptoltruist.github.io/cryptoTax/articles/ACB.html> and
+<https://cryptoltruist.github.io/cryptoTax/articles/references.html>.
 
 # Why use `cryptoTax`?
 
@@ -89,6 +98,14 @@ data
 
 ``` r
 ACB(data, spot.rate = "price", sup.loss = FALSE)
+#> Warning: `as.hms()` was deprecated in hms 1.2.0.
+#> ℹ Please use `as_hms()` instead.
+#> ℹ The deprecated feature was likely used in the progress package.
+#>   Please report the issue at <https://github.com/r-lib/progress/issues>.
+#> This warning is displayed once per session.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
+#>  [------------------------------------------------] 0/4 (  0%) [Elapsed: 00:00:00 || Remaining:  ?s] [===========>------------------------------------] 1/4 ( 25%) [Elapsed: 00:00:00 || Remaining:  0s] [=======================>------------------------] 2/4 ( 50%) [Elapsed: 00:00:00 || Remaining:  0s] [===================================>------------] 3/4 ( 75%) [Elapsed: 00:00:00 || Remaining:  0s] [================================================] 4/4 (100%) [Elapsed: 00:00:00 || Remaining:  0s]
 ```
 
 | date       | transaction | quantity | price | fees | total.price | total.quantity |  ACB | ACB.share | gains |
@@ -149,14 +166,14 @@ formatted.ACB <- format_ACB(all.data, verbose = FALSE)
 as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
 ```
 
-| date                | currency |  quantity | total.price | spot.rate | transaction | fees | description | comment                | revenue.type |     value | exchange | rate.source | currency2 | gains |      ACB | ACB.share |
-|:--------------------|:---------|----------:|------------:|----------:|:------------|-----:|:------------|:-----------------------|:-------------|----------:|:---------|:------------|:----------|------:|---------:|----------:|
-| 2021-05-07 14:50:41 | BTC      | 0.0010398 |    53.06974 |  51037.43 | buy         |    0 | Buy         | Bought @ CA\$51,002.43 | NA           | 53.069740 | shakepay | exchange    | BTC       |    NA | 53.06974 |  51037.43 |
-| 2021-05-21 12:47:14 | BTC      | 0.0000130 |     0.00000 |  56527.62 | revenue     |    0 | Reward      | ShakingSats            | airdrops     |  0.734859 | shakepay | exchange    | BTC       |    NA | 53.06974 |  49329.57 |
-| NA                  | NA       |        NA |          NA |        NA | NA          |   NA | NA          | NA                     | NA           |        NA | NA       | NA          | NA        |    NA |       NA |        NA |
-| NA                  | NA       |        NA |          NA |        NA | NA          |   NA | NA          | NA                     | NA           |        NA | NA       | NA          | NA        |    NA |       NA |        NA |
-| NA                  | NA       |        NA |          NA |        NA | NA          |   NA | NA          | NA                     | NA           |        NA | NA       | NA          | NA        |    NA |       NA |        NA |
-| NA                  | NA       |        NA |          NA |        NA | NA          |   NA | NA          | NA                     | NA           |        NA | NA       | NA          | NA        |    NA |       NA |        NA |
+| date                | currency |    quantity | total.price |     spot.rate | transaction | fees | description                     | comment                | revenue.type |      value | exchange | rate.source               | currency2 |    gains |       ACB |     ACB.share |
+|:--------------------|:---------|------------:|------------:|--------------:|:------------|-----:|:--------------------------------|:-----------------------|:-------------|-----------:|:---------|:--------------------------|:----------|---------:|----------:|--------------:|
+| 2021-05-03 22:05:50 | BTC      |   0.0007334 |    51.25000 | 69882.7777778 | buy         |    0 | crypto_purchase                 | Buy BTC                | NA           | 51.2500000 | CDC      | exchange                  | BTC       |       NA |  51.25000 | 69882.7777778 |
+| 2021-05-08 12:12:57 | BTC      |   0.0000110 |     0.00000 | 52582.0324000 | revenue     |    0 | Reward                          | ShakingSats            | airdrops     |  0.5784024 | shakepay | exchange                  | BTC       |       NA | 104.31974 | 58468.9319661 |
+| 2021-05-23 22:09:39 | CRO      | 117.9468230 |     0.00000 |     0.2556449 | revenue     |    0 | referral_gift                   | Sign-up Bonus Unlocked | referrals    | 30.1525000 | CDC      | exchange (USD conversion) | CRO       |       NA |  53.42000 |     0.1778397 |
+| 2021-06-02 19:11:52 | CRO      |  53.6136688 |     0.00000 |     0.2049850 | revenue     |    0 | reimbursement                   | Card Rebate: Spotify   | rebates      | 10.9900000 | CDC      | exchange                  | CRO       |       NA |  53.42000 |     0.1482240 |
+| 2021-07-06 22:18:40 | CRO      |   0.3207992 |     0.26000 |     0.8104758 | revenue     |    0 | crypto_earn_extra_interest_paid | Crypto Earn (Extra)    | interests    |  0.2600000 | CDC      | exchange                  | CRO       |       NA |  53.68000 |     0.1083560 |
+| 2021-07-10 00:52:19 | BTC      |   0.0005299 |    31.26847 | 59017.1922000 | sell        |    0 | Sell                            | Bought @ CA\$59,007.14 | NA           | 31.2684700 | shakepay | exchange                  | BTC       | 1.195385 |  74.24665 | 56751.3071977 |
 
 ### Summary info
 
@@ -171,10 +188,13 @@ report_overview(formatted.ACB,
 #> Date of current prices: 2023-12-31
 ```
 
-| date.last           | currency | total.quantity | cost.share | total.cost |  net | gains | losses | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
-|:--------------------|:---------|---------------:|-----------:|-----------:|-----:|------:|-------:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
-| 2021-07-10 00:52:19 | BTC      |      0.0005749 |   48034.74 |      27.62 | 5.81 |  5.81 |      0 |      83290 |       47.88 |            20.26 |                NA |          20.26 | BTC       |
-| 2021-07-10 00:52:19 | Total    |             NA |         NA |      27.62 | 5.81 |  5.81 |      0 |         NA |       47.88 |            20.26 |                 0 |          20.26 | Total     |
+| date.last           | currency | total.quantity | cost.share | total.cost |   net | gains | losses | rate.today | value.today | unrealized.gains | unrealized.losses | unrealized.net | currency2 |
+|:--------------------|:---------|---------------:|-----------:|-----------:|------:|------:|-------:|-----------:|------------:|-----------------:|------------------:|---------------:|:----------|
+| 2021-07-23 17:21:19 | CRO      |    535.0406356 |       0.11 |      60.66 |  0.00 |  0.00 |      0 |       0.70 |      372.92 |           312.26 |                NA |         312.26 | CRO       |
+| 2021-07-25 18:22:02 | BTC      |      0.0007762 |   56751.31 |      44.05 |  6.00 |  6.00 |      0 |   83290.00 |       64.65 |            20.60 |                NA |          20.60 | BTC       |
+| 2021-07-28 23:23:04 | ETH      |      0.0114054 |    2685.19 |      30.63 |  8.25 |  8.25 |      0 |    5629.00 |       64.20 |            33.57 |                NA |          33.57 | ETH       |
+| 2021-07-11 20:19:55 | ETHW     |      0.3558067 |       8.99 |       3.20 |  0.00 |  0.00 |      0 |      33.88 |       12.05 |             8.85 |                NA |           8.85 | ETHW      |
+| 2021-07-28 23:23:04 | Total    |             NA |         NA |     138.54 | 14.25 | 14.25 |      0 |         NA |      513.82 |           375.28 |                 0 |         375.28 | Total     |
 
 ``` r
 
@@ -191,18 +211,18 @@ report_summary(formatted.ACB,
 |                     | Type                | Amount  | currency |
 |:--------------------|:--------------------|:--------|:---------|
 |                     | tax.year            | 2021    | CAD      |
-| gains               | gains               | 5.81    | CAD      |
+| gains               | gains               | 14.25   | CAD      |
 | losses              | losses              | 0.00    | CAD      |
-| net                 | net                 | 5.81    | CAD      |
-| total.cost          | total.cost          | 27.62   | CAD      |
-| value.today         | value.today         | 47.88   | CAD      |
-| unrealized.gains    | unrealized.gains    | 20.26   | CAD      |
+| net                 | net                 | 14.25   | CAD      |
+| total.cost          | total.cost          | 138.54  | CAD      |
+| value.today         | value.today         | 513.82  | CAD      |
+| unrealized.gains    | unrealized.gains    | 375.28  | CAD      |
 | unrealized.losses   | unrealized.losses   | 0.00    | CAD      |
-| unrealized.net      | unrealized.net      | 20.26   | CAD      |
-| percentage.up       | percentage.up       | 73.38%  | CAD      |
-| all.time.up         | all.time.up         | 94.43%  | CAD      |
-| all.time.up.revenue | all.time.up.revenue | 107.62% | CAD      |
-| revenue             | revenue             | 3.64    | CAD      |
+| unrealized.net      | unrealized.net      | 375.28  | CAD      |
+| percentage.up       | percentage.up       | 270.89% | CAD      |
+| all.time.up         | all.time.up         | 281.17% | CAD      |
+| all.time.up.revenue | all.time.up.revenue | 353.18% | CAD      |
+| revenue             | revenue             | 99.75   | CAD      |
 
 ### Revenue estimation
 
@@ -214,8 +234,9 @@ table.revenues
 
 | exchange | date.last           | total.revenues | interests | rebates | staking | promos | airdrops | referrals | rewards | forks | mining | currency |
 |:---------|:--------------------|---------------:|----------:|--------:|--------:|-------:|---------:|----------:|--------:|------:|-------:|:---------|
-| shakepay | 2021-06-23 12:21:49 |           3.64 |         0 |       0 |       0 |      0 |     3.64 |         0 |       0 |     0 |      0 | CAD      |
-| total    | 2021-06-23 12:21:49 |           3.64 |         0 |       0 |       0 |      0 |     3.64 |         0 |       0 |     0 |      0 | CAD      |
+| CDC      | 2021-07-23 17:21:19 |          96.11 |     10.41 |   51.15 |       0 |      0 |     0.00 |     30.15 |     1.2 |   3.2 |      0 | CAD      |
+| shakepay | 2021-06-23 12:21:49 |           3.64 |      0.00 |    0.00 |       0 |      0 |     3.64 |      0.00 |     0.0 |   0.0 |      0 | CAD      |
+| total    | 2021-07-23 17:21:19 |          99.75 |     10.41 |   51.15 |       0 |      0 |     3.64 |     30.15 |     1.2 |   3.2 |      0 | CAD      |
 
 ``` r
 

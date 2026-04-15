@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.27</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,6 +69,27 @@
     
 <p>In this vignette, we will demonstrate that calculations of the
 adjusted cost base by <code>cryptoTax</code> closely follows those of <a href="https://www.adjustedcostbase.ca/" class="external-link uri">https://www.adjustedcostbase.ca/</a>.</p>
+<div class="section level3">
+<h3 id="scope-note">Scope note<a class="anchor" aria-label="anchor" href="#scope-note"></a>
+</h3>
+<p>This vignette focuses on transaction math for capital-account ACB and
+superficial-loss calculations.</p>
+<p><code>cryptoTax</code> does <strong>not</strong> try to settle every
+legal or tax-classification question automatically. In particular:</p>
+<ul>
+<li>different <code>currency</code> values are treated as different
+property pools by default</li>
+<li>the package does <strong>not</strong> automatically decide whether
+wrapped tokens, bridged assets, liquid staking derivatives, exchange
+wrappers, or similar crypto variants should count as the same “identical
+property” for superficial-loss purposes</li>
+<li>the package does <strong>not</strong> decide whether your facts
+belong on income account instead of capital account</li>
+</ul>
+<p>So the examples below are authoritative for the package’s current
+transaction math, but they are not a substitute for professional
+judgment in ambiguous “identical property” cases.</p>
+</div>
 <div class="section level2">
 <h2 id="basic-acb">Basic ACB<a class="anchor" aria-label="anchor" href="#basic-acb"></a>
 </h2>
@@ -1027,8 +1048,8 @@ losses, and include a few more columns for the demonstration:</p>
 <td align="right">2015-03-16 UTC–2015-05-15 UTC</td>
 <td align="left">FALSE</td>
 <td align="right">0</td>
-<td align="right">580.0000</td>
-<td align="right">3.222222</td>
+<td align="right">560.0000</td>
+<td align="right">3.111111</td>
 <td align="right">0.00000</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
@@ -1043,10 +1064,10 @@ losses, and include a few more columns for the demonstration:</p>
 <td align="right">2015-03-21 UTC–2015-05-20 UTC</td>
 <td align="left">TRUE</td>
 <td align="right">10</td>
-<td align="right">560.0000</td>
-<td align="right">3.294118</td>
-<td align="right">-12.22222</td>
-<td align="right">-12.22222</td>
+<td align="right">540.0000</td>
+<td align="right">3.176471</td>
+<td align="right">-11.11111</td>
+<td align="right">-11.11111</td>
 <td align="right">NA</td>
 <td align="right">NA</td>
 </tr>
@@ -1059,12 +1080,12 @@ losses, and include a few more columns for the demonstration:</p>
 <td align="right">2015-04-15 UTC–2015-06-14 UTC</td>
 <td align="left">TRUE</td>
 <td align="right">80</td>
-<td align="right">361.1765</td>
-<td align="right">4.013072</td>
-<td align="right">-103.52941</td>
-<td align="right">-64.70588</td>
-<td align="right">-38.82353</td>
-<td align="right">-38.82353</td>
+<td align="right">344.7059</td>
+<td align="right">3.830065</td>
+<td align="right">-94.11765</td>
+<td align="right">-58.82353</td>
+<td align="right">-35.29412</td>
+<td align="right">-35.29412</td>
 </tr>
 </tbody>
 </table>

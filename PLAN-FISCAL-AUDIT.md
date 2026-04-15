@@ -68,6 +68,29 @@ because there is a nearby reacquisition. Covered by
 [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R) and
 [test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R).
 
+A partial sale can still be fully superficial when enough pre-sale
+replacement shares from the prior 30-day window remain owned after the
+sale. Covered by
+[test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R).
+
+Denied-loss carry must not be added twice when a superficial-loss sale
+already leaves replacement shares in the pool and a later buy happens
+before the window ends. Covered by
+[test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R) and
+[test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R).
+
+Repeated partial loss sales inside the same 61-day cluster can each be
+superficial while enough substituted-property units still remain owned
+at the end of the later sale’s window. Covered by
+[test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R) and
+[test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R).
+
+Once no substituted-property units remain owned at the end of a later
+loss sale’s window, the engine should transition back to ordinary
+deductible-loss treatment. Covered by
+[test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R) and
+[test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R).
+
 ### ACB consequences of denied losses
 
 Fully denied superficial losses are rolled into replacement-share ACB.
@@ -263,6 +286,151 @@ Expected outcome:
 - Only the part tied to the 2 remaining replacement units is denied.
 - The remaining 40 of the original loss stays deductible.
 - The later replacement-lot sale uses the higher adjusted ACB/share.
+
+Coverage:
+
+- [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R)
+- [test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R)
+
+### Example D: Partial sale made superficial by pre-sale replacement shares still on hand
+
+Facts:
+
+- Day 1: buy 20 units for 200 total. ACB/share = 10.
+- Day 10: sell 8 units for 40 total.
+- No later buy is needed for the loss to be superficial because 12 units
+  from the original 30-day pre-sale acquisition are still owned at the
+  end of the window.
+
+Arithmetic:
+
+- Uncorrected loss on the sale = 40 - (8 x 10) = -40.
+- Shares acquired in the 61-day window = 20.
+- Shares still owned at the end of the window = 12.
+- Denied quantity = min(8 sold, 20 acquired in window, 12 still owned) =
+  8.
+- Denied loss = -40 x (8 / 8) = -40.
+- Remaining quantity after the sale = 12.
+- Remaining ACB before the denial = 200 x (12 / 20) = 120.
+- Remaining ACB after the denial = 120 + 40 = 160.
+- Remaining ACB/share = 160 / 12 = 13.333333.
+
+Expected outcome:
+
+- The whole 40 loss is denied even though there is no later
+  reacquisition.
+- The denied amount is reflected in the remaining pooled ACB because the
+  taxpayer still holds substituted property acquired in the 30 days
+  before the sale.
+
+Coverage:
+
+- [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R)
+
+### Example E: Later buy after a superficial-loss sale must not receive the same denied loss twice
+
+Facts:
+
+- Day 1: buy 10 units for 100 total.
+- Day 5: buy 5 more units for 50 total. Pool ACB = 150 across 15 units.
+- Day 10: sell 10 units for 50 total.
+- Day 20: buy 2 more units for 12 total.
+- At the end of the 30-day post-sale window, 7 units are still owned.
+
+Arithmetic:
+
+- Uncorrected loss on the Day 10 sale = 50 - (10 x 10) = -50.
+- Shares acquired in the 61-day window = 10 + 5 + 2 = 17.
+- Shares still owned at the end of the window = 7.
+- Denied quantity = min(10 sold, 17 acquired in window, 7 still owned) =
+  7.
+- Denied loss = -50 x (7 / 10) = -35.
+- Deductible excess loss = -50 - (-35) = -15.
+- Remaining ACB immediately after the sale, before denial = 150 x (5
+  / 15) = 50.
+- Remaining ACB immediately after the denied loss is attached = 50 + 35
+  = 85.
+- After the later Day 20 buy, total pooled ACB should be 85 + 12 = 97.
+- Final ACB/share = 97 / 7 = 13.857143.
+
+Expected outcome:
+
+- The denied portion is carried once into the surviving
+  substituted-property pool.
+- The later buy adds only its own acquisition cost; it must not receive
+  the same denied loss a second time.
+
+Coverage:
+
+- [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R)
+- [test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R)
+
+### Example F: Repeated partial loss sales can both be superficial while replacement shares remain
+
+Facts:
+
+- Day 1: buy 20 units for 200 total. ACB/share = 10.
+- Day 10: sell 8 units for 40 total.
+- Day 25: sell 4 more units for 28 total.
+- No new buys occur, but enough units from the original Day 1
+  acquisition remain owned after each sale to keep both losses inside
+  superficial-loss treatment.
+
+Arithmetic:
+
+- First sale: Uncorrected loss = 40 - (8 x 10) = -40. Denied quantity =
+  min(8 sold, 20 acquired in window, 12 still owned) = 8. Denied loss =
+  -40. Remaining ACB after the first sale = 200 x (12 / 20) + 40 = 160.
+  ACB/share after the first sale = 160 / 12 = 13.333333.
+- Second sale: Uncorrected loss = 28 - (4 x 13.333333) = -25.333333. At
+  the end of the second sale’s window, 8 units are still owned. Denied
+  quantity = min(4 sold, 20 acquired in window, 8 still owned) = 4.
+  Denied loss = -25.333333. Remaining ACB after the second sale = 160 x
+  (8 / 12) + 25.333333 = 132. Remaining ACB/share after the second sale
+  = 132 / 8 = 16.5.
+
+Expected outcome:
+
+- Both loss sales are fully superficial.
+- Each denied loss is reflected in the surviving pool, increasing
+  ACB/share as the remaining position gets smaller.
+
+Coverage:
+
+- [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R)
+- [test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R)
+
+### Example G: Later loss becomes deductible once the replacement pool is exhausted
+
+Facts:
+
+- Day 1: buy 20 units for 200 total. ACB/share = 10.
+- Day 10: sell 8 units for 40 total.
+- Day 25: sell 4 units for 28 total.
+- Day 46: sell the final 8 units for 48 total.
+- No new buys occur after the original Day 1 acquisition.
+
+Arithmetic:
+
+- First sale: Uncorrected loss = 40 - (8 x 10) = -40. Because 8 units
+  are still owned at the end of that window, the whole 40 loss is
+  denied. Remaining ACB after the first sale = 160, so ACB/share becomes
+  13.333333.
+- Second sale: Uncorrected loss = 28 - (4 x 13.333333) = -25.333333. By
+  the end of this later sale’s own window, no substituted-property units
+  remain owned. So the second sale is not superficial and the -25.333333
+  remains deductible. Remaining ACB after the second sale = 160 x (8
+  / 12) = 106.666667.
+- Final sale: Uncorrected loss = 48 - (8 x 13.333333) = -58.666667. No
+  shares remain afterward, so this final loss is also deductible.
+
+Expected outcome:
+
+- The engine transitions from denied-loss treatment back to ordinary
+  deductible losses once the “still owned at the end of the window”
+  condition is no longer met.
+- The earlier denied loss still affects the pool’s later ACB/share, but
+  it does not force every later loss sale to stay superficial forever.
 
 Coverage:
 
