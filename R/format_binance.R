@@ -34,8 +34,7 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- .format_binance_prepare_input(data, known.transactions)
 
-  # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force,
@@ -44,30 +43,27 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
   if (is.null(data)) {
     return(NULL)
   }
-
-  data <- .fill_missing_total_price_from_spot(data) %>%
+  data <- data %>%
     arrange(.data$date, desc(.data$total.price))
 
   outputs <- .format_binance_outputs(data)
 
-  # Merge the "buy" and "sell" objects
-  data <- bind_rows(
+  .finalize_formatted_exchange(
+    bind_rows(
     outputs$buy,
     outputs$sell,
     outputs$earn,
     outputs$conversions.buy,
     outputs$conversions.sell
-  ) %>%
-    mutate(exchange = "binance") %>%
-    arrange(date, desc(.data$total.price), .data$transaction) %>%
-    select(
+    ) %>%
+      arrange(date, desc(.data$total.price), .data$transaction),
+    exchange = "binance",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "fees.quantity", "fees.currency", "description", "comment", 
       "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_binance_prepare_input <- function(data, known.transactions) {

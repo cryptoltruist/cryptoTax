@@ -39,15 +39,14 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = NULL,
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_exodus_prepare_input <- function(data, known.transactions) {
@@ -123,6 +122,14 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
 
 #' @noRd
 .format_exodus_finalize <- function(outputs) {
-  merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking.fees) %>%
-    mutate(exchange = "exodus")
+  .finalize_formatted_exchange(
+    outputs$earn,
+    outputs$withdrawals,
+    outputs$staking.fees,
+    exchange = "exodus",
+    columns = c(
+      "date", "currency", "quantity", "transaction",
+      "description", "revenue.type", "exchange"
+    )
+  )
 }

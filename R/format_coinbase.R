@@ -97,16 +97,17 @@ format_coinbase <- function(data) {
 
 #' @noRd
 .format_coinbase_finalize <- function(outputs) {
-  merge_exchanges(
+  .finalize_formatted_exchange(
     outputs$buy,
     outputs$sell,
     outputs$earn,
-    outputs$withdrawals
-  ) %>%
-    mutate(exchange = "coinbase", rate.source = "exchange") %>%
-    arrange(date, desc(.data$transaction)) %>%
-    select(
+    outputs$withdrawals,
+    exchange = "coinbase",
+    rate_source = "exchange",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "description", "comment", "revenue.type", "exchange", "rate.source"
     )
+  ) %>%
+    arrange(date, desc(.data$transaction))
 }

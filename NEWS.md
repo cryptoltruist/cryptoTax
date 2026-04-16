@@ -1,8 +1,16 @@
+# cryptoTax 0.1.0.29
+
+**Improvements:**
+
+- Continued the formatter-architecture cleanup by pushing a broad new batch of wallet and exchange handlers onto the shared formatter helper path, including `format_CDC()`, `format_CDC_wallet()`, `format_cronos_pos()`, `format_exodus()`, `format_uphold()`, `format_gemini()`, `format_coinbase()`, `format_adalite()`, and the remaining CDC/binance helper-based formatter flows.
+- Consolidated more formatter end-of-pipeline behavior onto the shared finalize/resolve helpers while preserving exchange-specific accounting behavior, including CoinSmart's dedicated raw-input pricing path and Adalite's sparse-output normalization.
+- Updated the repo improvement plan to reflect that the formatter normalization track is now effectively in its last special-case stretch rather than the broad-family cleanup phase.
+
 # cryptoTax 0.1.0.28
 
 **Improvements:**
 
-- Continued the fiscal-audit and ACB-hardening pass by expanding the direct and package-level correctness bank around superficial losses, including pre-sale replacement-share cases, repeated partial-loss chains, and the transition back to deductible losses once no substituted-property units remain at the end of a later sale window.
+- Continued the fiscal-audit and ACB-hardening pass by expanding the direct and package-level correctness bank around superficial losses, including replacement-share cases acquired before a sale, repeated partial-loss chains, and the transition back to deductible losses once no substituted-property units remain at the end of a later sale window.
 - Fixed a superficial-loss carry bug in `ACB()` where a denied loss could be added twice when a loss sale already left substituted property in the pool and a later buy happened before the end of the superficial-loss window.
 - Continued the recent large-history performance work by trimming another layer of superficial-loss overhead and avoiding unnecessary progress-bar setup when `verbose = FALSE`, leaving the next meaningful ACB bottleneck in the row-wise core mutation path rather than the superficial-loss prep.
 - Strengthened user-facing fiscal scope documentation in the ACB vignette and README so the package's conservative "identical property" policy is clearer for wrapped, bridged, liquid-staked, and exchange-specific crypto variants.

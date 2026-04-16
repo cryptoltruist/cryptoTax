@@ -41,7 +41,7 @@ format_cronos_pos <- function(data, list.prices = NULL, force = FALSE) {
     select(-"blockHash")
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force,
@@ -51,17 +51,14 @@ format_cronos_pos <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  data <- .fill_missing_total_price_from_spot(data)
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = NULL,
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_cronos_pos_prepare_input <- function(data) {

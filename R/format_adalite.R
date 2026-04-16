@@ -20,10 +20,8 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   known.transactions <- c("Reward awarded", "Received", "Sent")
 
   data <- .format_adalite_prepare_input(data, known.transactions)
-  outputs <- .format_adalite_outputs(data)
-  data <- .format_adalite_finalize(outputs)
+  data <- .format_adalite_finalize(.format_adalite_outputs(data))
 
-  # Determine spot rate and value of coins
   data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
@@ -40,15 +38,14 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
   #                              0,
   #                              total.price))
 
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = NULL,
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 #' @noRd
@@ -82,11 +79,12 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
     filter(.data$description == "Reward awarded") %>%
     mutate(
       transaction = "revenue",
-      revenue.type = "staking"
+      revenue.type = "staking",
+      comment = NA_character_
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "revenue.type", "description"
+      "revenue.type", "description", "comment"
     )
 }
 
@@ -114,6 +112,29 @@ format_adalite <- function(data, list.prices = NULL, force = FALSE) {
 
 #' @noRd
 .format_adalite_finalize <- function(outputs) {
-  merge_exchanges(outputs$earn, outputs$withdrawals) %>%
-    mutate(exchange = "adalite")
+  normalize_output <- function(data) {
+    if (is.null(data)) {
+      return(data)
+    }
+
+    if (!"revenue.type" %in% names(data)) {
+      data$revenue.type <- NA_character_
+    }
+
+    if (!"comment" %in% names(data)) {
+      data$comment <- NA_character_
+    }
+
+    data
+  }
+
+  .finalize_formatted_exchange(
+    normalize_output(outputs$earn),
+    normalize_output(outputs$withdrawals),
+    exchange = "adalite",
+    columns = c(
+      "date", "currency", "quantity", "transaction",
+      "revenue.type", "description", "comment", "exchange"
+    )
+  )
 }

@@ -101,11 +101,10 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
   # https://www.reddit.com/r/Gemini/comments/16n27ay/canadian_regulators_important_changes_to_your/
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(outputs$buy, outputs$earn, outputs$earn2, outputs$sell) %>%
-    mutate(exchange = "gemini")
+  data <- merge_exchanges(outputs$buy, outputs$earn, outputs$earn2, outputs$sell)
 
   # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force
@@ -114,26 +113,19 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  data <- .fill_missing_total_price_from_spot(data)
-
   data <- .format_gemini_apply_sell_prices(data)
 
-  # Arrange in correct order and remove CAD buys
-  data <- data %>%
-    arrange(date, desc(.data$total.price)) %>%
-    filter(.data$currency != "CAD")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  as.data.frame(.finalize_formatted_exchange(
+    data %>%
+      arrange(date, desc(.data$total.price)) %>%
+      filter(.data$currency != "CAD"),
+    exchange = "gemini",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment", 
+      "fees", "fees.quantity", "fees.currency", "description", "comment",
       "revenue.type", "exchange", "rate.source"
-    ) %>%
-    as.data.frame()
-
-  # Return result
-  data
+    )
+  ))
 }
 
 .format_gemini_prepare_input <- function(data, known.transactions) {

@@ -31,8 +31,7 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
     outputs$sell,
     outputs$withdrawals,
     outputs$brave
-  ) %>%
-    mutate(exchange = "uphold")
+  )
 
   # Rename transfers as trades for clarity
   data <- data %>%
@@ -53,19 +52,15 @@ format_uphold <- function(data, list.prices = NULL, force = FALSE) {
 
   data <- .format_uphold_apply_sell_prices(data)
 
-  # Arrange in correct order
-  data <- data %>%
-    arrange(date, desc(.data$total.price))
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data %>%
+      arrange(date, desc(.data$total.price)),
+    exchange = "uphold",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_uphold_prepare_input <- function(data, known.transactions) {

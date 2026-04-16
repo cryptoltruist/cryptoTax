@@ -44,8 +44,7 @@ format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) 
   data <- data %>%
     mutate(across("Amount":"quantity", as.numeric))
 
-  # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force,
@@ -54,8 +53,6 @@ format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) 
   if (is.null(data)) {
     return(NULL)
   }
-
-  data <- .fill_missing_total_price_from_spot(data)
 
   # Actually no need to determine spot rate because network fees are as if sold for 0
   # data <- data %>%
@@ -73,17 +70,12 @@ format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) 
       "spot.rate", "transaction", "description", "rate.source"
     )
 
-  # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(SELL) %>%
-    mutate(exchange = "binance")
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    SELL,
+    exchange = "binance",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate",
       "transaction", "description", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }

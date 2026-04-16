@@ -50,11 +50,9 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
   data <- .format_cdc_exchange_prepare_input(data, known.transactions)
   outputs <- .format_cdc_exchange_outputs(data)
 
-  # Merge the "buy" and "sell" objects
   data <- merge_exchanges(outputs$buy, outputs$sell, outputs$fees, outputs$earn)
 
-  # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force
@@ -63,25 +61,21 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  data <- .fill_missing_total_price_from_spot(data)
-
   data <- .format_cdc_exchange_apply_sell_prices(data) %>%
-    mutate(exchange = "CDC.exchange") %>%
     arrange(.data$date, desc(.data$total.price), .data$transaction)
 
   # Add fees to BUY
   data <- .format_cdc_exchange_attach_fees(data)
 
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = "CDC.exchange",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "fees", "fees.quantity", "fees.currency", "description", "comment", 
       "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_cdc_exchange_prepare_input <- function(data, known.transactions) {

@@ -23,17 +23,14 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
   data <- .format_blockfi_prepare_input(data, known.transactions)
   outputs <- .format_blockfi_outputs(data)
 
-  # Merge the "buy" and "sell" objects
   data <- merge_exchanges(
     outputs$buy,
     outputs$earn,
     outputs$sell,
     outputs$withdrawals
-  ) %>%
-    mutate(exchange = "blockfi")
+  )
 
-  # Determine spot rate and value of coins
-  data <- .resolve_formatted_prices(
+  data <- .resolve_and_fill_formatted_prices(
     data,
     list.prices = list.prices,
     force = force,
@@ -43,23 +40,17 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  data <- .fill_missing_total_price_from_spot(data)
-
   data <- .format_blockfi_apply_sell_prices(data)
 
-  # Arrange in correct order
-  data <- data %>%
-    arrange(date, desc(.data$total.price))
-
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data %>%
+      arrange(date, desc(.data$total.price)),
+    exchange = "blockfi",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_blockfi_prepare_input <- function(data, known.transactions) {

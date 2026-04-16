@@ -449,6 +449,14 @@ test_that("format_detect helpers expose the canonical formatted-transaction sche
     cryptoTax:::.formatted_transaction_required_columns(),
     c("date", "currency", "quantity", "total.price", "spot.rate", "transaction", "exchange")
   )
+  expect_equal(
+    cryptoTax:::.formatted_transaction_optional_columns(),
+    c("fees", "description", "comment", "revenue.type", "rate.source", "currency2", "value")
+  )
+  expect_equal(
+    sort(names(cryptoTax:::.formatted_transaction_schema_spec())),
+    sort(cryptoTax:::.formatted_transaction_required_columns())
+  )
 
   expect_true(cryptoTax:::.format_detect_is_formatted_candidate(
     data.frame(
@@ -473,6 +481,47 @@ test_that("format_detect rejects invalid formatted transaction inputs with a sch
   expect_error(
     format_detect(invalid_formatted),
     "Invalid formatted transaction input. Missing required columns: spot.rate, exchange."
+  )
+})
+
+test_that("format_detect rejects malformed formatted transaction types with a schema error", {
+  invalid_formatted <- data.frame(
+    date = "2021-01-01 00:00:00",
+    currency = "BTC",
+    quantity = "1",
+    total.price = 100,
+    spot.rate = 100,
+    transaction = "buy",
+    exchange = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    format_detect(invalid_formatted),
+    "Invalid formatted transaction input. Required columns have unexpected types: date, quantity."
+  )
+})
+
+test_that("format_detect rejects duplicate columns in formatted transaction inputs", {
+  duplicated_formatted <- data.frame(
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    currency = "BTC",
+    quantity = 1,
+    total.price = 100,
+    spot.rate = 100,
+    transaction = "buy",
+    exchange = "manual",
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+  names(duplicated_formatted)[[2]] <- "date"
+
+  expect_error(
+    cryptoTax:::.validate_formatted_transaction_schema(
+      duplicated_formatted,
+      what = "formatted transaction input"
+    ),
+    "Invalid formatted transaction input. Duplicate columns are not allowed: date."
   )
 })
 
@@ -512,6 +561,32 @@ test_that("run_format_detect_formatter validates formatter outputs against the c
       data = data_shakepay
     ),
     "Invalid formatter output for exchange 'shakepay'. Missing required columns: spot.rate, exchange."
+  )
+})
+
+test_that("run_format_detect_formatter rejects formatter outputs with invalid core column types", {
+  testthat::local_mocked_bindings(
+    format_shakepay = function(...) {
+      data.frame(
+        date = "2021-01-01 00:00:00",
+        currency = "BTC",
+        quantity = "1",
+        total.price = 100,
+        spot.rate = 100,
+        transaction = "buy",
+        exchange = "shakepay",
+        stringsAsFactors = FALSE
+      )
+    },
+    .package = "cryptoTax"
+  )
+
+  expect_error(
+    cryptoTax:::.run_format_detect_formatter(
+      exchange = "shakepay",
+      data = data_shakepay
+    ),
+    "Invalid formatter output for exchange 'shakepay'. Required columns have unexpected types: date, quantity."
   )
 })
 

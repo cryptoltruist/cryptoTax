@@ -75,6 +75,22 @@
   c("date", "currency", "quantity", "total.price", "spot.rate", "transaction", "exchange")
 }
 
+.formatted_transaction_optional_columns <- function() {
+  c("fees", "description", "comment", "revenue.type", "rate.source", "currency2", "value")
+}
+
+.formatted_transaction_schema_spec <- function() {
+  list(
+    date = function(x) inherits(x, c("POSIXct", "POSIXt", "Date")),
+    currency = function(x) is.character(x) || is.factor(x),
+    quantity = is.numeric,
+    total.price = is.numeric,
+    spot.rate = is.numeric,
+    transaction = function(x) is.character(x) || is.factor(x),
+    exchange = function(x) is.character(x) || is.factor(x)
+  )
+}
+
 .formatted_transaction_candidate_columns <- function() {
   c("date", "currency", "quantity", "transaction")
 }
@@ -89,10 +105,33 @@
 }
 
 .validate_formatted_transaction_schema <- function(data, what = "formatted transaction data") {
+  duplicated_columns <- unique(names(data)[duplicated(names(data))])
+
+  if (length(duplicated_columns) > 0) {
+    stop(
+      "Invalid ", what, ". Duplicate columns are not allowed: ",
+      paste(duplicated_columns, collapse = ", "),
+      "."
+    )
+  }
+
   missing_columns <- .formatted_transaction_missing_columns(data)
 
   if (length(missing_columns) == 0) {
-    return(data)
+    schema_spec <- .formatted_transaction_schema_spec()
+    invalid_types <- names(schema_spec)[!vapply(names(schema_spec), function(column) {
+      schema_spec[[column]](data[[column]])
+    }, logical(1))]
+
+    if (length(invalid_types) == 0) {
+      return(data)
+    }
+
+    stop(
+      "Invalid ", what, ". Required columns have unexpected types: ",
+      paste(invalid_types, collapse = ", "),
+      "."
+    )
   }
 
   stop(
@@ -446,7 +485,10 @@ format_detect <- function(data, ...) {
 
   lapply(data, function(x) {
     if (is.data.frame(x) && .format_detect_is_formatted_input(x)) {
-      return(x)
+      return(.validate_formatted_transaction_schema(
+        x,
+        what = "formatted transaction input"
+      ))
     }
 
     if (is.data.frame(x) && .format_detect_is_formatted_candidate(x)) {
@@ -483,7 +525,10 @@ format_detect <- function(data, ...) {
 #' @export
 format_detect.data.frame <- function(data, list.prices = NULL, USD2CAD.table = NULL, force = FALSE, ...) {
   if (.format_detect_is_formatted_input(data)) {
-    return(data)
+    return(.validate_formatted_transaction_schema(
+      data,
+      what = "formatted transaction input"
+    ))
   }
 
   if (.format_detect_is_formatted_candidate(data)) {

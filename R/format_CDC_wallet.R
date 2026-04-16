@@ -37,8 +37,7 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
   #  mutate(total.price = 0)
 
   # Merge the "buy" and "sell" objects
-  data <- merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking) %>%
-    mutate(exchange = "CDC.wallet")
+  data <- merge_exchanges(outputs$earn, outputs$withdrawals, outputs$staking)
 
   # Determine spot rate and value of coins
   data <- .resolve_and_fill_formatted_prices(
@@ -51,15 +50,14 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = "CDC.wallet",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_cdc_wallet_prepare_input <- function(data, known.transactions) {

@@ -140,21 +140,19 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
 
   # Merge the "buy" and "sell" objects
   data <- bind_rows(BUY, EARN, SELL, WITHDRAWALS) %>%
-    mutate(exchange = "coinsmart") %>%
     arrange(.data$date, desc(.data$total.price))
 
   data <- .coinsmart_trade_comments(data)
 
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = "coinsmart",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", 
       "transaction", "fees", "fees.quantity", "fees.currency", 
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_coinsmart_prepare_input <- function(data, known.transactions) {

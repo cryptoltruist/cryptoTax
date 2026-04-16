@@ -87,18 +87,16 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
     outputs$sell,
     outputs$sell2,
     outputs$withdrawals
-  ) %>%
-    mutate(exchange = "CDC")
+  )
 
-  # Reorder columns properly
-  data <- data %>%
-    select(
+  .finalize_formatted_exchange(
+    data,
+    exchange = "CDC",
+    columns = c(
       "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
       "description", "comment", "revenue.type", "exchange", "rate.source"
     )
-
-  # Return result
-  data
+  )
 }
 
 .format_cdc_prepare_input <- function(data, known.transactions) {
