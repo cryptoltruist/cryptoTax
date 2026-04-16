@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.28</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,9 +37,16 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.29" id="cryptotax-01029">cryptoTax 0.1.0.29<a class="anchor" aria-label="anchor" href="#cryptotax-01029"></a></h2>
+<p><strong>Improvements:</strong></p>
+<ul><li>Continued the formatter-architecture cleanup by pushing a broad new batch of wallet and exchange handlers onto the shared formatter helper path, including <code><a href="../reference/format_CDC.html">format_CDC()</a></code>, <code><a href="../reference/format_CDC_wallet.html">format_CDC_wallet()</a></code>, <code><a href="../reference/format_cronos_pos.html">format_cronos_pos()</a></code>, <code><a href="../reference/format_exodus.html">format_exodus()</a></code>, <code><a href="../reference/format_uphold.html">format_uphold()</a></code>, <code><a href="../reference/format_gemini.html">format_gemini()</a></code>, <code><a href="../reference/format_coinbase.html">format_coinbase()</a></code>, <code><a href="../reference/format_adalite.html">format_adalite()</a></code>, and the remaining CDC/binance helper-based formatter flows.</li>
+<li>Consolidated more formatter end-of-pipeline behavior onto the shared finalize/resolve helpers while preserving exchange-specific accounting behavior, including CoinSmart’s dedicated raw-input pricing path and Adalite’s sparse-output normalization.</li>
+<li>Updated the repo improvement plan to reflect that the formatter normalization track is now effectively in its last special-case stretch rather than the broad-family cleanup phase.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.28" id="cryptotax-01028">cryptoTax 0.1.0.28<a class="anchor" aria-label="anchor" href="#cryptotax-01028"></a></h2>
 <p><strong>Improvements:</strong></p>
-<ul><li>Continued the fiscal-audit and ACB-hardening pass by expanding the direct and package-level correctness bank around superficial losses, including pre-sale replacement-share cases, repeated partial-loss chains, and the transition back to deductible losses once no substituted-property units remain at the end of a later sale window.</li>
+<ul><li>Continued the fiscal-audit and ACB-hardening pass by expanding the direct and package-level correctness bank around superficial losses, including replacement-share cases acquired before a sale, repeated partial-loss chains, and the transition back to deductible losses once no substituted-property units remain at the end of a later sale window.</li>
 <li>Fixed a superficial-loss carry bug in <code><a href="../reference/ACB.html">ACB()</a></code> where a denied loss could be added twice when a loss sale already left substituted property in the pool and a later buy happened before the end of the superficial-loss window.</li>
 <li>Continued the recent large-history performance work by trimming another layer of superficial-loss overhead and avoiding unnecessary progress-bar setup when <code>verbose = FALSE</code>, leaving the next meaningful ACB bottleneck in the row-wise core mutation path rather than the superficial-loss prep.</li>
 <li>Strengthened user-facing fiscal scope documentation in the ACB vignette and README so the package’s conservative “identical property” policy is clearer for wrapped, bridged, liquid-staked, and exchange-specific crypto variants.</li>

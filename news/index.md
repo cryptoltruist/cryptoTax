@@ -1,14 +1,39 @@
 # Changelog
 
+## cryptoTax 0.1.0.29
+
+**Improvements:**
+
+- Continued the formatter-architecture cleanup by pushing a broad new
+  batch of wallet and exchange handlers onto the shared formatter helper
+  path, including
+  [`format_CDC()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC.md),
+  [`format_CDC_wallet()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_wallet.md),
+  [`format_cronos_pos()`](https://cryptoltruist.github.io/cryptoTax/reference/format_cronos_pos.md),
+  [`format_exodus()`](https://cryptoltruist.github.io/cryptoTax/reference/format_exodus.md),
+  [`format_uphold()`](https://cryptoltruist.github.io/cryptoTax/reference/format_uphold.md),
+  [`format_gemini()`](https://cryptoltruist.github.io/cryptoTax/reference/format_gemini.md),
+  [`format_coinbase()`](https://cryptoltruist.github.io/cryptoTax/reference/format_coinbase.md),
+  [`format_adalite()`](https://cryptoltruist.github.io/cryptoTax/reference/format_adalite.md),
+  and the remaining CDC/binance helper-based formatter flows.
+- Consolidated more formatter end-of-pipeline behavior onto the shared
+  finalize/resolve helpers while preserving exchange-specific accounting
+  behavior, including CoinSmart’s dedicated raw-input pricing path and
+  Adalite’s sparse-output normalization.
+- Updated the repo improvement plan to reflect that the formatter
+  normalization track is now effectively in its last special-case
+  stretch rather than the broad-family cleanup phase.
+
 ## cryptoTax 0.1.0.28
 
 **Improvements:**
 
 - Continued the fiscal-audit and ACB-hardening pass by expanding the
   direct and package-level correctness bank around superficial losses,
-  including pre-sale replacement-share cases, repeated partial-loss
-  chains, and the transition back to deductible losses once no
-  substituted-property units remain at the end of a later sale window.
+  including replacement-share cases acquired before a sale, repeated
+  partial-loss chains, and the transition back to deductible losses once
+  no substituted-property units remain at the end of a later sale
+  window.
 - Fixed a superficial-loss carry bug in
   [`ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/ACB.md)
   where a denied loss could be added twice when a loss sale already left
