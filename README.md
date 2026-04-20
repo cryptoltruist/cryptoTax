@@ -41,6 +41,60 @@ For most users, the modern happy path is:
 The package now works best when you pass explicit price inputs for
 offline and reproducible workflows.
 
+The built-in pricing cache is now best understood as a convenience for
+the current R session, not as the primary source of truth for
+reproducible work. Normal implicit reuse only comes from the
+package-owned cache, while explicit inputs remain the preferred path for
+scripts, tests, and offline reporting.
+
+That cache is especially useful when you format exchange files one by
+one and need to make manual corrections between calls: you can prepare
+shared pricing once, then let the relevant `format_*()` functions reuse
+the package cache instead of figuring out by hand which exchange export
+needs `list.prices` or `USD2CAD.table`.
+
+If you are doing real taxes and want a maximally audit-friendly
+workflow, it is still perfectly reasonable to prefer explicit
+`format_*()` calls one by one so you can inspect each formatted output
+before merging everything together. In that workflow, explicit saved
+price objects on disk remain the safest source of truth, while the
+package cache is just a same-session convenience layer.
+
+## Saved prices across sessions
+
+The package-owned pricing cache is **session only**. If you restart R,
+that cache is gone. For multi-day tax work, the most practical workflow
+is:
+
+1.  Save your `list.prices` object to disk with `saveRDS()` or `save()`
+2.  Reload it in a later session
+3.  Optionally seed the package cache with `add_to_cache()` so
+    formatters can reuse it implicitly during that session
+
+``` r
+library(cryptoTax)
+
+if (file.exists("list.prices.rds")) {
+  list.prices <- readRDS("list.prices.rds")
+} else {
+  list.prices <- prepare_list_prices(
+    my.coins,
+    start.date = "2021-02-01"
+  )
+  saveRDS(list.prices, "list.prices.rds")
+}
+
+# Optional: seed the package-owned cache for this R session
+add_to_cache(list.prices = list.prices)
+
+# Inspect what is cached this session
+pricing_cache("list.prices")
+```
+
+If you prefer, you can keep passing `list.prices = list.prices`
+explicitly to every formatter call instead of relying on the cache. That
+remains the most explicit and reproducible path.
+
 ## Scope note
 
 `cryptoTax` currently implements capital-account style ACB, capital
@@ -191,6 +245,37 @@ as.data.frame(formatted.ACB[c(1, 4, 8, 10, 19, 20), c(1:6, 7:14, 24:26)])
 | 2021-07-10 00:52:19 | BTC      |   0.0005299 |    31.26847 | 59017.1922000 | sell        |    0 | Sell                            | Bought @ CA\$59,007.14 | NA           | 31.2684700 | shakepay | exchange                  | BTC       | 1.195385 |  74.24665 | 56751.3071977 |
 
 </div>
+
+### Audit-friendly explicit workflow
+
+For real tax work, many users may prefer formatting files one by one so
+the intermediate output can be checked before everything is merged
+together:
+
+``` r
+library(cryptoTax)
+
+list.prices <- readRDS("list.prices.rds")
+
+x.shakepay <- format_shakepay(data_shakepay)
+x.cdc <- format_CDC(data_CDC)
+x.binance <- format_binance(data_binance, list.prices = list.prices)
+
+all.data <- merge_exchanges(x.shakepay, x.cdc, x.binance)
+formatted.ACB <- format_ACB(all.data, verbose = FALSE)
+```
+
+If you want the same workflow but with less repeated `list.prices = ...`
+plumbing during the current R session, load your saved object once and
+seed the cache:
+
+``` r
+list.prices <- readRDS("list.prices.rds")
+add_to_cache(list.prices = list.prices)
+
+x.binance <- format_binance(data_binance)
+x.gemini <- format_gemini(data_gemini)
+```
 
 ### Summary info
 

@@ -221,6 +221,38 @@ test_that("resolve_report_today_data disables today.data when offline with no pr
   expect_null(price.state$list.prices)
 })
 
+test_that("resolve_report_today_data avoids preparing prices when offline and no cache is available", {
+  testthat::local_mocked_bindings(
+    .package = "curl",
+    has_internet = function() FALSE
+  )
+
+  testthat::local_mocked_bindings(
+    .package = "cryptoTax",
+    .resolve_report_cached_prices = function(...) NULL,
+    prepare_list_prices_slugs = function(...) stop("should not be called")
+  )
+
+  expect_message(
+    price.state <- cryptoTax:::.resolve_report_today_data(
+      formatted.ACB = data.frame(
+        currency = "BTC",
+        date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC")
+      ),
+      today.data = TRUE,
+      list.prices = NULL,
+      slug = NULL,
+      start.date = NULL,
+      force = FALSE,
+      verbose = TRUE
+    ),
+    "today.data argument has been set to `FALSE` automatically."
+  )
+
+  expect_false(price.state$today.data)
+  expect_null(price.state$list.prices)
+})
+
 test_that("resolve_report_today_data can reuse cached prices offline before disabling today.data", {
   explicit_list_prices <- data.frame(
     currency = "BTC",
@@ -235,7 +267,7 @@ test_that("resolve_report_today_data can reuse cached prices offline before disa
 
   testthat::local_mocked_bindings(
     .package = "cryptoTax",
-    prepare_list_prices_slugs = function(...) explicit_list_prices
+    .resolve_report_cached_prices = function(...) explicit_list_prices
   )
 
   price.state <- cryptoTax:::.resolve_report_today_data(
@@ -284,6 +316,27 @@ test_that("prepare_report_current_rates emits the requested signal style", {
   expect_equal(rates$currency, "BTC")
   expect_equal(rates$spot.rate, 42)
   expect_equal(rates$date, as.Date("2021-01-02"))
+})
+
+test_that("report_latest_acb keeps the last row at the latest timestamp for each currency", {
+  formatted.ACB <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-02 00:00:00",
+      "2021-01-03 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "BTC", "BTC", "ETH"),
+    total.quantity = c(1, 2, 3, 4),
+    ACB.share = c(10, 20, 30, 40),
+    ACB = c(100, 200, 300, 400)
+  )
+
+  result <- cryptoTax:::.report_latest_acb(formatted.ACB)
+
+  expect_equal(result$currency, c("BTC", "ETH"))
+  expect_equal(result$total.quantity, c(3, 4))
+  expect_equal(result$ACB, c(300, 400))
 })
 
 test_that("sup_losses_total returns zero for empty superficial-loss tables", {

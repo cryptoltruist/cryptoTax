@@ -1,17 +1,60 @@
-.prepare_report_core <- function(formatted.ACB, list.prices, tax.year, local.timezone) {
-  report.overview <- report_overview(
-    formatted.ACB,
+.prepare_report_price_state <- function(formatted.ACB, list.prices) {
+  .resolve_report_today_data(
+    formatted.ACB = formatted.ACB,
     today.data = TRUE,
-    tax.year = tax.year,
-    local.timezone = local.timezone,
+    list.prices = list.prices,
+    slug = NULL,
+    start.date = NULL,
+    force = FALSE,
+    verbose = TRUE
+  )
+}
+
+.prepare_report_current_rates_state <- function(formatted.ACB, price.state) {
+  if (!isTRUE(price.state$today.data)) {
+    return(NULL)
+  }
+
+  formatted.ACB %>%
+    dplyr::filter(.data$currency != "CAD") %>%
+    .report_latest_acb() %>%
+    .prepare_report_current_rates(
+      list.prices = price.state$list.prices,
+      force = FALSE,
+      verbose = TRUE,
+      signal = "message"
+    )
+}
+
+.prepare_report_core <- function(formatted.ACB, list.prices, tax.year, local.timezone) {
+  price.state <- .prepare_report_price_state(
+    formatted.ACB = formatted.ACB,
     list.prices = list.prices
   )
-  report.summary <- report_summary(
-    formatted.ACB,
-    today.data = TRUE,
+  current.rates <- .prepare_report_current_rates_state(
+    formatted.ACB = formatted.ACB,
+    price.state = price.state
+  )
+
+  report.overview <- .report_overview_from_price_state(
+    formatted.ACB = formatted.ACB,
+    today.data = price.state$today.data,
     tax.year = tax.year,
     local.timezone = local.timezone,
-    list.prices = list.prices
+    list.prices = price.state$list.prices,
+    rates = current.rates,
+    force = FALSE,
+    verbose = TRUE
+  )
+  report.summary <- .report_summary_from_price_state(
+    formatted.ACB = formatted.ACB,
+    today.data = price.state$today.data,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    list.prices = price.state$list.prices,
+    rates = current.rates,
+    force = FALSE,
+    verbose = TRUE
   )
   proceeds <- get_proceeds(
     formatted.ACB,
@@ -29,7 +72,14 @@
     local.timezone = local.timezone
   )
 
-  dplyr::lst(report.overview, report.summary, proceeds, sup.losses, table.revenues, list.prices)
+  dplyr::lst(
+    report.overview,
+    report.summary,
+    proceeds,
+    sup.losses,
+    table.revenues,
+    list.prices = price.state$list.prices
+  )
 }
 
 .prepare_report_outputs <- function(report.info, local.timezone) {

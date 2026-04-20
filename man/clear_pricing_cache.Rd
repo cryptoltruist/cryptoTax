@@ -20,6 +20,9 @@ Clear one or more cached pricing-related objects stored by
 
 This clears the package-owned cache only; it does not remove similarly named
 objects from \code{.GlobalEnv}.
+
+Clearing the package cache is the safest way to force fresh pricing/FX
+resolution without mutating user workspace objects.
 }
 \examples{
 clear_pricing_cache()

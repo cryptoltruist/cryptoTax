@@ -69,12 +69,7 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
 
   .finalize_formatted_exchange(
     data,
-    exchange = "CDC.exchange",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment", 
-      "revenue.type", "exchange", "rate.source"
-    )
+    exchange = "CDC.exchange"
   )
 }
 
@@ -95,10 +90,34 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
 
   data %>%
     mutate(
+      .cdc_row_id = dplyr::row_number(),
       date = lubridate::as_datetime(.data$date),
       currency = ifelse(.data$currency == "USD_Stable_Coin", "USDC", .data$currency),
       quantity = abs(.data$quantity)
     )
+}
+
+.format_cdc_exchange_fee_buy_row_id <- function(data) {
+  out <- rep(NA_integer_, nrow(data))
+  fee_rows <- which(data$description %in% "TRADE_FEE")
+  buy_mask <- data$description %in% "TRADING" & data$comment %in% "BUY"
+
+  for (i in fee_rows) {
+    candidate_rows <- c(i - 1L, i - 2L)
+    candidate_rows <- candidate_rows[candidate_rows >= 1L]
+    candidate_rows <- candidate_rows[
+      buy_mask[candidate_rows] &
+        !is.na(data$date[candidate_rows]) &
+        !is.na(data$date[i]) &
+        data$date[candidate_rows] == data$date[i]
+    ]
+
+    if (length(candidate_rows) > 0) {
+      out[[i]] <- data$.cdc_row_id[[candidate_rows[[1]]]]
+    }
+  }
+
+  out
 }
 
 .format_cdc_exchange_trade_rows <- function(data, description_value, transaction_value) {
@@ -117,9 +136,10 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
 .format_cdc_exchange_buy <- function(data) {
   .format_cdc_exchange_trade_rows(data, "TRADING", "buy") %>%
     filter(.data$comment == "BUY") %>%
+    mutate(.buy_fee_row_id = .data$.cdc_row_id) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "description", "comment", "Trade.ID", "row"
+      "description", "comment", "Trade.ID", "row", ".buy_fee_row_id"
     )
 }
 
@@ -138,6 +158,7 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
 
 .format_cdc_exchange_fees <- function(data) {
   data %>%
+    mutate(.buy_fee_row_id = .format_cdc_exchange_fee_buy_row_id(data)) %>%
     filter(.data$description == "TRADE_FEE") %>%
     arrange(.data$Trade.ID, .data$date) %>%
     group_by(.data$Trade.ID) %>%
@@ -149,7 +170,7 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
     ) %>%
     select(
       "date", "quantity", "currency", "transaction",
-      "description", "comment", "Trade.ID", "row"
+      "description", "comment", "Trade.ID", "row", ".buy_fee_row_id"
     )
 }
 
@@ -205,7 +226,7 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
   fees.temp <- data %>%
     filter(.data$description == "TRADE_FEE") %>%
     select(
-      "Trade.ID", "row",
+      ".buy_fee_row_id",
       fees = "total.price",
       fees.quantity = "quantity",
       fees.currency = "currency"
@@ -213,7 +234,8 @@ format_CDC_exchange <- function(data, list.prices = NULL, force = FALSE) {
 
   data %>%
     filter(.data$description != "TRADE_FEE") %>%
-    right_join(fees.temp, by = c("Trade.ID", "row")) %>%
+    left_join(fees.temp, by = ".buy_fee_row_id") %>%
+    select(-".buy_fee_row_id") %>%
     arrange(.data$date, desc(.data$total.price), .data$transaction)
 }
 

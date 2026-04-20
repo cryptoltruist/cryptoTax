@@ -698,3 +698,130 @@ test_that("ACB limits a day-30 superficial-loss denial to replacement shares sti
   expect_equal(result$ACB, c(100, 0, 44, 0))
   expect_equal(result$ACB.share, c(10, 0, 11, 0))
 })
+
+test_that("ACB does not treat post-sale revenue alone as a superficial-loss acquisition", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2020-11-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "revenue"),
+    quantity = c(10, 10, 4),
+    total.price = c(100, 50, 24),
+    spot.rate = c(10, 5, 6),
+    revenue.type = c(NA, NA, "staking"),
+    fees = c(0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_true(all(is.na(result$gains.sup)))
+  expect_true(all(is.na(result$gains.excess)))
+  expect_equal(result$gains[2], -50)
+  expect_equal(result$ACB, c(100, 0, 24))
+  expect_equal(result$ACB.share, c(10, 0, 6))
+})
+
+test_that("ACB does not treat pre-sale revenue alone as a superficial-loss acquisition", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2020-11-01 00:00:00",
+      "2021-01-05 00:00:00",
+      "2021-01-10 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "revenue", "sell"),
+    quantity = c(10, 5, 10),
+    total.price = c(100, 60, 50),
+    spot.rate = c(10, 12, 5),
+    revenue.type = c(NA, "staking", NA),
+    fees = c(0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$total.quantity, c(10, 15, 5))
+  expect_equal(result$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_true(all(is.na(result$gains.sup)))
+  expect_true(all(is.na(result$gains.excess)))
+  expect_equal(result$gains[3], -56.66667, tolerance = 1e-5)
+  expect_equal(result$ACB[3], 53.33333, tolerance = 1e-5)
+  expect_equal(result$ACB.share[3], 10.66667, tolerance = 1e-5)
+})
+
+test_that("ACB can still deny a loss when a qualifying buy exists in the window and revenue units remain owned at the end", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "revenue"),
+    quantity = c(10, 10, 4),
+    total.price = c(100, 50, 24),
+    spot.rate = c(10, 5, 6),
+    revenue.type = c(NA, NA, "staking"),
+    fees = c(0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$sup.loss, c(FALSE, TRUE, FALSE))
+  expect_equal(result$gains.uncorrected[2], -50)
+  expect_equal(result$gains.sup[2], -20)
+  expect_equal(result$gains.excess[2], -30)
+  expect_equal(result$gains[2], -30)
+  expect_equal(result$ACB, c(100, 0, 44))
+  expect_equal(result$ACB.share, c(10, 0, 11))
+})
+
+test_that("ACB does not treat rebates alone as a superficial-loss acquisition", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2020-11-01 00:00:00",
+      "2021-01-05 00:00:00",
+      "2021-01-10 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "rebates", "sell"),
+    quantity = c(10, 5, 10),
+    total.price = c(100, 60, 50),
+    spot.rate = c(10, 12, 5),
+    fees = c(0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$total.quantity, c(10, 15, 5))
+  expect_equal(result$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_true(all(is.na(result$gains.sup)))
+  expect_true(all(is.na(result$gains.excess)))
+  expect_equal(result$gains[3], -56.66667, tolerance = 1e-5)
+  expect_equal(result$ACB[3], 53.33333, tolerance = 1e-5)
+  expect_equal(result$ACB.share[3], 10.66667, tolerance = 1e-5)
+})
+
+test_that("ACB can still deny a loss when a qualifying buy exists in the window and rebates remain owned at the end", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00"
+    ), tz = "UTC"),
+    transaction = c("buy", "sell", "rebates"),
+    quantity = c(10, 10, 4),
+    total.price = c(100, 50, 24),
+    spot.rate = c(10, 5, 6),
+    fees = c(0, 0, 0)
+  )
+
+  result <- ACB(data, sup.loss = TRUE, verbose = FALSE)
+
+  expect_equal(result$sup.loss, c(FALSE, TRUE, FALSE))
+  expect_equal(result$gains.uncorrected[2], -50)
+  expect_equal(result$gains.sup[2], -20)
+  expect_equal(result$gains.excess[2], -30)
+  expect_equal(result$gains[2], -30)
+  expect_equal(result$ACB, c(100, 0, 44))
+  expect_equal(result$ACB.share, c(10, 0, 11))
+})

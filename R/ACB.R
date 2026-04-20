@@ -75,15 +75,18 @@
 
 .update_acb_add_row <- function(data, i, quantity, total.price) {
   if (i == 1) {
-    # TODO: Verify whether fees should always be added on top of total.price
-    # here, or whether some inputs already include fees in total.price.
+    # Supported fee contracts:
+    # - separate acquisition fees: total.price excludes fees, so add fees here
+    # - fee-inclusive acquisition totals: formatter must zero fees beforehand
+    # - fee-in-kind / withdrawal fees as separate sell rows: handled elsewhere
     data[i, "ACB"] <- data[i, total.price] + data[i, "fees"]
     return(data)
   }
 
   data[i, "total.quantity"] <- data[i - 1, "total.quantity"] + data[i, quantity]
-  # TODO: Verify whether fees should always be added on top of total.price
-  # here, or whether some inputs already include fees in total.price.
+  # See supported fee contracts above. ACB() assumes non-zero fees are separate
+  # from acquisition total.price; fee-inclusive acquisitions must already have
+  # fees zeroed by the formatter contract.
   data[i, "ACB"] <- data[i - 1, "ACB"] + data[i, total.price] + data[i, "fees"]
   data
 }
@@ -187,7 +190,22 @@
 #' cases should still be reviewed carefully. More broadly, [ACB()] implements a
 #' capital-account style cost-base and disposition workflow; it does not decide
 #' whether a user's facts should instead be reported on income account as
-#' business income.
+#' business income. In particular, a result based on one supplied ledger should
+#' not be read as proof that no affiliated-person superficial-loss issue exists;
+#' the function only evaluates the transaction history you provide.
+#'
+#' Fee handling assumes one of three normalized contracts:
+#'
+#' - acquisition/disposition rows with a separate `fees` column, where
+#'   `total.price` excludes those fees;
+#' - fee-inclusive acquisition totals, where the formatter has already zeroed
+#'   the separate `fees` field to avoid double-counting; or
+#' - fee-in-kind / withdrawal fees represented as their own disposition rows
+#'   instead of a `fees` column attached to another transaction.
+#'
+#' If a raw import mixes fee-inclusive `total.price` values with non-zero
+#' attached `fees` on the same acquisition row, that ambiguity should be
+#' resolved in the formatter/import step before calling [ACB()].
 #' @param data The dataframe
 #' @param transaction Name of transaction column
 #' @param price Name of price column

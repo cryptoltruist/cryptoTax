@@ -50,19 +50,15 @@ format_binance <- function(data, list.prices = NULL, force = FALSE) {
 
   .finalize_formatted_exchange(
     bind_rows(
-    outputs$buy,
-    outputs$sell,
-    outputs$earn,
-    outputs$conversions.buy,
-    outputs$conversions.sell
+      outputs$buy,
+      outputs$sell,
+      outputs$earn,
+      outputs$conversions.buy,
+      outputs$conversions.sell
     ) %>%
-      arrange(date, desc(.data$total.price), .data$transaction),
+      arrange(date, desc(.data$total.price)),
     exchange = "binance",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment", 
-      "revenue.type", "exchange", "rate.source"
-    )
+    tie_breakers = "transaction"
   )
 }
 

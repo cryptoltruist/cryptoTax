@@ -14,10 +14,15 @@
 #' @param ... Additional exchange data frames or nested lists to format.
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' When supplied explicitly, it must contain at least `currency`,
-#' `spot.rate2`, and `date2`.
+#' `spot.rate2`, and `date2`. For mixed exchange workflows, you can pass one
+#' shared `list.prices` object here and let the relevant exchange formatters
+#' consume it only when needed, instead of figuring out manually which
+#' exchange exports require external price matching.
 #' @param USD2CAD.table Optional explicit USD/CAD rate table to use for
 #' exchanges that convert USD-denominated values to CAD. When supplied
-#' explicitly, it must contain at least `date` and `USD`.
+#' explicitly, it must contain at least `date` and `USD`. As with
+#' `list.prices`, this can be supplied once for a mixed workflow and will only
+#' be used by the exchange formatters that actually need USD/CAD conversion.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @return A data frame of exchange transactions, formatted for further

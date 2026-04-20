@@ -47,6 +47,9 @@ A data frame, with the following columns: date, transaction,
 quantity, price, fees, total.price, total.quantity, ACB, ACB.share,
 gains
 }
+\description{
+Calculate realized and unrealized capital gains/losses
+}
 \details{
 The current superficial-loss implementation is scoped to the
 transaction history supplied for a single taxpayer-facing asset pool. It is
@@ -60,10 +63,23 @@ bridge assets, exchange-specific wrappers, or other substitute-property edge
 cases should still be reviewed carefully. More broadly, \code{\link[=ACB]{ACB()}} implements a
 capital-account style cost-base and disposition workflow; it does not decide
 whether a user's facts should instead be reported on income account as
-business income.
+business income. In particular, a result based on one supplied ledger should
+not be read as proof that no affiliated-person superficial-loss issue exists;
+the function only evaluates the transaction history you provide.
+
+Fee handling assumes one of three normalized contracts:
+\itemize{
+\item acquisition/disposition rows with a separate \code{fees} column, where
+\code{total.price} excludes those fees;
+\item fee-inclusive acquisition totals, where the formatter has already zeroed
+the separate \code{fees} field to avoid double-counting; or
+\item fee-in-kind / withdrawal fees represented as their own disposition rows
+instead of a \code{fees} column attached to another transaction.
 }
-\description{
-Calculate realized and unrealized capital gains/losses
+
+If a raw import mixes fee-inclusive \code{total.price} values with non-zero
+attached \code{fees} on the same acquisition row, that ambiguity should be
+resolved in the formatter/import step before calling \code{\link[=ACB]{ACB()}}.
 }
 \examples{
 data <- data_adjustedcostbase1

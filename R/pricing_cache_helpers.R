@@ -12,6 +12,38 @@
   c("list.prices", "coins.list", "USD2CAD.table")
 }
 
+.package_cached_pricing_object <- function(name, allow_null = FALSE) {
+  cache_env <- .pricing_cache_env()
+
+  if (!exists(name, envir = cache_env, inherits = FALSE)) {
+    return(list(found = FALSE, value = NULL, env = NULL))
+  }
+
+  value <- get(name, envir = cache_env, inherits = FALSE)
+
+  if (!isTRUE(allow_null) && is.null(value)) {
+    return(list(found = FALSE, value = NULL, env = NULL))
+  }
+
+  list(found = TRUE, value = value, env = cache_env)
+}
+
+.reusable_package_cached_pricing_object <- function(name,
+                                                    allow_null = FALSE,
+                                                    validator = NULL) {
+  cache_match <- .package_cached_pricing_object(name, allow_null = allow_null)
+
+  if (!isTRUE(cache_match$found)) {
+    return(cache_match)
+  }
+
+  if (is.function(validator) && !isTRUE(validator(cache_match$value))) {
+    return(list(found = FALSE, value = NULL, env = NULL))
+  }
+
+  cache_match
+}
+
 .find_cached_pricing_object <- function(name, allow_null = FALSE) {
   cache_envs <- list(
     .pricing_cache_env(),
@@ -103,8 +135,19 @@
   invisible(TRUE)
 }
 
-.can_reuse_cached_pricing_object <- function(name, force = FALSE, allow_null = FALSE) {
-  !isTRUE(force) && .has_cached_pricing_object(name, allow_null = allow_null)
+.can_reuse_cached_pricing_object <- function(name,
+                                             force = FALSE,
+                                             allow_null = FALSE,
+                                             include_legacy = FALSE) {
+  if (isTRUE(force)) {
+    return(FALSE)
+  }
+
+  if (isTRUE(include_legacy)) {
+    return(.has_cached_pricing_object(name, allow_null = allow_null))
+  }
+
+  .package_cached_pricing_object(name, allow_null = allow_null)$found
 }
 
 .message_cached_pricing_reuse <- function(name, source, verbose = TRUE) {
@@ -136,16 +179,30 @@
                                          force = FALSE,
                                          verbose = TRUE,
                                          allow_null = FALSE,
-                                         validator = NULL) {
-  if (!.can_reuse_cached_pricing_object(name, force = force, allow_null = allow_null)) {
+                                         validator = NULL,
+                                         include_legacy = FALSE) {
+  if (!.can_reuse_cached_pricing_object(
+    name,
+    force = force,
+    allow_null = allow_null,
+    include_legacy = include_legacy
+  )) {
     return(NULL)
   }
 
-  cache_match <- .find_reusable_cached_pricing_object(
-    name = name,
-    allow_null = allow_null,
-    validator = validator
-  )
+  cache_match <- if (isTRUE(include_legacy)) {
+    .find_reusable_cached_pricing_object(
+      name = name,
+      allow_null = allow_null,
+      validator = validator
+    )
+  } else {
+    .reusable_package_cached_pricing_object(
+      name = name,
+      allow_null = allow_null,
+      validator = validator
+    )
+  }
 
   if (!isTRUE(cache_match$found)) {
     return(NULL)
@@ -164,6 +221,50 @@
   )
 
   cache_match$value
+}
+
+.resolve_pricing_object <- function(name,
+                                    value = NULL,
+                                    force = FALSE,
+                                    verbose = TRUE,
+                                    allow_null = FALSE,
+                                    validator = NULL,
+                                    fetch = NULL,
+                                    cache = TRUE) {
+  if (!is.null(value)) {
+    return(value)
+  }
+
+  cached_value <- .reuse_cached_pricing_object(
+    name = name,
+    force = force,
+    verbose = verbose,
+    allow_null = allow_null,
+    validator = validator
+  )
+  if (!is.null(cached_value)) {
+    return(cached_value)
+  }
+
+  if (!is.function(fetch)) {
+    return(NULL)
+  }
+
+  fetched_value <- fetch()
+
+  if (is.null(fetched_value)) {
+    return(NULL)
+  }
+
+  if (is.function(validator) && !isTRUE(validator(fetched_value))) {
+    return(NULL)
+  }
+
+  if (isTRUE(cache)) {
+    .set_cached_pricing_object(name, fetched_value)
+  }
+
+  fetched_value
 }
 
 .is_valid_list_prices_table <- function(list.prices) {
@@ -193,10 +294,17 @@
 #' cluttering the user workspace while still keeping the shared-price workflow
 #' easy to inspect.
 #'
+#' The package-owned cache is a convenience layer for the current R session.
+#' It is the only implicit cache path reused during normal pricing/FX
+#' resolution. For reproducible or offline workflows, passing explicit
+#' `list.prices`, `coins.list`, or `USD2CAD.table` inputs remains the preferred
+#' path.
+#'
 #' For compatibility with older workflows, `include.legacy = TRUE` will also
 #' report matching objects that still live in `.GlobalEnv`. Those legacy
-#' workspace objects are supported as a compatibility fallback, but they are no
-#' longer the primary cache path and may be removed in a future release.
+#' workspace objects are no longer part of the normal implicit resolution path;
+#' they are exposed here only for inspection/transition purposes and may be
+#' removed in a future release.
 #'
 #' @param name Optional single cache entry to inspect. One of
 #'   `"list.prices"`, `"coins.list"`, or `"USD2CAD.table"`.
@@ -252,6 +360,79 @@ pricing_cache <- function(name = NULL, include.legacy = FALSE) {
   cache_entries
 }
 
+#' @title Add pricing objects to the cryptoTax cache
+#'
+#' @description Seed the package-owned pricing cache explicitly from objects
+#' already available in the current R session, for example after loading a
+#' previously saved `list.prices` or `USD2CAD.table` from disk.
+#'
+#' This is especially useful for multi-day tax workflows where you want to keep
+#' explicit saved pricing files on disk, but still let formatter helpers reuse
+#' those objects through the package cache during the current R session.
+#'
+#' All supplied objects are validated before being cached. Invalid objects fail
+#' early with a clear error instead of silently poisoning later pricing or FX
+#' resolution.
+#'
+#' @param list.prices Optional `list.prices` object to store in the package
+#'   cache.
+#' @param coins.list Optional output from [crypto2::crypto_list()] to store in
+#'   the package cache.
+#' @param USD2CAD.table Optional USD/CAD rate table to store in the package
+#'   cache.
+#'
+#' @return Invisibly returns `TRUE`.
+#' @export
+#'
+#' @examples
+#' add_to_cache(list.prices = list_prices_example)
+#' pricing_cache("list.prices")
+add_to_cache <- function(list.prices = NULL,
+                         coins.list = NULL,
+                         USD2CAD.table = NULL) {
+  if (is.null(list.prices) && is.null(coins.list) && is.null(USD2CAD.table)) {
+    stop(
+      "At least one of 'list.prices', 'coins.list', or 'USD2CAD.table' must be supplied."
+    )
+  }
+
+  if (!is.null(list.prices) && !isTRUE(.is_valid_list_prices_table(list.prices))) {
+    stop(
+      "'list.prices' must be a data.frame containing columns ",
+      "'currency', 'spot.rate2', and 'date2'."
+    )
+  }
+
+  if (!is.null(coins.list) && !isTRUE(.is_valid_coins_list(coins.list))) {
+    stop(
+      "'coins.list' must be a data.frame containing column 'slug'."
+    )
+  }
+
+  if (!is.null(USD2CAD.table) &&
+    !isTRUE(.is_valid_usd2cad_pricer_cache(USD2CAD.table)) &&
+    !isTRUE(.is_valid_usd2cad_crypto2_table(USD2CAD.table))) {
+    stop(
+      "'USD2CAD.table' must be a data.frame containing either columns ",
+      "'date' and 'CAD.rate' or columns 'date2' and 'CAD.rate'."
+    )
+  }
+
+  if (!is.null(list.prices)) {
+    .set_cached_pricing_object("list.prices", list.prices)
+  }
+
+  if (!is.null(coins.list)) {
+    .set_cached_pricing_object("coins.list", coins.list)
+  }
+
+  if (!is.null(USD2CAD.table)) {
+    .set_cached_pricing_object("USD2CAD.table", USD2CAD.table)
+  }
+
+  invisible(TRUE)
+}
+
 #' @title Clear the cryptoTax pricing cache
 #'
 #' @description Clear one or more cached pricing-related objects stored by
@@ -259,6 +440,9 @@ pricing_cache <- function(name = NULL, include.legacy = FALSE) {
 #'
 #' This clears the package-owned cache only; it does not remove similarly named
 #' objects from `.GlobalEnv`.
+#'
+#' Clearing the package cache is the safest way to force fresh pricing/FX
+#' resolution without mutating user workspace objects.
 #'
 #' @param name Optional single cache entry to clear. One of `"list.prices"`,
 #'   `"coins.list"`, or `"USD2CAD.table"`. If omitted, all package-owned

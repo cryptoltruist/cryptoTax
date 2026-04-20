@@ -1,4 +1,28 @@
 #' @noRd
+.arrange_formatted_transactions <- function(data, tie_breakers = character()) {
+  sort_columns <- c("date", "total.price", tie_breakers)
+  sort_columns <- sort_columns[sort_columns %in% names(data)]
+
+  if (!nrow(data) || !length(sort_columns)) {
+    return(data)
+  }
+
+  ordering <- lapply(sort_columns, function(column) {
+    values <- data[[column]]
+
+    if (identical(column, "total.price")) {
+      return(-xtfrm(values))
+    }
+
+    xtfrm(values)
+  })
+
+  out <- data[do.call(order, c(ordering, list(na.last = TRUE))), , drop = FALSE]
+  rownames(out) <- NULL
+  out
+}
+
+#' @noRd
 .format_fee_sell_rows <- function(data,
                                   filter_expr,
                                   fee_col,
@@ -52,7 +76,9 @@
 .finalize_formatted_exchange <- function(...,
                                          exchange,
                                          rate_source = NULL,
-                                         columns) {
+                                         columns = NULL,
+                                         arrange = TRUE,
+                                         tie_breakers = character()) {
   out <- merge_exchanges(...)
 
   if (!is.null(exchange)) {
@@ -65,8 +91,27 @@
       mutate(rate.source = rate_source)
   }
 
+  if (isTRUE(arrange)) {
+    out <- .arrange_formatted_transactions(out, tie_breakers = tie_breakers)
+  }
+
+  if (is.null(columns)) {
+    columns <- .formatted_transaction_output_columns()
+  }
+
+  required_columns <- intersect(.formatted_transaction_required_columns(), columns)
+  missing_required_columns <- setdiff(required_columns, names(out))
+
+  if (length(missing_required_columns) > 0) {
+    stop(
+      "Cannot finalize formatted exchange output. Missing required columns: ",
+      paste(missing_required_columns, collapse = ", "),
+      "."
+    )
+  }
+
   out %>%
-    select(all_of(columns))
+    select(any_of(columns))
 }
 
 #' @noRd

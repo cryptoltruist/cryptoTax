@@ -41,11 +41,7 @@ format_exodus <- function(data, list.prices = NULL, force = FALSE) {
 
   .finalize_formatted_exchange(
     data,
-    exchange = NULL,
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
+    exchange = NULL
   )
 }
 

@@ -56,12 +56,6 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  # Rename Fee column and make it positive.
-  fee <- fee %>%
-    mutate(fees.quantity = abs(.data$Fee), 
-           fees = .data$fees.quantity * .data$spot.rate,
-           fees.currency = .data$currency)
-
   balance <- data %>%
     select("date", "description":"comment", contains("Balance")) %>%
     mutate(nrow = 1:n()) %>%
@@ -117,14 +111,8 @@ format_gemini <- function(data, list.prices = NULL, force = FALSE) {
 
   as.data.frame(.finalize_formatted_exchange(
     data %>%
-      arrange(date, desc(.data$total.price)) %>%
       filter(.data$currency != "CAD"),
-    exchange = "gemini",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment",
-      "revenue.type", "exchange", "rate.source"
-    )
+    exchange = "gemini"
   ))
 }
 

@@ -89,14 +89,44 @@ test_that("gemini", {
     exchange = "gemini"
   )
   formatted.gemini <- as.data.frame(format_ACB(x, verbose = FALSE))
-  expect_snapshot(formatted.gemini)
+
+  ltc <- formatted.gemini[formatted.gemini$currency == "LTC", ]
+  btc <- formatted.gemini[formatted.gemini$currency == "BTC", ]
+  bat <- formatted.gemini[formatted.gemini$currency == "BAT", ]
+
+  expect_equal(ltc$transaction, c("buy", "sell", "sell"))
+  expect_equal(ltc$total.quantity, c(1, 0.7533094016, 0.7516685816), tolerance = 1e-10)
+  expect_equal(ltc$sup.loss, c(FALSE, TRUE, TRUE))
+  expect_equal(ltc$gains.uncorrected[2:3], c(-23.7566497452, -0.2279262628), tolerance = 1e-7)
+  expect_equal(ltc$gains.sup[2:3], c(-23.7566497452, -0.2279262628), tolerance = 1e-7)
+  expect_true(all(is.na(ltc$gains)))
+  expect_equal(ltc$ACB, c(286, 239.2031392015, 238.9100451008), tolerance = 1e-7)
+  expect_equal(ltc$ACB.share, c(286, 317.5363784708, 317.8396050724), tolerance = 1e-7)
+
+  expect_equal(btc$transaction, c("buy", "buy", "sell", "revenue"))
+  expect_equal(btc$total.quantity, c(0.000966278356, 0.000972330268, 0.000021600253, 0.000306625831), tolerance = 1e-8)
+  expect_equal(btc$gains[3], 2.3795565874, tolerance = 1e-5)
+  expect_equal(btc$ACB, c(46.9084148916, 47.2032774996, 1.0486180840, 1.0486180840), tolerance = 1e-7)
+
+  expect_equal(bat$transaction, c("buy", "revenue", "revenue", "revenue", "revenue"))
+  expect_equal(bat$total.quantity, c(48.7195195851, 51.5534543653, 54.6387426966, 59.6462241581, 66.4805467009), tolerance = 1e-7)
+  expect_true(all(is.na(bat$gains)))
+  expect_equal(bat$ACB, rep(48.6220804657, 5), tolerance = 1e-7)
+  expect_equal(bat$ACB.share, c(0.9980000000, 0.9431391123, 0.8898828587, 0.8151744687, 0.7313730628), tolerance = 1e-7)
 })
 
 test_that("exodus", {
   x <- format_exodus(data_exodus, list.prices = list.prices)
   x <- .acb_seed_from_existing(x)
   formatted.exodus <- as.data.frame(format_ACB(x, verbose = FALSE))
-  expect_snapshot(formatted.exodus)
+
+  expect_equal(formatted.exodus$transaction, c("buy", "buy", "buy", "buy", "sell", "sell", "sell", "sell"))
+  expect_equal(formatted.exodus$currency, c("LTC", "ADA", "BTC", "ETH", "LTC", "ADA", "BTC", "ETH"))
+  expect_equal(formatted.exodus$total.quantity, c(0.002886, 0.356482, 0.0001006, 0.0029, 0.001443, 0.178241, 0.0000503, 0.00145))
+  expect_true(all(is.na(formatted.exodus$gains)))
+  expect_equal(formatted.exodus$ACB, c(0.4952376, 0.5304452, 5.097402, 6.8643, 0.2476188, 0.2652226, 2.548701, 3.43215))
+  expect_equal(formatted.exodus$ACB.share, c(171.6, 1.488, 50670, 2367, 171.6, 1.488, 50670, 2367))
+  expect_equal(formatted.exodus$description[5:8], rep("withdrawal", 4))
 })
 
 test_that("binance", {
@@ -125,7 +155,20 @@ test_that("binance withdrawals", {
   x <- format_binance_withdrawals(data_binance_withdrawals, list.prices = list.prices)
   x <- .acb_seed_from_existing(x)
   formatted.binance.withdrawals <- as.data.frame(format_ACB(x, verbose = FALSE))
-  expect_snapshot(formatted.binance.withdrawals)
+
+  expect_equal(formatted.binance.withdrawals$transaction, c("buy", "buy", "buy", "sell", "sell", "sell"))
+  expect_equal(formatted.binance.withdrawals$currency, c("LTC", "ETH", "ETH", "LTC", "ETH", "ETH"))
+  expect_equal(formatted.binance.withdrawals$total.quantity, c(0.002, 0.000142, 0.000266, 0.001, 0.000195, 0.000133))
+  expect_equal(formatted.binance.withdrawals$sup.loss, c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
+  expect_equal(formatted.binance.withdrawals$gains.uncorrected, c(0, 0, 0, 0, -0.0009267368, 0.0006320821), tolerance = 1e-7)
+  expect_true(all(is.na(formatted.binance.withdrawals$gains.sup[c(1, 2, 3, 4, 6)])))
+  expect_equal(formatted.binance.withdrawals$gains.sup[5], -0.0009267368, tolerance = 1e-7)
+  expect_true(all(is.na(formatted.binance.withdrawals$gains.excess)))
+  expect_true(all(is.na(formatted.binance.withdrawals$gains[c(1, 2, 3, 4, 5)])))
+  expect_equal(formatted.binance.withdrawals$gains[6], 0.0006320821, tolerance = 1e-7)
+  expect_equal(formatted.binance.withdrawals$ACB, c(0.3351, 0.313749, 0.591199, 0.16755, 0.4343245, 0.2962316), tolerance = 1e-7)
+  expect_equal(formatted.binance.withdrawals$ACB.share, c(167.55, 2209.5, 2222.553, 167.55, 2227.30512820513, 2227.30512820513), tolerance = 1e-6)
+  expect_equal(formatted.binance.withdrawals$description[4:6], rep("Withdrawal fees", 3))
 })
 
 test_that("CDC exchange trades", {
@@ -139,7 +182,22 @@ test_that("CDC exchange trades", {
     exchange = "CDC.exchange"
   )
   formatted.CDC.exchange.trades <- as.data.frame(format_ACB(x, verbose = FALSE))
-  expect_snapshot(formatted.CDC.exchange.trades)
+
+  cro <- formatted.CDC.exchange.trades[formatted.CDC.exchange.trades$currency == "CRO", ]
+  eth <- formatted.CDC.exchange.trades[formatted.CDC.exchange.trades$currency == "ETH", ]
+
+  expect_true(all(cro$transaction == "buy"))
+  expect_equal(cro$total.quantity, c(13260.13, 16816.03, 18597.77, 18624.62, 18651.29, 18669.07, 18686.85), tolerance = 1e-6)
+  expect_true(all(is.na(cro$gains)))
+  expect_equal(cro$ACB[c(1, 7)], c(4373.37651734, 6163.18451070), tolerance = 1e-6)
+  expect_equal(cro$ACB.share[c(1, 7)], c(0.3298143202, 0.3298143202), tolerance = 1e-6)
+  expect_true(all(cro$fees > 0))
+
+  expect_equal(eth$transaction, c("buy", "sell", "sell", "sell", "sell", "sell", "sell", "sell"))
+  expect_equal(eth$total.quantity, c(1, -1.0932, -1.6532, -1.9332, -1.9374, -1.9416, -1.9444, -1.9472), tolerance = 1e-6)
+  expect_equal(eth$gains[2:8], c(-2129.06879208, 1168.11315, 585.30159, 8.820225, 8.761095, 5.84073, 5.84073), tolerance = 1e-5)
+  expect_equal(eth$ACB[2:8], c(-3386.88398208, -5121.84098208, -5989.31898208, -6002.33158208, -6015.34418208, -6024.01858208, -6032.69298208), tolerance = 1e-5)
+  expect_true(all(eth$ACB.share[-1] == 0))
 })
 
 test_that("format_ACB keeps currency pools separate across a mixed multi-asset history", {
@@ -174,6 +232,30 @@ test_that("format_ACB keeps currency pools separate across a mixed multi-asset h
   expect_equal(eth$ACB, c(200, 100))
   expect_equal(eth$ACB.share, c(100, 100))
   expect_equal(eth$gains, c(NA, 50))
+})
+
+test_that("format_ACB normalizes same-timestamp same-currency buys before sells", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-01 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "BTC"),
+    quantity = c(1, 1),
+    total.price = c(15, 10),
+    spot.rate = c(15, 10),
+    transaction = c("sell", "buy"),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = FALSE, verbose = FALSE))
+
+  expect_equal(result$transaction, c("buy", "sell"))
+  expect_equal(result$total.quantity, c(1, 0))
+  expect_equal(result$ACB, c(10, 0))
+  expect_equal(result$gains, c(NA, 5))
 })
 
 test_that("format_ACB treats fee-in-kind rows as dispositions of the fee currency only", {
@@ -665,5 +747,183 @@ test_that("format_ACB never applies superficial-loss treatment to a gain just be
   expect_equal(eth$gains, c(NA, 40))
   expect_equal(eth$ACB, c(200, 0))
   expect_equal(eth$ACB.share, c(200, 0))
+})
+
+test_that("format_ACB does not create a superficial loss when only revenue falls inside the window", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2020-11-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-05 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-12 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "ETH"),
+    quantity = c(10, 1, 5, 10, 1),
+    total.price = c(100, 200, 60, 50, 240),
+    spot.rate = c(10, 200, 12, 5, 240),
+    transaction = c("buy", "buy", "revenue", "sell", "sell"),
+    revenue.type = c(NA, NA, "staking", NA, NA),
+    description = c(
+      "old btc buy outside window",
+      "buy eth",
+      "btc staking reward inside window",
+      "sell btc at loss",
+      "sell eth at gain"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$total.quantity, c(10, 15, 5))
+  expect_equal(btc$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_true(all(is.na(btc$gains.sup)))
+  expect_true(all(is.na(btc$gains.excess)))
+  expect_equal(btc$gains[3], -56.66667, tolerance = 1e-5)
+  expect_equal(btc$ACB[3], 53.33333, tolerance = 1e-5)
+  expect_equal(btc$ACB.share[3], 10.66667, tolerance = 1e-5)
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40))
+})
+
+test_that("format_ACB can still deny a loss when an in-window buy exists and revenue units remain owned", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00",
+      "2021-01-25 00:00:00",
+      "2021-01-26 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "ETH", "BTC"),
+    quantity = c(10, 1, 10, 4, 1, 4),
+    total.price = c(100, 200, 50, 24, 240, 24),
+    spot.rate = c(10, 200, 5, 6, 240, 6),
+    transaction = c("buy", "buy", "sell", "buy", "sell", "revenue"),
+    revenue.type = c(NA, NA, NA, NA, NA, "staking"),
+    description = c(
+      "buy btc",
+      "buy eth",
+      "sell btc at loss",
+      "reacquire btc",
+      "sell eth at gain",
+      "btc staking reward still owned in window"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$sup.loss, c(FALSE, TRUE, FALSE, FALSE))
+  expect_equal(btc$gains.uncorrected[2], -50)
+  expect_equal(btc$gains.sup[2], -40)
+  expect_equal(btc$gains.excess[2], -10)
+  expect_equal(btc$gains[2], -10)
+  expect_equal(btc$ACB, c(100, 0, 64, 88))
+  expect_equal(btc$ACB.share, c(10, 0, 16, 11))
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40))
+})
+
+test_that("format_ACB does not create a superficial loss when only rebates fall inside the window", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2020-11-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-05 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-12 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "ETH"),
+    quantity = c(10, 1, 5, 10, 1),
+    total.price = c(100, 200, 60, 50, 240),
+    spot.rate = c(10, 200, 12, 5, 240),
+    transaction = c("buy", "buy", "rebates", "sell", "sell"),
+    description = c(
+      "old btc buy outside window",
+      "buy eth",
+      "btc cashback inside window",
+      "sell btc at loss",
+      "sell eth at gain"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$total.quantity, c(10, 15, 5))
+  expect_equal(btc$sup.loss, c(FALSE, FALSE, FALSE))
+  expect_true(all(is.na(btc$gains.sup)))
+  expect_true(all(is.na(btc$gains.excess)))
+  expect_equal(btc$gains[3], -56.66667, tolerance = 1e-5)
+  expect_equal(btc$ACB[3], 53.33333, tolerance = 1e-5)
+  expect_equal(btc$ACB.share[3], 10.66667, tolerance = 1e-5)
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40))
+})
+
+test_that("format_ACB can still deny a loss when an in-window buy exists and rebates remain owned", {
+  data <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-03 00:00:00",
+      "2021-01-10 00:00:00",
+      "2021-01-20 00:00:00",
+      "2021-01-25 00:00:00",
+      "2021-01-26 00:00:00"
+    ), tz = "UTC"),
+    currency = c("BTC", "ETH", "BTC", "BTC", "ETH", "BTC"),
+    quantity = c(10, 1, 10, 4, 1, 4),
+    total.price = c(100, 200, 50, 24, 240, 24),
+    spot.rate = c(10, 200, 5, 6, 240, 6),
+    transaction = c("buy", "buy", "sell", "buy", "sell", "rebates"),
+    description = c(
+      "buy btc",
+      "buy eth",
+      "sell btc at loss",
+      "reacquire btc",
+      "sell eth at gain",
+      "btc cashback still owned in window"
+    ),
+    exchange = "manual",
+    rate.source = "manual",
+    stringsAsFactors = FALSE
+  )
+
+  result <- as.data.frame(format_ACB(data, sup.loss = TRUE, verbose = FALSE))
+
+  btc <- result[result$currency == "BTC", ]
+  eth <- result[result$currency == "ETH", ]
+
+  expect_equal(btc$sup.loss, c(FALSE, TRUE, FALSE, FALSE))
+  expect_equal(btc$gains.uncorrected[2], -50)
+  expect_equal(btc$gains.sup[2], -40)
+  expect_equal(btc$gains.excess[2], -10)
+  expect_equal(btc$gains[2], -10)
+  expect_equal(btc$ACB, c(100, 0, 64, 88))
+  expect_equal(btc$ACB.share, c(10, 0, 16, 11))
+
+  expect_equal(eth$sup.loss, c(FALSE, FALSE))
+  expect_equal(eth$gains, c(NA, 40))
 })
 

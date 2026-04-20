@@ -84,6 +84,56 @@ test_that("CDC exchange trades", {
   expect_snapshot(format_CDC_exchange_trades(data_CDC_exchange_trades, list.prices = list.prices))
 })
 
+test_that("CDC exchange all-transactions export matches fee rows without creating NA placeholders", {
+  # These adjacent integer IDs collapse to the same double precision value in R,
+  # which used to make TRADE_FEE rows drift away from their matching BUY rows.
+  trade_ids <- as.numeric(c("9007199254740992", "9007199254740993"))
+
+  raw <- data.frame(
+    Journal.ID = c(1, 2, 3, 4, 5, 6),
+    Time..UTC. = c(
+      "2024-12-30 20:19:54.721",
+      "2024-12-30 20:19:54.721",
+      "2024-12-30 20:19:54.721",
+      "2024-12-30 20:19:55.470",
+      "2024-12-30 20:19:55.470",
+      "2024-12-30 20:19:55.470"
+    ),
+    Event.Date = c(
+      "2024-12-30",
+      "2024-12-30",
+      "2024-12-30",
+      "2024-12-30",
+      "2024-12-30",
+      "2024-12-30"
+    ),
+    Journal.Type = c("TRADING", "TRADING", "TRADE_FEE", "TRADING", "TRADING", "TRADE_FEE"),
+    Instrument = c("USD_Stable_Coin", "BTC", "USD_Stable_Coin", "USD_Stable_Coin", "BTC", "USD_Stable_Coin"),
+    Taker.Side = c(NA, NA, NA, NA, NA, NA),
+    Side = c("BUY", "SELL", "NULL_VAL", "BUY", "SELL", "NULL_VAL"),
+    Transaction.Quantity = c(3357.9189688, -0.03541, -5.0368784532, 1441.4111360, -0.0152, -2.1621167040),
+    Transaction.Cost = c(3357.9189688, -0.03541, -5.0368784532, 1441.4111360, -0.0152, -2.1621167040),
+    Realized.PNL = c(0, 0, 0, 0, 0, 0),
+    Order.ID = c(1, 1, 1, 2, 2, 2),
+    Trade.ID = c(trade_ids[[1]], trade_ids[[1]], trade_ids[[1]], trade_ids[[2]], trade_ids[[2]], trade_ids[[2]]),
+    Trade.Match.ID = c(11, 11, 11, 12, 12, 12),
+    Client.Order.Id = c("a", "a", "a", "b", "b", "b"),
+    check.names = TRUE,
+    stringsAsFactors = FALSE
+  )
+
+  formatted <- format_CDC_exchange(raw, list.prices = list.prices)
+  fee.rows <- formatted[!is.na(formatted$fees.quantity), , drop = FALSE]
+
+  expect_equal(nrow(formatted), 4L)
+  expect_false(any(is.na(formatted$date)))
+  expect_false(any(is.na(formatted$currency)))
+  expect_false(any(is.na(formatted$quantity)))
+  expect_false(any(is.na(formatted$transaction)))
+  expect_equal(nrow(fee.rows), 2L)
+  expect_true(all(fee.rows$transaction == "buy"))
+})
+
 test_that("CDC wallet", {
   expect_snapshot(format_CDC_wallet(data_CDC_wallet, list.prices = list.prices))
 })

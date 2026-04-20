@@ -52,11 +52,7 @@ format_CDC_wallet <- function(data, list.prices = NULL, force = FALSE) {
 
   .finalize_formatted_exchange(
     data,
-    exchange = "CDC.wallet",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
+    exchange = "CDC.wallet"
   )
 }
 

@@ -4,26 +4,21 @@
     conversion %in% names(USD2CAD.table)
 }
 
-.resolve_usd2cad_table <- function(force = FALSE, USD2CAD.table = NULL, conversion = "USD") {
-  if (!is.null(USD2CAD.table)) {
-    return(USD2CAD.table)
-  }
-
-  cached_table <- .reuse_cached_pricing_object(
+.resolve_usd2cad_table <- function(force = FALSE,
+                                   USD2CAD.table = NULL,
+                                   conversion = "USD",
+                                   verbose = TRUE) {
+  .resolve_pricing_object(
     name = "USD2CAD.table",
+    value = USD2CAD.table,
     force = force,
-    verbose = TRUE,
+    verbose = verbose,
     allow_null = TRUE,
     validator = function(table) {
       .usd2cad_table_has_conversion(table, conversion = conversion)
-    }
+    },
+    fetch = cur2CAD_table
   )
-
-  if (!is.null(cached_table)) {
-    return(cached_table)
-  }
-
-  cur2CAD_table()
 }
 
 .cache_usd2cad_table <- function(USD2CAD.table) {
@@ -177,7 +172,8 @@ USD2CAD <- function(data,
   USD2CAD.table <- .resolve_usd2cad_table(
     force = force,
     USD2CAD.table = USD2CAD.table,
-    conversion = conversion
+    conversion = conversion,
+    verbose = FALSE
   )
 
   if (is.null(USD2CAD.table)) {
@@ -291,27 +287,23 @@ USD2CAD_crypto2 <- function(data,
     return(NULL)
   }
 
-  if (is.null(USD2CAD.table)) {
-    USD2CAD.table <- .reuse_cached_pricing_object(
-      name = "USD2CAD.table",
-      force = force,
-      verbose = TRUE,
-      allow_null = TRUE,
-      validator = .is_valid_usd2cad_crypto2_table
-    )
-  }
-
-  if (is.null(USD2CAD.table)) {
-    USD2CAD.table <- .fetch_usd2cad_crypto2_table(
-      start.date = start.date,
-      force = TRUE
-    )
-
-    if (is.null(USD2CAD.table)) {
-      return(NULL)
+  USD2CAD.table <- .resolve_pricing_object(
+    name = "USD2CAD.table",
+    value = USD2CAD.table,
+    force = force,
+    verbose = TRUE,
+    allow_null = TRUE,
+    validator = .is_valid_usd2cad_crypto2_table,
+    fetch = function() {
+      .fetch_usd2cad_crypto2_table(
+        start.date = start.date,
+        force = TRUE
+      )
     }
+  )
 
-    USD2CAD.table <- .cache_usd2cad_table(USD2CAD.table)
+  if (is.null(USD2CAD.table)) {
+    return(NULL)
   }
 
   USD2CAD.table_short <- USD2CAD.table %>%
@@ -350,27 +342,23 @@ USD2CAD_priceR <- function(data, conversion = "USD", currency = "CAD", USD2CAD.t
     return(NULL)
   }
 
-  if (is.null(USD2CAD.table)) {
-    USD2CAD.table <- .reuse_cached_pricing_object(
-      name = "USD2CAD.table",
-      force = FALSE,
-      verbose = FALSE,
-      allow_null = TRUE,
-      validator = .is_valid_usd2cad_pricer_cache
-    )
-  }
-
-  if (is.null(USD2CAD.table)) {
-    USD2CAD.table <- .fetch_usd2cad_pricer_table(
-      conversion = conversion,
-      currency = currency
-    )
-
-    if (is.null(USD2CAD.table)) {
-      return(NULL)
+  USD2CAD.table <- .resolve_pricing_object(
+    name = "USD2CAD.table",
+    value = USD2CAD.table,
+    force = FALSE,
+    verbose = FALSE,
+    allow_null = TRUE,
+    validator = .is_valid_usd2cad_pricer_cache,
+    fetch = function() {
+      .fetch_usd2cad_pricer_table(
+        conversion = conversion,
+        currency = currency
+      )
     }
+  )
 
-    USD2CAD.table <- .cache_usd2cad_table(USD2CAD.table)
+  if (is.null(USD2CAD.table)) {
+    return(NULL)
   }
 
   .join_usd2cad_rates(data, USD2CAD.table)

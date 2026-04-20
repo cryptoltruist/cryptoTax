@@ -81,3 +81,32 @@ test_that("Uphold models withdrawal fees as separate sell rows instead of a fees
   expect_true(all(fee.rows$transaction == "sell"))
   expect_true(all(fee.rows$total.price >= 0))
 })
+
+test_that("representative formatter families stay inside the documented fee-contract buckets", {
+  coinbase <- format_coinbase(data_coinbase)
+  coinbase.buy <- coinbase[coinbase$transaction == "buy" & coinbase$description == "Convert", ]
+
+  cdc.exchange <- format_CDC_exchange_trades(
+    data_CDC_exchange_trades,
+    list.prices = list_prices_example
+  )
+  cdc.exchange.buy <- cdc.exchange[cdc.exchange$transaction == "buy", ]
+
+  uphold <- format_uphold(
+    data_uphold,
+    list.prices = list_prices_example
+  )
+  uphold.fee.rows <- uphold[!is.na(uphold$comment) & uphold$comment == "withdrawal fees", ]
+
+  expect_true(nrow(coinbase.buy) > 0)
+  expect_true(all(coinbase.buy$fees == 0))
+
+  expect_true(nrow(cdc.exchange.buy) > 0)
+  expect_true(any(!is.na(cdc.exchange.buy$fees) & cdc.exchange.buy$fees > 0))
+  expect_true(any(!is.na(cdc.exchange.buy$fees.quantity) & cdc.exchange.buy$fees.quantity > 0))
+  expect_true(any(!is.na(cdc.exchange.buy$fees.currency)))
+
+  expect_false("fees" %in% names(uphold))
+  expect_true(nrow(uphold.fee.rows) > 0)
+  expect_true(all(uphold.fee.rows$transaction == "sell"))
+})

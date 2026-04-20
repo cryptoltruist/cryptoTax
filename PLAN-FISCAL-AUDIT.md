@@ -94,21 +94,49 @@ These references are the current audit anchors for the first pass:
 - [x] Non-taxable revenue types can be excluded from ACB through `as.revenue`.
   Covered by [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R) and
   [test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R).
+- [x] Non-`buy` acquisition-like rows such as `revenue` and `rebates` are not
+  themselves counted as `buy` acquisitions for replacement-property quantity
+  in the superficial-loss window, but units added by those rows can still
+  matter indirectly through the "shares still owned" condition if some
+  qualifying `buy` already exists in the 61-day period.
+  Covered by [test-ACB.R](C:/github/cryptoTax/tests/testthat/test-ACB.R),
+  [test-format_ACB.R](C:/github/cryptoTax/tests/testthat/test-format_ACB.R),
+  and clarified in [references.Rmd](C:/github/cryptoTax/vignettes/references.Rmd).
 
 ## Known audit gaps
 
-- [ ] Affiliated-person superficial-loss scenarios are not modeled explicitly.
+- [ ] Affiliated-person superficial-loss scenarios are not modeled
+  programmatically.
   Current ACB logic works on one taxpayer transaction history and does not have
-  a first-class concept of spouse, corporation, trust, or other affiliated owner.
-- [ ] "Identical property" classification is not yet audited beyond same-symbol
-  transaction pools. Edge cases like wrapped assets, bridged assets, liquid
-  staking tokens, and exchange-specific synthetic assets need a policy decision.
+  a first-class concept of spouse, corporation, trust, or other affiliated owner,
+  even though the boundary is now documented explicitly.
+- [ ] "Identical property" classification is not resolved programmatically
+  beyond same-symbol transaction pools.
+  Edge cases like wrapped assets, bridged assets, liquid staking tokens, and
+  exchange-specific synthetic assets now have an explicit package policy note,
+  but still depend on user normalization rather than automatic engine logic.
 - [x] Business-income versus capital-account classification is now explicitly
   documented as out of scope for `ACB()` itself and still dependent on user tax
   facts outside the transaction math.
 - [x] Network fees, withdrawal fees, and fee-in-kind treatment now have a
   policy note separating what is proven in the current implementation from what
   may still require professional review in ambiguous real-world exports.
+
+## Audit execution order
+
+This is the recommended order for the remaining audit work. The idea is to
+finish the highest-confidence same-taxpayer math first, then document the
+boundaries where the package should stay conservative rather than pretending to
+decide legal or factual questions it does not actually model.
+
+1. Resolve the remaining same-taxpayer transaction-math questions that are still
+   partly represented as comments or policy notes.
+2. Finish the package policy on what counts as the same pool versus a distinct
+   crypto instrument.
+3. Write explicit boundary documentation for affiliated-person cases that the
+   engine does not currently model.
+4. Only after those are explicit, decide whether any code change is needed, or
+   whether the right result is just stronger documentation and validation.
 
 ## Next audit slices
 
@@ -126,6 +154,117 @@ These references are the current audit anchors for the first pass:
 - [x] Add a policy note distinguishing tested fee-in-kind behavior from more
   ambiguous withdrawal/network-fee export cases.
 - [x] Add an explicit package-scope note that business-income versus capital-account classification is not decided by the ACB engine.
+
+## Immediate audit queue
+
+These are the concrete unresolved slices to work through next.
+
+### 1. Fee treatment versus `total.price`
+
+- [x] Audit whether any remaining supported formatter paths can produce rows where
+  acquisition-side `total.price` already includes fees while `fees` is still
+  non-zero, which would make generic ACB fee handling ambiguous.
+- [x] For each representative fee contract, record the intended rule explicitly:
+  separate fees, fee-inclusive totals with zeroed `fees`, or fee-in-kind modeled
+  as a separate disposition row.
+- [x] Decide whether the remaining `ACB.R` fee TODO should become stricter
+  validation, formatter-contract enforcement, or a retained documented caveat.
+
+Current audit read:
+
+- Coinbase convert buys are the representative fee-inclusive acquisition case,
+  and the formatter already zeroes `fees` to avoid double-counting.
+- CDC Exchange trades, Gemini trades, Binance trades, and CoinSmart trades are
+  representative separate-fee cases, where `fees`, `fees.quantity`, and
+  `fees.currency` remain explicit alongside the acquisition/disposition row.
+- Uphold withdrawal fees and third-asset trading fees are representative
+  separate-disposition cases, where the fee is modeled as its own sell row
+  rather than as an attached `fees` value.
+- CDC app output remains a known special case with limited fee visibility rather
+  than a contradictory mixed contract.
+
+Definition of done:
+
+- We can point to tests and docs showing which fee contracts are supported, and
+  the remaining comment in [ACB.R](C:/github/cryptoTax/R/ACB.R) is either
+  resolved or intentionally retained with a precise reason.
+
+### 2. Identical-property boundary cases
+
+- [x] Pick a short list of concrete crypto edge cases to treat as policy examples:
+  wrapped assets, bridged assets, liquid staking tokens, and exchange-specific
+  synthetic assets.
+- [x] For each example, state whether the package currently keeps it in a
+  separate pool by `currency`, and whether that is an intentional package policy
+  or an unresolved tax-judgment limitation.
+- [x] Add at least one user-facing note or worked example showing that the engine
+  does not automatically merge these assets into the same superficial-loss pool.
+
+Definition of done:
+
+- A user can tell, without reading code, what the package will do for the most
+  common same-symbol-versus-same-property ambiguities.
+
+Current audit read:
+
+- CRA's current [Capital Gains – 2025](https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/t4037/capital-gains.html) guide says identical properties are ones where each property in the group is the same as all the others.
+- CRA's archived interpretation bulletin on identical properties remains useful context because it reflects the older "same in all material respects" framing and highlights that conversion/exchange rights can matter in superficial-loss analysis.
+- That combination supports the package's conservative stance: different `currency` values stay in separate pools by default, while wrapped, bridged, staked, or exchange-specific variants are treated as a user-policy normalization question rather than silently merged by the engine.
+- The user-facing note and worked boundary example now live in [references.Rmd](C:/github/cryptoTax/vignettes/references.Rmd).
+
+### 3. Affiliated-person boundary cases
+
+- [x] Expand the existing policy note into a short boundary explanation of what
+  the package can and cannot infer from a single transaction history.
+- [x] Add one worked boundary example showing why an affiliated-person
+  superficial loss cannot be detected from one taxpayer ledger alone.
+- [x] Decide whether any warning or documentation pointer should be surfaced near
+  `ACB()` / `format_ACB()` usage, or whether the plan/docs note is enough.
+
+Definition of done:
+
+- The limitation is explicit enough that users do not mistake "passes tests" for
+  "covers spouse/corporate affiliated-owner scenarios."
+
+Current audit read:
+
+- CRA's current superficial-loss wording explicitly includes acquisitions by the
+  taxpayer or an affiliated person, so this is a real rule boundary rather than
+  an academic edge case.
+- The package cannot infer spouse, corporation, trust, or other affiliated-owner
+  activity from a single taxpayer-facing ledger.
+- The user-facing boundary explanation and worked example now live in
+  [references.Rmd](C:/github/cryptoTax/vignettes/references.Rmd), and the
+  `ACB()` / `format_ACB()` docs now state more plainly that clean results from
+  one ledger do not prove the absence of affiliated-person superficial-loss
+  issues outside that input.
+
+### 4. Residual timing and ordering assumptions
+
+- [x] Review whether any remaining same-timestamp assumptions in ACB processing
+  need to be documented as package policy rather than only encoded in tests.
+- [x] Confirm that formatter-level ordering and ACB-level ordering together do
+  not create hidden tax-policy assumptions beyond "acquisitions before
+  dispositions when timestamps are indistinguishable."
+
+Definition of done:
+
+- The repo has one clear statement of the same-timestamp rule and why it exists.
+
+Current audit read:
+
+- The package-level ordering rule is now explicit: when same-pool rows share an
+  indistinguishable timestamp and no trustworthy event-order field survives,
+  acquisition-like rows are normalized before `sell` rows.
+- Within those groups, larger `total.price` rows come first as a deterministic
+  tie-break rather than as a claimed legal priority rule.
+- Formatter-level reconstruction can still use source-specific identifiers or
+  source ordering before `format_ACB()` if an exchange export genuinely
+  preserves richer event-sequencing information.
+- The user-facing note and worked boundary example now live in
+  [references.Rmd](C:/github/cryptoTax/vignettes/references.Rmd), and the
+  `format_ACB()` docs now describe the same-timestamp normalization rule
+  directly.
 
 ## Worked-example appendix
 

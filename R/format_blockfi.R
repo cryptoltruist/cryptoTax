@@ -43,13 +43,8 @@ format_blockfi <- function(data, list.prices = NULL, force = FALSE) {
   data <- .format_blockfi_apply_sell_prices(data)
 
   .finalize_formatted_exchange(
-    data %>%
-      arrange(date, desc(.data$total.price)),
-    exchange = "blockfi",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
+    data,
+    exchange = "blockfi"
   )
 }
 

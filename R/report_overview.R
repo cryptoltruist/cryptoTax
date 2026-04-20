@@ -97,14 +97,6 @@
   formatted.ACB.year
 }
 
-.report_overview_latest_acb <- function(formatted.ACB) {
-  formatted.ACB %>%
-    group_by(.data$currency) %>%
-    filter(date == max(.data$date)) %>%
-    slice_tail() %>%
-    select("date", "currency", "total.quantity", "ACB.share", "ACB")
-}
-
 .report_overview_finalize <- function(full) {
   last.col <- last(full)
 
@@ -121,6 +113,56 @@
     ) %>%
     select(-"cost.gains") %>%
     bind_rows(last.col)
+}
+
+.report_overview_from_price_state <- function(formatted.ACB,
+                                              today.data,
+                                              tax.year,
+                                              local.timezone,
+                                              list.prices,
+                                              rates = NULL,
+                                              force = FALSE,
+                                              verbose = TRUE) {
+  formatted.ACB <- formatted.ACB %>%
+    filter(.data$currency != "CAD")
+
+  formatted.ACB.year <- .report_overview_filter_year(
+    formatted.ACB = formatted.ACB,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    verbose = verbose
+  )
+  grouped.totals <- .report_overview_group_totals(formatted.ACB.year)
+  ACB.list <- .report_latest_acb(formatted.ACB)
+
+  if (isTRUE(today.data) && is.null(rates)) {
+    rates <- .prepare_report_current_rates(
+      ACB.list = ACB.list,
+      list.prices = list.prices,
+      force = force,
+      verbose = verbose,
+      signal = "warning"
+    )
+  }
+
+  if (isTRUE(today.data)) {
+    full <- .report_overview_full_table(
+      ACB.list = ACB.list,
+      grouped.totals = grouped.totals,
+      rates = .report_overview_prepare_rates(rates),
+      today.data = TRUE
+    )
+  }
+
+  if (isFALSE(today.data)) {
+    full <- .report_overview_full_table(
+      ACB.list = ACB.list,
+      grouped.totals = grouped.totals,
+      today.data = FALSE
+    )
+  }
+
+  .report_overview_finalize(full)
 }
 
 #' @title Summary of ACB
@@ -157,19 +199,6 @@ report_overview <- function(formatted.ACB,
                             start.date = NULL,
                             force = FALSE,
                             verbose = TRUE) {
-  # Remove CAD
-  formatted.ACB <- formatted.ACB %>%
-    filter(.data$currency != "CAD")
-
-  formatted.ACB.year <- .report_overview_filter_year(
-    formatted.ACB = formatted.ACB,
-    tax.year = tax.year,
-    local.timezone = local.timezone,
-    verbose = verbose
-  )
-  grouped.totals <- .report_overview_group_totals(formatted.ACB.year)
-  ACB.list <- .report_overview_latest_acb(formatted.ACB)
-
   price.state <- .resolve_report_today_data(
     formatted.ACB = formatted.ACB,
     today.data = today.data,
@@ -182,30 +211,14 @@ report_overview <- function(formatted.ACB,
   today.data <- price.state$today.data
   list.prices <- price.state$list.prices
 
-  if (isTRUE(today.data)) {
-    rates <- .prepare_report_current_rates(
-      ACB.list = ACB.list,
-      list.prices = list.prices,
-      force = force,
-      verbose = verbose,
-      signal = "warning"
-    )
-    full <- .report_overview_full_table(
-      ACB.list = ACB.list,
-      grouped.totals = grouped.totals,
-      rates = .report_overview_prepare_rates(rates),
-      today.data = TRUE
-    )
-  }
-
-  if (isFALSE(today.data)) {
-    full <- .report_overview_full_table(
-      ACB.list = ACB.list,
-      grouped.totals = grouped.totals,
-      today.data = FALSE
-    )
-  }
-
-  .report_overview_finalize(full)
+  .report_overview_from_price_state(
+    formatted.ACB = formatted.ACB,
+    today.data = today.data,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    list.prices = list.prices,
+    force = force,
+    verbose = verbose
+  )
 }
 

@@ -80,12 +80,77 @@
     filter(lubridate::year(.data$datetime.local) == tax.year)
 }
 
-.report_summary_latest_acb <- function(formatted.ACB) {
-  formatted.ACB %>%
-    group_by(.data$currency) %>%
-    filter(.data$date == max(.data$date)) %>%
-    slice_tail() %>%
-    select("date", "currency", "total.quantity", "ACB.share", "ACB")
+.report_summary_from_price_state <- function(formatted.ACB,
+                                             today.data,
+                                             tax.year,
+                                             local.timezone,
+                                             list.prices,
+                                             rates = NULL,
+                                             force = FALSE,
+                                             verbose = TRUE) {
+  formatted.ACB <- formatted.ACB %>%
+    filter(.data$currency != "CAD")
+
+  ACB.list <- .report_latest_acb(formatted.ACB)
+
+  if (tax.year != "all") {
+    formatted.ACB.year <- .report_summary_filter_year(formatted.ACB, tax.year, local.timezone)
+    if (isTRUE(verbose)) {
+      message(
+        "gains, losses, and net have been filtered for tax year ",
+        tax.year, " (time zone = ", local.timezone, ")"
+      )
+    }
+  } else {
+    formatted.ACB.year <- formatted.ACB
+  }
+
+  static.metrics <- .report_summary_static_metrics(formatted.ACB.year, ACB.list)
+
+  if (isTRUE(today.data) && is.null(rates)) {
+    rates <- .prepare_report_current_rates(
+      ACB.list = ACB.list,
+      list.prices = list.prices,
+      force = force,
+      verbose = verbose,
+      signal = "message"
+    )
+  }
+
+  if (isTRUE(today.data)) {
+    rates <- rates %>%
+      mutate(
+        rate.today = .data$spot.rate,
+        value.today = round(.data$total.quantity * .data$rate.today, 2),
+        unrealized.net = round(.data$value.today - .data$ACB, 2),
+        unrealized.gains = ifelse(.data$unrealized.net > 0,
+          .data$unrealized.net,
+          NA
+        ),
+        unrealized.losses = ifelse(.data$unrealized.net < 0,
+          .data$unrealized.net,
+          NA
+        )
+      ) %>%
+      select(
+        "currency", "rate.today", "value.today", "unrealized.gains",
+        "unrealized.losses", "unrealized.net"
+      )
+
+    today.metrics <- .report_summary_today_metrics(rates, ACB.list, static.metrics)
+
+    metrics <- c(
+      static.metrics[setdiff(names(static.metrics), "revenue")],
+      today.metrics,
+      revenue = static.metrics$revenue
+    )
+  }
+
+  if (isFALSE(today.data)) {
+    metrics <- static.metrics
+  }
+
+  .report_summary_table(metrics, tax.year)
 }
 
 #' @title Summary of gains and losses
@@ -120,23 +185,6 @@ report_summary <- function(formatted.ACB,
                            slug = NULL,
                            start.date = NULL,
                            force = FALSE) {
-  formatted.ACB <- formatted.ACB %>%
-    filter(.data$currency != "CAD")
-
-  ACB.list <- .report_summary_latest_acb(formatted.ACB)
-
-  if (tax.year != "all") {
-    formatted.ACB.year <- .report_summary_filter_year(formatted.ACB, tax.year, local.timezone)
-    message(
-      "gains, losses, and net have been filtered for tax year ",
-      tax.year, " (time zone = ", local.timezone, ")"
-    )
-  } else {
-    formatted.ACB.year <- formatted.ACB
-  }
-
-  static.metrics <- .report_summary_static_metrics(formatted.ACB.year, ACB.list)
-
   price.state <- .resolve_report_today_data(
     formatted.ACB = formatted.ACB,
     today.data = today.data,
@@ -149,47 +197,15 @@ report_summary <- function(formatted.ACB,
   today.data <- price.state$today.data
   list.prices <- price.state$list.prices
 
-  if (isTRUE(today.data)) {
-    rates <- .prepare_report_current_rates(
-      ACB.list = ACB.list,
-      list.prices = list.prices,
-      force = force,
-      signal = "message"
-    )
-
-    rates <- rates %>%
-      mutate(
-        rate.today = .data$spot.rate,
-        value.today = round(.data$total.quantity * .data$rate.today, 2),
-        unrealized.net = round(.data$value.today - .data$ACB, 2),
-        unrealized.gains = ifelse(.data$unrealized.net > 0,
-          .data$unrealized.net,
-          NA
-        ),
-        unrealized.losses = ifelse(.data$unrealized.net < 0,
-          .data$unrealized.net,
-          NA
-        )
-      ) %>%
-      select(
-        "currency", "rate.today", "value.today", "unrealized.gains",
-        "unrealized.losses", "unrealized.net"
-      )
-
-    today.metrics <- .report_summary_today_metrics(rates, ACB.list, static.metrics)
-
-    metrics <- c(
-      static.metrics[setdiff(names(static.metrics), "revenue")],
-      today.metrics,
-      revenue = static.metrics$revenue
-    )
-  }
-
-  if (isFALSE(today.data)) {
-    metrics <- static.metrics
-  }
-
-  .report_summary_table(metrics, tax.year)
+  .report_summary_from_price_state(
+    formatted.ACB = formatted.ACB,
+    today.data = today.data,
+    tax.year = tax.year,
+    local.timezone = local.timezone,
+    list.prices = list.prices,
+    force = force,
+    verbose = TRUE
+  )
 }
 
 formatC_2 <- function(x) {formatC(unlist(unlist(x)), format = "f", big.mark = ",", digits = 2)}

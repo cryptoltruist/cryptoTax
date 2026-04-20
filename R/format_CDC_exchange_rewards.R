@@ -59,11 +59,7 @@ format_CDC_exchange_rewards <- function(data, list.prices = NULL, force = FALSE)
 
   .finalize_formatted_exchange(
     data,
-    exchange = "CDC.exchange",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
+    exchange = "CDC.exchange"
   )
 }
 

@@ -98,11 +98,7 @@ format_generic <- function(data,
     return(NULL)
   }
 
-  data <- data %>%
-    mutate(total.price = ifelse(is.na(.data$total.price),
-      .data$quantity * .data$spot.rate,
-      .data$total.price
-    ))
+  data <- .fill_missing_total_price_from_spot(data)
 
   # Change the order of columns
   data <- data %>%
@@ -167,7 +163,7 @@ format_generic <- function(data,
 
   if (!"spot.rate" %in% names(data) && !"total.price" %in% names(data) &&
     "currency" %in% names(data)) {
-    return(.resolve_formatted_prices(
+    return(.resolve_and_fill_formatted_prices(
       data,
       list.prices = list.prices,
       force = force,

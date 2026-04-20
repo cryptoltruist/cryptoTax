@@ -72,10 +72,6 @@ format_binance_withdrawals <- function(data, list.prices = NULL, force = FALSE) 
 
   .finalize_formatted_exchange(
     SELL,
-    exchange = "binance",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate",
-      "transaction", "description", "exchange", "rate.source"
-    )
+    exchange = "binance"
   )
 }

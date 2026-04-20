@@ -53,28 +53,100 @@ format_cronos_pos <- function(data, list.prices = NULL, force = FALSE) {
 
   .finalize_formatted_exchange(
     data,
-    exchange = NULL,
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
+    exchange = NULL
   )
+}
+
+.normalize_cronos_pos_description <- function(message_module, message_action, message_action_raw = NULL) {
+  action_source <- dplyr::coalesce(message_action, message_action_raw)
+  needs_fallback <- is.na(message_module) | message_module == "" | message_module == "error"
+
+  fallback <- dplyr::case_when(
+    action_source %in% c(
+      "delegate",
+      "begin_unbonding",
+      "begin_redelegate",
+      "/cosmos.staking.v1beta1.MsgDelegate",
+      "/cosmos.staking.v1beta1.MsgUndelegate",
+      "/cosmos.staking.v1beta1.MsgBeginRedelegate"
+    ) ~ "staking",
+    action_source %in% c(
+      "withdraw_delegator_reward",
+      "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
+    ) ~ "distribution",
+    action_source %in% c(
+      "send",
+      "/cosmos.bank.v1beta1.MsgSend",
+      "/cosmos.bank.v1beta1.MsgMultiSend"
+    ) ~ "bank",
+    action_source %in% c(
+      "update_client",
+      "/ibc.core.client.v1.MsgUpdateClient"
+    ) ~ "ibc_client",
+    action_source %in% c(
+      "/ibc.applications.transfer.v1.MsgTransfer"
+    ) ~ "ibc_channel",
+    .default = message_module
+  )
+
+  dplyr::if_else(needs_fallback, fallback, message_module)
 }
 
 .format_cronos_pos_prepare_input <- function(data) {
   ratio <- 100000000
+  if (!"message_action_raw" %in% names(data)) {
+    data$message_action_raw <- NA_character_
+  }
 
   data %>%
     mutate(
-      quantity = readr::parse_number(.data$transfer_amount) / ratio,
+      reward_amount = dplyr::coalesce(
+        dplyr::if_else(
+          .data$message_action == "delegate",
+          .data$message_auto_claimed_reward_amount,
+          NA_character_
+        ),
+        dplyr::if_else(
+          .data$message_action == "withdraw_delegator_reward",
+          .data$message_amount,
+          NA_character_
+        ),
+        .data$transfer_amount
+      ),
+      quantity = readr::parse_number(.data$reward_amount) / ratio,
       quantity = tidyr::replace_na(.data$quantity, 0),
       fee_amount = as.numeric(.data$fee.amount) / ratio,
-      currency = ifelse(.data$fee.denom == "basecro", "CRO", .data$fee.denom),
+      currency = dplyr::coalesce(
+        dplyr::if_else(
+          !is.na(.data$message_auto_claimed_reward_denom) & .data$message_auto_claimed_reward_denom == "basecro",
+          "CRO",
+          .data$message_auto_claimed_reward_denom
+        ),
+        dplyr::if_else(
+          !is.na(.data$message_amount_denom) & .data$message_amount_denom == "basecro",
+          "CRO",
+          .data$message_amount_denom
+        ),
+        ifelse(.data$fee.denom == "basecro", "CRO", .data$fee.denom)
+      ),
+      withdraw_rewards_validator = dplyr::coalesce(
+        .data$withdraw_rewards_validator,
+        .data$message_validator_address
+      ),
+      delegate_validator = dplyr::coalesce(
+        .data$delegate_validator,
+        .data$message_validator_address
+      ),
       transaction = "revenue",
-      description = .data$message_module,
+      description = .normalize_cronos_pos_description(
+        .data$message_module,
+        .data$message_action,
+        .data$message_action_raw
+      ),
       revenue.type = "staking",
       exchange = "CDC.wallet"
-    )
+    ) %>%
+    select(-"reward_amount")
 }
 
 .format_cronos_pos_manual_reward <- function(data) {

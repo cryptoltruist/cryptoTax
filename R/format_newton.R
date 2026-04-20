@@ -120,10 +120,6 @@ format_newton <- function(data, filetype = "yearly") {
     outputs$sell,
     outputs$earn,
     exchange = "newton",
-    rate_source = "exchange",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
+    rate_source = "exchange"
   )
 }

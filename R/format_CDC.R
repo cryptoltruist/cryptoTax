@@ -34,7 +34,12 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
     "pay_checkout_reward", "gift_card_reward", "crypto_purchase",
     "referral_gift", "lockup_lock", "reward.loyalty_program.trading_rebate.crypto_wallet",
     "recurring_buy_order", "admin_wallet_debited",
-    "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet"
+    "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
+    "finance.lockup.dpos_compound_interest.crypto_wallet",
+    "finance.lockup.dpos_lock.crypto_wallet",
+    "lockup_unlock",
+    "transfer.p2p_transfer.crypto_wallet.crypto_wallet.credit",
+    "transfer.p2p_transfer.crypto_wallet.crypto_wallet.debit"
   )
 
   data <- .format_cdc_prepare_input(data, known.transactions)
@@ -91,12 +96,148 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
 
   .finalize_formatted_exchange(
     data,
-    exchange = "CDC",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "comment", "revenue.type", "exchange", "rate.source"
-    )
+    exchange = "CDC"
   )
+}
+
+#' @title Review Crypto.com App withdrawal fee assumptions
+#'
+#' @description Build a compact review table of Crypto.com App withdrawal rows
+#' and the policy-estimated network fees that `format_CDC()` would apply.
+#' @param data Either the raw Crypto.com App dataframe or the formatted output
+#' returned by `format_CDC()`.
+#' @return A data frame of withdrawal rows with estimated withdrawal fees for
+#' manual review against the app UI or the transaction email.
+#' @export
+#' @examples
+#' review_CDC_withdrawals(data_CDC)
+review_CDC_withdrawals <- function(data) {
+  if (.is_formatted_cdc_withdrawal_input(data)) {
+    return(
+      data %>%
+        filter(
+          .data$exchange == "CDC",
+          .data$description == "crypto_withdrawal"
+        ) %>%
+        mutate(withdraw.fees = .data$quantity) %>%
+        .cdc_withdrawal_review_table()
+    )
+  }
+
+  known.transactions <- c(
+    "crypto_earn_program_withdrawn", "rewards_platform_deposit_credited",
+    "crypto_earn_extra_interest_paid", "crypto_earn_interest_paid",
+    "reimbursement", "crypto_withdrawal", "mco_stake_reward", "referral_card_cashback",
+    "crypto_transfer", "transfer_cashback", "card_cashback_reverted",
+    "crypto_earn_program_created", "crypto_viban_exchange", "admin_wallet_credited",
+    "card_top_up", "crypto_wallet_swap_credited", "crypto_wallet_swap_debited",
+    "viban_purchase", "supercharger_reward_to_app_credited", "supercharger_withdrawal",
+    "crypto_to_exchange_transfer", "supercharger_deposit", "crypto_exchange",
+    "exchange_to_crypto_transfer", "crypto_deposit", "lockup_upgrade",
+    "reimbursement_reverted", "mobile_airtime_reward", "crypto_payment",
+    "pay_checkout_reward", "gift_card_reward", "crypto_purchase",
+    "referral_gift", "lockup_lock", "reward.loyalty_program.trading_rebate.crypto_wallet",
+    "recurring_buy_order", "admin_wallet_debited",
+    "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
+    "finance.lockup.dpos_compound_interest.crypto_wallet",
+    "finance.lockup.dpos_lock.crypto_wallet",
+    "lockup_unlock",
+    "transfer.p2p_transfer.crypto_wallet.crypto_wallet.credit",
+    "transfer.p2p_transfer.crypto_wallet.crypto_wallet.debit"
+  )
+
+  .format_cdc_prepare_input(data, known.transactions) %>%
+    filter(.data$description == "crypto_withdrawal") %>%
+    mutate(withdraw.fees = .detect_cdc_withdrawal_fee(.data$comment)) %>%
+    .cdc_withdrawal_review_table()
+}
+
+#' @title Apply manual Crypto.com App withdrawal fee overrides
+#'
+#' @description Update policy-estimated Crypto.com App withdrawal fee rows on a
+#' formatted CDC ledger using a small override table, then recompute
+#' `total.price` from the updated `quantity` and existing `spot.rate`.
+#' @param data The formatted output returned by `format_CDC()`.
+#' @param overrides A data frame containing a replacement `quantity` column and
+#' a `date` column, with optional additional match columns such as `currency`
+#' or `comment`.
+#' @return The formatted CDC data frame with matching withdrawal rows updated.
+#' @export
+#' @examples
+#' overrides <- data.frame(
+#'   date = lubridate::as_datetime("2021-04-18 03:57:41"),
+#'   quantity = 0.01
+#' )
+#' apply_CDC_withdrawal_overrides(format_CDC(data_CDC), overrides)
+apply_CDC_withdrawal_overrides <- function(data, overrides) {
+  .validate_cdc_withdrawal_override_inputs(data, overrides)
+
+  join_keys <- .cdc_withdrawal_override_keys(overrides)
+  override_rows <- overrides %>%
+    select(all_of(c(join_keys, "quantity"))) %>%
+    rename(quantity.override = "quantity")
+
+  data %>%
+    dplyr::left_join(override_rows, by = join_keys) %>%
+    mutate(
+      quantity = ifelse(
+        .data$exchange == "CDC" & .data$description == "crypto_withdrawal" &
+          !is.na(.data$quantity.override),
+        .data$quantity.override,
+        .data$quantity
+      ),
+      total.price = ifelse(
+        .data$exchange == "CDC" & .data$description == "crypto_withdrawal" &
+          !is.na(.data$quantity.override),
+        abs(.data$quantity * .data$spot.rate),
+        .data$total.price
+      )
+    ) %>%
+    select(-"quantity.override")
+}
+
+.is_formatted_cdc_withdrawal_input <- function(data) {
+  is.data.frame(data) &&
+    all(c("date", "currency", "quantity", "description", "comment", "exchange") %in% names(data))
+}
+
+.cdc_withdrawal_override_allowed_keys <- function() {
+  c("date", "currency", "comment", "description", "exchange")
+}
+
+.cdc_withdrawal_override_keys <- function(overrides) {
+  keys <- intersect(.cdc_withdrawal_override_allowed_keys(), names(overrides))
+
+  if (!"date" %in% keys) {
+    stop("`overrides` must contain a 'date' column.")
+  }
+
+  keys
+}
+
+.validate_cdc_withdrawal_override_inputs <- function(data, overrides) {
+  if (!.is_formatted_cdc_withdrawal_input(data)) {
+    stop("`data` must be a formatted transaction table returned by `format_CDC()`.")
+  }
+
+  if (!is.data.frame(overrides)) {
+    stop("`overrides` must be a data.frame.")
+  }
+
+  if (!"quantity" %in% names(overrides)) {
+    stop("`overrides` must contain a 'quantity' column.")
+  }
+
+  keys <- .cdc_withdrawal_override_keys(overrides)
+  duplicate_override_rows <- duplicated(overrides[keys])
+
+  if (any(duplicate_override_rows)) {
+    stop(
+      "`overrides` contains duplicate match rows for columns: ",
+      paste(keys, collapse = ", "),
+      "."
+    )
+  }
 }
 
 .format_cdc_prepare_input <- function(data, known.transactions) {
@@ -189,6 +330,7 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
         "crypto_earn_interest_paid",
         "crypto_earn_extra_interest_paid",
         "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
+        "finance.lockup.dpos_compound_interest.crypto_wallet",
         "mco_stake_reward",
         "transfer_cashback",
         "mobile_airtime_reward",
@@ -225,6 +367,7 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
           "crypto_earn_interest_paid",
           "crypto_earn_extra_interest_paid",
           "finance.crypto_earn.loyalty_program_extra_interest_paid.crypto_wallet",
+          "finance.lockup.dpos_compound_interest.crypto_wallet",
           "mco_stake_reward",
           "supercharger_reward_to_app_credited"
         ),
@@ -299,27 +442,13 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
   withdrawals <- data %>%
     filter(.data$description == "crypto_withdrawal") %>%
     mutate(
-      withdraw.fees = case_when(
-        .data$comment == "Withdraw CRO" ~ 0.001,
-        .data$comment == "Withdraw CRO (CRO)" ~ 0.001,
-        .data$comment == "Withdraw CRO (Crypto.org)" ~ 0.001,
-        .data$comment == "Withdraw CRO (Cronos POS)" ~ 0.001,
-        .data$comment == "Withdraw CRO (Cronos POS (prev. Crypto.org))" ~ 0.001,
-        .data$comment == "Withdraw CRO (Cronos)" ~ 0.2,
-        .data$comment == "Withdraw LTC (LTC)" ~ 0.001,
-        .data$comment == "Withdraw LTC" ~ 0.001,
-        .data$comment == "Withdraw ETH (BSC)" ~ 0.0005,
-        .data$comment == "Withdraw ETH" ~ 0.005,
-        .data$comment == "Withdraw ADA" ~ 0.5,
-        .data$comment == "Withdraw ADA (Cardano)" ~ 0.5,
-        .data$comment == "Withdraw BTC" ~ 0.0004,
-        .data$comment == "Withdraw USDC (BSC)" ~ 1
-      ),
+      withdraw.fees = .detect_cdc_withdrawal_fee(.data$comment),
       spot.rate = abs(.data$Native.Amount / .data$quantity),
       quantity = .data$withdraw.fees,
       total.price = .data$quantity * .data$spot.rate,
       transaction = "sell"
     ) %>%
+    .report_cdc_withdrawal_review() %>%
     select(
       "date", "quantity", "currency", "total.price", "spot.rate",
       "transaction", "description", "comment", "rate.source"
@@ -335,6 +464,55 @@ format_CDC <- function(data, USD2CAD.table = NULL) {
   }
 
   withdrawals
+}
+
+.cdc_withdrawal_review_table <- function(withdrawals) {
+  withdrawals %>%
+    select(
+      "date",
+      "currency",
+      withdrawal.description = "comment",
+      policy.withdrawal.fee = "withdraw.fees"
+    )
+}
+
+.report_cdc_withdrawal_review <- function(withdrawals) {
+  if (!nrow(withdrawals)) {
+    return(withdrawals)
+  }
+
+  message(
+    "Crypto.com App exports do not include withdrawal/network fees in the CSV. ",
+    "Please confirm them against the app or the transaction email with ",
+    "`review_CDC_withdrawals(formatted.CDC)`."
+  )
+
+  withdrawals
+}
+
+.detect_cdc_withdrawal_fee <- function(comment) {
+  dplyr::case_when(
+    comment %in% c(
+      "Withdraw CRO",
+      "Withdraw CRO (CRO)",
+      "Withdraw CRO (Crypto.org)",
+      "Withdraw CRO (Cronos POS)",
+      "Withdraw CRO (Cronos POS (prev. Crypto.org))"
+    ) ~ 0.001,
+    comment %in% c("Withdraw CRO (Cronos)") ~ 0.2,
+    comment %in% c("Withdraw LTC", "Withdraw LTC (LTC)") ~ 0.001,
+    comment %in% c(
+      "Withdraw ETH",
+      "Withdraw ETH (Ethereum)",
+      "Withdraw ETH (ERC20)",
+      "Withdraw ETH (Ethereum (ERC20))"
+    ) ~ 0.005,
+    comment %in% c("Withdraw ETH (BSC)", "Withdraw ETH (BEP20)") ~ 0.0005,
+    comment %in% c("Withdraw ADA", "Withdraw ADA (Cardano)") ~ 0.5,
+    comment %in% c("Withdraw BTC", "Withdraw BTC (Bitcoin)") ~ 0.0004,
+    comment %in% c("Withdraw USDC (BSC)", "Withdraw USDC (BEP20)") ~ 1,
+    .default = NA_real_
+  )
 }
 
 .format_cdc_outputs <- function(data) {

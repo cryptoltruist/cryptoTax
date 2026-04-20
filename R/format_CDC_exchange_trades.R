@@ -86,14 +86,9 @@ format_CDC_exchange_trades <- function(data, list.prices = NULL, force = FALSE) 
   data <- .format_cdc_exchange_trades_apply_sell_prices(data)
 
   .finalize_formatted_exchange(
-    data %>%
-      arrange(date, desc(.data$total.price), .data$transaction),
+    data,
     exchange = "CDC.exchange",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "fees", "fees.quantity", "fees.currency", "description", "comment", 
-      "exchange", "rate.source"
-    )
+    tie_breakers = "transaction"
   )
 }
 

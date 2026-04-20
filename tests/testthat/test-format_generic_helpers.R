@@ -40,6 +40,40 @@ test_that("format_generic_resolve_prices errors when neither prices nor currency
   )
 })
 
+test_that("format_generic_resolve_prices uses the shared formatted-pricing helper when only currency is available", {
+  input <- data.frame(
+    quantity = 2,
+    currency = "BTC",
+    stringsAsFactors = FALSE
+  )
+  priced <- data.frame(
+    quantity = 2,
+    currency = "BTC",
+    spot.rate = 5,
+    total.price = 10,
+    stringsAsFactors = FALSE
+  )
+
+  testthat::local_mocked_bindings(
+    .resolve_and_fill_formatted_prices = function(data, list.prices, force, warn_on_missing_spot) {
+      expect_identical(data, input)
+      expect_null(list.prices)
+      expect_false(force)
+      expect_true(warn_on_missing_spot)
+      priced
+    },
+    .package = "cryptoTax"
+  )
+
+  result <- cryptoTax:::.format_generic_resolve_prices(
+    data = input,
+    list.prices = NULL,
+    force = FALSE
+  )
+
+  expect_identical(result, priced)
+})
+
 test_that("format_generic_standardize_columns matches names case-insensitively", {
   data <- data.frame(
     Date.Transaction = "2021-01-01 00:00:00",

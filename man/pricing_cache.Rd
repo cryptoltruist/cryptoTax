@@ -23,10 +23,17 @@ during the current R session. This cache is package-owned, so it avoids
 cluttering the user workspace while still keeping the shared-price workflow
 easy to inspect.
 
+The package-owned cache is a convenience layer for the current R session.
+It is the only implicit cache path reused during normal pricing/FX
+resolution. For reproducible or offline workflows, passing explicit
+\code{list.prices}, \code{coins.list}, or \code{USD2CAD.table} inputs remains the preferred
+path.
+
 For compatibility with older workflows, \code{include.legacy = TRUE} will also
 report matching objects that still live in \code{.GlobalEnv}. Those legacy
-workspace objects are supported as a compatibility fallback, but they are no
-longer the primary cache path and may be removed in a future release.
+workspace objects are no longer part of the normal implicit resolution path;
+they are exposed here only for inspection/transition purposes and may be
+removed in a future release.
 }
 \examples{
 pricing_cache()

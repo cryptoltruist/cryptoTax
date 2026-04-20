@@ -52,7 +52,13 @@ Paying trading fees in a third currency (e.g., BNB or CRO) is considered a sale 
 
 Superficial losses (+/- 30 days from purchase) are deducted from total capital losses (including those from gas fees).
 
-New coins obtained through airdrops and the like, or in the form of interest or staking, is not treated as buying in the context of superficial loss.
+Under the current package implementation, non-`buy` acquisition-like rows such
+as `revenue` and `rebates` are **not** themselves counted as `buy`
+acquisitions when measuring replacement-property quantity inside the 61-day
+superficial-loss window. However, if there is already a qualifying `buy`
+inside that window, units added by those rows that are still owned at the end
+of the window can still matter indirectly through the "shares still owned"
+condition.
 
 When there is a superficial loss on a quantity greater than the amount bought within 60 days, or the amount left at the end of the 60 days, only the amount bought/left is counted as superficial; any excess is counted as valid capital loss.
 
@@ -102,7 +108,81 @@ There is no such thing as superficial gains.
 - The package does **not** automatically assume that wrapped tokens, liquid staking derivatives, bridged assets, or exchange-specific wrappers are identical to their underlying asset for superficial-loss purposes.
 - If you decide that two instruments should be treated as the same property pool for your tax position, you should normalize that input explicitly before calling `format_ACB()` and review the consequences carefully.
 
-This is an implementation policy, not a statement that those instruments are never identical property under Canadian tax law. We have not found CRA guidance specific enough to crypto wrappers or staking derivatives to encode a harder automatic rule with confidence. More generally, CRA guidance on identical property looks at the legal rights attached to property rather than economic similarity alone, so instruments with conversion, redemption, or substitute rights may still require professional review.
+This is an implementation policy, not a statement that those instruments are never identical property under Canadian tax law. The CRA's current capital-gains guide says identical properties are ones where each property in the group is the same as all the others, and the older CRA interpretation material on identical properties uses the stronger idea of being the same in all material respects. We have not found CRA crypto-specific guidance precise enough to turn wrapped assets, bridged assets, or staking derivatives into an automatic package rule with confidence. More generally, CRA guidance on identical property looks at the legal rights attached to property rather than economic similarity alone, so instruments with conversion, redemption, staking, bridging, or substitute rights may still require professional review.
+
+Current package examples:
+
+- `BTC` and `WBTC` stay in separate pools by default if they appear as different `currency` values.
+- `ETH` and `stETH` stay in separate pools by default if they appear as different `currency` values.
+- Native `USDC` and a bridged/wrapped variant stay in separate pools by default unless you normalize them yourself.
+- An exchange-specific wrapper or synthetic balance stays in its own pool by default unless you deliberately map it into another pool before `format_ACB()`.
+
+Worked boundary example:
+
+- Suppose you dispose of `BTC` at a loss and buy `WBTC` inside the superficial-loss window.
+- `cryptoTax` will **not** automatically merge those rows into the same property pool just because they are economically related.
+- If your tax position is that those instruments should be treated as identical property, you would need to normalize the input first and then review the consequences carefully.
+- This is a deliberate package limitation: it avoids silently making a legal judgment about substitute-property identity from ticker names alone.
+
+# Affiliated-person boundary
+
+CRA superficial-loss rules are not limited to purchases by the same taxpayer.
+CRA guidance also looks at acquisitions and ownership by an affiliated person.
+That matters because a single transaction ledger can be mathematically correct
+for one account and still be incomplete for superficial-loss analysis if a
+spouse, corporation, trust, or other affiliated party acquired the same or an
+identical property inside the window.
+
+`cryptoTax` therefore takes a narrow and explicit stance:
+
+- `ACB()` and `format_ACB()` only audit the transaction history you actually
+  supply to them.
+- They do **not** independently infer spouse, corporation, trust, or other
+  affiliated-owner activity from one taxpayer ledger.
+- A "clean" package result therefore means the supplied ledger is internally
+  consistent under the package assumptions, not that affiliated-person
+  superficial-loss risk has been ruled out.
+
+Worked boundary example:
+
+- You sell `BTC` at a loss in your own account on Day 10.
+- Your spouse buys `BTC` on Day 20 and still holds it at the end of the window.
+- If your package input only contains your own ledger, `cryptoTax` cannot see
+  the spouse acquisition and therefore cannot deny the loss on that basis.
+- This is not a hidden bug in the engine. It is a deliberate scope boundary:
+  the package does not manufacture affiliated-person facts that are absent from
+  the input.
+
+If you need affiliated-person superficial-loss analysis, you would need a
+deliberately normalized cross-owner dataset and a tax position that justifies
+combining those facts for review.
+
+# Ordering when timestamps are indistinguishable
+
+Most exchange exports provide enough timestamp detail that row order is not a
+tax-policy question. But some ledgers collapse multiple events onto the same
+timestamp, or lose the original event sequence during export/normalization.
+
+`cryptoTax` therefore uses an explicit bookkeeping policy for same-pool rows
+that share the same timestamp:
+
+- within one `currency` pool, acquisition-like rows (`buy`, `revenue`,
+  `rebates`) are normalized before `sell` rows when timestamps are otherwise
+  indistinguishable;
+- within those groups, larger `total.price` rows come first as a deterministic
+  tie-break;
+- formatter-level event reconstruction can still use exchange-specific source
+  IDs or source ordering *before* the data reaches `format_ACB()`.
+
+Worked boundary example:
+
+- Suppose an export shows a `buy` and a `sell` for the same `currency` at the
+  exact same timestamp, but gives no reliable event-order field.
+- `cryptoTax` normalizes the acquisition before the disposition so the sale is
+  not treated as if it happened before the replacement quantity existed.
+- This is a conservative package policy for ambiguous exports. It is not a
+  claim that the package knows the exchange's true internal execution order once
+  that information has been lost.
 
 # Gas/network fees
 
@@ -112,6 +192,10 @@ Current implementation notes:
 
 - Fee-in-kind trading fees paid in a third asset (for example BNB or CRO) are modeled as dispositions of the fee asset, and the current test suite covers that behavior directly.
 - Some formatter paths represent withdrawal or network fees as their own disposal rows rather than as a `fees` column attached to another transaction.
+- For ACB purposes, the supported row-level fee contracts are:
+  separate `fees` with fee-exclusive `total.price`; fee-inclusive acquisition
+  totals with `fees = 0`; or fee-in-kind / withdrawal fees represented as
+  their own disposition rows.
 - Other exchange exports remain imperfect or ambiguous: some files omit withdrawal fees entirely, and some raw totals may or may not already include fees depending on the source. In those cases, `cryptoTax` aims for a conservative and internally consistent treatment, but manual review is still appropriate when the exchange export is incomplete or unclear.
 
 ## Documentation

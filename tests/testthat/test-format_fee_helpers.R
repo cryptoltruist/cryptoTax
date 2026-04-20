@@ -41,7 +41,7 @@ test_that("format_fee_sell_rows can override description and total price", {
   expect_equal(result$total.price, 0)
 })
 
-test_that("finalize_formatted_exchange adds exchange metadata and keeps selected columns", {
+test_that("finalize_formatted_exchange uses canonical output columns by default", {
   input <- data.frame(
     date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
     currency = "BTC",
@@ -57,11 +57,7 @@ test_that("finalize_formatted_exchange adds exchange metadata and keeps selected
   result <- cryptoTax:::.finalize_formatted_exchange(
     input,
     exchange = "newton",
-    rate_source = "exchange",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate",
-      "transaction", "description", "revenue.type", "exchange", "rate.source"
-    )
+    rate_source = "exchange"
   )
 
   expect_equal(result$exchange, "newton")
@@ -73,4 +69,44 @@ test_that("finalize_formatted_exchange adds exchange metadata and keeps selected
       "transaction", "description", "revenue.type", "exchange", "rate.source"
     )
   )
+})
+
+test_that("finalize_formatted_exchange orders canonical existing columns and skips absent optionals", {
+  input <- data.frame(
+    transaction = "buy",
+    total.price = 100,
+    date = as.POSIXct("2021-01-01 00:00:00", tz = "UTC"),
+    quantity = 1,
+    currency = "BTC",
+    spot.rate = 100,
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.finalize_formatted_exchange(
+    input,
+    exchange = "newton"
+  )
+
+  expect_equal(
+    names(result),
+    c("date", "currency", "quantity", "total.price", "spot.rate", "transaction", "exchange")
+  )
+})
+
+test_that("arrange_formatted_transactions applies default ordering with optional tie breakers", {
+  input <- data.frame(
+    date = as.POSIXct(c(
+      "2021-01-01 00:00:00",
+      "2021-01-01 00:00:00",
+      "2021-01-02 00:00:00"
+    ), tz = "UTC"),
+    total.price = c(10, 20, 5),
+    transaction = c("sell", "buy", "buy"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.arrange_formatted_transactions(input, tie_breakers = "transaction")
+
+  expect_equal(result$total.price, c(20, 10, 5))
+  expect_equal(result$transaction, c("buy", "sell", "buy"))
 })

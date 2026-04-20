@@ -1,19 +1,4 @@
-.resolve_coins_list <- function(force = FALSE, coins.list = NULL, verbose = TRUE) {
-  if (!is.null(coins.list)) {
-    return(coins.list)
-  }
-
-  cached_coins <- .reuse_cached_pricing_object(
-    name = "coins.list",
-    force = force,
-    verbose = verbose,
-    allow_null = TRUE,
-    validator = .is_valid_coins_list
-  )
-  if (!is.null(cached_coins)) {
-    return(cached_coins)
-  }
-
+.fetch_coins_list <- function(verbose = TRUE) {
   if (isFALSE(curl::has_internet()) && isTRUE(verbose)) {
     message("This function requires Internet access.")
     return(NULL)
@@ -37,16 +22,27 @@
     return(NULL)
   }
 
-  .set_cached_pricing_object("coins.list", fetched_coins)
+  fetched_coins
+}
+
+.resolve_coins_list <- function(force = FALSE, coins.list = NULL, verbose = TRUE) {
+  .resolve_pricing_object(
+    name = "coins.list",
+    value = coins.list,
+    force = force,
+    verbose = verbose,
+    allow_null = TRUE,
+    validator = .is_valid_coins_list,
+    fetch = function() {
+      .fetch_coins_list(verbose = verbose)
+    }
+  )
 }
 
 .resolve_list_prices <- function(force = FALSE, list.prices = NULL, verbose = TRUE) {
-  if (!is.null(list.prices)) {
-    return(list.prices)
-  }
-
-  .reuse_cached_pricing_object(
+  .resolve_pricing_object(
     name = "list.prices",
+    value = list.prices,
     force = force,
     verbose = verbose,
     validator = .is_valid_list_prices_table
@@ -101,6 +97,14 @@
   }
 
   list.prices
+}
+
+.should_cache_prepared_list_prices <- function(list.prices = NULL,
+                                               coin_hist = NULL,
+                                               USD2CAD.table = NULL) {
+  is.null(list.prices) &&
+    is.null(coin_hist) &&
+    is.null(USD2CAD.table)
 }
 
 .prepare_price_slugs <- function(data, slug = NULL) {
@@ -279,7 +283,11 @@ prepare_list_prices <- function(slug,
                                 coins.list = NULL,
                                 coin_hist = NULL,
                                 USD2CAD.table = NULL) {
-  explicit_list_prices <- !is.null(list.prices)
+  explicit_price_inputs <- list(
+    list.prices = list.prices,
+    coin_hist = coin_hist,
+    USD2CAD.table = USD2CAD.table
+  )
   resolved_list_prices <- .resolve_list_prices(
     force = force,
     list.prices = list.prices,
@@ -323,7 +331,11 @@ prepare_list_prices <- function(slug,
 
   .maybe_cache_list_prices(
     list.prices = resolved_list_prices,
-    cache = !explicit_list_prices
+    cache = .should_cache_prepared_list_prices(
+      list.prices = explicit_price_inputs$list.prices,
+      coin_hist = explicit_price_inputs$coin_hist,
+      USD2CAD.table = explicit_price_inputs$USD2CAD.table
+    )
   )
 }
 

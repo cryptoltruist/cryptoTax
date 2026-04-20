@@ -123,10 +123,6 @@ format_presearch <- function(data, list.prices = NULL, force = FALSE) {
 .format_presearch_finalize <- function(data) {
   .finalize_formatted_exchange(
     data,
-    exchange = "presearch",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
+    exchange = "presearch"
   )
 }

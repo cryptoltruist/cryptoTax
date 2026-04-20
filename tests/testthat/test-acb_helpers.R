@@ -176,7 +176,9 @@ test_that("update_acb_sell_row and gains use prior ACB share", {
 test_that("prepare_format_acb_input sorts by date and carries currency2", {
   data <- data.frame(
     date = as.POSIXct(c("2021-01-02 00:00:00", "2021-01-01 00:00:00"), tz = "UTC"),
-    currency = c("ETH", "BTC")
+    currency = c("ETH", "BTC"),
+    transaction = c("buy", "buy"),
+    total.price = c(20, 10)
   )
 
   result <- cryptoTax:::.prepare_format_acb_input(data)
@@ -186,6 +188,21 @@ test_that("prepare_format_acb_input sorts by date and carries currency2", {
     result$date,
     as.POSIXct(c("2021-01-01 00:00:00", "2021-01-02 00:00:00"), tz = "UTC")
   )
+})
+
+test_that("prepare_format_acb_input sorts same-timestamp rows by acquisition before disposition then by larger totals", {
+  data <- data.frame(
+    date = as.POSIXct(rep("2021-01-01 00:00:00", 4), tz = "UTC"),
+    currency = rep("BTC", 4),
+    transaction = c("sell", "buy", "revenue", "buy"),
+    total.price = c(50, 20, 5, 100),
+    stringsAsFactors = FALSE
+  )
+
+  result <- cryptoTax:::.prepare_format_acb_input(data)
+
+  expect_equal(result$transaction, c("buy", "buy", "revenue", "sell"))
+  expect_equal(result$total.price, c(100, 20, 5, 50))
 })
 
 test_that("finalize_format_acb_output reorders date and fees columns", {

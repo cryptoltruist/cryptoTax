@@ -20,6 +20,11 @@ It is possible to generate a full tax report with `cryptoTax`. This vignette sho
 To keep the workflow reproducible and easy to run without internet access, the
 examples below use the built-in `list_prices_example` fixture.
 
+For real tax work across multiple sessions, a more practical workflow is often
+to save your prepared `list.prices` object to disk, reload it later, and then
+optionally seed the package cache with `add_to_cache()` for same-session
+convenience.
+
 # Preparing your list of coins
 
 First, you want price information for all your coins.
@@ -35,7 +40,20 @@ list.prices <- list_prices_example
 
 ```{r list.prices, eval=FALSE}
 library(cryptoTax)
-list.prices <- list_prices_example
+
+if (file.exists("list.prices.rds")) {
+  list.prices <- readRDS("list.prices.rds")
+} else {
+  list.prices <- prepare_list_prices(
+    my.coins,
+    start.date = "2021-02-01"
+  )
+  saveRDS(list.prices, "list.prices.rds")
+}
+
+# Optional: make the saved object available through the package cache during
+# this R session so formatters can reuse it implicitly if desired.
+add_to_cache(list.prices = list.prices)
 ```
 
 # Formatting your data
@@ -51,6 +69,28 @@ exchanges <- list(
 )
 
 formatted.data <- format_exchanges(exchanges, list.prices = list.prices)
+```
+
+If you prefer a maximally audit-friendly workflow, it is also completely fine to format each
+exchange explicitly, inspect the output, and only then merge everything:
+
+```{r format exchanges explicit, eval=FALSE}
+x.adalite <- format_adalite(data_adalite, list.prices = list.prices)
+x.binance <- format_binance(data_binance, list.prices = list.prices)
+x.binance.withdrawals <- format_binance_withdrawals(
+  data_binance_withdrawals,
+  list.prices = list.prices
+)
+x.cdc <- format_CDC(data_CDC)
+x.gemini <- format_gemini(data_gemini, list.prices = list.prices)
+
+formatted.data <- merge_exchanges(
+  x.adalite,
+  x.binance,
+  x.binance.withdrawals,
+  x.cdc,
+  x.gemini
+)
 ```
 
 # Adjusted Cost Base

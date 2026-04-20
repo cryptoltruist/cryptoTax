@@ -59,11 +59,7 @@
   .finalize_formatted_exchange(
     earn,
     exchange = "celsius",
-    rate_source = "exchange (USD conversion)",
-    columns = c(
-      "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
-      "description", "revenue.type", "exchange", "rate.source"
-    )
+    rate_source = "exchange (USD conversion)"
   )
 }
 

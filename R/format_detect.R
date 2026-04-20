@@ -76,7 +76,18 @@
 }
 
 .formatted_transaction_optional_columns <- function() {
-  c("fees", "description", "comment", "revenue.type", "rate.source", "currency2", "value")
+  c(
+    "fees", "fees.quantity", "fees.currency", "description",
+    "comment", "revenue.type", "rate.source", "currency2", "value"
+  )
+}
+
+.formatted_transaction_output_columns <- function() {
+  c(
+    "date", "currency", "quantity", "total.price", "spot.rate", "transaction",
+    "fees", "fees.quantity", "fees.currency", "description", "comment",
+    "revenue.type", "exchange", "rate.source"
+  )
 }
 
 .formatted_transaction_schema_spec <- function() {
@@ -292,9 +303,13 @@
 #' @param list.prices A `list.prices` object from which to fetch coin prices.
 #' When supplied explicitly, it must contain at least `currency`,
 #' `spot.rate2`, and `date2` for exchanges that require external pricing.
+#' In mixed workflows, this can be passed once at the top level and will be
+#' forwarded only to exchange formatters that actually need external pricing.
 #' @param USD2CAD.table Optional explicit USD/CAD rate table to use for
 #' exchanges that convert USD-denominated values to CAD. When supplied
-#' explicitly, it must contain at least `date` and `USD`.
+#' explicitly, it must contain at least `date` and `USD`. In mixed workflows,
+#' this can be passed once at the top level and will be forwarded only to the
+#' exchange formatters that actually need USD/CAD conversion.
 #' @param force Whether to force recreating `list.prices` even though
 #' it already exists (e.g., if you added new coins or new dates).
 #' @param ... Used for other methods.

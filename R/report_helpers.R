@@ -24,6 +24,18 @@
   dplyr::last(list.prices$date2)
 }
 
+.resolve_report_cached_prices <- function(list.prices, force, verbose = TRUE) {
+  if (!is.null(list.prices)) {
+    return(list.prices)
+  }
+
+  .resolve_list_prices(
+    force = force,
+    list.prices = NULL,
+    verbose = verbose
+  )
+}
+
 .resolve_report_today_data <- function(formatted.ACB,
                                        today.data,
                                        list.prices,
@@ -31,12 +43,9 @@
                                        start.date,
                                        force,
                                        verbose = TRUE) {
-  if (isTRUE(today.data) && is.null(list.prices)) {
-    list.prices <- prepare_list_prices_slugs(
-      formatted.ACB,
+  if (isTRUE(today.data)) {
+    list.prices <- .resolve_report_cached_prices(
       list.prices = list.prices,
-      slug = slug,
-      start.date = start.date,
       force = force,
       verbose = verbose
     )
@@ -47,6 +56,17 @@
       message("You need Internet access to use the `today.data == TRUE` argument. The today.data argument has been set to `FALSE` automatically.")
     }
     return(list(today.data = FALSE, list.prices = list.prices))
+  }
+
+  if (isTRUE(today.data) && is.null(list.prices)) {
+    list.prices <- prepare_list_prices_slugs(
+      formatted.ACB,
+      list.prices = list.prices,
+      slug = slug,
+      start.date = start.date,
+      force = force,
+      verbose = verbose
+    )
   }
 
   if (isTRUE(today.data) && !is.null(list.prices) && !.can_use_report_today_prices(list.prices)) {
@@ -123,6 +143,14 @@
   }
 
   rates
+}
+
+.report_latest_acb <- function(formatted.ACB) {
+  formatted.ACB %>%
+    dplyr::group_by(.data$currency) %>%
+    dplyr::filter(.data$date == max(.data$date)) %>%
+    dplyr::slice_tail() %>%
+    dplyr::select("date", "currency", "total.quantity", "ACB.share", "ACB")
 }
 
 .sup_losses_total_row <- function(sup.losses) {

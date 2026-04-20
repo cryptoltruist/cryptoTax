@@ -45,11 +45,6 @@ format_pooltool <- function(data, exchange = "exodus") {
 .format_pooltool_finalize <- function(data, exchange) {
   .finalize_formatted_exchange(
     data,
-    exchange = exchange,
-    columns = c(
-      "date", "currency", "quantity", "total.price",
-      "spot.rate", "transaction", "description", "comment",
-      "revenue.type", "exchange", "rate.source"
-    )
+    exchange = exchange
   )
 }

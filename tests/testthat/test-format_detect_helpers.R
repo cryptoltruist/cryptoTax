@@ -451,7 +451,10 @@ test_that("format_detect helpers expose the canonical formatted-transaction sche
   )
   expect_equal(
     cryptoTax:::.formatted_transaction_optional_columns(),
-    c("fees", "description", "comment", "revenue.type", "rate.source", "currency2", "value")
+    c(
+      "fees", "fees.quantity", "fees.currency", "description",
+      "comment", "revenue.type", "rate.source", "currency2", "value"
+    )
   )
   expect_equal(
     sort(names(cryptoTax:::.formatted_transaction_schema_spec())),

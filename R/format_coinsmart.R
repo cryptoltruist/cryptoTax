@@ -29,10 +29,7 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
     return(NULL)
   }
 
-  # Add total.price
-  data <- data %>%
-    rowwise() %>%
-    mutate(total.price = sum(.data$Credit, .data$Debit) * .data$spot.rate)
+  data <- .coinsmart_add_total_price(data)
 
   # Create a "buy" object
   BUY <- data %>%
@@ -58,16 +55,8 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
   BUY <- .coinsmart_apply_trade_prices(BUY, CAD.prices, "exchange")
 
   # Isolate trading fees
-  FEES.BUY <- data %>%
-    filter(.data$description == "Fee" &
-      .data$comment == "Trade") %>%
-    mutate(fees = .data$total.price, 
-           fees.quantity = .data$Debit,
-           fees.currency = .data$currency) %>% 
-    select("fees", "fees.quantity", "fees.currency")
-
-  # Merge fees to our BUY object
-  BUY <- cbind(BUY, FEES.BUY)
+  FEES.BUY <- .format_coinsmart_buy_fees(data)
+  BUY <- .coinsmart_attach_buy_fees(BUY, FEES.BUY)
 
   # Create a "earn" object
   EARN <- data %>%
@@ -186,6 +175,40 @@ format_coinsmart <- function(data, list.prices = NULL, force = FALSE) {
       spot.rate = ifelse(.data$currency == "CAD", 1, NA)
     ) %>%
     arrange(.data$date)
+}
+
+.coinsmart_add_total_price <- function(data) {
+  data %>%
+    mutate(
+      total.price = (
+        dplyr::coalesce(.data$Credit, 0) +
+          dplyr::coalesce(.data$Debit, 0)
+      ) * .data$spot.rate
+    )
+}
+
+.format_coinsmart_buy_fees <- function(data) {
+  data %>%
+    filter(.data$description == "Fee" &
+      .data$comment == "Trade") %>%
+    mutate(
+      fees = .data$total.price,
+      fees.quantity = .data$Debit,
+      fees.currency = .data$currency,
+      .buy_fee_row_id = dplyr::row_number()
+    ) %>%
+    select(".buy_fee_row_id", "fees", "fees.quantity", "fees.currency")
+}
+
+.coinsmart_attach_buy_fees <- function(buy_rows, fee_rows) {
+  if (!nrow(buy_rows)) {
+    return(buy_rows)
+  }
+
+  buy_rows %>%
+    mutate(.buy_fee_row_id = dplyr::row_number()) %>%
+    dplyr::left_join(fee_rows, by = ".buy_fee_row_id") %>%
+    select(-".buy_fee_row_id")
 }
 
 .coinsmart_apply_trade_prices <- function(data, reference_prices, rate_source_value) {
