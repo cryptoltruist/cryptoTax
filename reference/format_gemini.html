@@ -9,7 +9,7 @@ Open the xlsx data file using readxl::read_excel()."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,44 +76,45 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">format_gemini</span><span class="op">(</span><span class="va">data_gemini</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency     quantity total.price    spot.rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-04-09 22:50:55      BTC 9.662784e-04  70.6481728 7.311369e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-04-09 22:50:55      LTC 2.466906e-01  70.6481728 2.863837e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-09 22:53:57      BTC 6.051912e-06   0.4424776 7.311369e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-09 22:53:57      LTC 1.640820e-03   0.4424776 2.696686e+02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-04-09 23:20:53      BAT 4.871952e+01  86.3813238 1.773033e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-04-09 23:20:53      BTC 9.507300e-04  86.3813238 9.085789e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-04-10 23:22:04      BTC 2.850256e-04  21.1030333 7.403909e+04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-08 16:14:54      BAT 2.833935e+00   4.8662823 1.717147e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-05-16 12:55:02      BAT 3.085288e+00   4.2575830 1.379963e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-05-16 13:35:19      BAT 5.007481e+00   6.9101380 1.379963e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-06-18 01:38:54      BAT 6.834323e+00   5.3946979 7.893537e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    transaction        fees fees.quantity fees.currency description</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          buy 0.168410698  2.303409e-06           BTC      LTCBTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         sell          NA            NA           LTC      LTCBTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          buy 0.002669973  3.651810e-08           BTC      LTCBTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         sell          NA            NA           LTC      LTCBTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          buy          NA            NA           BAT      BATBTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         sell 0.132645853  1.814241e-06           BTC      BATBTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      revenue          NA            NA          &lt;NA&gt;      Credit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      revenue          NA            NA          &lt;NA&gt;      Credit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      revenue          NA            NA          &lt;NA&gt;      Credit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     revenue          NA            NA          &lt;NA&gt;      Credit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11     revenue          NA            NA          &lt;NA&gt;      Credit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  comment revenue.type exchange               rate.source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 Market         &lt;NA&gt;   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 Market         &lt;NA&gt;   gemini coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  Limit         &lt;NA&gt;   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  Limit         &lt;NA&gt;   gemini coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  Limit         &lt;NA&gt;   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  Limit         &lt;NA&gt;   gemini coinmarketcap (buy price)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  Administrative Credit    referrals   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Administrative Credit    referrals   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                Deposit     airdrops   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10               Deposit     airdrops   gemini             coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11               Deposit     airdrops   gemini             coinmarketcap</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Could not calculate spot rate. Use `force = TRUE`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency     quantity total.price  spot.rate transaction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-04-09 22:50:55      BTC 9.662784e-04  70.6481728 73113.6866         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-04-09 22:50:55      LTC 2.466906e-01  70.6481728   286.3837        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-04-09 22:53:57      BTC 6.051912e-06   0.4424776 73113.6866         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-04-09 22:53:57      LTC 1.640820e-03   0.4424776   269.6686        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-04-09 23:20:53      BAT 4.871952e+01          NA         NA         buy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-04-09 23:20:53      BTC 9.507300e-04          NA         NA        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-04-10 23:22:04      BTC 2.850256e-04  21.1030333 74039.0861     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-05-08 16:14:54      BAT 2.833935e+00          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-05-16 12:55:02      BAT 3.085288e+00          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-05-16 13:35:19      BAT 5.007481e+00          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-06-18 01:38:54      BAT 6.834323e+00          NA         NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           fees fees.quantity fees.currency description               comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.168410698  2.303409e-06           BTC      LTCBTC                Market</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           NA            NA           LTC      LTCBTC                Market</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.002669973  3.651810e-08           BTC      LTCBTC                 Limit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           NA            NA           LTC      LTCBTC                 Limit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           NA            NA           BAT      BATBTC                 Limit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.132645853  1.814241e-06           BTC      BATBTC                 Limit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           NA            NA          &lt;NA&gt;      Credit Administrative Credit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           NA            NA          &lt;NA&gt;      Credit Administrative Credit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           NA            NA          &lt;NA&gt;      Credit               Deposit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          NA            NA          &lt;NA&gt;      Credit               Deposit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          NA            NA          &lt;NA&gt;      Credit               Deposit</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type exchange               rate.source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt;   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt;   gemini coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt;   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          &lt;NA&gt;   gemini coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          &lt;NA&gt;   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          &lt;NA&gt;   gemini coinmarketcap (buy price)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     referrals   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     referrals   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      airdrops   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     airdrops   gemini             coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     airdrops   gemini             coinmarketcap</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

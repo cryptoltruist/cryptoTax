@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,15 +86,24 @@
 <h3 id="revenue-entering-acb">Revenue entering ACB<a class="anchor" aria-label="anchor" href="#revenue-entering-acb"></a></h3>
 <ul class="task-list"><li><label><input type="checkbox" checked>Taxable crypto revenue enters ACB by default. Covered by <a href="C:/github/cryptoTax/tests/testthat/test-ACB.R">test-ACB.R</a> and <a href="C:/github/cryptoTax/tests/testthat/test-format_ACB.R">test-format_ACB.R</a>.</label></li>
 <li><label><input type="checkbox" checked>Non-taxable revenue types can be excluded from ACB through <code>as.revenue</code>. Covered by <a href="C:/github/cryptoTax/tests/testthat/test-ACB.R">test-ACB.R</a> and <a href="C:/github/cryptoTax/tests/testthat/test-format_ACB.R">test-format_ACB.R</a>.</label></li>
+<li><label><input type="checkbox" checked>Non-<code>buy</code> acquisition-like rows such as <code>revenue</code> and <code>rebates</code> are not themselves counted as <code>buy</code> acquisitions for replacement-property quantity in the superficial-loss window, but units added by those rows can still matter indirectly through the “shares still owned” condition if some qualifying <code>buy</code> already exists in the 61-day period. Covered by <a href="C:/github/cryptoTax/tests/testthat/test-ACB.R">test-ACB.R</a>, <a href="C:/github/cryptoTax/tests/testthat/test-format_ACB.R">test-format_ACB.R</a>, and clarified in <a href="C:/github/cryptoTax/vignettes/references.Rmd">references.Rmd</a>.</label></li>
 </ul></div>
 </div>
 <div class="section level2">
 <h2 id="known-audit-gaps">Known audit gaps<a class="anchor" aria-label="anchor" href="#known-audit-gaps"></a></h2>
-<ul class="task-list"><li><label><input type="checkbox">Affiliated-person superficial-loss scenarios are not modeled explicitly. Current ACB logic works on one taxpayer transaction history and does not have a first-class concept of spouse, corporation, trust, or other affiliated owner.</label></li>
-<li><label><input type="checkbox">“Identical property” classification is not yet audited beyond same-symbol transaction pools. Edge cases like wrapped assets, bridged assets, liquid staking tokens, and exchange-specific synthetic assets need a policy decision.</label></li>
+<ul class="task-list"><li><label><input type="checkbox">Affiliated-person superficial-loss scenarios are not modeled programmatically. Current ACB logic works on one taxpayer transaction history and does not have a first-class concept of spouse, corporation, trust, or other affiliated owner, even though the boundary is now documented explicitly.</label></li>
+<li><label><input type="checkbox">“Identical property” classification is not resolved programmatically beyond same-symbol transaction pools. Edge cases like wrapped assets, bridged assets, liquid staking tokens, and exchange-specific synthetic assets now have an explicit package policy note, but still depend on user normalization rather than automatic engine logic.</label></li>
 <li><label><input type="checkbox" checked>Business-income versus capital-account classification is now explicitly documented as out of scope for <code><a href="reference/ACB.html">ACB()</a></code> itself and still dependent on user tax facts outside the transaction math.</label></li>
 <li><label><input type="checkbox" checked>Network fees, withdrawal fees, and fee-in-kind treatment now have a policy note separating what is proven in the current implementation from what may still require professional review in ambiguous real-world exports.</label></li>
 </ul></div>
+<div class="section level2">
+<h2 id="audit-execution-order">Audit execution order<a class="anchor" aria-label="anchor" href="#audit-execution-order"></a></h2>
+<p>This is the recommended order for the remaining audit work. The idea is to finish the highest-confidence same-taxpayer math first, then document the boundaries where the package should stay conservative rather than pretending to decide legal or factual questions it does not actually model.</p>
+<ol style="list-style-type: decimal"><li>Resolve the remaining same-taxpayer transaction-math questions that are still partly represented as comments or policy notes.</li>
+<li>Finish the package policy on what counts as the same pool versus a distinct crypto instrument.</li>
+<li>Write explicit boundary documentation for affiliated-person cases that the engine does not currently model.</li>
+<li>Only after those are explicit, decide whether any code change is needed, or whether the right result is just stronger documentation and validation.</li>
+</ol></div>
 <div class="section level2">
 <h2 id="next-audit-slices">Next audit slices<a class="anchor" aria-label="anchor" href="#next-audit-slices"></a></h2>
 <ul class="task-list"><li><label><input type="checkbox" checked>Add one explicit affiliated-person policy note to package docs or plan material.</label></li>
@@ -104,6 +113,61 @@
 <li><label><input type="checkbox" checked>Add a policy note distinguishing tested fee-in-kind behavior from more ambiguous withdrawal/network-fee export cases.</label></li>
 <li><label><input type="checkbox" checked>Add an explicit package-scope note that business-income versus capital-account classification is not decided by the ACB engine.</label></li>
 </ul></div>
+<div class="section level2">
+<h2 id="immediate-audit-queue">Immediate audit queue<a class="anchor" aria-label="anchor" href="#immediate-audit-queue"></a></h2>
+<p>These are the concrete unresolved slices to work through next.</p>
+<div class="section level3">
+<h3 id="id_1-fee-treatment-versus-totalprice">1. Fee treatment versus <code>total.price</code>
+<a class="anchor" aria-label="anchor" href="#id_1-fee-treatment-versus-totalprice"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox" checked>Audit whether any remaining supported formatter paths can produce rows where acquisition-side <code>total.price</code> already includes fees while <code>fees</code> is still non-zero, which would make generic ACB fee handling ambiguous.</label></li>
+<li><label><input type="checkbox" checked>For each representative fee contract, record the intended rule explicitly: separate fees, fee-inclusive totals with zeroed <code>fees</code>, or fee-in-kind modeled as a separate disposition row.</label></li>
+<li><label><input type="checkbox" checked>Decide whether the remaining <code>ACB.R</code> fee TODO should become stricter validation, formatter-contract enforcement, or a retained documented caveat.</label></li>
+</ul><p>Current audit read:</p>
+<ul><li>Coinbase convert buys are the representative fee-inclusive acquisition case, and the formatter already zeroes <code>fees</code> to avoid double-counting.</li>
+<li>CDC Exchange trades, Gemini trades, Binance trades, and CoinSmart trades are representative separate-fee cases, where <code>fees</code>, <code>fees.quantity</code>, and <code>fees.currency</code> remain explicit alongside the acquisition/disposition row.</li>
+<li>Uphold withdrawal fees and third-asset trading fees are representative separate-disposition cases, where the fee is modeled as its own sell row rather than as an attached <code>fees</code> value.</li>
+<li>CDC app output remains a known special case with limited fee visibility rather than a contradictory mixed contract.</li>
+</ul><p>Definition of done:</p>
+<ul><li>We can point to tests and docs showing which fee contracts are supported, and the remaining comment in <a href="C:/github/cryptoTax/R/ACB.R">ACB.R</a> is either resolved or intentionally retained with a precise reason.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2-identical-property-boundary-cases">2. Identical-property boundary cases<a class="anchor" aria-label="anchor" href="#id_2-identical-property-boundary-cases"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox" checked>Pick a short list of concrete crypto edge cases to treat as policy examples: wrapped assets, bridged assets, liquid staking tokens, and exchange-specific synthetic assets.</label></li>
+<li><label><input type="checkbox" checked>For each example, state whether the package currently keeps it in a separate pool by <code>currency</code>, and whether that is an intentional package policy or an unresolved tax-judgment limitation.</label></li>
+<li><label><input type="checkbox" checked>Add at least one user-facing note or worked example showing that the engine does not automatically merge these assets into the same superficial-loss pool.</label></li>
+</ul><p>Definition of done:</p>
+<ul><li>A user can tell, without reading code, what the package will do for the most common same-symbol-versus-same-property ambiguities.</li>
+</ul><p>Current audit read:</p>
+<ul><li>CRA’s current <a href="https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/t4037/capital-gains.html" class="external-link">Capital Gains – 2025</a> guide says identical properties are ones where each property in the group is the same as all the others.</li>
+<li>CRA’s archived interpretation bulletin on identical properties remains useful context because it reflects the older “same in all material respects” framing and highlights that conversion/exchange rights can matter in superficial-loss analysis.</li>
+<li>That combination supports the package’s conservative stance: different <code>currency</code> values stay in separate pools by default, while wrapped, bridged, staked, or exchange-specific variants are treated as a user-policy normalization question rather than silently merged by the engine.</li>
+<li>The user-facing note and worked boundary example now live in <a href="C:/github/cryptoTax/vignettes/references.Rmd">references.Rmd</a>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_3-affiliated-person-boundary-cases">3. Affiliated-person boundary cases<a class="anchor" aria-label="anchor" href="#id_3-affiliated-person-boundary-cases"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox" checked>Expand the existing policy note into a short boundary explanation of what the package can and cannot infer from a single transaction history.</label></li>
+<li><label><input type="checkbox" checked>Add one worked boundary example showing why an affiliated-person superficial loss cannot be detected from one taxpayer ledger alone.</label></li>
+<li><label><input type="checkbox" checked>Decide whether any warning or documentation pointer should be surfaced near <code><a href="reference/ACB.html">ACB()</a></code> / <code><a href="reference/format_ACB.html">format_ACB()</a></code> usage, or whether the plan/docs note is enough.</label></li>
+</ul><p>Definition of done:</p>
+<ul><li>The limitation is explicit enough that users do not mistake “passes tests” for “covers spouse/corporate affiliated-owner scenarios.”</li>
+</ul><p>Current audit read:</p>
+<ul><li>CRA’s current superficial-loss wording explicitly includes acquisitions by the taxpayer or an affiliated person, so this is a real rule boundary rather than an academic edge case.</li>
+<li>The package cannot infer spouse, corporation, trust, or other affiliated-owner activity from a single taxpayer-facing ledger.</li>
+<li>The user-facing boundary explanation and worked example now live in <a href="C:/github/cryptoTax/vignettes/references.Rmd">references.Rmd</a>, and the <code><a href="reference/ACB.html">ACB()</a></code> / <code><a href="reference/format_ACB.html">format_ACB()</a></code> docs now state more plainly that clean results from one ledger do not prove the absence of affiliated-person superficial-loss issues outside that input.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_4-residual-timing-and-ordering-assumptions">4. Residual timing and ordering assumptions<a class="anchor" aria-label="anchor" href="#id_4-residual-timing-and-ordering-assumptions"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox" checked>Review whether any remaining same-timestamp assumptions in ACB processing need to be documented as package policy rather than only encoded in tests.</label></li>
+<li><label><input type="checkbox" checked>Confirm that formatter-level ordering and ACB-level ordering together do not create hidden tax-policy assumptions beyond “acquisitions before dispositions when timestamps are indistinguishable.”</label></li>
+</ul><p>Definition of done:</p>
+<ul><li>The repo has one clear statement of the same-timestamp rule and why it exists.</li>
+</ul><p>Current audit read:</p>
+<ul><li>The package-level ordering rule is now explicit: when same-pool rows share an indistinguishable timestamp and no trustworthy event-order field survives, acquisition-like rows are normalized before <code>sell</code> rows.</li>
+<li>Within those groups, larger <code>total.price</code> rows come first as a deterministic tie-break rather than as a claimed legal priority rule.</li>
+<li>Formatter-level reconstruction can still use source-specific identifiers or source ordering before <code><a href="reference/format_ACB.html">format_ACB()</a></code> if an exchange export genuinely preserves richer event-sequencing information.</li>
+<li>The user-facing note and worked boundary example now live in <a href="C:/github/cryptoTax/vignettes/references.Rmd">references.Rmd</a>, and the <code><a href="reference/format_ACB.html">format_ACB()</a></code> docs now describe the same-timestamp normalization rule directly.</li>
+</ul></div>
+</div>
 <div class="section level2">
 <h2 id="worked-example-appendix">Worked-example appendix<a class="anchor" aria-label="anchor" href="#worked-example-appendix"></a></h2>
 <p>These examples are intentionally small and human-checkable. They are not meant to replace the test suite; they make the core audit arithmetic legible outside of code.</p>

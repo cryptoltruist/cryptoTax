@@ -6,6 +6,9 @@ during the current R session.
 This clears the package-owned cache only; it does not remove similarly
 named objects from `.GlobalEnv`.
 
+Clearing the package cache is the safest way to force fresh pricing/FX
+resolution without mutating user workspace objects.
+
 ## Usage
 
 ``` r

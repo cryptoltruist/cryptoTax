@@ -7,6 +7,12 @@ To keep the workflow reproducible and easy to run without internet
 access, the examples below use the built-in `list_prices_example`
 fixture.
 
+For real tax work across multiple sessions, a more practical workflow is
+often to save your prepared `list.prices` object to disk, reload it
+later, and then optionally seed the package cache with
+[`add_to_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/add_to_cache.md)
+for same-session convenience.
+
 ## Preparing your list of coins
 
 First, you want price information for all your coins.
@@ -18,7 +24,20 @@ First, you want price information for all your coins.
 
 ``` r
 library(cryptoTax)
-list.prices <- list_prices_example
+
+if (file.exists("list.prices.rds")) {
+  list.prices <- readRDS("list.prices.rds")
+} else {
+  list.prices <- prepare_list_prices(
+    my.coins,
+    start.date = "2021-02-01"
+  )
+  saveRDS(list.prices, "list.prices.rds")
+}
+
+# Optional: make the saved object available through the package cache during
+# this R session so formatters can reuse it implicitly if desired.
+add_to_cache(list.prices = list.prices)
 ```
 
 ## Formatting your data
@@ -41,6 +60,29 @@ exchanges <- list(
 formatted.data <- format_exchanges(exchanges, list.prices = list.prices)
 ```
 
+If you prefer a maximally audit-friendly workflow, it is also completely
+fine to format each exchange explicitly, inspect the output, and only
+then merge everything:
+
+``` r
+x.adalite <- format_adalite(data_adalite, list.prices = list.prices)
+x.binance <- format_binance(data_binance, list.prices = list.prices)
+x.binance.withdrawals <- format_binance_withdrawals(
+  data_binance_withdrawals,
+  list.prices = list.prices
+)
+x.cdc <- format_CDC(data_CDC)
+x.gemini <- format_gemini(data_gemini, list.prices = list.prices)
+
+formatted.data <- merge_exchanges(
+  x.adalite,
+  x.binance,
+  x.binance.withdrawals,
+  x.cdc,
+  x.gemini
+)
+```
+
 ## Adjusted Cost Base
 
 Next, we can begin processing that data. We start by formatting the
@@ -51,10 +93,10 @@ with which we will be working for all future steps.
 
 ``` r
 formatted.ACB <- format_ACB(formatted.data)
-#> Process started at 2026-04-16 01:11:35.307439. Please be patient as the transactions process.
+#> Process started at 2026-04-20 00:54:29.573008. Please be patient as the transactions process.
 #> [Formatting ACB (progress bar repeats for each coin)...]
 #> Note: Adjusted cost base (ACB) and capital gains have been adjusted for the superficial loss rule. To avoid this, use argument `sup.loss = FALSE`.
-#> Process ended at 2026-04-16 01:11:35.708017. Total time elapsed: 0.01 minutes
+#> Process ended at 2026-04-20 00:54:29.91854. Total time elapsed: 0.01 minutes
 ```
 
 > Per default,
@@ -171,7 +213,7 @@ print_report(formatted.ACB,
 
 Name: Mr. Cryptoltruist
 
-Date: Thu Apr 16 01:11:37 2026
+Date: Mon Apr 20 00:54:31 2026
 
 #### Summary
 

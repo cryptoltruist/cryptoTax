@@ -65,8 +65,9 @@ calculate prices with CoinMarketCap and later capital gains and so on.
 
 ``` r
 format_CDC_exchange_trades(data_CDC_exchange_trades)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Warning: Could not calculate spot rate. Use `force = TRUE`.
 #>                   date currency   quantity total.price    spot.rate transaction
 #> 1  2021-12-24 15:34:45      CRO 13260.1300 10383.49502    0.7830613         buy
 #> 2  2021-12-24 15:34:45      ETH     2.0932 10383.49502 4960.5842834        sell

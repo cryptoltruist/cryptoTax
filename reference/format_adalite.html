@@ -9,7 +9,7 @@ wallet for later ACB processing."><meta property="og:image" content="https://cry
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,14 +77,15 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_adalite</span></span></span>
 <span class="r-in"><span><span class="fu">format_adalite</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Could not calculate spot rate. Use `force = TRUE`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  date currency  quantity total.price spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-28 16:56:00      ADA 0.3120400   0.5092906  1.632132     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-07 16:53:00      ADA 0.3125132   0.6272258  2.007038     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-12 16:56:00      ADA 0.2212410   0.4437400  2.005686     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-05-17 17:16:00      ADA 0.4123210   1.0790423  2.616996     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-17 21:16:00      ADA 0.1691870   0.4427617  2.616996        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-05-17 21:31:00      ADA 0.1912300   0.5004481  2.616996        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-04-28 16:56:00      ADA 0.3120400          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-05-07 16:53:00      ADA 0.3125132          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-05-12 16:56:00      ADA 0.2212410          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-05-17 17:16:00      ADA 0.4123210          NA        NA     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2021-05-17 21:16:00      ADA 0.1691870          NA        NA        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2021-05-17 21:31:00      ADA 0.1912300          NA        NA        sell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      description        comment revenue.type exchange   rate.source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Reward awarded           &lt;NA&gt;      staking  adalite coinmarketcap</span>

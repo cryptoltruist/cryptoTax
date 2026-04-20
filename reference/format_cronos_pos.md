@@ -56,17 +56,17 @@ data <- fetch_cronos_pos(
 #> 
 #> Warning: Total number of transactions detected higher than the set limit. Adjust as needed with the 'limit' argument
 format_cronos_pos(data)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 #>                   date currency     quantity  total.price spot.rate transaction
-#> 1  2021-11-28 06:00:38      CRO   0.00000000 0.000000e+00 0.9815073     revenue
-#> 2  2021-11-28 06:00:38      CRO   0.00020000 1.963015e-04 0.9815073        sell
-#> 3  2021-11-28 20:34:08      CRO   0.00000000 0.000000e+00 0.9815073     revenue
-#> 4  2021-11-28 20:34:08      CRO   0.00020000 1.963015e-04 0.9815073        sell
+#> 1  2021-11-28 06:00:38      CRO   0.00020000 1.963015e-04 0.9815073        sell
+#> 2  2021-11-28 06:00:38      CRO   0.00000000 0.000000e+00 0.9815073     revenue
+#> 3  2021-11-28 20:34:08      CRO   0.00020000 1.963015e-04 0.9815073        sell
+#> 4  2021-11-28 20:34:08      CRO   0.00000000 0.000000e+00 0.9815073     revenue
 #> 5  2021-11-29 22:35:48      CRO   0.00020000 1.873850e-04 0.9369251        sell
 #> 6  2021-12-01 00:40:36      CRO   0.00893473 8.053155e-03 0.9013316     revenue
 #> 7  2021-12-01 00:40:36      CRO   0.00020000 1.802663e-04 0.9013316        sell
-#> 8  2021-12-01 00:42:18      CRO   0.00000348 3.136634e-06 0.9013316     revenue
-#> 9  2021-12-01 00:42:18      CRO   0.00020000 1.802663e-04 0.9013316        sell
+#> 8  2021-12-01 00:42:18      CRO   0.00020000 1.802663e-04 0.9013316        sell
+#> 9  2021-12-01 00:42:18      CRO   0.00000348 3.136634e-06 0.9013316     revenue
 #> 10 2021-12-01 00:43:26      CRO   0.00003980 3.587300e-05 0.9013316        sell
 #> 11 2021-12-01 00:55:29      CRO   0.14445831 1.302048e-01 0.9013316     revenue
 #> 12 2021-12-01 00:55:29      CRO   0.00020000 1.802663e-04 0.9013316        sell
@@ -90,15 +90,15 @@ format_cronos_pos(data)
 #> 30 2021-12-27 00:35:19      CRO   0.51924766 4.157489e-01 0.8006756     revenue
 #> 31 2021-12-27 00:35:19      CRO   0.00020000 1.601351e-04 0.8006756        sell
 #>     description
-#> 1       staking
-#> 2  staking cost
-#> 3       staking
-#> 4  staking cost
+#> 1  staking cost
+#> 2       staking
+#> 3  staking cost
+#> 4       staking
 #> 5    withdrawal
 #> 6  distribution
 #> 7  staking cost
-#> 8       staking
-#> 9  staking cost
+#> 8  staking cost
+#> 9       staking
 #> 10   ibc_client
 #> 11 distribution
 #> 12 staking cost
@@ -121,48 +121,48 @@ format_cronos_pos(data)
 #> 29 staking cost
 #> 30 distribution
 #> 31 staking cost
-#>                                                                                          comment
-#> 1                       Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 2                              Stake on Validator crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 3                       Auto Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 4                              Stake on Validator crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 5                      Outgoing Transaction to (send) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj
-#> 6                            Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 7                    Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 8                       Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 9                                    Unstake from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 10 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
-#> 11                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 12                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 13 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
-#> 14                     Outgoing Transaction to (send) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj
-#> 15                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 16                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 17 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
-#> 18                     Outgoing Transaction to (send) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj
-#> 19                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 20                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 21 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
-#> 22 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
-#> 23 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
-#> 24                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 25                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
-#> 26                                                                  Auto Withdraw Reward from NA
-#> 27                                                                         Stake on Validator NA
-#> 28                           Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 29                   Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 30                           Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
-#> 31                   Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#>                                                                                              comment
+#> 1                                  Stake on Validator crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 2                           Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 3                                  Stake on Validator crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 4                           Auto Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 5  Outgoing Transaction to (/cosmos.bank.v1beta1.MsgSend) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj
+#> 6                                Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 7                        Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 8                                        Unstake from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 9                           Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 10     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
+#> 11                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 12                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 13     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
+#> 14 Outgoing Transaction to (/cosmos.bank.v1beta1.MsgSend) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj
+#> 15                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 16                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 17     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
+#> 18 Outgoing Transaction to (/cosmos.bank.v1beta1.MsgSend) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj
+#> 19                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 20                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 21     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
+#> 22     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
+#> 23     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))
+#> 24                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 25                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 26                          Auto Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 27                                 Stake on Validator crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6
+#> 28                               Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 29                       Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 30                               Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
+#> 31                       Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8
 #>    revenue.type   exchange   rate.source
-#> 1       staking CDC.wallet coinmarketcap
-#> 2          <NA> CDC.wallet coinmarketcap
-#> 3       staking CDC.wallet coinmarketcap
-#> 4          <NA> CDC.wallet coinmarketcap
+#> 1          <NA> CDC.wallet coinmarketcap
+#> 2       staking CDC.wallet coinmarketcap
+#> 3          <NA> CDC.wallet coinmarketcap
+#> 4       staking CDC.wallet coinmarketcap
 #> 5          <NA> CDC.wallet coinmarketcap
 #> 6       staking CDC.wallet coinmarketcap
 #> 7          <NA> CDC.wallet coinmarketcap
-#> 8       staking CDC.wallet coinmarketcap
-#> 9          <NA> CDC.wallet coinmarketcap
+#> 8          <NA> CDC.wallet coinmarketcap
+#> 9       staking CDC.wallet coinmarketcap
 #> 10         <NA> CDC.wallet coinmarketcap
 #> 11      staking CDC.wallet coinmarketcap
 #> 12         <NA> CDC.wallet coinmarketcap

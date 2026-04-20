@@ -35,14 +35,15 @@ A data frame of exchange transactions, formatted for further processing.
 ``` r
 data <- data_adalite
 format_adalite(data)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Warning: Could not calculate spot rate. Use `force = TRUE`.
 #>                  date currency  quantity total.price spot.rate transaction
-#> 1 2021-04-28 16:56:00      ADA 0.3120400   0.5092906  1.632132     revenue
-#> 2 2021-05-07 16:53:00      ADA 0.3125132   0.6272258  2.007038     revenue
-#> 3 2021-05-12 16:56:00      ADA 0.2212410   0.4437400  2.005686     revenue
-#> 4 2021-05-17 17:16:00      ADA 0.4123210   1.0790423  2.616996     revenue
-#> 5 2021-05-17 21:16:00      ADA 0.1691870   0.4427617  2.616996        sell
-#> 6 2021-05-17 21:31:00      ADA 0.1912300   0.5004481  2.616996        sell
+#> 1 2021-04-28 16:56:00      ADA 0.3120400          NA        NA     revenue
+#> 2 2021-05-07 16:53:00      ADA 0.3125132          NA        NA     revenue
+#> 3 2021-05-12 16:56:00      ADA 0.2212410          NA        NA     revenue
+#> 4 2021-05-17 17:16:00      ADA 0.4123210          NA        NA     revenue
+#> 5 2021-05-17 21:16:00      ADA 0.1691870          NA        NA        sell
+#> 6 2021-05-17 21:31:00      ADA 0.1912300          NA        NA        sell
 #>      description        comment revenue.type exchange   rate.source
 #> 1 Reward awarded           <NA>      staking  adalite coinmarketcap
 #> 2 Reward awarded           <NA>      staking  adalite coinmarketcap

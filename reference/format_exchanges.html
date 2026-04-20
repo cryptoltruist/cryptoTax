@@ -19,7 +19,7 @@ transaction tables are passed through unchanged."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,13 +86,18 @@ frames and/or already formatted transaction tables.</p></dd>
 <dt id="arg-list-prices">list.prices<a class="anchor" aria-label="anchor" href="#arg-list-prices"></a></dt>
 <dd><p>A <code>list.prices</code> object from which to fetch coin prices.
 When supplied explicitly, it must contain at least <code>currency</code>,
-<code>spot.rate2</code>, and <code>date2</code>.</p></dd>
+<code>spot.rate2</code>, and <code>date2</code>. For mixed exchange workflows, you can pass one
+shared <code>list.prices</code> object here and let the relevant exchange formatters
+consume it only when needed, instead of figuring out manually which
+exchange exports require external price matching.</p></dd>
 
 
 <dt id="arg-usd-cad-table">USD2CAD.table<a class="anchor" aria-label="anchor" href="#arg-usd-cad-table"></a></dt>
 <dd><p>Optional explicit USD/CAD rate table to use for
 exchanges that convert USD-denominated values to CAD. When supplied
-explicitly, it must contain at least <code>date</code> and <code>USD</code>.</p></dd>
+explicitly, it must contain at least <code>date</code> and <code>USD</code>. As with
+<code>list.prices</code>, this can be supplied once for a mixed workflow and will only
+be used by the exchange formatters that actually need USD/CAD conversion.</p></dd>
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>

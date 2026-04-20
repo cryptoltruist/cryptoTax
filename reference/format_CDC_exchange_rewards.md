@@ -57,7 +57,10 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_CDC_exchange_rewards(data_CDC_exchange_rewards)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> ❯ Scraping historical crypto data
+#> 
+#> ❯ Processing historical crypto data
+#> 
 #>                   date currency   quantity  total.price    spot.rate
 #> 1  2021-02-19 00:00:00      CRO 1.36512341 0.2221748898 1.627508e-01
 #> 2  2021-02-21 00:00:00      CRO 1.36945123 0.2412313569 1.761518e-01

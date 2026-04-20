@@ -9,7 +9,7 @@ along with ACB per share and realized capital gains or losses."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,19 @@ questions across distinct crypto instruments. Different <code>currency</code> va
 are therefore kept in separate pools unless you normalize them yourself
 before calling <code>format_ACB()</code>. This wrapper also does not determine whether a
 user's crypto activity belongs on capital account or should instead be
-reported as business income under their facts.</p>
+reported as business income under their facts. A clean result from one
+supplied ledger should therefore not be read as proof that no affiliated-
+person superficial-loss issue exists outside that input.</p>
+<p>When same-pool rows share the same timestamp and the original execution order
+is not reliably available, <code>format_ACB()</code> applies a deterministic
+normalization rule before per-currency ACB processing: acquisition-like rows
+(<code>buy</code>, <code>revenue</code>, <code>rebates</code>) are ordered before <code>sell</code> rows, and larger
+<code>total.price</code> rows come first within those groups. This is a package policy
+for ambiguous exports, not a claim that the true source-event order is known.</p>
+<p>The same normalized fee-contract expectation also applies here: formatted
+rows should either carry separate <code>fees</code> with fee-exclusive <code>total.price</code>,
+use fee-inclusive acquisition totals with <code>fees = 0</code>, or represent
+fee-in-kind / withdrawal fees as their own disposition rows.</p>
     </div>
 
     <div class="section level2">

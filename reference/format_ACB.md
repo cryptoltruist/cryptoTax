@@ -56,7 +56,22 @@ instruments. Different `currency` values are therefore kept in separate
 pools unless you normalize them yourself before calling `format_ACB()`.
 This wrapper also does not determine whether a user's crypto activity
 belongs on capital account or should instead be reported as business
-income under their facts.
+income under their facts. A clean result from one supplied ledger should
+therefore not be read as proof that no affiliated- person
+superficial-loss issue exists outside that input.
+
+When same-pool rows share the same timestamp and the original execution
+order is not reliably available, `format_ACB()` applies a deterministic
+normalization rule before per-currency ACB processing: acquisition-like
+rows (`buy`, `revenue`, `rebates`) are ordered before `sell` rows, and
+larger `total.price` rows come first within those groups. This is a
+package policy for ambiguous exports, not a claim that the true
+source-event order is known.
+
+The same normalized fee-contract expectation also applies here:
+formatted rows should either carry separate `fees` with fee-exclusive
+`total.price`, use fee-inclusive acquisition totals with `fees = 0`, or
+represent fee-in-kind / withdrawal fees as their own disposition rows.
 
 ## Examples
 

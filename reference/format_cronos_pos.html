@@ -11,7 +11,7 @@ Use fetch_cronos_pos() to first download the data."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,17 +97,17 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Total number of transactions detected higher than the set limit. Adjust as needed with the 'limit' argument</span>
 <span class="r-in"><span><span class="fu">format_cronos_pos</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   date currency     quantity  total.price spot.rate transaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-11-28 06:00:38      CRO   0.00000000 0.000000e+00 0.9815073     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-11-28 06:00:38      CRO   0.00020000 1.963015e-04 0.9815073        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-11-28 20:34:08      CRO   0.00000000 0.000000e+00 0.9815073     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-11-28 20:34:08      CRO   0.00020000 1.963015e-04 0.9815073        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2021-11-28 06:00:38      CRO   0.00020000 1.963015e-04 0.9815073        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2021-11-28 06:00:38      CRO   0.00000000 0.000000e+00 0.9815073     revenue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2021-11-28 20:34:08      CRO   0.00020000 1.963015e-04 0.9815073        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2021-11-28 20:34:08      CRO   0.00000000 0.000000e+00 0.9815073     revenue</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  2021-11-29 22:35:48      CRO   0.00020000 1.873850e-04 0.9369251        sell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  2021-12-01 00:40:36      CRO   0.00893473 8.053155e-03 0.9013316     revenue</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7  2021-12-01 00:40:36      CRO   0.00020000 1.802663e-04 0.9013316        sell</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-12-01 00:42:18      CRO   0.00000348 3.136634e-06 0.9013316     revenue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-12-01 00:42:18      CRO   0.00020000 1.802663e-04 0.9013316        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2021-12-01 00:42:18      CRO   0.00020000 1.802663e-04 0.9013316        sell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2021-12-01 00:42:18      CRO   0.00000348 3.136634e-06 0.9013316     revenue</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 2021-12-01 00:43:26      CRO   0.00003980 3.587300e-05 0.9013316        sell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 2021-12-01 00:55:29      CRO   0.14445831 1.302048e-01 0.9013316     revenue</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 2021-12-01 00:55:29      CRO   0.00020000 1.802663e-04 0.9013316        sell</span>
@@ -131,15 +131,15 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30 2021-12-27 00:35:19      CRO   0.51924766 4.157489e-01 0.8006756     revenue</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31 2021-12-27 00:35:19      CRO   0.00020000 1.601351e-04 0.8006756        sell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     description</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       staking</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  staking cost</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       staking</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       staking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       staking</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5    withdrawal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7  staking cost</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       staking</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  staking cost</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       staking</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10   ibc_client</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 staking cost</span>
@@ -162,48 +162,48 @@ it already exists (e.g., if you added new coins or new dates).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29 staking cost</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30 distribution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31 staking cost</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                          comment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                       Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                              Stake on Validator crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                       Auto Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                              Stake on Validator crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                      Outgoing Transaction to (send) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                            Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                    Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                       Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                    Unstake from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14                     Outgoing Transaction to (send) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18                     Outgoing Transaction to (send) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24                           Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25                   Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                                                  Auto Withdraw Reward from NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                                                         Stake on Validator NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28                           Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29                   Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30                           Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31                   Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                              comment</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                  Stake on Validator crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                           Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                  Stake on Validator crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                           Auto Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Outgoing Transaction to (/cosmos.bank.v1beta1.MsgSend) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                        Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                        Unstake from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                           Auto Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 Outgoing Transaction to (/cosmos.bank.v1beta1.MsgSend) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 Outgoing Transaction to (/cosmos.bank.v1beta1.MsgSend) cro1w2kvwrzp23aq54n3amwav4yy4a9ahq2kz2wtmj</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     Bridging chains (crypto.org relayer | hermes 0.8.0+a3a1ad6 (https://hermes.informal.systems))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                               Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                       Withdraw staking reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                          Auto Withdraw Reward from crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                 Stake on Validator crocncl12p3emq9ergyynqw5pltnajcuk8yccy3uk2vdd6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                               Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                       Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                               Withdraw Reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                       Withdraw staking reward from crocncl17ph30pdn43yggj7d72dhztlzwwxnkfj9gn85h8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    revenue.type   exchange   rate.source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       staking CDC.wallet coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt; CDC.wallet coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       staking CDC.wallet coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       staking CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       staking CDC.wallet coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5          &lt;NA&gt; CDC.wallet coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6       staking CDC.wallet coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7          &lt;NA&gt; CDC.wallet coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       staking CDC.wallet coinmarketcap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          &lt;NA&gt; CDC.wallet coinmarketcap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       staking CDC.wallet coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10         &lt;NA&gt; CDC.wallet coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11      staking CDC.wallet coinmarketcap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12         &lt;NA&gt; CDC.wallet coinmarketcap</span>

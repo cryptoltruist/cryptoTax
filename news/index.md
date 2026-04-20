@@ -1,5 +1,26 @@
 # Changelog
 
+## cryptoTax 0.1.0.30
+
+**Improvements:**
+
+- Continued the formatter-hardening pass across
+  [`format_CDC_exchange()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange.md),
+  [`format_CDC_exchange_trades()`](https://cryptoltruist.github.io/cryptoTax/reference/format_CDC_exchange_trades.md),
+  [`format_detect()`](https://cryptoltruist.github.io/cryptoTax/reference/format_detect.md),
+  and related exchange helpers so newer Crypto.com Exchange exports,
+  malformed edge cases, and explicit pricing inputs behave more
+  predictably under the shared formatter contract.
+- Expanded direct regression coverage around fee modeling, malformed
+  explicit pricing inputs, formatter schema guarantees, and
+  representative exchange outputs, including a guard for newer CDC
+  Exchange all-transactions exports that previously could produce
+  orphaned fee rows with missing core fields.
+- Continued the broader fiscal-audit and deterministic-pricing cleanup
+  by tightening correctness coverage around ACB/superficial-loss edge
+  cases and pushing more formatter/reporting paths onto the explicit
+  offline pricing workflow.
+
 ## cryptoTax 0.1.0.29
 
 **Improvements:**
@@ -18,8 +39,8 @@
   and the remaining CDC/binance helper-based formatter flows.
 - Consolidated more formatter end-of-pipeline behavior onto the shared
   finalize/resolve helpers while preserving exchange-specific accounting
-  behavior, including CoinSmart’s dedicated raw-input pricing path and
-  Adalite’s sparse-output normalization.
+  behavior, including the dedicated raw-input pricing path in CoinSmart
+  and the sparse-output normalization used by Adalite.
 - Updated the repo improvement plan to reflect that the formatter
   normalization track is now effectively in its last special-case
   stretch rather than the broad-family cleanup phase.

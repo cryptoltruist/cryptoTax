@@ -48,12 +48,12 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_presearch(data_presearch)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
-#>                  date currency quantity total.price  spot.rate transaction
-#> 1 2021-01-02 19:08:59      PRE     1000   17.286345 0.01728634     revenue
-#> 2 2021-04-27 19:12:15      PRE     1000   93.074345 0.09307434     revenue
-#> 3 2021-05-07 05:55:33      PRE     1000   78.969090 0.07896909         buy
-#> 4 2021-12-09 06:24:22      PRE       10    3.195957 0.31959575     revenue
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#>                  date currency quantity total.price spot.rate transaction
+#> 1 2021-01-02 19:08:59      PRE     1000          NA        NA     revenue
+#> 2 2021-04-27 19:12:15      PRE     1000          NA        NA     revenue
+#> 3 2021-05-07 05:55:33      PRE     1000          NA        NA         buy
+#> 4 2021-12-09 06:24:22      PRE       10          NA        NA     revenue
 #>                                       description revenue.type  exchange
 #> 1                        Transferred from Rewards     airdrops presearch
 #> 2                        Transferred from Rewards     airdrops presearch

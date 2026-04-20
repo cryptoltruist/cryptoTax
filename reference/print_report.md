@@ -61,10 +61,9 @@ if (is.data.frame(list.prices)) {
     tax.year = 2021, name = "Mr. Cryptoltruist"
   )
 }
+#> Date of current prices: 2023-12-31
 #> gains, losses, and net have been filtered for tax year 2021
-#> Date of current prices: 2023-12-31
 #> gains, losses, and net have been filtered for tax year 2021 (time zone = America/Montreal)
-#> Date of current prices: 2023-12-31
 #> Note: proceeds have been filtered for tax year 2021
 #> Note: superficial losses have been filtered for tax year 2021
 #> Note: revenues have been filtered for tax year 2021
@@ -93,7 +92,7 @@ if (is.data.frame(list.prices)) {
 #> 20/21 [unnamed-chunk-1]
 #> 21/21                  
 #> output file: full_report.knit.md
-#> /opt/hostedtoolcache/pandoc/3.1.11/x64/pandoc +RTS -K512m -RTS full_report.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/runner/work/cryptoTax/cryptoTax/docs/reference/full_report_2021.html --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /home/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/RtmpKd7GSa/rmarkdown-str1ae74566d193.html 
+#> /opt/hostedtoolcache/pandoc/3.1.11/x64/pandoc +RTS -K512m -RTS full_report.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/runner/work/cryptoTax/cryptoTax/docs/reference/full_report_2021.html --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --template /home/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/Rtmp8kvTXI/rmarkdown-str19ed8cb0d0d.html 
 #> 
 #> Output created: full_report_2021.html
 # }

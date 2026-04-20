@@ -51,7 +51,6 @@ if (is.data.frame(list.prices)) {
   x$proceeds
 }
 #> Date of current prices: 2023-12-31
-#> Date of current prices: 2023-12-31
 #>     type proceeds ACB.total    gains
 #> 1  Gains 31.26847  25.45409 5.814382
 #> 2 Losses  0.00000   0.00000 0.000000

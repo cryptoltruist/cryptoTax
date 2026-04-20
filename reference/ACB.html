@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +127,18 @@ bridge assets, exchange-specific wrappers, or other substitute-property edge
 cases should still be reviewed carefully. More broadly, <code>ACB()</code> implements a
 capital-account style cost-base and disposition workflow; it does not decide
 whether a user's facts should instead be reported on income account as
-business income.</p>
+business income. In particular, a result based on one supplied ledger should
+not be read as proof that no affiliated-person superficial-loss issue exists;
+the function only evaluates the transaction history you provide.</p>
+<p>Fee handling assumes one of three normalized contracts:</p><ul><li><p>acquisition/disposition rows with a separate <code>fees</code> column, where
+<code>total.price</code> excludes those fees;</p></li>
+<li><p>fee-inclusive acquisition totals, where the formatter has already zeroed
+the separate <code>fees</code> field to avoid double-counting; or</p></li>
+<li><p>fee-in-kind / withdrawal fees represented as their own disposition rows
+instead of a <code>fees</code> column attached to another transaction.</p></li>
+</ul><p>If a raw import mixes fee-inclusive <code>total.price</code> values with non-zero
+attached <code>fees</code> on the same acquisition row, that ambiguity should be
+resolved in the formatter/import step before calling <code>ACB()</code>.</p>
     </div>
 
     <div class="section level2">

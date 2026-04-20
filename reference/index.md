@@ -19,6 +19,12 @@
 
   Convert USD to CAD (using `priceR`)
 
+- [`add_to_cache()`](https://cryptoltruist.github.io/cryptoTax/reference/add_to_cache.md)
+  : Add pricing objects to the cryptoTax cache
+
+- [`apply_CDC_withdrawal_overrides()`](https://cryptoltruist.github.io/cryptoTax/reference/apply_CDC_withdrawal_overrides.md)
+  : Apply manual Crypto.com App withdrawal fee overrides
+
 - [`check_missing_transactions()`](https://cryptoltruist.github.io/cryptoTax/reference/check_missing_transactions.md)
   : View rows with negative total balances
 
@@ -117,6 +123,9 @@
 
 - [`fetch_cronos_pos()`](https://cryptoltruist.github.io/cryptoTax/reference/fetch_cronos_pos.md)
   : Download transaction data from the Cronos POS chain
+
+- [`fetch_pooltool()`](https://cryptoltruist.github.io/cryptoTax/reference/fetch_pooltool.md)
+  : Download Cardano staking rewards in PoolTool-compatible format
 
 - [`format_ACB()`](https://cryptoltruist.github.io/cryptoTax/reference/format_ACB.md)
   : Formats transactions with ACB
@@ -242,6 +251,9 @@
 
 - [`report_summary()`](https://cryptoltruist.github.io/cryptoTax/reference/report_summary.md)
   : Summary of gains and losses
+
+- [`review_CDC_withdrawals()`](https://cryptoltruist.github.io/cryptoTax/reference/review_CDC_withdrawals.md)
+  : Review Crypto.com App withdrawal fee assumptions
 
 - [`tax_box()`](https://cryptoltruist.github.io/cryptoTax/reference/tax_box.md)
   : Get a simple table of relevant tax information

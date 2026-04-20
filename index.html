@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">cryptoTax</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +87,39 @@
 <li>Generate summaries and reports from the formatted ACB output</li>
 </ol>
 <p>The package now works best when you pass explicit price inputs for offline and reproducible workflows.</p>
+<p>The built-in pricing cache is now best understood as a convenience for the current R session, not as the primary source of truth for reproducible work. Normal implicit reuse only comes from the package-owned cache, while explicit inputs remain the preferred path for scripts, tests, and offline reporting.</p>
+<p>That cache is especially useful when you format exchange files one by one and need to make manual corrections between calls: you can prepare shared pricing once, then let the relevant <code>format_*()</code> functions reuse the package cache instead of figuring out by hand which exchange export needs <code>list.prices</code> or <code>USD2CAD.table</code>.</p>
+<p>If you are doing real taxes and want a maximally audit-friendly workflow, it is still perfectly reasonable to prefer explicit <code>format_*()</code> calls one by one so you can inspect each formatted output before merging everything together. In that workflow, explicit saved price objects on disk remain the safest source of truth, while the package cache is just a same-session convenience layer.</p>
+</div>
+<div class="section level2">
+<h2 id="saved-prices-across-sessions">Saved prices across sessions<a class="anchor" aria-label="anchor" href="#saved-prices-across-sessions"></a>
+</h2>
+<p>The package-owned pricing cache is <strong>session only</strong>. If you restart R, that cache is gone. For multi-day tax work, the most practical workflow is:</p>
+<ol style="list-style-type: decimal">
+<li>Save your <code>list.prices</code> object to disk with <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> or <code><a href="https://rdrr.io/r/base/save.html" class="external-link">save()</a></code>
+</li>
+<li>Reload it in a later session</li>
+<li>Optionally seed the package cache with <code><a href="reference/add_to_cache.html">add_to_cache()</a></code> so formatters can reuse it implicitly during that session</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"list.prices.rds"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"list.prices.rds"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/prepare_list_prices.html">prepare_list_prices</a></span><span class="op">(</span></span>
+<span>    <span class="va">my.coins</span>,</span>
+<span>    start.date <span class="op">=</span> <span class="st">"2021-02-01"</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">list.prices</span>, <span class="st">"list.prices.rds"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Optional: seed the package-owned cache for this R session</span></span>
+<span><span class="fu"><a href="reference/add_to_cache.html">add_to_cache</a></span><span class="op">(</span>list.prices <span class="op">=</span> <span class="va">list.prices</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspect what is cached this session</span></span>
+<span><span class="fu"><a href="reference/pricing_cache.html">pricing_cache</a></span><span class="op">(</span><span class="st">"list.prices"</span><span class="op">)</span></span></code></pre></div>
+<p>If you prefer, you can keep passing <code>list.prices = list.prices</code> explicitly to every formatter call instead of relying on the cache. That remains the most explicit and reproducible path.</p>
 </div>
 <div class="section level2">
 <h2 id="scope-note">Scope note<a class="anchor" aria-label="anchor" href="#scope-note"></a>
@@ -117,13 +150,13 @@
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>To install, use:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"cryptoltruist/cryptoTax"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="acb-demo">ACB demo<a class="anchor" aria-label="anchor" href="#acb-demo"></a>
 </h1>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data_adjustedcostbase1</span></span>
 <span><span class="va">data</span></span></code></pre></div>
@@ -168,7 +201,7 @@
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/ACB.html">ACB</a></span><span class="op">(</span><span class="va">data</span>, spot.rate <span class="op">=</span> <span class="st">"price"</span>, sup.loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: `as.hms()` was deprecated in hms 1.2.0.</span></span>
 <span><span class="co">#&gt; ℹ Please use `as_hms()` instead.</span></span>
@@ -282,7 +315,7 @@
 <div class="section level1">
 <h1 id="workflow-demo">Workflow demo<a class="anchor" aria-label="anchor" href="#workflow-demo"></a>
 </h1>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use bundled example prices for an offline, reproducible demo</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">list_prices_example</span><span class="op">)</span></span>
 <span><span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="va">list_prices_example</span></span>
@@ -460,9 +493,32 @@
 </table>
 </div>
 <div class="section level3">
+<h3 id="audit-friendly-explicit-workflow">Audit-friendly explicit workflow<a class="anchor" aria-label="anchor" href="#audit-friendly-explicit-workflow"></a>
+</h3>
+<p>For real tax work, many users may prefer formatting files one by one so the intermediate output can be checked before everything is merged together:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cryptoltruist.github.io/cryptoTax/">cryptoTax</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"list.prices.rds"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x.shakepay</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_shakepay.html">format_shakepay</a></span><span class="op">(</span><span class="va">data_shakepay</span><span class="op">)</span></span>
+<span><span class="va">x.cdc</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_CDC.html">format_CDC</a></span><span class="op">(</span><span class="va">data_CDC</span><span class="op">)</span></span>
+<span><span class="va">x.binance</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_binance.html">format_binance</a></span><span class="op">(</span><span class="va">data_binance</span>, list.prices <span class="op">=</span> <span class="va">list.prices</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">all.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/merge_exchanges.html">merge_exchanges</a></span><span class="op">(</span><span class="va">x.shakepay</span>, <span class="va">x.cdc</span>, <span class="va">x.binance</span><span class="op">)</span></span>
+<span><span class="va">formatted.ACB</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_ACB.html">format_ACB</a></span><span class="op">(</span><span class="va">all.data</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>If you want the same workflow but with less repeated <code>list.prices = ...</code> plumbing during the current R session, load your saved object once and seed the cache:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">list.prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"list.prices.rds"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/add_to_cache.html">add_to_cache</a></span><span class="op">(</span>list.prices <span class="op">=</span> <span class="va">list.prices</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x.binance</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_binance.html">format_binance</a></span><span class="op">(</span><span class="va">data_binance</span><span class="op">)</span></span>
+<span><span class="va">x.gemini</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_gemini.html">format_gemini</a></span><span class="op">(</span><span class="va">data_gemini</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="summary-info">Summary info<a class="anchor" aria-label="anchor" href="#summary-info"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get latest ACB.share for each coin (ACB)</span></span>
 <span><span class="fu"><a href="reference/report_overview.html">report_overview</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
 <span>  today.data <span class="op">=</span> <span class="cn">TRUE</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span>,</span>
@@ -589,7 +645,7 @@
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Get summary of realized capital gains and losses</span></span>
 <span><span class="fu"><a href="reference/report_summary.html">report_summary</a></span><span class="op">(</span><span class="va">formatted.ACB</span>,</span>
@@ -693,7 +749,7 @@
 <div class="section level3">
 <h3 id="revenue-estimation">Revenue estimation<a class="anchor" aria-label="anchor" href="#revenue-estimation"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">table.revenues</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/report_revenues.html">report_revenues</a></span><span class="op">(</span><span class="va">formatted.ACB</span>, tax.year <span class="op">=</span> <span class="st">"2021"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Note: revenues have been filtered for tax year 2021</span></span>
 <span><span class="va">table.revenues</span></span></code></pre></div>
@@ -778,12 +834,12 @@
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Plot revenues by exchange</span></span>
 <span><span class="fu"><a href="reference/crypto_pie.html">crypto_pie</a></span><span class="op">(</span><span class="va">table.revenues</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-revenues-1.png"><!-- --></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Plot revenues by reward type</span></span>
 <span><span class="fu"><a href="reference/crypto_pie.html">crypto_pie</a></span><span class="op">(</span><span class="va">table.revenues</span>, by <span class="op">=</span> <span class="st">"revenue.type"</span><span class="op">)</span></span></code></pre></div>

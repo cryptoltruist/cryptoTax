@@ -1,5 +1,13 @@
 # TODOS
 
+This file is now a lightweight legacy backlog note only. The
+authoritative roadmap lives in:
+
+- `PLAN-REPO-IMPROVEMENTS.md`
+- `PLAN-FISCAL-AUDIT.md`
+
+All items below have been integrated into those plan files.
+
 ## Performance improvements
 
 - Only calculate superficial losses for rows that are sales and with a

@@ -146,11 +146,12 @@ format_generic(data_generic3)
 # If both total.price and spot.rate are missing, it will
 # scrap the spot.rate from coinmarketcap based on the coin:
 format_generic(data_generic4)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
+#> Warning: Could not calculate spot rate. Use `force = TRUE`.
 #>                  date currency quantity total.price spot.rate transaction fees
-#> 1 2021-03-02 10:36:06      BTC 0.001240    76.70861 61861.778         buy 0.72
-#> 2 2021-03-10 12:49:04      ETH 0.063067   146.15197  2317.408         buy 0.72
-#> 3 2021-03-15 14:12:08      ETH 0.065048   147.98240  2274.972        sell 1.75
+#> 1 2021-03-02 10:36:06      BTC 0.001240    76.70861  61861.78         buy 0.72
+#> 2 2021-03-10 12:49:04      ETH 0.063067          NA        NA         buy 0.72
+#> 3 2021-03-15 14:12:08      ETH 0.065048          NA        NA        sell 1.75
 #>           exchange   rate.source
 #> 1 generic_exchange coinmarketcap
 #> 2 generic_exchange coinmarketcap

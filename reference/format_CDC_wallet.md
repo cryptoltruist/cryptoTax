@@ -48,7 +48,7 @@ A data frame of exchange transactions, formatted for further processing.
 
 ``` r
 format_CDC_wallet(data_CDC_wallet)
-#> Using deprecated legacy '.GlobalEnv' cache for 'list.prices'. This compatibility path may be removed in a future release; prefer `pricing_cache()` or pass `list.prices` explicitly. To force a fresh download, use argument 'force = TRUE'.
+#> Using cached 'list.prices'. To force a fresh download, use argument 'force = TRUE'.
 #>                  date currency quantity  total.price spot.rate transaction
 #> 1 2021-04-12 18:28:50      CRO 0.512510 1.359843e-01 0.2653300     revenue
 #> 2 2021-04-18 18:28:50      CRO 0.000200 5.561116e-05 0.2780558        sell
